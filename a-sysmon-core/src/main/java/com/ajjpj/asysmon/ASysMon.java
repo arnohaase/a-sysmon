@@ -1,6 +1,5 @@
 package com.ajjpj.asysmon;
 
-
 import com.ajjpj.asysmon.config.AStaticSysMonConfig;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalData;
@@ -70,6 +69,9 @@ public class ASysMon {
         return getMeasurementHierarchy().start(identifier, disjoint);
     }
 
+    /**
+     * this class has the sole purpose of providing really lazy init of the singleton instance
+     */
     private static class ASysMonInstanceHolder {
         public static final ASysMon INSTANCE = new ASysMon(AStaticSysMonConfig.get());
     }
