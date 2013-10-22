@@ -6,6 +6,7 @@ import com.ajjpj.asysmon.timer.ATimer;
 import com.ajjpj.asysmon.util.ArrayStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -21,6 +22,8 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
     private final ArrayStack<ASimpleMeasurement> unfinished = new ArrayStack<com.ajjpj.asysmon.measure.ASimpleMeasurement>();
     private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<List<AHierarchicalData>>();
 
+    private ACollectingMeasurement curCollectingMeasurement = null;
+
     private boolean isFinished = false;
 
     public AMeasurementHierarchyImpl(ATimer timer, ADataSink dataSink) {
@@ -28,7 +31,22 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
         this.dataSink = dataSink;
     }
 
+    private void checkNotFinished() {
+        if(isFinished) {
+            throw new IllegalStateException("measurements must not be reused - this measurement is already closed");
+        }
+    }
+
+    private void checkNoCollectingMeasurement() {
+        if(curCollectingMeasurement != null) {
+            throw new IllegalStateException("collecting measurements can not be nested");
+        }
+    }
+
     @Override public ASimpleMeasurement start(String identifier, boolean disjoint) {
+        checkNotFinished();
+        checkNoCollectingMeasurement();
+
         final ASimpleMeasurement result = new ASimpleMeasurement(this, disjoint, timer.getCurrentNanos(), identifier);
         unfinished.push(result);
         childrenStack.push(new ArrayList<AHierarchicalData>());
@@ -36,10 +54,8 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
     }
 
     @Override public void finish(ASimpleMeasurement measurement) {
-        if(isFinished) {
-            throw new IllegalStateException("measurements must not be reused - this measurement is already closed");
-        }
-        isFinished = true;
+        checkNotFinished();
+        checkNoCollectingMeasurement();
 
         if (unfinished.peek() != measurement) {
             //TODO this is a bug in using code - how to deal with it?!
@@ -53,6 +69,40 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
         final AHierarchicalData newData = new AHierarchicalData(measurement.isDisjoint(), measurement.getStartTimeMillis(), finishedTimestamp - measurement.getStartTimeNanos(), measurement.getIdentifier(), measurement.getParameters(), children);
 
         if(unfinished.isEmpty()) {
+            isFinished = true;
+            dataSink.onFinishedHierarchicalData(newData);
+        }
+        else {
+            childrenStack.peek().add(newData);
+        }
+    }
+
+    @Override
+    public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean disjoint) {
+        checkNotFinished();
+        checkNoCollectingMeasurement();
+
+        curCollectingMeasurement = new ACollectingMeasurement(timer, this, disjoint, identifier);
+        return curCollectingMeasurement;
+    }
+
+    @Override public void finish(ACollectingMeasurement m) {
+        checkNotFinished();
+        if(curCollectingMeasurement != m) {
+            throw new IllegalStateException("not the current collecting measurement");
+        }
+
+        final List<AHierarchicalData> children = new ArrayList<AHierarchicalData>();
+        for(String detailIdentifier: m.getDetails().keySet()) {
+            final ACollectingMeasurement.Detail detail = m.getDetails().get(detailIdentifier);
+            //TODO how to store m.getNum()?
+            children.add(new AHierarchicalData(true, m.getStartTimeMillis(), detail.getTotalNanos(), detailIdentifier, Collections.<String, String>emptyMap(), Collections.<AHierarchicalData>emptyList()));
+        }
+
+        final AHierarchicalData newData = new AHierarchicalData(m.isDisjoint(), m.getStartTimeMillis(), m.getTotalDurationNanos(), m.getIdentifier(), m.getParameters(), children);
+
+        if(unfinished.isEmpty()) {
+            isFinished = true;
             dataSink.onFinishedHierarchicalData(newData);
         }
         else {

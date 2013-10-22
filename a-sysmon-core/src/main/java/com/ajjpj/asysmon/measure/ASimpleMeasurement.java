@@ -12,7 +12,7 @@ public class ASimpleMeasurement {
     private final AMeasurementHierarchy hierarchy;
     private final boolean disjoint;
 
-    private final long startTimeMillis; // this is a *nix style timestamp
+    private final long startTimeMillis = System.currentTimeMillis();
     private final long startTimeNanos; // this number has no absolute meaning and is useful only for measuring differences
     private final String identifier;
 
@@ -23,7 +23,6 @@ public class ASimpleMeasurement {
     ASimpleMeasurement(AMeasurementHierarchy hierarchy, boolean disjoint, long startTimeNanos, String identifier) {
         this.hierarchy = hierarchy;
         this.disjoint = disjoint;
-        this.startTimeMillis = System.currentTimeMillis();
         this.startTimeNanos = startTimeNanos;
         this.identifier = identifier;
     }
