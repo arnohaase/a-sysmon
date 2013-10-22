@@ -1,32 +1,25 @@
 todo
 ----
+* JDBC
+* Log4J data sink
+
+* global measurements
+  * system load
+  * currently used connections per connection pool
+  * currently used threads per thread pool
+
+* offloading data sink
+
 unique ids per measurement --> referencing (?)
 support for 'correcting' real time clocks of systems
 
 
 
-Messpunkt-Details:
-
-    Zeitstempel, Dauer, Identifier (--> für Aggregation benutzt), Parameter (key/value)
-    „Parent“ / Hierarchie-Informationen
     Einmalig in Root: Thread-ID, Host, PID
-    Optional: kann „parent“ sein oder nicht (Default: ja) --> hierarchisch oder „außen vor“
-
-
-Mögliche Messpunkte für OMD:
-
-    http-Requests (per Filter) --> alle Header als Parameter, insbes. URL, außerdem Absender
-    Service-Methoden
 
 
 
 Correlation ID etc.: als „Kontext“ eines Messpunkts (wenn vorhanden)
-
-Nicht-hierarchisch / Intervallgesteuert:
-
-    System-Load
-    Auslastung aller Thread-Pools
-    Anzahl „offener“ / benutzter Datenbank-Verbindungen --> * per connection pool * --> (optional) identifier in JDBC url
 
 
 Punktuell / interaktiv: „Snapshot“ der aktuellen Aktivitäten
