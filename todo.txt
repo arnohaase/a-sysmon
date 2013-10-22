@@ -39,6 +39,7 @@ Renderer:
 System info:
 * OS, version, num processors,
 
+* log asysmon overhead (?)
 
 
 AOP:
@@ -51,3 +52,7 @@ documentation
 * terminology
   * measurement: something ongoing --> something like a builder
   * data: immutable results of a finished measurement
+
+* initialization
+  * completely non-static
+  * or static 'ASysMon.get()' --> AStaticSysMonConfig.get(), changes must be registered there before first access

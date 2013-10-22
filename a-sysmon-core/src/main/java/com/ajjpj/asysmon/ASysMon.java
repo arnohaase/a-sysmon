@@ -1,6 +1,8 @@
 package com.ajjpj.asysmon;
 
 
+import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchy;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchyImpl;
@@ -8,9 +10,21 @@ import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.processing.ADataSink;
 import com.ajjpj.asysmon.timer.ATimer;
 
+import java.util.ArrayList;
 import java.util.List;
 
+
 /**
+ * This class is the point of contact for an application to ASysMon. There are basically two ways to use it:
+ *
+ * <ul>
+ *     <li> Use the static get() method to access it as a singleton. That is simple and convenient, and it is
+ *          sufficient for many applications. If it is used that way, all configuration must be done through
+ *          the static methods of AStaticSysMonConfig. </li>
+ *     <li> Create and manage your own instance (or instances) by calling the constructor, passing in your
+ *          configuration. This is for maximum flexibility, but you lose some convenience. </li>
+ * </ul>
+ *
  * @author arno
  */
 public class ASysMon {
@@ -19,9 +33,14 @@ public class ASysMon {
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
-    public ASysMon(ATimer timer, List<ADataSink> handlers) {
-        this.timer = timer;
-        this.handlers = handlers; //TODO initialize from props or whatever; the list must be thread safe!
+    public static ASysMon get() {
+        // this class has the sole purpose of providing really lazy init of the singleton instance
+        return ASysMonInstanceHolder.INSTANCE;
+    }
+
+    public ASysMon(ASysMonConfig config) {
+        this.timer = config.getTimer();
+        this.handlers = new ArrayList<ADataSink>(config.getHandlers());
     }
 
     private AMeasurementHierarchy getMeasurementHierarchy() {
@@ -44,13 +63,15 @@ public class ASysMon {
     }
 
     public ASimpleMeasurement start(String identifier) {
-        return getMeasurementHierarchy().start(identifier);
+        return start(identifier, true);
     }
 
     public ASimpleMeasurement start(String identifier, boolean disjoint) {
         return getMeasurementHierarchy().start(identifier, disjoint);
     }
 
-
+    private static class ASysMonInstanceHolder {
+        public static final ASysMon INSTANCE = new ASysMon(AStaticSysMonConfig.get());
+    }
 }
 

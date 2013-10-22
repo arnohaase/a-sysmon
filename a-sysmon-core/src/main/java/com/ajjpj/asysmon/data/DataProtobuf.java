@@ -25,12 +25,12 @@ public final class DataProtobuf {
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
-    java.util.List<com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem> 
+    java.util.List<DataProtobuf.GlobalDataItem>
         getItemsList();
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
-    com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem getItems(int index);
+    DataProtobuf.GlobalDataItem getItems(int index);
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
@@ -38,12 +38,12 @@ public final class DataProtobuf {
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
-    java.util.List<? extends com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder> 
+    java.util.List<? extends DataProtobuf.GlobalDataItemOrBuilder>
         getItemsOrBuilderList();
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
-    com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder getItemsOrBuilder(
+    DataProtobuf.GlobalDataItemOrBuilder getItemsOrBuilder(
         int index);
   }
   /**
@@ -104,10 +104,10 @@ public final class DataProtobuf {
             }
             case 18: {
               if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                items_ = new java.util.ArrayList<com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem>();
+                items_ = new java.util.ArrayList<DataProtobuf.GlobalDataItem>();
                 mutable_bitField0_ |= 0x00000002;
               }
-              items_.add(input.readMessage(com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.PARSER, extensionRegistry));
+              items_.add(input.readMessage(DataProtobuf.GlobalDataItem.PARSER, extensionRegistry));
               break;
             }
           }
@@ -127,14 +127,14 @@ public final class DataProtobuf {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalData_descriptor;
+      return DataProtobuf.internal_static_GlobalData_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalData_fieldAccessorTable
+      return DataProtobuf.internal_static_GlobalData_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.ajjpj.asysmon.data.DataProtobuf.GlobalData.class, com.ajjpj.asysmon.data.DataProtobuf.GlobalData.Builder.class);
+              DataProtobuf.GlobalData.class, DataProtobuf.GlobalData.Builder.class);
     }
 
     public static com.google.protobuf.Parser<GlobalData> PARSER =
@@ -171,17 +171,17 @@ public final class DataProtobuf {
 
     // repeated .GlobalDataItem items = 2;
     public static final int ITEMS_FIELD_NUMBER = 2;
-    private java.util.List<com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem> items_;
+    private java.util.List<DataProtobuf.GlobalDataItem> items_;
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
-    public java.util.List<com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem> getItemsList() {
+    public java.util.List<DataProtobuf.GlobalDataItem> getItemsList() {
       return items_;
     }
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
-    public java.util.List<? extends com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder> 
+    public java.util.List<? extends DataProtobuf.GlobalDataItemOrBuilder>
         getItemsOrBuilderList() {
       return items_;
     }
@@ -194,13 +194,13 @@ public final class DataProtobuf {
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
-    public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem getItems(int index) {
+    public DataProtobuf.GlobalDataItem getItems(int index) {
       return items_.get(index);
     }
     /**
      * <code>repeated .GlobalDataItem items = 2;</code>
      */
-    public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder getItemsOrBuilder(
+    public DataProtobuf.GlobalDataItemOrBuilder getItemsOrBuilder(
         int index) {
       return items_.get(index);
     }
@@ -266,53 +266,53 @@ public final class DataProtobuf {
       return super.writeReplace();
     }
 
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseFrom(
+    public static DataProtobuf.GlobalData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseFrom(
+    public static DataProtobuf.GlobalData parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseFrom(byte[] data)
+    public static DataProtobuf.GlobalData parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseFrom(
+    public static DataProtobuf.GlobalData parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseFrom(java.io.InputStream input)
+    public static DataProtobuf.GlobalData parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseFrom(
+    public static DataProtobuf.GlobalData parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseDelimitedFrom(java.io.InputStream input)
+    public static DataProtobuf.GlobalData parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseDelimitedFrom(
+    public static DataProtobuf.GlobalData parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseFrom(
+    public static DataProtobuf.GlobalData parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalData parseFrom(
+    public static DataProtobuf.GlobalData parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -321,7 +321,7 @@ public final class DataProtobuf {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ajjpj.asysmon.data.DataProtobuf.GlobalData prototype) {
+    public static Builder newBuilder(DataProtobuf.GlobalData prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -337,17 +337,17 @@ public final class DataProtobuf {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ajjpj.asysmon.data.DataProtobuf.GlobalDataOrBuilder {
+       implements DataProtobuf.GlobalDataOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalData_descriptor;
+        return DataProtobuf.internal_static_GlobalData_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalData_fieldAccessorTable
+        return DataProtobuf.internal_static_GlobalData_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.ajjpj.asysmon.data.DataProtobuf.GlobalData.class, com.ajjpj.asysmon.data.DataProtobuf.GlobalData.Builder.class);
+                DataProtobuf.GlobalData.class, DataProtobuf.GlobalData.Builder.class);
       }
 
       // Construct using com.ajjpj.asysmon.data.DataProtobuf.GlobalData.newBuilder()
@@ -388,23 +388,23 @@ public final class DataProtobuf {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalData_descriptor;
+        return DataProtobuf.internal_static_GlobalData_descriptor;
       }
 
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalData getDefaultInstanceForType() {
-        return com.ajjpj.asysmon.data.DataProtobuf.GlobalData.getDefaultInstance();
+      public DataProtobuf.GlobalData getDefaultInstanceForType() {
+        return DataProtobuf.GlobalData.getDefaultInstance();
       }
 
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalData build() {
-        com.ajjpj.asysmon.data.DataProtobuf.GlobalData result = buildPartial();
+      public DataProtobuf.GlobalData build() {
+        DataProtobuf.GlobalData result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalData buildPartial() {
-        com.ajjpj.asysmon.data.DataProtobuf.GlobalData result = new com.ajjpj.asysmon.data.DataProtobuf.GlobalData(this);
+      public DataProtobuf.GlobalData buildPartial() {
+        DataProtobuf.GlobalData result = new DataProtobuf.GlobalData(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -426,16 +426,16 @@ public final class DataProtobuf {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ajjpj.asysmon.data.DataProtobuf.GlobalData) {
-          return mergeFrom((com.ajjpj.asysmon.data.DataProtobuf.GlobalData)other);
+        if (other instanceof DataProtobuf.GlobalData) {
+          return mergeFrom((DataProtobuf.GlobalData)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.ajjpj.asysmon.data.DataProtobuf.GlobalData other) {
-        if (other == com.ajjpj.asysmon.data.DataProtobuf.GlobalData.getDefaultInstance()) return this;
+      public Builder mergeFrom(DataProtobuf.GlobalData other) {
+        if (other == DataProtobuf.GlobalData.getDefaultInstance()) return this;
         if (other.hasTimestamp()) {
           setTimestamp(other.getTimestamp());
         }
@@ -487,11 +487,11 @@ public final class DataProtobuf {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.ajjpj.asysmon.data.DataProtobuf.GlobalData parsedMessage = null;
+        DataProtobuf.GlobalData parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ajjpj.asysmon.data.DataProtobuf.GlobalData) e.getUnfinishedMessage();
+          parsedMessage = (DataProtobuf.GlobalData) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -536,22 +536,22 @@ public final class DataProtobuf {
       }
 
       // repeated .GlobalDataItem items = 2;
-      private java.util.List<com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem> items_ =
+      private java.util.List<DataProtobuf.GlobalDataItem> items_ =
         java.util.Collections.emptyList();
       private void ensureItemsIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          items_ = new java.util.ArrayList<com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem>(items_);
+          items_ = new java.util.ArrayList<DataProtobuf.GlobalDataItem>(items_);
           bitField0_ |= 0x00000002;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder> itemsBuilder_;
+          DataProtobuf.GlobalDataItem, DataProtobuf.GlobalDataItem.Builder, DataProtobuf.GlobalDataItemOrBuilder> itemsBuilder_;
 
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public java.util.List<com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem> getItemsList() {
+      public java.util.List<DataProtobuf.GlobalDataItem> getItemsList() {
         if (itemsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(items_);
         } else {
@@ -571,7 +571,7 @@ public final class DataProtobuf {
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem getItems(int index) {
+      public DataProtobuf.GlobalDataItem getItems(int index) {
         if (itemsBuilder_ == null) {
           return items_.get(index);
         } else {
@@ -582,7 +582,7 @@ public final class DataProtobuf {
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
       public Builder setItems(
-          int index, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem value) {
+          int index, DataProtobuf.GlobalDataItem value) {
         if (itemsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -599,7 +599,7 @@ public final class DataProtobuf {
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
       public Builder setItems(
-          int index, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder builderForValue) {
+          int index, DataProtobuf.GlobalDataItem.Builder builderForValue) {
         if (itemsBuilder_ == null) {
           ensureItemsIsMutable();
           items_.set(index, builderForValue.build());
@@ -612,7 +612,7 @@ public final class DataProtobuf {
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public Builder addItems(com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem value) {
+      public Builder addItems(DataProtobuf.GlobalDataItem value) {
         if (itemsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -629,7 +629,7 @@ public final class DataProtobuf {
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
       public Builder addItems(
-          int index, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem value) {
+          int index, DataProtobuf.GlobalDataItem value) {
         if (itemsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -646,7 +646,7 @@ public final class DataProtobuf {
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
       public Builder addItems(
-          com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder builderForValue) {
+          DataProtobuf.GlobalDataItem.Builder builderForValue) {
         if (itemsBuilder_ == null) {
           ensureItemsIsMutable();
           items_.add(builderForValue.build());
@@ -660,7 +660,7 @@ public final class DataProtobuf {
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
       public Builder addItems(
-          int index, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder builderForValue) {
+          int index, DataProtobuf.GlobalDataItem.Builder builderForValue) {
         if (itemsBuilder_ == null) {
           ensureItemsIsMutable();
           items_.add(index, builderForValue.build());
@@ -674,7 +674,7 @@ public final class DataProtobuf {
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
       public Builder addAllItems(
-          java.lang.Iterable<? extends com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem> values) {
+          java.lang.Iterable<? extends DataProtobuf.GlobalDataItem> values) {
         if (itemsBuilder_ == null) {
           ensureItemsIsMutable();
           super.addAll(values, items_);
@@ -713,14 +713,14 @@ public final class DataProtobuf {
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder getItemsBuilder(
+      public DataProtobuf.GlobalDataItem.Builder getItemsBuilder(
           int index) {
         return getItemsFieldBuilder().getBuilder(index);
       }
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder getItemsOrBuilder(
+      public DataProtobuf.GlobalDataItemOrBuilder getItemsOrBuilder(
           int index) {
         if (itemsBuilder_ == null) {
           return items_.get(index);  } else {
@@ -730,7 +730,7 @@ public final class DataProtobuf {
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public java.util.List<? extends com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder> 
+      public java.util.List<? extends DataProtobuf.GlobalDataItemOrBuilder>
            getItemsOrBuilderList() {
         if (itemsBuilder_ != null) {
           return itemsBuilder_.getMessageOrBuilderList();
@@ -741,31 +741,31 @@ public final class DataProtobuf {
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder addItemsBuilder() {
+      public DataProtobuf.GlobalDataItem.Builder addItemsBuilder() {
         return getItemsFieldBuilder().addBuilder(
-            com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.getDefaultInstance());
+            DataProtobuf.GlobalDataItem.getDefaultInstance());
       }
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder addItemsBuilder(
+      public DataProtobuf.GlobalDataItem.Builder addItemsBuilder(
           int index) {
         return getItemsFieldBuilder().addBuilder(
-            index, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.getDefaultInstance());
+            index, DataProtobuf.GlobalDataItem.getDefaultInstance());
       }
       /**
        * <code>repeated .GlobalDataItem items = 2;</code>
        */
-      public java.util.List<com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder> 
+      public java.util.List<DataProtobuf.GlobalDataItem.Builder>
            getItemsBuilderList() {
         return getItemsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder> 
+          DataProtobuf.GlobalDataItem, DataProtobuf.GlobalDataItem.Builder, DataProtobuf.GlobalDataItemOrBuilder>
           getItemsFieldBuilder() {
         if (itemsBuilder_ == null) {
           itemsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder>(
+              DataProtobuf.GlobalDataItem, DataProtobuf.GlobalDataItem.Builder, DataProtobuf.GlobalDataItemOrBuilder>(
                   items_,
                   ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
@@ -889,14 +889,14 @@ public final class DataProtobuf {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalDataItem_descriptor;
+      return DataProtobuf.internal_static_GlobalDataItem_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalDataItem_fieldAccessorTable
+      return DataProtobuf.internal_static_GlobalDataItem_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.class, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder.class);
+              DataProtobuf.GlobalDataItem.class, DataProtobuf.GlobalDataItem.Builder.class);
     }
 
     public static com.google.protobuf.Parser<GlobalDataItem> PARSER =
@@ -1033,53 +1033,53 @@ public final class DataProtobuf {
       return super.writeReplace();
     }
 
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseFrom(
+    public static DataProtobuf.GlobalDataItem parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseFrom(
+    public static DataProtobuf.GlobalDataItem parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseFrom(byte[] data)
+    public static DataProtobuf.GlobalDataItem parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseFrom(
+    public static DataProtobuf.GlobalDataItem parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseFrom(java.io.InputStream input)
+    public static DataProtobuf.GlobalDataItem parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseFrom(
+    public static DataProtobuf.GlobalDataItem parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseDelimitedFrom(java.io.InputStream input)
+    public static DataProtobuf.GlobalDataItem parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseDelimitedFrom(
+    public static DataProtobuf.GlobalDataItem parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseFrom(
+    public static DataProtobuf.GlobalDataItem parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parseFrom(
+    public static DataProtobuf.GlobalDataItem parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1088,7 +1088,7 @@ public final class DataProtobuf {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem prototype) {
+    public static Builder newBuilder(DataProtobuf.GlobalDataItem prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -1104,17 +1104,17 @@ public final class DataProtobuf {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItemOrBuilder {
+       implements DataProtobuf.GlobalDataItemOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalDataItem_descriptor;
+        return DataProtobuf.internal_static_GlobalDataItem_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalDataItem_fieldAccessorTable
+        return DataProtobuf.internal_static_GlobalDataItem_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.class, com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.Builder.class);
+                DataProtobuf.GlobalDataItem.class, DataProtobuf.GlobalDataItem.Builder.class);
       }
 
       // Construct using com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.newBuilder()
@@ -1150,23 +1150,23 @@ public final class DataProtobuf {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.ajjpj.asysmon.data.DataProtobuf.internal_static_GlobalDataItem_descriptor;
+        return DataProtobuf.internal_static_GlobalDataItem_descriptor;
       }
 
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem getDefaultInstanceForType() {
-        return com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.getDefaultInstance();
+      public DataProtobuf.GlobalDataItem getDefaultInstanceForType() {
+        return DataProtobuf.GlobalDataItem.getDefaultInstance();
       }
 
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem build() {
-        com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem result = buildPartial();
+      public DataProtobuf.GlobalDataItem build() {
+        DataProtobuf.GlobalDataItem result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem buildPartial() {
-        com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem result = new com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem(this);
+      public DataProtobuf.GlobalDataItem buildPartial() {
+        DataProtobuf.GlobalDataItem result = new DataProtobuf.GlobalDataItem(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1183,16 +1183,16 @@ public final class DataProtobuf {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem) {
-          return mergeFrom((com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem)other);
+        if (other instanceof DataProtobuf.GlobalDataItem) {
+          return mergeFrom((DataProtobuf.GlobalDataItem)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem other) {
-        if (other == com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem.getDefaultInstance()) return this;
+      public Builder mergeFrom(DataProtobuf.GlobalDataItem other) {
+        if (other == DataProtobuf.GlobalDataItem.getDefaultInstance()) return this;
         if (other.hasIdentifier()) {
           bitField0_ |= 0x00000001;
           identifier_ = other.identifier_;
@@ -1221,11 +1221,11 @@ public final class DataProtobuf {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem parsedMessage = null;
+        DataProtobuf.GlobalDataItem parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ajjpj.asysmon.data.DataProtobuf.GlobalDataItem) e.getUnfinishedMessage();
+          parsedMessage = (DataProtobuf.GlobalDataItem) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {

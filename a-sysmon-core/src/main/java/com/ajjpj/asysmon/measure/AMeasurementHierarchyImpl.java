@@ -14,11 +14,11 @@ import java.util.List;
  *
  * @author arno
  */
-public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
+public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMeasurementHierarchy {
     private final ATimer timer;
     private final ADataSink dataSink;
 
-    private final ArrayStack<ASimpleMeasurement> unfinished = new ArrayStack<ASimpleMeasurement>();
+    private final ArrayStack<ASimpleMeasurement> unfinished = new ArrayStack<com.ajjpj.asysmon.measure.ASimpleMeasurement>();
     private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<List<AHierarchicalData>>();
 
     private boolean isFinished = false;
@@ -26,10 +26,6 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     public AMeasurementHierarchyImpl(ATimer timer, ADataSink dataSink) {
         this.timer = timer;
         this.dataSink = dataSink;
-    }
-
-    @Override public ASimpleMeasurement start(String identifier) {
-        return start(identifier, true);
     }
 
     @Override public ASimpleMeasurement start(String identifier, boolean disjoint) {
