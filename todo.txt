@@ -44,3 +44,10 @@ System info:
 AOP:
 --> File I/O
 --> Socket I/O
+
+
+documentation
+-------------
+* terminology
+  * measurement: something ongoing --> something like a builder
+  * data: immutable results of a finished measurement
