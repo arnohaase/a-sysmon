@@ -22,8 +22,6 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
     private final ArrayStack<ASimpleMeasurement> unfinished = new ArrayStack<com.ajjpj.asysmon.measure.ASimpleMeasurement>();
     private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<List<AHierarchicalData>>();
 
-    private ACollectingMeasurement curCollectingMeasurement = null;
-
     private boolean isFinished = false;
 
     public AMeasurementHierarchyImpl(ATimer timer, ADataSink dataSink) {
@@ -37,15 +35,8 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
         }
     }
 
-    private void checkNoCollectingMeasurement() {
-        if(curCollectingMeasurement != null) {
-            throw new IllegalStateException("collecting measurements can not be nested");
-        }
-    }
-
     @Override public ASimpleMeasurement start(String identifier, boolean disjoint) {
         checkNotFinished();
-        checkNoCollectingMeasurement();
 
         final ASimpleMeasurement result = new ASimpleMeasurement(this, disjoint, timer.getCurrentNanos(), identifier);
         unfinished.push(result);
@@ -55,7 +46,6 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
 
     @Override public void finish(ASimpleMeasurement measurement) {
         checkNotFinished();
-        checkNoCollectingMeasurement();
 
         if (unfinished.peek() != measurement) {
             //TODO this is a bug in using code - how to deal with it?!
@@ -80,17 +70,15 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
     @Override
     public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean disjoint) {
         checkNotFinished();
-        checkNoCollectingMeasurement();
+        if(unfinished.isEmpty()) {
+            throw new IllegalStateException("currently no support for top-level collecting measurements"); //TODO what is a good way to get around this?
+        }
 
-        curCollectingMeasurement = new ACollectingMeasurement(timer, this, disjoint, identifier);
-        return curCollectingMeasurement;
+        return new ACollectingMeasurement(timer, this, disjoint, identifier, childrenStack.peek());
     }
 
     @Override public void finish(ACollectingMeasurement m) {
         checkNotFinished();
-        if(curCollectingMeasurement != m) {
-            throw new IllegalStateException("not the current collecting measurement");
-        }
 
         final List<AHierarchicalData> children = new ArrayList<AHierarchicalData>();
         for(String detailIdentifier: m.getDetails().keySet()) {
@@ -100,14 +88,7 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
         }
 
         final AHierarchicalData newData = new AHierarchicalData(m.isDisjoint(), m.getStartTimeMillis(), m.getTotalDurationNanos(), m.getIdentifier(), m.getParameters(), children);
-
-        if(unfinished.isEmpty()) {
-            isFinished = true;
-            dataSink.onFinishedHierarchicalData(newData);
-        }
-        else {
-            childrenStack.peek().add(newData);
-        }
+        m.getChildrenOfParent().add(newData);
     }
 }
 

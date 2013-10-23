@@ -1,8 +1,10 @@
 package com.ajjpj.asysmon.measure;
 
+import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.timer.ATimer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Map;
  *
  * @author arno
  */
-public class ACollectingMeasurement {
+public class ACollectingMeasurement implements AWithParameters {
     private final ATimer timer;
     private final AMeasurementHierarchy hierarchy;
     private final boolean disjoint;
@@ -25,6 +27,8 @@ public class ACollectingMeasurement {
     private final Map<String, String> parameters = new HashMap<String, String>();
     private final Map<String, Detail> details = new HashMap<String, Detail>();
 
+    private final List<AHierarchicalData> childrenOfParent;
+
     private long totalDurationNanos = 0;
 
     private String detailIdentifier = null;
@@ -32,11 +36,16 @@ public class ACollectingMeasurement {
 
     private boolean isFinished = false;
 
-    public ACollectingMeasurement(ATimer timer, AMeasurementHierarchy hierarchy, boolean disjoint, String identifier) {
+    public ACollectingMeasurement(ATimer timer, AMeasurementHierarchy hierarchy, boolean disjoint, String identifier, List<AHierarchicalData> childrenOfParent) {
         this.timer = timer;
         this.hierarchy = hierarchy;
         this.disjoint = disjoint;
         this.identifier = identifier;
+        this.childrenOfParent = childrenOfParent;
+    }
+
+    List<AHierarchicalData> getChildrenOfParent() {
+        return childrenOfParent;
     }
 
     public boolean isDisjoint() {
@@ -51,7 +60,7 @@ public class ACollectingMeasurement {
         return identifier;
     }
 
-    public void addParameter(String identifier, String value) {
+    @Override public void addParameter(String identifier, String value) {
         parameters.put(identifier, value); //TODO warn of duplicates?
     }
 
@@ -65,6 +74,15 @@ public class ACollectingMeasurement {
 
     public long getTotalDurationNanos() {
         return totalDurationNanos;
+    }
+
+    public <R, E extends Exception> R detail(String detailIdentifier, AMeasureCallback<R,E> callback) throws E {
+        startDetail(detailIdentifier);
+        try {
+            return callback.call(this);
+        } finally {
+            finishDetail();
+        }
     }
 
     public void startDetail(String detailIdentifier) {

@@ -3,9 +3,7 @@ package com.ajjpj.asysmon;
 import com.ajjpj.asysmon.config.AStaticSysMonConfig;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.measure.AMeasurementHierarchy;
-import com.ajjpj.asysmon.measure.AMeasurementHierarchyImpl;
-import com.ajjpj.asysmon.measure.ASimpleMeasurement;
+import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.processing.ADataSink;
 import com.ajjpj.asysmon.timer.ATimer;
 
@@ -61,12 +59,27 @@ public class ASysMon {
         return result;
     }
 
+    public <R, E extends Exception> R measure(String identifier, AMeasureCallback<R,E> callback) throws E {
+        final ASimpleMeasurement m = start(identifier);
+        try {
+            return callback.call(m);
+        } finally {
+            m.finish();
+        }
+    }
+
     public ASimpleMeasurement start(String identifier) {
         return start(identifier, true);
     }
-
     public ASimpleMeasurement start(String identifier, boolean disjoint) {
         return getMeasurementHierarchy().start(identifier, disjoint);
+    }
+
+    public ACollectingMeasurement startCollectingMeasurement(String identifier) {
+        return startCollectingMeasurement(identifier, true);
+    }
+    public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean disjoint) {
+        return getMeasurementHierarchy().startCollectingMeasurement(identifier, disjoint);
     }
 
     /**

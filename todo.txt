@@ -1,7 +1,6 @@
 todo
 ----
-* JDBC
-* Log4J data sink
+* presentation: servlet
 
 * global measurements
   * system load
@@ -10,24 +9,26 @@ todo
 
 * offloading data sink
 
+* JDBC
+  * new methods of 1.7
+  * DataSource --> keep track of number of used connections
+
+* JUnit tests
+
+* aggregated presentation: handling of 'disjoint'
+
+
 unique ids per measurement --> referencing (?)
 support for 'correcting' real time clocks of systems
 
 
 
-    Einmalig in Root: Thread-ID, Host, PID
-
+Einmalig in Root: Thread-ID, Host, PID
 
 
 Correlation ID etc.: als „Kontext“ eines Messpunkts (wenn vorhanden)
 
-
 Punktuell / interaktiv: „Snapshot“ der aktuellen Aktivitäten
-
-Renderer:
-
-    Einfach aggregiert a la JETM
-    UDP an „zentralen“ Server
 
 System info:
 * OS, version, num processors,
@@ -40,6 +41,12 @@ AOP:
 --> Socket I/O
 
 
+discuss
+-------
+* how to get jQuery (and css) into AMinMaxAvgServlet
+* how to configure (non-static) ASysMon instance for JDBC logging
+* how to deal with data sources in app server --> outside application scope
+
 documentation
 -------------
 * terminology
@@ -49,3 +56,11 @@ documentation
 * initialization
   * completely non-static
   * or static 'ASysMon.get()' --> AStaticSysMonConfig.get(), changes must be registered there before first access
+
+* AMinMaxAvgServlet
+  * load-on-startup = 1
+  * security --> filter --> responsibility of the application
+  * display
+    * color coding / percentage: relative to immediate parent
+    * #: average number of calls *per parent*
+

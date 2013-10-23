@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <servlet>
+        <servlet-name>performance</servlet-name>
+        <servlet-class>com.ajjpj.asysmon.render.minmaxavgservlet.AMinMaxAvgServlet</servlet-class>
+        <!--<init-param>-->
+            <!--<param-name>sleep-time-in-seconds</param-name>-->
+            <!--<param-value>10</param-value>-->
+        <!--</init-param>-->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>performance</servlet-name>
+        <url-pattern>/performance</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>content</servlet-name>
+        <servlet-class>com.ajjpj.asysmon.demo.AppServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>content</servlet-name>
+        <url-pattern>content/*</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>asysmon-filter</filter-name>
+        <filter-class>com.ajjpj.asysmon.measure.http.AHttpRequestMeasuringFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>asysmon-filter</filter-name>
+        <url-pattern>/content/*</url-pattern>
+    </filter-mapping>
+
+</web-app>

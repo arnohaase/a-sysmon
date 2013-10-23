@@ -2,9 +2,9 @@ package com.ajjpj.asysmon.measure.http;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
-import com.sun.deploy.net.HttpRequest;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Map;
 
@@ -45,7 +45,7 @@ public class AHttpRequestMeasuringFilter implements Filter {
     }
 
     @Override public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        final AHttpRequestDetails details = analyzer.analyze((HttpRequest) servletRequest);
+        final AHttpRequestDetails details = analyzer.analyze((HttpServletRequest) servletRequest);
 
         final ASimpleMeasurement measurement = getSysMon().start(details.getIdentifier());
         try {

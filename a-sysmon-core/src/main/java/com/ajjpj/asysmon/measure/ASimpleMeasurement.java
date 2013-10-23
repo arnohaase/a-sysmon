@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author arno
  */
-public class ASimpleMeasurement {
+public class ASimpleMeasurement implements AWithParameters {
     private final AMeasurementHierarchy hierarchy;
     private final boolean disjoint;
 
@@ -27,7 +27,7 @@ public class ASimpleMeasurement {
         this.identifier = identifier;
     }
 
-    public void addParameter(String identifier, String value) {
+    @Override public void addParameter(String identifier, String value) {
         parameters.put(identifier, value); //TODO warn of duplicates?
     }
 
