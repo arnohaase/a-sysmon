@@ -28,31 +28,31 @@ public class AppServlet extends HttpServlet {
                 return sleep();
             }
         });
-        ASysMon.get().measure("a", new AMeasureCallback<Object, RuntimeException>() {
+        ASysMon.get().measure("b", new AMeasureCallback<Object, RuntimeException>() {
             @Override
             public Object call(AWithParameters m) {
                 return sleep();
             }
         });
-        ASysMon.get().measure("a", new AMeasureCallback<Object, RuntimeException>() {
+        ASysMon.get().measure("b", new AMeasureCallback<Object, RuntimeException>() {
             @Override
             public Object call(AWithParameters m) {
                 return sleep();
             }
         });
-        ASysMon.get().measure("a", new AMeasureCallback<Object, RuntimeException>() {
+        ASysMon.get().measure("b", new AMeasureCallback<Object, RuntimeException>() {
             @Override
             public Object call(AWithParameters m) {
                 return sleep();
             }
         });
-        ASysMon.get().measure("a", new AMeasureCallback<Object, RuntimeException>() {
+        ASysMon.get().measure("b", new AMeasureCallback<Object, RuntimeException>() {
             @Override
             public Object call(AWithParameters m) {
                 return sleep();
             }
         });
-        ASysMon.get().measure("a", new AMeasureCallback<Object, RuntimeException>() {
+        ASysMon.get().measure("b", new AMeasureCallback<Object, RuntimeException>() {
             @Override
             public Object call(AWithParameters m) {
                 return sleep();

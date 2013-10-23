@@ -34,6 +34,10 @@ public class AMinMaxAvgData {
                 children);
     }
 
+    public long getTotalNanos() {
+        return totalNumInContext * avgNanos;
+    }
+
     public int getTotalNumInContext() {
         return totalNumInContext;
     }

@@ -12,8 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.Collator;
 import java.text.DecimalFormat;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -86,41 +87,64 @@ public class AMinMaxAvgServlet extends HttpServlet {
         out.println("</body></html>");
     }
 
+    private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw) {
+        final List<Map.Entry<String, AMinMaxAvgData>> result = new ArrayList<Map.Entry<String, AMinMaxAvgData>>(raw.entrySet());
+
+        Collections.sort(result, new Comparator<Map.Entry<String, AMinMaxAvgData>>() {
+            @Override public int compare(Map.Entry<String, AMinMaxAvgData> o1, Map.Entry<String, AMinMaxAvgData> o2) {
+                final long delta = o2.getValue().getTotalNanos() - o1.getValue().getTotalNanos();
+                if(delta > 0) {
+                    return 1;
+                }
+                if(delta < 0) {
+                    return -1;
+                }
+                return Collator.getInstance().compare(o1.getKey(), o2.getKey());
+            }
+        });
+        return result;
+    }
+
     private void writeTable(PrintWriter out) {
         final IdGenerator idGenerator = new IdGenerator();
 
-        for(String rootIdent: collector.getData().keySet()) {
+        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(collector.getData())) {
+            final String rootIdent = entry.getKey();
+
             out.println("<div class='table-header'>&nbsp;<div style=\"float: right;\">");
             writeColumn(out, CSS_COLUMN_MEDIUM, "%");
-            writeColumn(out, CSS_COLUMN_SHORT, "#");
+            writeColumn(out, CSS_COLUMN_MEDIUM, "#");
             writeColumn(out, CSS_COLUMN_LONG, "total");
             writeColumn(out, CSS_COLUMN_MEDIUM, "min");
             writeColumn(out, CSS_COLUMN_MEDIUM, "avg");
             writeColumn(out, CSS_COLUMN_MEDIUM, "max");
             out.println("</div></div>");
 
-            final AMinMaxAvgData data = collector.getData().get(rootIdent);
+            final AMinMaxAvgData data = entry.getValue();
             writeTreeNodeRec(out, rootIdent, data, idGenerator, 0, data.getAvgNanos() * data.getTotalNumInContext(), data.getTotalNumInContext());
         }
     }
 
-    //TODO top-level call sorted by total duration
-    //TODO sort by fraction of parent at every level
     //TODO commands
+
+    //TODO expand / collapse all
     //TODO make static resources cacheable
-    //TODO visualize 'has children'
+    //TODO show 'self' time at every level
+    //TODO show parentheses around non-disjoint data
+    //TODO show 'global' measured data
+    //TODO top-level percentage relative to the sum of all top-level measurements
 
     private void writeTreeNodeRec(PrintWriter out, String ident, AMinMaxAvgData data, IdGenerator idGenerator, int level, double parentTotalNanos, double numParentCalls) {
         out.println("<div class='data-row data-row-" + level + "' onclick=\"$('#" + idGenerator.nextId() + "').slideToggle(50);\">");
-//        out.println("<div style=\"background: " + colorForLevel(level) + "\" onclick=\"$('#" + idGenerator.nextId() + "').slideToggle(50);\">");
+        out.println("<div class='node-icon'>" + (data.getChildren().isEmpty() ? "&nbsp;" : "*") + "</div>");
         out.println(ident);
         out.println("<div style=\"float: right;\">");
 
         long totalNanos = data.getAvgNanos() * data.getTotalNumInContext();
         double fractionOfParent = totalNanos / parentTotalNanos;
         writeColumn(out, CSS_COLUMN_MEDIUM, "background: " + blendedColor(200, 255, 200, 255, 120, 120, fractionOfParent), 100.0 * fractionOfParent, 1);
-        writeColumn(out, CSS_COLUMN_SHORT, level == 0 ? data.getTotalNumInContext() : (data.getTotalNumInContext() / numParentCalls), 1);
-        writeColumn(out, CSS_COLUMN_LONG, (data.getAvgNanos() * data.getTotalNumInContext()) / MILLION);
+        writeColumn(out, CSS_COLUMN_MEDIUM, level == 0 ? data.getTotalNumInContext() : (data.getTotalNumInContext() / numParentCalls), 2);
+        writeColumn(out, CSS_COLUMN_LONG, data.getTotalNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getMinNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getAvgNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getMaxNanos() / MILLION);
@@ -129,7 +153,7 @@ public class AMinMaxAvgServlet extends HttpServlet {
         out.println("</div>");
         if(! data.getChildren().isEmpty()) {
             out.println("<div class='children' style='display:" + (level == 0 ? "block" : "none") +"' id=\"" + idGenerator.curId() + "\">");
-            for(Map.Entry<String, AMinMaxAvgData> entry: data.getChildren().entrySet()) {
+            for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(data.getChildren())) {
                 writeTreeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, level+1, totalNanos, data.getTotalNumInContext());
             }
             out.println("</div>");
