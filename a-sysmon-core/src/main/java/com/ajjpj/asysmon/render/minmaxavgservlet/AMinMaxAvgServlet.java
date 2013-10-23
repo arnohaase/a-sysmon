@@ -1,6 +1,9 @@
 package com.ajjpj.asysmon.render.minmaxavgservlet;
 
+import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.data.AGlobalDataPoint;
+import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.processing.minmaxavg.AMinMaxAvgCollector;
 import com.ajjpj.asysmon.processing.minmaxavg.AMinMaxAvgData;
 
@@ -44,6 +47,12 @@ public class AMinMaxAvgServlet extends HttpServlet {
         return collector;
     }
 
+    /**
+     * Default implementations returns the singleton instance. Override to customize.
+     */
+    protected ASysMon getSysMon() {
+        return ASysMon.get();
+    }
 
 
     @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,6 +65,10 @@ public class AMinMaxAvgServlet extends HttpServlet {
 //            resp.addHeader("Cache-Control", "max-age=3600");
             serveStaticResource(req.getParameter("res"), resp.getOutputStream());
             return;
+        }
+
+        if("clear".equals(req.getParameter("cmd"))) {
+            getCollector().clear();
         }
 
         resp.setCharacterEncoding("utf-8");
@@ -83,8 +96,52 @@ public class AMinMaxAvgServlet extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>A-SysMon performance min / avg / max</h1>");
+        writeCommands(url, out);
+        writeGlobalMeasurements(out);
         writeTable(out);
         out.println("</body></html>");
+    }
+
+    private void writeGlobalMeasurements(PrintWriter out) {
+        final Map<String, AGlobalDataPoint> allData = ASysMon.get().getGlobalMeasurements();
+
+        out.println("<table>");
+
+        // special handling for system load
+        final AGlobalDataPoint load1  = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_1_MIN);
+        final AGlobalDataPoint load5  = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_5_MIN);
+        final AGlobalDataPoint load15 = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_15_MIN);
+
+        final String sLoad1  = load1  != null ? getDecimalFormat(load1. getNumFracDigits()).format(load1. getValue()) : "N/A";
+        final String sLoad5  = load5  != null ? getDecimalFormat(load5. getNumFracDigits()).format(load5. getValue()) : "N/A";
+        final String sLoad15 = load15 != null ? getDecimalFormat(load15.getNumFracDigits()).format(load15.getValue()) : "N/A";
+
+        //TODO color code system load
+
+        writeGlobalMeasurement(out, "System Load", sLoad1 + " / " + sLoad5 + " / " + sLoad15);
+
+        // generic handling for other global measurements
+        for(AGlobalDataPoint dp: allData.values()) {
+            writeGlobalMeasurement(out, dp.getName(), getDecimalFormat(dp.getNumFracDigits()).format(dp.getValue()));
+        }
+
+        out.println("</table>");
+    }
+
+    private void writeGlobalMeasurement(PrintWriter out, String ident, String value) {
+        out.println("<tr><td>" + ident + "</td><td>" + value + "</td></tr>");
+    }
+
+    private DecimalFormat getDecimalFormat(int numFrac) {
+        final String formatSuffix = "000000000". substring(0, numFrac);
+        return new DecimalFormat("#,##0." + formatSuffix);
+    }
+
+    private void writeCommands(String url, PrintWriter out) {
+        out.println("<div class='button-box'>");
+        out.println("<a class='btn' href='" + url + "'>Refresh</a>");
+        out.println("<a class='btn' href='" + url + "?cmd=clear'>Clear</a>");
+        out.println("</div>");
     }
 
     private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw) {
@@ -108,7 +165,7 @@ public class AMinMaxAvgServlet extends HttpServlet {
     private void writeTable(PrintWriter out) {
         final IdGenerator idGenerator = new IdGenerator();
 
-        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(collector.getData())) {
+        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(getCollector().getData())) {
             final String rootIdent = entry.getKey();
 
             out.println("<div class='table-header'>&nbsp;<div style=\"float: right;\">");
@@ -125,14 +182,14 @@ public class AMinMaxAvgServlet extends HttpServlet {
         }
     }
 
-    //TODO commands
+    //TODO show parentheses around non-disjoint data
+    //TODO top-level percentage relative to the sum of all top-level measurements
 
+    //TODO styling of command links
+    //TODO styling of global measurements
     //TODO expand / collapse all
     //TODO make static resources cacheable
     //TODO show 'self' time at every level
-    //TODO show parentheses around non-disjoint data
-    //TODO show 'global' measured data
-    //TODO top-level percentage relative to the sum of all top-level measurements
 
     private void writeTreeNodeRec(PrintWriter out, String ident, AMinMaxAvgData data, IdGenerator idGenerator, int level, double parentTotalNanos, double numParentCalls) {
         out.println("<div class='data-row data-row-" + level + "' onclick=\"$('#" + idGenerator.nextId() + "').slideToggle(50);\">");
@@ -182,8 +239,7 @@ public class AMinMaxAvgServlet extends HttpServlet {
         writeColumn(out, cssClass, null, data, numFrac);
     }
     private void writeColumn(PrintWriter out, String cssClass, String style, double data, int numFrac) {
-        final String formatSuffix = "000000000". substring(0, numFrac);
-        writeColumn(out, cssClass, style, new DecimalFormat("#,##0." + formatSuffix).format(data));
+        writeColumn(out, cssClass, style, getDecimalFormat(numFrac).format(data));
     }
 
     private void writeColumn(PrintWriter out, String cssClass, long data) {

@@ -2,13 +2,15 @@ package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.AStaticSysMonConfig;
 import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.data.AGlobalDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.measure.*;
+import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.processing.ADataSink;
 import com.ajjpj.asysmon.timer.ATimer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -27,6 +29,7 @@ import java.util.List;
 public class ASysMon {
     private final ATimer timer;
     private final List<ADataSink> handlers;
+    private final List<? extends AGlobalMeasurer> globalMeasurers = Arrays.asList(new ASystemLoadMeasurer()); //TODO make the list of global measurers configurable
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
@@ -80,6 +83,14 @@ public class ASysMon {
     }
     public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean disjoint) {
         return getMeasurementHierarchy().startCollectingMeasurement(identifier, disjoint);
+    }
+
+    public Map<String, AGlobalDataPoint> getGlobalMeasurements() {
+        final Map<String, AGlobalDataPoint> result = new HashMap<String, AGlobalDataPoint>();
+        for(AGlobalMeasurer measurer: globalMeasurers) {
+            measurer.contributeMeasurements(result);
+        }
+        return result;
     }
 
     /**

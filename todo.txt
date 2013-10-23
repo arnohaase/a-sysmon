@@ -3,7 +3,6 @@ todo
 * presentation: servlet
 
 * global measurements
-  * system load
   * currently used connections per connection pool
   * currently used threads per thread pool
 
@@ -28,12 +27,9 @@ Einmalig in Root: Thread-ID, Host, PID
 
 Correlation ID etc.: als „Kontext“ eines Messpunkts (wenn vorhanden)
 
-Punktuell / interaktiv: „Snapshot“ der aktuellen Aktivitäten
-
-System info:
-* OS, version, num processors,
-
 * log asysmon overhead (?)
+
+* extract a-base
 
 
 AOP:
@@ -43,7 +39,6 @@ AOP:
 
 discuss
 -------
-* how to get jQuery (and css) into AMinMaxAvgServlet
 * how to configure (non-static) ASysMon instance for JDBC logging
 * how to deal with data sources in app server --> outside application scope
 
