@@ -1,6 +1,8 @@
 todo
 ----
-* presentation: servlet
+* beautify min-max servlet
+* configure ASysMon instance for JDBC
+* JDBC: DataSource (optional)
 
 * global measurements
   * currently used connections per connection pool
