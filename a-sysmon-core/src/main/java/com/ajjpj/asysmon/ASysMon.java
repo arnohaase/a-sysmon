@@ -9,7 +9,6 @@ import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
 import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.processing.ADataSink;
-import com.ajjpj.asysmon.processing.log.AStdOutDataSink;
 import com.ajjpj.asysmon.timer.ATimer;
 
 import java.util.*;
@@ -30,12 +29,13 @@ import java.util.*;
  */
 public class ASysMon {
     private final ATimer timer;
-    private final List<ADataSink> handlers;
-    private final List<? extends AGlobalMeasurer> globalMeasurers = Arrays.asList(
-            //TODO make the list of global measurers configurable
-            new ASystemLoadMeasurer(),
-            new AMemoryMeasurer()
-    );
+    private final List<? extends ADataSink> handlers;
+    private final List<? extends AGlobalMeasurer> globalMeasurers;
+//    private final List<? extends AGlobalMeasurer> globalMeasurers = Arrays.asList(
+//            //TODO make the list of global measurers configurable
+//            new ASystemLoadMeasurer(),
+//            new AMemoryMeasurer()
+//    );
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
@@ -47,6 +47,7 @@ public class ASysMon {
     public ASysMon(ASysMonConfig config) {
         this.timer = config.getTimer();
         this.handlers = new ArrayList<ADataSink>(config.getHandlers());
+        this.globalMeasurers = new ArrayList<AGlobalMeasurer> (config.getGlobalMeasurers());
     }
 
     private AMeasurementHierarchy getMeasurementHierarchy() {
@@ -56,7 +57,10 @@ public class ASysMon {
         }
 
         final AMeasurementHierarchy result = new AMeasurementHierarchyImpl(timer, new ADataSink() {
-            @Override public void onStartHierarchicalMeasurement() {
+            @Override public void onStartedHierarchicalMeasurement() {
+                for(ADataSink handler: handlers) {
+                    handler.onStartedHierarchicalMeasurement();
+                }
             }
 
             @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data) {

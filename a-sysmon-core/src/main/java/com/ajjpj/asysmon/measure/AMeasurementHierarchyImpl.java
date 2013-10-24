@@ -39,6 +39,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     @Override public ASimpleMeasurement start(String identifier, boolean isSerial) {
         checkNotFinished();
 
+        if(unfinished.isEmpty()) {
+            dataSink.onStartedHierarchicalMeasurement();
+        }
+
         if(isSerial) {
             final ASimpleSerialMeasurementImpl result = new ASimpleSerialMeasurementImpl(this, timer.getCurrentNanos(), identifier);
             unfinished.push(result);

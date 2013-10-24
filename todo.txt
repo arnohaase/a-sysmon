@@ -7,8 +7,6 @@ todo
 
 * global measurements
   * currently used connections per connection pool
-  * currently used threads per thread pool
-  * threads per pool
 
 * offloading data sink
 

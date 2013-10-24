@@ -108,7 +108,7 @@ public class AMinMaxAvgServlet extends HttpServlet {
     }
 
     private void writeGlobalMeasurements(PrintWriter out) {
-        final Map<String, AGlobalDataPoint> allData = ASysMon.get().getGlobalMeasurements();
+        final Map<String, AGlobalDataPoint> allData = new TreeMap<String, AGlobalDataPoint>(getSysMon().getGlobalMeasurements());
 
         out.println("<table class='global-measurements'>");
 

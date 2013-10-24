@@ -1,10 +1,15 @@
 package com.ajjpj.asysmon.config;
 
 
+import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
+import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
+import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
 import com.ajjpj.asysmon.processing.ADataSink;
 import com.ajjpj.asysmon.timer.ASystemNanoTimer;
 import com.ajjpj.asysmon.timer.ATimer;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -17,8 +22,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author arno
  */
 public class AStaticSysMonConfig {
+    private static final AThreadCountMeasurer threadCountMeasurer = new AThreadCountMeasurer();
+
     private static volatile ATimer timer = new ASystemNanoTimer();
-    private static List<ADataSink> handlers = new CopyOnWriteArrayList<ADataSink>();
+    private static final List<ADataSink> handlers = new CopyOnWriteArrayList<ADataSink>(Arrays.asList(threadCountMeasurer.counter));
+
+    //TODO make the list of global measurers configurable
+    private static final List<? extends AGlobalMeasurer> globalMeasurers = Arrays.asList(
+            new ASystemLoadMeasurer(),
+            new AMemoryMeasurer(),
+            threadCountMeasurer
+    );
+
 
     public static void setTimer(ATimer timer) {
         AStaticSysMonConfig.timer = timer;
@@ -34,9 +49,12 @@ public class AStaticSysMonConfig {
                 return timer;
             }
 
-            @Override
-            public List<ADataSink> getHandlers() {
+            @Override public List<? extends ADataSink> getHandlers() {
                 return handlers;
+            }
+
+            @Override public List<? extends AGlobalMeasurer> getGlobalMeasurers() {
+                return globalMeasurers;
             }
         };
     }
