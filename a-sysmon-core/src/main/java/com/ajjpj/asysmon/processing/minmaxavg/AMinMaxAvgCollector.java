@@ -20,6 +20,10 @@ public class AMinMaxAvgCollector implements ADataSink {
         this.isActive = active;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
     public void clear() {
         rootMap.clear();
     }
@@ -44,13 +48,13 @@ public class AMinMaxAvgCollector implements ADataSink {
         final ConcurrentHashMap<String, AMinMaxAvgData> childMap;
 
         if(prev == null) {
-            final AMinMaxAvgData newData = new AMinMaxAvgData(data.getDurationNanos());
+            final AMinMaxAvgData newData = new AMinMaxAvgData(data.isDisjoint(), data.getDurationNanos());
             childMap = newData.getChildren();
             parentMap.put(data.getIdentifier(), newData);
         }
         else {
             childMap = prev.getChildren();
-            parentMap.put(data.getIdentifier(), prev.withDataPoint(data.getDurationNanos()));
+            parentMap.put(data.getIdentifier(), prev.withDataPoint(data.isDisjoint(), data.getDurationNanos()));
         }
 
         for(AHierarchicalData childData: data.getChildren()) {

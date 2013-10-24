@@ -5,7 +5,7 @@
 
     <servlet>
         <servlet-name>performance</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.render.minmaxavgservlet.AMinMaxAvgServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.processing.minmaxavg.AMinMaxAvgServlet</servlet-class>
         <!--<init-param>-->
             <!--<param-name>sleep-time-in-seconds</param-name>-->
             <!--<param-value>10</param-value>-->

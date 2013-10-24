@@ -22,7 +22,7 @@ public class ASysMonPreparedStatement extends ASysMonStatement implements Prepar
     static {
         for(int i=0; i<NUM_BATCHES; i++) {
             for(int j=0; j<NUM_INT_TO_STRING; j++) {
-                intToString[i*NUM_BATCHES + j] = (i==0) ? String.valueOf(j) : "#" + i + ":" + j;
+                intToString[i*NUM_INT_TO_STRING + j] = (i==0) ? String.valueOf(j) : "#" + i + ":" + j;
             }
         }
     }
@@ -103,7 +103,7 @@ public class ASysMonPreparedStatement extends ASysMonStatement implements Prepar
     private String keyForIndex(int index) {
         // this lookup is more about memory consumption than about performance
         if(index < NUM_INT_TO_STRING && batchCount < NUM_BATCHES) {
-            return intToString[batchCount * NUM_BATCHES + index];
+            return intToString[batchCount * NUM_INT_TO_STRING + index];
         }
 
         return (batchCount == 0) ? String.valueOf(index) : "#" + batchCount + ":" + index;

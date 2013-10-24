@@ -4,9 +4,12 @@ todo
 * configure ASysMon instance for JDBC
 * JDBC: DataSource (optional)
 
+* database drill-up servlet: start with JDBC, inverse tree to the 'top'
+
 * global measurements
   * currently used connections per connection pool
   * currently used threads per thread pool
+  * memory consumption
 
 * offloading data sink
 
@@ -61,3 +64,7 @@ documentation
     * color coding / percentage: relative to immediate parent
     * #: average number of calls *per parent*
 
+* database drill-up servlet
+  * does some processing --> use advisedly, esp. in production
+
+* no top-level 'parallel' measurement

@@ -2,6 +2,7 @@ package com.ajjpj.asysmon.measure;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.timer.ATimer;
+import com.ajjpj.asysmon.util.AObjectHolder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +87,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void startDetail(String detailIdentifier) {
-        if(detailIdentifier != null) {
+        if(this.detailIdentifier != null) {
             throw new IllegalStateException("a detail measurement is already running");
         }
 
@@ -95,12 +96,13 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void finishDetail() {
-        if(detailIdentifier == null) {
+        if(this.detailIdentifier == null) {
             throw new IllegalStateException("no current detail measurement");
         }
 
         final long duration = timer.getCurrentNanos() - detailStartTimeNanos;
         addDetailMeasurement(detailIdentifier, duration);
+        detailIdentifier = null;
     }
 
     public void addDetailMeasurement(String detailIdentifier, long durationNanos) {
@@ -117,7 +119,7 @@ public class ACollectingMeasurement implements AWithParameters {
 
     public void finish() {
         if(isFinished) {
-            throw new IllegalStateException("a simple measurement can be finished only once.");
+            throw new IllegalStateException("a measurement can be finished only once.");
         }
         if(detailIdentifier != null) {
             //TODO log a warning

@@ -3,6 +3,7 @@ package com.ajjpj.asysmon.measure;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.processing.ADataSink;
 import com.ajjpj.asysmon.timer.ATimer;
+import com.ajjpj.asysmon.util.AObjectHolder;
 import com.ajjpj.asysmon.util.ArrayStack;
 
 import java.util.ArrayList;
@@ -15,14 +16,14 @@ import java.util.List;
  *
  * @author arno
  */
-public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMeasurementHierarchy {
+public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     private final ATimer timer;
     private final ADataSink dataSink;
 
-    private final ArrayStack<ASimpleMeasurement> unfinished = new ArrayStack<com.ajjpj.asysmon.measure.ASimpleMeasurement>();
+    private final ArrayStack<ASimpleSerialMeasurementImpl> unfinished = new ArrayStack<ASimpleSerialMeasurementImpl>();
     private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<List<AHierarchicalData>>();
 
-    private boolean isFinished = false;
+    private final AObjectHolder<Boolean> isFinished = new AObjectHolder<Boolean>(Boolean.FALSE);
 
     public AMeasurementHierarchyImpl(ATimer timer, ADataSink dataSink) {
         this.timer = timer;
@@ -30,7 +31,7 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
     }
 
     private void checkNotFinished() {
-        if(isFinished) {
+        if(isFinished.value) {
             throw new IllegalStateException("measurements must not be reused - this measurement is already closed");
         }
     }
@@ -38,13 +39,18 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
     @Override public ASimpleMeasurement start(String identifier, boolean disjoint) {
         checkNotFinished();
 
-        final ASimpleMeasurement result = new ASimpleMeasurement(this, disjoint, timer.getCurrentNanos(), identifier);
-        unfinished.push(result);
-        childrenStack.push(new ArrayList<AHierarchicalData>());
-        return result;
+        if(disjoint) {
+            final ASimpleSerialMeasurementImpl result = new ASimpleSerialMeasurementImpl(this, timer.getCurrentNanos(), identifier);
+            unfinished.push(result);
+            childrenStack.push(new ArrayList<AHierarchicalData>()); //TODO rename 'disjoint' in 'parallel' (negating the logic, of course)
+            return result;
+        }
+        else {
+            return new ASimpleParallelMeasurementImpl(this, timer.getCurrentNanos(), identifier, childrenStack.peek());
+        }
     }
 
-    @Override public void finish(ASimpleMeasurement measurement) {
+    @Override public void finish(ASimpleSerialMeasurementImpl measurement) {
         checkNotFinished();
 
         if (unfinished.peek() != measurement) {
@@ -56,15 +62,22 @@ public class AMeasurementHierarchyImpl implements com.ajjpj.asysmon.measure.AMea
 
         unfinished.pop();
         final List<AHierarchicalData> children = childrenStack.pop();
-        final AHierarchicalData newData = new AHierarchicalData(measurement.isDisjoint(), measurement.getStartTimeMillis(), finishedTimestamp - measurement.getStartTimeNanos(), measurement.getIdentifier(), measurement.getParameters(), children);
+        final AHierarchicalData newData = new AHierarchicalData(true, measurement.getStartTimeMillis(), finishedTimestamp - measurement.getStartTimeNanos(), measurement.getIdentifier(), measurement.getParameters(), children);
 
         if(unfinished.isEmpty()) {
-            isFinished = true;
+            isFinished.value = true;
             dataSink.onFinishedHierarchicalData(newData);
         }
         else {
             childrenStack.peek().add(newData);
         }
+    }
+
+    @Override public void finish(ASimpleParallelMeasurementImpl m) {
+        checkNotFinished();
+
+        final long finishedTimestamp = timer.getCurrentNanos();
+        m.getChildrenOfParent().add(new AHierarchicalData(false, m.getStartTimeMillis(), finishedTimestamp - m.getStartTimeNanos(), m.getIdentifier(), m.getParameters(), Collections.<AHierarchicalData>emptyList()));
     }
 
     @Override

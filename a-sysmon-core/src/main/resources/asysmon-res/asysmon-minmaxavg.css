@@ -1,3 +1,48 @@
+html {
+  font-family: sans-serif;
+}
+
+table.global-measurements {
+  margin-top: 20px;
+}
+tr.global-measurements {
+  margin-top: 3px;
+}
+td.global-measurements-key {
+  padding-right: 10px;
+}
+
+div.button-box {
+  float: right;
+  margin-top: 8px;
+}
+
+.btn {
+  -moz-box-sizing: border-box;
+  text-transform: none;
+  font-family: inherit;
+  background-image: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 6px 6px 6px 6px;
+  -moz-user-select: none;
+  text-decoration: none;
+  color: rgb(51,51,51);
+  background-color: rgb(245,245,245);
+  border-color: rgb(173,173,173);
+}
+
+.btn:hover {
+   background-color: rgb(235,235,235);
+}
+
 div.table-header {
   margin-top: 10px;
 }
@@ -27,6 +72,10 @@ div.column-long {
 }
 
 div.children {
+}
+
+div.data-row-parallel {
+  color: #808080;
 }
 
 div.data-row {

@@ -1,8 +1,9 @@
-package com.ajjpj.asysmon.render.minmaxavgservlet;
+package com.ajjpj.asysmon.processing.minmaxavg;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.AStaticSysMonConfig;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
+import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.processing.minmaxavg.AMinMaxAvgCollector;
 import com.ajjpj.asysmon.processing.minmaxavg.AMinMaxAvgData;
@@ -18,6 +19,7 @@ import java.io.PrintWriter;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -70,6 +72,12 @@ public class AMinMaxAvgServlet extends HttpServlet {
         if("clear".equals(req.getParameter("cmd"))) {
             getCollector().clear();
         }
+        else if("start".equals(req.getParameter("cmd"))) {
+            getCollector().setActive(true);
+        }
+        else if("stop".equals(req.getParameter("cmd"))) {
+            getCollector().setActive(false);
+        }
 
         resp.setCharacterEncoding("utf-8");
 
@@ -92,7 +100,6 @@ public class AMinMaxAvgServlet extends HttpServlet {
         out.println("<meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\" />");
         out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + url + "?res=asysmon-minmaxavg.css\">");
         out.println("<script src=\"" + url + "?res=jquery-1.10.2.min.js\"></script>");
-        out.println("<script src=\"" + url + "?res=asysmon-minmaxavg.js\"></script>");
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>A-SysMon performance min / avg / max</h1>");
@@ -105,7 +112,7 @@ public class AMinMaxAvgServlet extends HttpServlet {
     private void writeGlobalMeasurements(PrintWriter out) {
         final Map<String, AGlobalDataPoint> allData = ASysMon.get().getGlobalMeasurements();
 
-        out.println("<table>");
+        out.println("<table class='global-measurements'>");
 
         // special handling for system load
         final AGlobalDataPoint load1  = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_1_MIN);
@@ -120,6 +127,21 @@ public class AMinMaxAvgServlet extends HttpServlet {
 
         writeGlobalMeasurement(out, "System Load", sLoad1 + " / " + sLoad5 + " / " + sLoad15);
 
+        // special handling for memory
+        final AGlobalDataPoint memUsed = allData.remove(AMemoryMeasurer.IDENT_MEM_USED);
+        final AGlobalDataPoint memTotal = allData.remove(AMemoryMeasurer.IDENT_MEM_TOTAL);
+        final AGlobalDataPoint memMax = allData.remove(AMemoryMeasurer.IDENT_MEM_MAX);
+        allData.remove(AMemoryMeasurer.IDENT_MEM_FREE);
+
+        final int MEGA = 1024*1024;
+        final String sMemUsed  = memUsed  != null ? (getDecimalFormat(memUsed. getNumFracDigits()).format(memUsed. getValue() / MEGA) + "M") : "N/A";
+        final String sMemTotal = memTotal != null ? (getDecimalFormat(memTotal.getNumFracDigits()).format(memTotal.getValue() / MEGA) + "M") : "N/A";
+        final String sMemMax   = memMax   != null ? (getDecimalFormat(memMax.  getNumFracDigits()).format(memMax.  getValue() / MEGA) + "M") : "N/A";
+
+        //TODO color code memory usage
+
+        writeGlobalMeasurement(out, "Memory", sMemUsed + " / " + sMemTotal + " / " + sMemMax);
+
         // generic handling for other global measurements
         for(AGlobalDataPoint dp: allData.values()) {
             writeGlobalMeasurement(out, dp.getName(), getDecimalFormat(dp.getNumFracDigits()).format(dp.getValue()));
@@ -129,10 +151,14 @@ public class AMinMaxAvgServlet extends HttpServlet {
     }
 
     private void writeGlobalMeasurement(PrintWriter out, String ident, String value) {
-        out.println("<tr><td>" + ident + "</td><td>" + value + "</td></tr>");
+        out.println("<tr class='global-measurements'><td class='global-measurements-key'>" + escapeHtml(ident) + "</td><td class='global-measuremnets-value'>" + escapeHtml(value) + "</td></tr>");
     }
 
     private DecimalFormat getDecimalFormat(int numFrac) {
+        if(numFrac == 0) {
+            return new DecimalFormat("#,##0");
+        }
+
         final String formatSuffix = "000000000". substring(0, numFrac);
         return new DecimalFormat("#,##0." + formatSuffix);
     }
@@ -141,11 +167,23 @@ public class AMinMaxAvgServlet extends HttpServlet {
         out.println("<div class='button-box'>");
         out.println("<a class='btn' href='" + url + "'>Refresh</a>");
         out.println("<a class='btn' href='" + url + "?cmd=clear'>Clear</a>");
+        if(getCollector().isActive()) {
+            out.println("<a class='btn' href='" + url + "?cmd=stop'>Stop</a>");
+        }
+        else {
+            out.println("<a class='btn' href='" + url + "?cmd=start'>Start</a>");
+        }
+
         out.println("</div>");
     }
 
-    private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw) {
+    private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw, long selfNanos, int numParent) {
         final List<Map.Entry<String, AMinMaxAvgData>> result = new ArrayList<Map.Entry<String, AMinMaxAvgData>>(raw.entrySet());
+
+        if(selfNanos != 0) {
+            final AMinMaxAvgData selfData = new AMinMaxAvgData(true, numParent, 0, 0, selfNanos / numParent, selfNanos, new ConcurrentHashMap<String, AMinMaxAvgData>());
+            result.add(new AbstractMap.SimpleEntry<String, AMinMaxAvgData>("<self>", selfData));
+        }
 
         Collections.sort(result, new Comparator<Map.Entry<String, AMinMaxAvgData>>() {
             @Override public int compare(Map.Entry<String, AMinMaxAvgData> o1, Map.Entry<String, AMinMaxAvgData> o2) {
@@ -162,10 +200,38 @@ public class AMinMaxAvgServlet extends HttpServlet {
         return result;
     }
 
+    private static String escapeHtml(String s) {
+        final StringBuilder result = new StringBuilder();
+
+        for(int i=0; i<s.length(); i++) {
+            final char ch = s.charAt(i);
+
+            if(ch == '"') {
+                result.append("&quot;");
+            }
+            else if(ch == '<') {
+                result.append("&lt;");
+            }
+            else if(ch == '>') {
+                result.append("&gt;");
+            }
+            else if(ch > 127) {
+                result.append("&#" + ((int)ch) + ";");
+            }
+            else result.append(ch);
+        }
+        return result.toString();
+    }
+
     private void writeTable(PrintWriter out) {
         final IdGenerator idGenerator = new IdGenerator();
 
-        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(getCollector().getData())) {
+        long totalNanos = 0;
+        for(AMinMaxAvgData d: getCollector().getData().values()) {
+            totalNanos += d.getTotalNanos();
+        }
+
+        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(getCollector().getData(), 0, 0)) {
             final String rootIdent = entry.getKey();
 
             out.println("<div class='table-header'>&nbsp;<div style=\"float: right;\">");
@@ -178,29 +244,34 @@ public class AMinMaxAvgServlet extends HttpServlet {
             out.println("</div></div>");
 
             final AMinMaxAvgData data = entry.getValue();
-            writeTreeNodeRec(out, rootIdent, data, idGenerator, 0, data.getAvgNanos() * data.getTotalNumInContext(), data.getTotalNumInContext());
+            writeTreeNodeRec(out, rootIdent, data, idGenerator, 0, totalNanos, 1);
         }
     }
 
-    //TODO show parentheses around non-disjoint data
-    //TODO top-level percentage relative to the sum of all top-level measurements
-
-    //TODO styling of command links
-    //TODO styling of global measurements
     //TODO expand / collapse all
     //TODO make static resources cacheable
-    //TODO show 'self' time at every level
 
     private void writeTreeNodeRec(PrintWriter out, String ident, AMinMaxAvgData data, IdGenerator idGenerator, int level, double parentTotalNanos, double numParentCalls) {
-        out.println("<div class='data-row data-row-" + level + "' onclick=\"$('#" + idGenerator.nextId() + "').slideToggle(50);\">");
+        out.println("<div class='" + (data.isDisjoint() ? "" :  "data-row-parallel ") + "data-row data-row-" + level + "' onclick=\"$('#" + idGenerator.nextId() + "').slideToggle(50);\">");
         out.println("<div class='node-icon'>" + (data.getChildren().isEmpty() ? "&nbsp;" : "*") + "</div>");
-        out.println(ident);
+
+        final String effIdent = data.isDisjoint() ? ident : ("[" + ident + "]");
+        out.println(escapeHtml(effIdent));
         out.println("<div style=\"float: right;\">");
 
-        long totalNanos = data.getAvgNanos() * data.getTotalNumInContext();
+        long totalNanos = data.getTotalNanos();
         double fractionOfParent = totalNanos / parentTotalNanos;
-        writeColumn(out, CSS_COLUMN_MEDIUM, "background: " + blendedColor(200, 255, 200, 255, 120, 120, fractionOfParent), 100.0 * fractionOfParent, 1);
-        writeColumn(out, CSS_COLUMN_MEDIUM, level == 0 ? data.getTotalNumInContext() : (data.getTotalNumInContext() / numParentCalls), 2);
+
+        long selfNanos = totalNanos;
+        for(AMinMaxAvgData childData: data.getChildren().values()) {
+            if(childData.isDisjoint()) {
+                selfNanos -= childData.getTotalNanos();
+            }
+        }
+
+        final String percentStyle = data.isDisjoint() ? ("background: " + blendedColor(200, 255, 200, 255, 120, 120, fractionOfParent)) : null;
+        writeColumn(out, CSS_COLUMN_MEDIUM, percentStyle, 100.0 * fractionOfParent, 1);
+        writeColumn(out, CSS_COLUMN_MEDIUM, (data.getTotalNumInContext() / numParentCalls), 2);
         writeColumn(out, CSS_COLUMN_LONG, data.getTotalNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getMinNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getAvgNanos() / MILLION);
@@ -210,7 +281,7 @@ public class AMinMaxAvgServlet extends HttpServlet {
         out.println("</div>");
         if(! data.getChildren().isEmpty()) {
             out.println("<div class='children' style='display:" + (level == 0 ? "block" : "none") +"' id=\"" + idGenerator.curId() + "\">");
-            for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(data.getChildren())) {
+            for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(data.getChildren(), selfNanos, data.getTotalNumInContext())) {
                 writeTreeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, level+1, totalNanos, data.getTotalNumInContext());
             }
             out.println("</div>");
