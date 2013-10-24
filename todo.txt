@@ -1,26 +1,19 @@
 todo
 ----
-* configure ASysMon instance for JDBC
+* JDBC
+  * configure ASysMon instance for JDBC
   * DataSource --> keep track of number of used connections
-
-* database drill-up servlet: start with JDBC, inverse tree to the 'top'
-
-* global measurements
-  * currently used connections per connection pool
-
-* offloading data sink
+  * database drill-up servlet: start with JDBC, inverse tree to the 'top'
+  * global measurements: currently used connections per connection pool
 
 * JUnit tests
 
-* aggregated presentation: handling of 'disjoint'
+* offloading data sink
+  * unique ids per measurement --> referencing (?)
+  * support for 'correcting' real time clocks of systems
+  * per hierarchy: Thread name, Host, PID
 
-
-unique ids per measurement --> referencing (?)
-support for 'correcting' real time clocks of systems
-
-Einmalig in Root: Thread-ID, Host, PID
-
-Correlation ID etc.: als „Kontext“ eines Messpunkts (wenn vorhanden)
+* Correlation ID etc.: as a 'context' of a measurement hierarchy (if present)
 
 * log asysmon overhead (?)
 
