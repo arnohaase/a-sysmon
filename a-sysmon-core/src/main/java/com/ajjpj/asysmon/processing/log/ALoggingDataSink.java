@@ -14,7 +14,7 @@ public abstract class ALoggingDataSink implements ADataSink {
     }
 
     private void logDataRec(AHierarchicalData data, int level) {
-        String s = indent(level) + (data.isDisjoint() ? "+" : "-") + data.getIdentifier() + "@" + data.getStartTimeMillis() + ": " + data.getDurationNanos() + " " + data.getParameters();
+        String s = indent(level) + (data.isSerial() ? "+" : "-") + data.getIdentifier() + "@" + data.getStartTimeMillis() + ": " + data.getDurationNanos() + " " + data.getParameters();
         log(s);
 
         for(AHierarchicalData child: data.getChildren()) {

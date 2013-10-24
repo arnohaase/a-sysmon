@@ -10,7 +10,7 @@ import java.util.Map;
  * @author arno
  */
 public class AHierarchicalData {
-    private final boolean isDisjoint;
+    private final boolean isSerial;
 
     private final long startTimeMillis;
     private final long durationNanos;
@@ -20,7 +20,7 @@ public class AHierarchicalData {
     private final List<AHierarchicalData> children;
 
     /**
-     * @param isDisjoint <code>true</code> designates the intuitive situation that a parent 'contains' several non-overlapping measurements,
+     * @param isSerial <code>true</code> designates the intuitive situation that a parent 'contains' several non-overlapping measurements,
      *                     with the sum of the children's durations being less than or equals to the parent's duration and the difference
      *                     being spent in the parent itself.<p />
      *                     <code>false</code> designates more exotic measurements that may 'overlap' other measurements etc., providing
@@ -29,8 +29,8 @@ public class AHierarchicalData {
      * @param identifier is used for aggregated rendering of results - measurements with equal identifiers are treated
      *                   as 'equivalent'.
      */
-    public AHierarchicalData(boolean isDisjoint, long startTimeMillis, long durationNanos, String identifier, Map<String, String> parameters, List<AHierarchicalData> children) {
-        this.isDisjoint = isDisjoint;
+    public AHierarchicalData(boolean isSerial, long startTimeMillis, long durationNanos, String identifier, Map<String, String> parameters, List<AHierarchicalData> children) {
+        this.isSerial = isSerial;
         this.startTimeMillis = startTimeMillis;
         this.durationNanos = durationNanos;
         this.identifier = identifier;
@@ -38,8 +38,8 @@ public class AHierarchicalData {
         this.children = Collections.unmodifiableList(children);
     }
 
-    public boolean isDisjoint() {
-        return isDisjoint;
+    public boolean isSerial() {
+        return isSerial;
     }
 
     public long getStartTimeMillis() {

@@ -48,13 +48,13 @@ public class AMinMaxAvgCollector implements ADataSink {
         final ConcurrentHashMap<String, AMinMaxAvgData> childMap;
 
         if(prev == null) {
-            final AMinMaxAvgData newData = new AMinMaxAvgData(data.isDisjoint(), data.getDurationNanos());
+            final AMinMaxAvgData newData = new AMinMaxAvgData(data.isSerial(), data.getDurationNanos());
             childMap = newData.getChildren();
             parentMap.put(data.getIdentifier(), newData);
         }
         else {
             childMap = prev.getChildren();
-            parentMap.put(data.getIdentifier(), prev.withDataPoint(data.isDisjoint(), data.getDurationNanos()));
+            parentMap.put(data.getIdentifier(), prev.withDataPoint(data.isSerial(), data.getDurationNanos()));
         }
 
         for(AHierarchicalData childData: data.getChildren()) {

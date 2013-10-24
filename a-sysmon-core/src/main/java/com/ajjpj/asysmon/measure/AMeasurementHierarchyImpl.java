@@ -36,13 +36,13 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         }
     }
 
-    @Override public ASimpleMeasurement start(String identifier, boolean disjoint) {
+    @Override public ASimpleMeasurement start(String identifier, boolean isSerial) {
         checkNotFinished();
 
-        if(disjoint) {
+        if(isSerial) {
             final ASimpleSerialMeasurementImpl result = new ASimpleSerialMeasurementImpl(this, timer.getCurrentNanos(), identifier);
             unfinished.push(result);
-            childrenStack.push(new ArrayList<AHierarchicalData>()); //TODO rename 'disjoint' in 'parallel' (negating the logic, of course)
+            childrenStack.push(new ArrayList<AHierarchicalData>());
             return result;
         }
         else {
@@ -81,13 +81,13 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override
-    public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean disjoint) {
+    public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean isSerial) {
         checkNotFinished();
         if(unfinished.isEmpty()) {
             throw new IllegalStateException("currently no support for top-level collecting measurements"); //TODO what is a good way to get around this?
         }
 
-        return new ACollectingMeasurement(timer, this, disjoint, identifier, childrenStack.peek());
+        return new ACollectingMeasurement(timer, this, isSerial, identifier, childrenStack.peek());
     }
 
     @Override public void finish(ACollectingMeasurement m) {
@@ -100,7 +100,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             children.add(new AHierarchicalData(true, m.getStartTimeMillis(), detail.getTotalNanos(), detailIdentifier, Collections.<String, String>emptyMap(), Collections.<AHierarchicalData>emptyList()));
         }
 
-        final AHierarchicalData newData = new AHierarchicalData(m.isDisjoint(), m.getStartTimeMillis(), m.getTotalDurationNanos(), m.getIdentifier(), m.getParameters(), children);
+        final AHierarchicalData newData = new AHierarchicalData(m.isSerial(), m.getStartTimeMillis(), m.getTotalDurationNanos(), m.getIdentifier(), m.getParameters(), children);
         m.getChildrenOfParent().add(newData);
     }
 }

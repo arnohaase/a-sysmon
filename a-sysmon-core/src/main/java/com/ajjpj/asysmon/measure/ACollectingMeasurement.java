@@ -2,7 +2,6 @@ package com.ajjpj.asysmon.measure;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.timer.ATimer;
-import com.ajjpj.asysmon.util.AObjectHolder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.Map;
 public class ACollectingMeasurement implements AWithParameters {
     private final ATimer timer;
     private final AMeasurementHierarchy hierarchy;
-    private final boolean disjoint;
+    private final boolean isSerial;
 
     private final long startTimeMillis = System.currentTimeMillis();
     private final String identifier;
@@ -37,10 +36,10 @@ public class ACollectingMeasurement implements AWithParameters {
 
     private boolean isFinished = false;
 
-    public ACollectingMeasurement(ATimer timer, AMeasurementHierarchy hierarchy, boolean disjoint, String identifier, List<AHierarchicalData> childrenOfParent) {
+    public ACollectingMeasurement(ATimer timer, AMeasurementHierarchy hierarchy, boolean isSerial, String identifier, List<AHierarchicalData> childrenOfParent) {
         this.timer = timer;
         this.hierarchy = hierarchy;
-        this.disjoint = disjoint;
+        this.isSerial = isSerial;
         this.identifier = identifier;
         this.childrenOfParent = childrenOfParent;
     }
@@ -49,8 +48,8 @@ public class ACollectingMeasurement implements AWithParameters {
         return childrenOfParent;
     }
 
-    public boolean isDisjoint() {
-        return disjoint;
+    public boolean isSerial() {
+        return isSerial;
     }
 
     public long getStartTimeMillis() {

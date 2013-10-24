@@ -5,8 +5,6 @@ import com.ajjpj.asysmon.config.AStaticSysMonConfig;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
 import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
-import com.ajjpj.asysmon.processing.minmaxavg.AMinMaxAvgCollector;
-import com.ajjpj.asysmon.processing.minmaxavg.AMinMaxAvgData;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -252,10 +250,10 @@ public class AMinMaxAvgServlet extends HttpServlet {
     //TODO make static resources cacheable
 
     private void writeTreeNodeRec(PrintWriter out, String ident, AMinMaxAvgData data, IdGenerator idGenerator, int level, double parentTotalNanos, double numParentCalls) {
-        out.println("<div class='" + (data.isDisjoint() ? "" :  "data-row-parallel ") + "data-row data-row-" + level + "' onclick=\"$('#" + idGenerator.nextId() + "').slideToggle(50);\">");
+        out.println("<div class='" + (data.isSerial() ? "" :  "data-row-parallel ") + "data-row data-row-" + level + "' onclick=\"$('#" + idGenerator.nextId() + "').slideToggle(50);\">");
         out.println("<div class='node-icon'>" + (data.getChildren().isEmpty() ? "&nbsp;" : "*") + "</div>");
 
-        final String effIdent = data.isDisjoint() ? ident : ("[" + ident + "]");
+        final String effIdent = data.isSerial() ? ident : ("[" + ident + "]");
         out.println(escapeHtml(effIdent));
         out.println("<div style=\"float: right;\">");
 
@@ -264,12 +262,12 @@ public class AMinMaxAvgServlet extends HttpServlet {
 
         long selfNanos = totalNanos;
         for(AMinMaxAvgData childData: data.getChildren().values()) {
-            if(childData.isDisjoint()) {
+            if(childData.isSerial()) {
                 selfNanos -= childData.getTotalNanos();
             }
         }
 
-        final String percentStyle = data.isDisjoint() ? ("background: " + blendedColor(200, 255, 200, 255, 120, 120, fractionOfParent)) : null;
+        final String percentStyle = data.isSerial() ? ("background: " + blendedColor(200, 255, 200, 255, 120, 120, fractionOfParent)) : null;
         writeColumn(out, CSS_COLUMN_MEDIUM, percentStyle, 100.0 * fractionOfParent, 1);
         writeColumn(out, CSS_COLUMN_MEDIUM, (data.getTotalNumInContext() / numParentCalls), 2);
         writeColumn(out, CSS_COLUMN_LONG, data.getTotalNanos() / MILLION);

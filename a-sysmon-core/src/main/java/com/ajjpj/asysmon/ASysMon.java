@@ -79,15 +79,15 @@ public class ASysMon {
     public ASimpleMeasurement start(String identifier) {
         return start(identifier, true);
     }
-    public ASimpleMeasurement start(String identifier, boolean disjoint) {
-        return getMeasurementHierarchy().start(identifier, disjoint);
+    public ASimpleMeasurement start(String identifier, boolean serial) {
+        return getMeasurementHierarchy().start(identifier, serial);
     }
 
     public ACollectingMeasurement startCollectingMeasurement(String identifier) {
         return startCollectingMeasurement(identifier, true);
     }
-    public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean disjoint) {
-        return getMeasurementHierarchy().startCollectingMeasurement(identifier, disjoint);
+    public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean serial) {
+        return getMeasurementHierarchy().startCollectingMeasurement(identifier, serial);
     }
 
     public Map<String, AGlobalDataPoint> getGlobalMeasurements() {
