@@ -32,7 +32,10 @@ public class AMinMaxAvgCollector implements ADataSink {
         return Collections.unmodifiableMap(rootMap);
     }
 
-    @Override public void onFinishedHierarchicalData(AHierarchicalData data) {
+    @Override public void onStartHierarchicalMeasurement() {
+    }
+
+    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data) {
         if(isActive) {
             synchronizedCollect(data);
         }

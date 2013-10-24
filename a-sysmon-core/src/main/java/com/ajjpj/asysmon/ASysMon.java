@@ -9,6 +9,7 @@ import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
 import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.processing.ADataSink;
+import com.ajjpj.asysmon.processing.log.AStdOutDataSink;
 import com.ajjpj.asysmon.timer.ATimer;
 
 import java.util.*;
@@ -55,11 +56,14 @@ public class ASysMon {
         }
 
         final AMeasurementHierarchy result = new AMeasurementHierarchyImpl(timer, new ADataSink() {
-            @Override public void onFinishedHierarchicalData(AHierarchicalData data) {
+            @Override public void onStartHierarchicalMeasurement() {
+            }
+
+            @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data) {
                 hierarchyPerThread.remove();
 
                 for(ADataSink handler: handlers) {
-                    handler.onFinishedHierarchicalData(data);
+                    handler.onFinishedHierarchicalMeasurement(data);
                 }
             }
         });

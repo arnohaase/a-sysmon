@@ -5,7 +5,10 @@ import com.ajjpj.asysmon.processing.ADataSink;
 
 
 public abstract class ALoggingDataSink implements ADataSink {
-    @Override public void onFinishedHierarchicalData(AHierarchicalData data) {
+    @Override public void onStartHierarchicalMeasurement() {
+    }
+
+    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data) {
         logDataRec(data, 0);
     }
 

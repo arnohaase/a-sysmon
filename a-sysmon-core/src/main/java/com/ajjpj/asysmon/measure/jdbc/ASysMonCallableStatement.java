@@ -585,4 +585,14 @@ public class ASysMonCallableStatement extends ASysMonPreparedStatement implement
     public Reader getCharacterStream(String parameterName) throws SQLException {
         return inner.getCharacterStream(parameterName);
     }
+
+    // introduced with JDK 1.7
+
+    public <T> T getObject(int parameterIndex, Class<T> type) throws SQLException {
+        return inner.getObject(parameterIndex, type);
+    }
+
+    public <T> T getObject(String parameterName, Class<T> type) throws SQLException {
+        return inner.getObject(parameterName, type);
+    }
 }

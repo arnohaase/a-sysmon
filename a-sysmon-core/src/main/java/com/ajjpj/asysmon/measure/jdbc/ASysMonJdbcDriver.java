@@ -5,6 +5,7 @@ import com.ajjpj.asysmon.ASysMon;
 
 import java.sql.*;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 
 /**
@@ -55,5 +56,10 @@ public class ASysMonJdbcDriver implements Driver {
 
     @Override public boolean jdbcCompliant() {
         return true; //TODO what to return here?!
+    }
+
+    // introduced with JDK 1.7
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        throw new SQLFeatureNotSupportedException();
     }
 }

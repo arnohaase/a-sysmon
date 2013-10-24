@@ -24,7 +24,7 @@ public class ASysMonResultSet implements ResultSet {
         this.m = m;
     }
 
-//---------------------- Wrapper interface
+    //---------------------- Wrapper interface
 
     @Override public <T> T unwrap(Class<T> iface) throws SQLException {
         return inner.unwrap(iface); //TODO dynamic proxy?
@@ -1020,4 +1020,15 @@ public class ASysMonResultSet implements ResultSet {
     public void updateNClob(String columnLabel, Reader reader) throws SQLException {
         inner.updateNClob(columnLabel, reader);
     }
+
+    // introduced with JDK 1.7 --> no @Override to maintain compatibility with JDK 1.6
+
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+        return inner.getObject(columnIndex, type);
+    }
+
+    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
+        return inner.getObject(columnLabel, type);
+    }
+
 }

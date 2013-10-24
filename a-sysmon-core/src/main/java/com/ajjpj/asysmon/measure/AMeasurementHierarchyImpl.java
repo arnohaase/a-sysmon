@@ -66,7 +66,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         if(unfinished.isEmpty()) {
             isFinished.value = true;
-            dataSink.onFinishedHierarchicalData(newData);
+            dataSink.onFinishedHierarchicalMeasurement(newData);
         }
         else {
             childrenStack.peek().add(newData);

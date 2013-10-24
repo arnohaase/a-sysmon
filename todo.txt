@@ -1,21 +1,16 @@
 todo
 ----
-* beautify min-max servlet
 * configure ASysMon instance for JDBC
-* JDBC: DataSource (optional)
+  * DataSource --> keep track of number of used connections
 
 * database drill-up servlet: start with JDBC, inverse tree to the 'top'
 
 * global measurements
   * currently used connections per connection pool
   * currently used threads per thread pool
-  * memory consumption
+  * threads per pool
 
 * offloading data sink
-
-* JDBC
-  * new methods of 1.7
-  * DataSource --> keep track of number of used connections
 
 * JUnit tests
 
@@ -25,10 +20,7 @@ todo
 unique ids per measurement --> referencing (?)
 support for 'correcting' real time clocks of systems
 
-
-
 Einmalig in Root: Thread-ID, Host, PID
-
 
 Correlation ID etc.: als „Kontext“ eines Messpunkts (wenn vorhanden)
 

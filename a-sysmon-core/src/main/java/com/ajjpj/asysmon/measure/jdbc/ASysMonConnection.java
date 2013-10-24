@@ -6,6 +6,7 @@ import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 /**
  * @author arno
@@ -300,5 +301,27 @@ public class ASysMonConnection implements Connection {
     @Override
     public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
         return inner.createStruct(typeName, attributes);
+    }
+
+    // introduced with JDK 1.7
+
+    public void setSchema(String schema) throws SQLException {
+        inner.setSchema(schema);
+    }
+
+    public String getSchema() throws SQLException {
+        return inner.getSchema();
+    }
+
+    public void abort(Executor executor) throws SQLException {
+        inner.abort(executor);
+    }
+
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+        inner.setNetworkTimeout(executor, milliseconds);
+    }
+
+    public int getNetworkTimeout() throws SQLException {
+        return inner.getNetworkTimeout();
     }
 }

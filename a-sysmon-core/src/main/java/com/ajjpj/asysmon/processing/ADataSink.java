@@ -6,5 +6,6 @@ import com.ajjpj.asysmon.data.AHierarchicalData;
  * @author arno
  */
 public interface ADataSink {
-    void onFinishedHierarchicalData(AHierarchicalData data);
+    void onStartHierarchicalMeasurement();
+    void onFinishedHierarchicalMeasurement(AHierarchicalData data);
 }

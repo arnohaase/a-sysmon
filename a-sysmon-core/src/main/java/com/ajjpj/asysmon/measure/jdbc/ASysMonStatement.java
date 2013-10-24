@@ -17,6 +17,8 @@ public class ASysMonStatement implements Statement {
     private final Statement inner;
     private final ASysMon sysMon;
 
+    private boolean closeOnCompletion = false;
+
     public ASysMonStatement(Connection conn, Statement inner, ASysMon sysMon) {
         this.conn = conn;
         this.inner = inner;
@@ -287,5 +289,16 @@ public class ASysMonStatement implements Statement {
     @Override
     public boolean isPoolable() throws SQLException {
         return inner.isPoolable();
+    }
+
+    // introduced with JDK 1.7
+
+    public void closeOnCompletion() throws SQLException {
+        this.closeOnCompletion = true;
+        inner.closeOnCompletion();
+    }
+
+    public boolean isCloseOnCompletion() throws SQLException {
+        return inner.isCloseOnCompletion();
     }
 }

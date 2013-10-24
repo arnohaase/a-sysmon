@@ -1,6 +1,8 @@
 package com.ajjpj.asysmon.demo;
 
 
+import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.processing.log.AStdOutDataSink;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -14,6 +16,8 @@ import java.util.ServiceLoader;
  */
 public class AsysmonDemoMain {
     public static void main(String[] args) throws Exception {
+        AStaticSysMonConfig.addHandler(new AStdOutDataSink());
+
         final Server server = new Server(8080);
 
         final WebAppContext webapp = new WebAppContext();
