@@ -3,8 +3,14 @@ todo
 * JDBC
   * configure ASysMon instance for JDBC
   * DataSource --> keep track of number of used connections
+  * global measurements: currently used connections (per connection pool?)
   * database drill-up servlet: start with JDBC, inverse tree to the 'top'
-  * global measurements: currently used connections per connection pool
+    * % of stmt time
+    * % of measurement ident in context
+    * % of measurement ident (global)
+    * filter measurements (--> e.g. only services)
+
+* allow top-level collecting measurements --> wrap synthetic simple measurement around it
 
 * JUnit tests
 
@@ -48,6 +54,6 @@ documentation
     * #: average number of calls *per parent*
 
 * database drill-up servlet
-  * does some processing --> use advisedly, esp. in production
+  * 'eventually consistent' --> trade-off to avoid global locking
 
 * no top-level 'parallel' measurement

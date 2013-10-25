@@ -6,9 +6,7 @@ import com.ajjpj.asysmon.data.AGlobalDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
-import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
-import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
-import com.ajjpj.asysmon.processing.ADataSink;
+import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.timer.ATimer;
 
 import java.util.*;

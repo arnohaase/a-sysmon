@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.processing;
+package com.ajjpj.asysmon.datasink;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
 

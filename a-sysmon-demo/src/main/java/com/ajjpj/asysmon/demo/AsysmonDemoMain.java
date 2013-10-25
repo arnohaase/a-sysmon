@@ -2,15 +2,9 @@ package com.ajjpj.asysmon.demo;
 
 
 import com.ajjpj.asysmon.config.AStaticSysMonConfig;
-import com.ajjpj.asysmon.measure.threadpool.AThreadPoolTrackingDataSink;
-import com.ajjpj.asysmon.processing.log.AStdOutDataSink;
+import com.ajjpj.asysmon.datasink.log.AStdOutDataSink;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.util.ServiceLoader;
 
 /**
  * @author arno

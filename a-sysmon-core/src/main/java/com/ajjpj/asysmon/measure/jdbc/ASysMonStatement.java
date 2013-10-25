@@ -11,6 +11,7 @@ import java.sql.*;
  * @author arno
  */
 public class ASysMonStatement implements Statement {
+    public static final String IDENT_PREFIX_JDBC = "jdbc:";
     public static final String IDENT_EXECUTE = "execute";
 
     private final Connection conn;
@@ -26,7 +27,7 @@ public class ASysMonStatement implements Statement {
     }
 
     public static String ident(String sql) {
-        return "jdbc: " + sql;
+        return IDENT_PREFIX_JDBC + " " + sql;
     }
 
     //-------------------------- Wrapper interface

@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.processing.log;
+package com.ajjpj.asysmon.datasink.log;
 
 
 /**

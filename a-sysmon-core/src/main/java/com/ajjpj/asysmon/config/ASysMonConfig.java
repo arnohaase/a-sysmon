@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.config;
 
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
-import com.ajjpj.asysmon.processing.ADataSink;
+import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.timer.ATimer;
 
 import java.util.List;

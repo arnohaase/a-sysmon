@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.measure.threadpool;
 
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.processing.ADataSink;
+import com.ajjpj.asysmon.datasink.ADataSink;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

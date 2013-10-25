@@ -96,7 +96,7 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void commit() throws SQLException {
-        final ASimpleMeasurement m = sysMon.start("jdbc-commit");
+        final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "commit");
         try {
             inner.commit();
         }
@@ -107,7 +107,7 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void rollback() throws SQLException {
-        final ASimpleMeasurement m = sysMon.start("jdbc-rollback");
+        final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "rollback");
         try {
             inner.rollback();
         } finally {
@@ -117,7 +117,7 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public Savepoint setSavepoint() throws SQLException {
-        final ASimpleMeasurement m = sysMon.start("jdbc-setSavepoint");
+        final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "setSavepoint");
         try {
             return inner.setSavepoint();
         } finally {
@@ -127,7 +127,7 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public Savepoint setSavepoint(String name) throws SQLException {
-        final ASimpleMeasurement m = sysMon.start("jdbc-setSavepoint");
+        final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "setSavepoint");
         try {
             return inner.setSavepoint(name);
         } finally {
@@ -137,7 +137,7 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void rollback(Savepoint savepoint) throws SQLException {
-        final ASimpleMeasurement m = sysMon.start("jdbc-rollback");
+        final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "rollback");
         try {
             inner.rollback(savepoint);
         } finally {
@@ -147,7 +147,7 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-        final ASimpleMeasurement m = sysMon.start("jdbc-releaseSavepoint");
+        final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "releaseSavepoint");
         try {
             inner.releaseSavepoint(savepoint);
         } finally {

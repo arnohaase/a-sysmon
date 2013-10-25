@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.processing.ADataSink;
+import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.timer.ATimer;
 import com.ajjpj.asysmon.util.AObjectHolder;
 import com.ajjpj.asysmon.util.ArrayStack;

@@ -1,7 +1,7 @@
-package com.ajjpj.asysmon.processing.minmaxavg;
+package com.ajjpj.asysmon.datasink.minmaxavg;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.processing.ADataSink;
+import com.ajjpj.asysmon.datasink.ADataSink;
 
 import java.util.Collections;
 import java.util.Map;
@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author arno
  */
-public class AMinMaxAvgCollector implements ADataSink {
-    private volatile boolean isActive = true;
+public class AMinMaxAvgDataSink implements ADataSink {
+    private volatile boolean isActive = false;
 
     private final ConcurrentHashMap<String, AMinMaxAvgData> rootMap = new ConcurrentHashMap<String, AMinMaxAvgData>();
 

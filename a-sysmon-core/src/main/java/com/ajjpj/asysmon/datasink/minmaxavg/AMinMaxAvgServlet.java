@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.processing.minmaxavg;
+package com.ajjpj.asysmon.datasink.minmaxavg;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.AStaticSysMonConfig;
@@ -28,22 +28,26 @@ public class AMinMaxAvgServlet extends HttpServlet {
     private static final String CSS_COLUMN_MEDIUM = "column-medium";
     private static final String CSS_COLUMN_LONG = "column-long";
 
-    private static volatile AMinMaxAvgCollector collector;
+    private static volatile AMinMaxAvgDataSink collector;
 
     private static final int MILLION = 1000*1000;
 
     /**
      * Override to customize initialization (and potentially registration) of the collector.
      */
-    @Override public synchronized void init() throws ServletException {
-        collector = new AMinMaxAvgCollector();
-        AStaticSysMonConfig.addHandler(collector);
+    @Override public void init() throws ServletException {
+        synchronized (AMinMaxAvgServlet.class) {
+            if(collector == null) {
+                collector = new AMinMaxAvgDataSink();
+                AStaticSysMonConfig.addHandler(collector);
+            }
+        }
     }
 
     /**
      * All access to the collector is done through this method. Override to customize.
      */
-    protected AMinMaxAvgCollector getCollector() {
+    protected AMinMaxAvgDataSink getCollector() {
         return collector;
     }
 

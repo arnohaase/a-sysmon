@@ -1,7 +1,4 @@
-package com.ajjpj.asysmon.processing.log;
-
-import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.processing.ADataSink;
+package com.ajjpj.asysmon.datasink.log;
 
 
 /**

@@ -1,7 +1,7 @@
-package com.ajjpj.asysmon.processing.log;
+package com.ajjpj.asysmon.datasink.log;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.processing.ADataSink;
+import com.ajjpj.asysmon.datasink.ADataSink;
 
 
 public abstract class ALoggingDataSink implements ADataSink {

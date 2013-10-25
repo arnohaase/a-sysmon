@@ -4,19 +4,28 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
     <servlet>
-        <servlet-name>performance</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.processing.minmaxavg.AMinMaxAvgServlet</servlet-class>
-        <!--<init-param>-->
-            <!--<param-name>sleep-time-in-seconds</param-name>-->
-            <!--<param-value>10</param-value>-->
-        <!--</init-param>-->
+        <servlet-name>asysmon-minmaxavg</servlet-name>
+        <servlet-class>com.ajjpj.asysmon.datasink.minmaxavg.AMinMaxAvgServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>performance</servlet-name>
-        <url-pattern>/performance</url-pattern>
+        <servlet-name>asysmon-minmaxavg</servlet-name>
+        <url-pattern>/performance/minmaxavg</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>asysmon-jdbc</servlet-name>
+        <servlet-class>com.ajjpj.asysmon.datasink.jdbcreport.AJdbcReportServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>asysmon-jdbc</servlet-name>
+        <url-pattern>/performance/jdbc</url-pattern>
+    </servlet-mapping>
+
+
 
     <servlet>
         <servlet-name>content</servlet-name>

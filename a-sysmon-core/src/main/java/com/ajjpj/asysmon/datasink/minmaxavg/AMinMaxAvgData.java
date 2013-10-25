@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.processing.minmaxavg;
+package com.ajjpj.asysmon.datasink.minmaxavg;
 
 
 import java.util.concurrent.ConcurrentHashMap;
