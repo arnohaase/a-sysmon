@@ -5,24 +5,24 @@
 
     <servlet>
         <servlet-name>asysmon-minmaxavg</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.datasink.minmaxavg.AMinMaxAvgServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.AMinMaxAvgServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>asysmon-minmaxavg</servlet-name>
-        <url-pattern>/performance/minmaxavg</url-pattern>
+        <url-pattern>/asysmon/minmaxavg</url-pattern>
     </servlet-mapping>
 
     <servlet>
         <servlet-name>asysmon-jdbc</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.datasink.jdbcreport.AJdbcReportServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.jdbc.AJdbcReportServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>asysmon-jdbc</servlet-name>
-        <url-pattern>/performance/jdbc</url-pattern>
+        <url-pattern>/asysmon/jdbc</url-pattern>
     </servlet-mapping>
 
 

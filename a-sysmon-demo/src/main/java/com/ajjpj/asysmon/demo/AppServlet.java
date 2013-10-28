@@ -51,6 +51,12 @@ public class AppServlet extends HttpServlet {
                 doQuery(); doQuery(); doQuery(); return sleep();
             }
         });
+        ASysMon.get().measure("q", new AMeasureCallback<Object, RuntimeException>() {
+            @Override
+            public Object call(AWithParameters m) {
+                doQuery(); doQuery(); doQuery(); doQuery(); doQuery(); doQuery(); doQuery(); doQuery(); return sleep();
+            }
+        });
         ASysMon.get().measure("b", new AMeasureCallback<Object, RuntimeException>() {
             @Override
             public Object call(AWithParameters m) {

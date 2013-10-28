@@ -12,6 +12,8 @@ todo
 
 * allow top-level collecting measurements --> wrap synthetic simple measurement around it
 
+* logo in report servlets (?)
+
 * JUnit tests
 
 * offloading data sink
@@ -24,6 +26,8 @@ todo
 * log asysmon overhead (?)
 
 * extract a-base
+
+* generalize 'JDBC' report to 'bottom-up' report --> configurable (in servlet) what a 'leaf' is
 
 
 AOP:

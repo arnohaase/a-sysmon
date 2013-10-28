@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.util;
 
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -8,7 +9,7 @@ import java.util.NoSuchElementException;
  *
  * @author arno
  */
-public class ArrayStack<T> {
+public class ArrayStack<T> implements Iterable<T> {
     private T[] data;
     private int size = 0;
 
@@ -55,6 +56,30 @@ public class ArrayStack<T> {
     }
 
     //TODO tryPop, tryPeek
+
+    /**
+     * iterates through the stack's elements in pop() order without modifying the stack
+     */
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            int idx=size();
+
+            @Override public boolean hasNext() {
+                return idx>0;
+            }
+
+            @Override public T next() {
+                idx -= 1;
+                return data[idx];
+            }
+
+            @Override public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    //TODO reverseIterator()
 
     public int size() {
         return size;

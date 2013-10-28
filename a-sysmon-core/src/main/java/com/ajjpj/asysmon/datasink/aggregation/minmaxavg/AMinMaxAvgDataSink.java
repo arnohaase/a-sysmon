@@ -1,7 +1,8 @@
-package com.ajjpj.asysmon.datasink.minmaxavg;
+package com.ajjpj.asysmon.datasink.aggregation.minmaxavg;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.datasink.ADataSink;
+import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
 
 import java.util.Collections;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class AMinMaxAvgDataSink implements ADataSink {
         return isActive;
     }
 
-    public void clear() {
+    public synchronized void clear() {
         rootMap.clear();
     }
 
@@ -41,7 +42,7 @@ public class AMinMaxAvgDataSink implements ADataSink {
         }
     }
 
-    private synchronized void synchronizedCollect(AHierarchicalData newData) {
+    private synchronized void synchronizedCollect(AHierarchicalData newData) { //TODO change this to a non-blocking implementation
         recCollect(newData, rootMap);
     }
 
