@@ -7,9 +7,9 @@ import com.ajjpj.asysmon.util.APair;
 
 import javax.servlet.ServletException;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.text.Collator;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -70,7 +70,7 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
             totalJdbcCalls += d.getTotalNumInContext();
         }
 
-        for (Map.Entry<String, AMinMaxAvgData> entry: getCollector().getData().entrySet()) {
+        for (Map.Entry<String, AMinMaxAvgData> entry: getSorted(getCollector().getData(), true)) {
             out.println("<div class='table-header'>&nbsp;<div style=\"float: right;\">");
             writeColumn(out, CSS_COLUMN_MEDIUM, "%");
             writeColumn(out, CSS_COLUMN_MEDIUM, "%local");
@@ -107,12 +107,29 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
                 totalChildCalls += childData.getTotalNumInContext();
             }
 
-            for(Map.Entry<String, AMinMaxAvgData> entry: data.getChildren().entrySet()) { //getSorted(data.getChildren(), selfNanos, data.getTotalNumInContext())) { //TODO getSorted
+            for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(data.getChildren(), false)) {
                 writeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, level + 1, jdbcTimeHere, totalJdbcTime, totalChildCalls);
 //                writeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, level+1, totalNanos, data.getTotalNumInContext());
             }
         }
         nodeRowAfterChildren(out, hasChildren);
+    }
 
+    private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw, final boolean rootLevel) {
+        final List<Map.Entry<String, AMinMaxAvgData>> result = new ArrayList<Map.Entry<String, AMinMaxAvgData>>(raw.entrySet());
+
+        Collections.sort(result, new Comparator<Map.Entry<String, AMinMaxAvgData>>() {
+            @Override public int compare(Map.Entry<String, AMinMaxAvgData> o1, Map.Entry<String, AMinMaxAvgData> o2) {
+                final long delta = rootLevel ? (o2.getValue().getTotalNanos() - o1.getValue().getTotalNanos()) : (o2.getValue().getTotalNumInContext() - o1.getValue().getTotalNumInContext());
+                if(delta > 0) {
+                    return 1;
+                }
+                if(delta < 0) {
+                    return -1;
+                }
+                return Collator.getInstance().compare(o1.getKey(), o2.getKey());
+            }
+        });
+        return result;
     }
 }

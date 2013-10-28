@@ -29,11 +29,6 @@ public class ASysMon {
     private final ATimer timer;
     private final List<? extends ADataSink> handlers;
     private final List<? extends AGlobalMeasurer> globalMeasurers;
-//    private final List<? extends AGlobalMeasurer> globalMeasurers = Arrays.asList(
-//            //TODO make the list of global measurers configurable
-//            new ASystemLoadMeasurer(),
-//            new AMemoryMeasurer()
-//    );
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
