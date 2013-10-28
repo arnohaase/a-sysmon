@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author arno
  */
 public class ABottomUpDataSink implements ADataSink {
-    private volatile boolean isActive = true; // TODO change default to 'false'
+    private volatile boolean isActive = false;
 
     /**
      * Leaf node - e.g. JDBC call - at the top, service calls 'below' that, with the entry points as leaves. Statistics are collected

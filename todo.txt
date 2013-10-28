@@ -1,14 +1,8 @@
 todo
 ----
 * JDBC
-  * configure ASysMon instance for JDBC
   * DataSource --> keep track of number of used connections
   * global measurements: currently used connections (per connection pool?)
-  * database drill-up servlet: start with JDBC, inverse tree to the 'top'
-    * % of stmt time
-    * % of measurement ident in context
-    * % of measurement ident (global)
-    * filter measurements (--> e.g. only services)
 
 * allow top-level collecting measurements --> wrap synthetic simple measurement around it
 
@@ -26,8 +20,6 @@ todo
 * log asysmon overhead (?)
 
 * extract a-base
-
-* generalize 'JDBC' report to 'bottom-up' report --> configurable (in servlet) what a 'leaf' is
 
 
 AOP:
