@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.timer;
+package com.ajjpj.asysmon.util.timer;
 
 
 public interface ATimer {

@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.timer.ATimer;
+import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.HashMap;
 import java.util.List;

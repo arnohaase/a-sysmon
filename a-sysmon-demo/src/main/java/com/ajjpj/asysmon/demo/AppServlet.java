@@ -146,6 +146,6 @@ public class AppServlet extends HttpServlet {
     }
 
     private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("asysmon:jdbc:h2:mem:demo", "sa", "");
+        return DriverManager.getConnection("asysmon:qualifier=123:jdbc:h2:mem:demo", "sa", "");
     }
 }

@@ -4,10 +4,11 @@ package com.ajjpj.asysmon.config;
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
 import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
+import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
 import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.timer.ASystemNanoTimer;
-import com.ajjpj.asysmon.timer.ATimer;
+import com.ajjpj.asysmon.util.timer.ASystemNanoTimer;
+import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +32,8 @@ public class AStaticSysMonConfig {
     private static final List<? extends AGlobalMeasurer> globalMeasurers = Arrays.asList(
             new ASystemLoadMeasurer(),
             new AMemoryMeasurer(),
-            threadCountMeasurer
+            threadCountMeasurer,
+            AConnectionCounter.INSTANCE
     );
 
 

@@ -3,6 +3,7 @@ todo
 * JDBC
   * DataSource --> keep track of number of used connections
   * global measurements: currently used connections (per connection pool?)
+  * Driver: additional 'params' section in the URL
 
 * allow top-level collecting measurements --> wrap synthetic simple measurement around it
 

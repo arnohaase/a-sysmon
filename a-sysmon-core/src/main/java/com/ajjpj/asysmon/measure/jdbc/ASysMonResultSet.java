@@ -43,7 +43,7 @@ public class ASysMonResultSet implements ResultSet {
     //---------------------- navigation
 
     @Override public boolean next() throws SQLException {
-        m.startDetail("result set navigation");
+        m.startDetail("result set access");
         try {
             return inner.next();
         }
@@ -54,7 +54,7 @@ public class ASysMonResultSet implements ResultSet {
 
     @Override
     public void beforeFirst() throws SQLException {
-        m.startDetail("result set navigation");
+        m.startDetail("result set access");
         try {
             inner.beforeFirst();
         }
@@ -65,7 +65,7 @@ public class ASysMonResultSet implements ResultSet {
 
     @Override
     public void afterLast() throws SQLException {
-        m.startDetail("result set navigation");
+        m.startDetail("result set access");
         try {
             inner.afterLast();
         }
@@ -76,7 +76,7 @@ public class ASysMonResultSet implements ResultSet {
 
     @Override
     public boolean first() throws SQLException {
-        m.startDetail("result set navigation");
+        m.startDetail("result set access");
         try {
             return inner.first();
         }
@@ -87,7 +87,7 @@ public class ASysMonResultSet implements ResultSet {
 
     @Override
     public boolean last() throws SQLException {
-        m.startDetail("result set navigation");
+        m.startDetail("result set access");
         try {
             return inner.last();
         }
@@ -98,7 +98,7 @@ public class ASysMonResultSet implements ResultSet {
 
     @Override
     public boolean absolute(int row) throws SQLException {
-        m.startDetail("result set navigation");
+        m.startDetail("result set access");
         try {
             return inner.absolute(row);
         }
@@ -109,7 +109,7 @@ public class ASysMonResultSet implements ResultSet {
 
     @Override
     public boolean relative(int rows) throws SQLException {
-        m.startDetail("result set navigation");
+        m.startDetail("result set access");
         try {
             return inner.relative(rows);
         }
@@ -120,7 +120,7 @@ public class ASysMonResultSet implements ResultSet {
 
     @Override
     public boolean previous() throws SQLException {
-        m.startDetail("result set navigation");
+        m.startDetail("result set access");
         try {
             return inner.previous();
         }
