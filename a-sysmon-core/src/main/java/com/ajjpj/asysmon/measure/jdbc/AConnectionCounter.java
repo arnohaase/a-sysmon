@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AConnectionCounter implements AGlobalMeasurer {
     public static final AConnectionCounter INSTANCE = new AConnectionCounter(); //TODO make instance management configurable
 
-    private static final String DEFAULT_POOL_IDENTIFIER = "@@##++@@##++@@##++@@##++@@##++@@##++@@##++@@##++@@##++@@##++@@##++@@##++";
+    private static final String DEFAULT_POOL_IDENTIFIER = " @@##++ ";
     private final Map<String, AtomicInteger> perConnectionPool = new ConcurrentHashMap<String, AtomicInteger>();
 
     public void onOpenConnection(String qualifier) {

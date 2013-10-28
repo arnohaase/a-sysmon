@@ -80,7 +80,7 @@ public class ASysMonJdbcDriver implements Driver {
             if(keyValue.length != 2) {
                 throw new IllegalArgumentException("key/value pairs with '=', ';' between pairs");
             }
-            result.put(keyValue[0].toLowerCase(), keyValue[1]);
+            result.put(keyValue[0].toLowerCase().trim(), keyValue[1].trim());
         }
         return result;
     }
