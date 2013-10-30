@@ -11,7 +11,7 @@
 
     <groupId>com.ajjpj.a-sysmon</groupId>
     <artifactId>a-sysmon-core</artifactId>
-    <version>0.9-pre1-SNAPSHOT</version>
+    <version>1.0-pre1</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}-${project.version}</name>
