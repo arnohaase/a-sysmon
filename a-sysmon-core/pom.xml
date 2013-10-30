@@ -4,43 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <groupId>com.ajjpj.a-sysmon</groupId>
+        <artifactId>a-sysmon-parent</artifactId>
+        <version>1.0-pre1</version>
     </parent>
 
-    <groupId>com.ajjpj.a-sysmon</groupId>
     <artifactId>a-sysmon-core</artifactId>
-    <version>1.0-pre3-SNAPSHOT</version>
+    <version>1.0-pre1</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}-${project.version}</name>
-
-    <description>a-sysmon is a toolset for monitoring and exploring performance aspects of Java enterprise applications</description>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <scm>
-        <connection>scm:git:git@github.com:arnohaase/a-sysmon.git</connection>
-        <developerConnection>scm:git:git@github.com:arnohaase/a-sysmon.git</developerConnection>
-        <url>git@github.com:arnohaase/a-sysmon.git</url>
-    </scm>
-    <developers>
-        <developer>
-            <id>arnohaase</id>
-            <name>Arno Haase</name>
-            <email>github@haase-consulting.com</email>
-        </developer>
-    </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <!--
