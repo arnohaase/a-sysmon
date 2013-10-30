@@ -2,6 +2,7 @@ package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.AStaticSysMonConfig;
 import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.measure.*;
@@ -56,11 +57,11 @@ public class ASysMon {
                 }
             }
 
-            @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data) {
+            @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
                 hierarchyPerThread.remove();
 
                 for(ADataSink handler: handlers) {
-                    handler.onFinishedHierarchicalMeasurement(data);
+                    handler.onFinishedHierarchicalMeasurement(data, startedFlows, joinedFlows);
                 }
             }
         });
@@ -92,6 +93,9 @@ public class ASysMon {
     }
 
     public Map<String, AGlobalDataPoint> getGlobalMeasurements() {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return new HashMap<String, AGlobalDataPoint>();
+        }
         final Map<String, AGlobalDataPoint> result = new HashMap<String, AGlobalDataPoint>();
         for(AGlobalMeasurer measurer: globalMeasurers) {
             measurer.contributeMeasurements(result);

@@ -1,10 +1,12 @@
 package com.ajjpj.asysmon.datasink.aggregation.bottomup;
 
+import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
 import com.ajjpj.asysmon.util.ArrayStack;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,7 +43,7 @@ public class ABottomUpDataSink implements ADataSink {
     @Override public void onStartedHierarchicalMeasurement() {
     }
 
-    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data) {
+    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
         if(isActive) {
             synchronizedCollect(data);
         }

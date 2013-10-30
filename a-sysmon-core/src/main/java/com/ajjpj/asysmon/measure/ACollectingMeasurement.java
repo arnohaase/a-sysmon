@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.measure;
 
+import com.ajjpj.asysmon.config.AStaticSysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
@@ -86,6 +87,10 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void startDetail(String detailIdentifier) {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return;
+        }
+
         if(this.detailIdentifier != null) {
             throw new IllegalStateException("a detail measurement is already running");
         }
@@ -95,6 +100,10 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void finishDetail() {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return;
+        }
+
         if(this.detailIdentifier == null) {
             throw new IllegalStateException("no current detail measurement");
         }
@@ -105,6 +114,10 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void addDetailMeasurement(String detailIdentifier, long durationNanos) {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return;
+        }
+
         totalDurationNanos += durationNanos;
 
         final Detail prev = details.get(detailIdentifier);
@@ -117,6 +130,10 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void finish() {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return;
+        }
+
         if(isFinished) {
             throw new IllegalStateException("a measurement can be finished only once.");
         }

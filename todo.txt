@@ -1,6 +1,47 @@
 todo
 ----
+* introduce logging - but how?!
+
 * allow top-level collecting measurements --> wrap synthetic simple measurement around it
+
+* global measurements
+  * /proc/diskstats
+
+          Field 1 -- # of reads issued
+          Field 2 -- # of reads merged, field 6 -- # of writes merged
+          Field 3 -- # of sectors read
+          Field 4 -- # of milliseconds spent reading
+          Field 5 -- # of writes completed
+          Field 7 -- # of sectors written
+          Field 8 -- # of milliseconds spent writing
+          Field 9 -- # of I/Os currently in progress
+          Field 10 -- # of milliseconds spent doing I/Os
+          Field 11 -- weighted # of milliseconds spent doing I/Os
+
+          --> read aggregated values, calc 'current' values
+
+  * /proc/stat
+
+        These numbers identify the amount of time the CPU has spent performing different kinds of work. Time units are in USER_HZ or Jiffies (typically hundredths of a second).
+         fields from left to right:
+
+          user: normal processes executing in user mode
+          nice: niced processes executing in user mode
+          system: processes executing in kernel mode
+          idle: twiddling thumbs
+          iowait: waiting for I/O to complete
+          irq: servicing interrupts
+          softirq: servicing softirqs
+
+          --> read aggregated values, calc 'current' values
+
+  * /proc/net/dev
+
+  * --> see code in 'meltdown'
+
+  * how to differentiate between 'own' and 'foreign' load?!
+
+
 
 * logo in report servlets (?)
 
@@ -10,8 +51,8 @@ todo
   * unique ids per measurement --> referencing (?)
   * support for 'correcting' real time clocks of systems
   * per hierarchy: Thread name, Host, PID
+* 'push' (via UDP) vs. 'pull' (store locally, collect e.g. via servlet call --> provide servlet)
 
-* Correlation ID etc.: as a 'context' of a measurement hierarchy (if present)
 
 * log asysmon overhead (?)
 
@@ -30,6 +71,8 @@ discuss
 
 documentation
 -------------
+* "globally disabled" by system property
+
 * terminology
   * measurement: something ongoing --> something like a builder
   * data: immutable results of a finished measurement
@@ -49,3 +92,8 @@ documentation
   * 'eventually consistent' --> trade-off to avoid global locking
 
 * no top-level 'parallel' measurement
+
+* Correlation ID etc.: as a 'context' of a measurement hierarchy (if present)
+  * ASysMon.spawnNewCorrelation(...), ASysMon.joinCorrelation(...)
+  * any time during a measurement --> knowledge of a correlation ID can come e.g. after parsing of a message, i.e. after JDBC or I/O
+  * separate 'kind' and 'correlation id' to keep multiple

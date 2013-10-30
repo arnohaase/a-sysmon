@@ -11,6 +11,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class AsysmonDemoMain {
     public static void main(String[] args) throws Exception {
+//        System.setProperty("com.ajjpj.asysmon.globallydisabled", "true");
+
         AStaticSysMonConfig.addHandler(new AStdOutDataSink());
 
         final Server server = new Server(8080);

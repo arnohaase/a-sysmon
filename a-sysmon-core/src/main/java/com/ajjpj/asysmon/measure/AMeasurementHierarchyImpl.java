@@ -1,14 +1,14 @@
 package com.ajjpj.asysmon.measure;
 
+import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.util.timer.ATimer;
 import com.ajjpj.asysmon.util.AObjectHolder;
 import com.ajjpj.asysmon.util.ArrayStack;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -22,6 +22,9 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
     private final ArrayStack<ASimpleSerialMeasurementImpl> unfinished = new ArrayStack<ASimpleSerialMeasurementImpl>();
     private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<List<AHierarchicalData>>();
+
+    private final Collection<ACorrelationId> startedFlows = new HashSet<ACorrelationId>();
+    private final Collection<ACorrelationId> joinedFlows = new HashSet<ACorrelationId>();
 
     private final AObjectHolder<Boolean> isFinished = new AObjectHolder<Boolean>(Boolean.FALSE);
 
@@ -37,6 +40,16 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public ASimpleMeasurement start(String identifier, boolean isSerial) {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return new ASimpleMeasurement() {
+                @Override public void finish() {
+                }
+
+                @Override public void addParameter(String identifier, String value) {
+                }
+            };
+        }
+
         checkNotFinished();
 
         if(unfinished.isEmpty()) {
@@ -55,6 +68,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ASimpleSerialMeasurementImpl measurement) {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return;
+        }
+
         checkNotFinished();
 
         if (unfinished.peek() != measurement) {
@@ -70,7 +87,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         if(unfinished.isEmpty()) {
             isFinished.value = true;
-            dataSink.onFinishedHierarchicalMeasurement(newData);
+            dataSink.onFinishedHierarchicalMeasurement(newData, startedFlows, joinedFlows);
         }
         else {
             childrenStack.peek().add(newData);
@@ -78,6 +95,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ASimpleParallelMeasurementImpl m) {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return;
+        }
+
         checkNotFinished();
 
         final long finishedTimestamp = timer.getCurrentNanos();
@@ -86,6 +107,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
     @Override
     public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean isSerial) {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return new ACollectingMeasurement(null, null, true, null, null);
+        }
+
         checkNotFinished();
         if(unfinished.isEmpty()) {
             throw new IllegalStateException("currently no support for top-level collecting measurements"); //TODO what is a good way to get around this?
@@ -95,6 +120,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ACollectingMeasurement m) {
+        if(AStaticSysMonConfig.isGloballyDisabled()) {
+            return;
+        }
+
         checkNotFinished();
 
         final List<AHierarchicalData> children = new ArrayList<AHierarchicalData>();
@@ -106,6 +135,24 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         final AHierarchicalData newData = new AHierarchicalData(m.isSerial(), m.getStartTimeMillis(), m.getTotalDurationNanos(), m.getIdentifier(), m.getParameters(), children);
         m.getChildrenOfParent().add(newData);
+    }
+
+    /**
+     * notifies that this measurements contains the start of a new 'flow', i.e. it is the first point in a (potential) chain
+     *  of measurements that are somehow correlated.
+     */
+    public void onStartFlow(ACorrelationId correlationId) {
+        //TODO warn duplicates - in both collections
+        startedFlows.add(correlationId);
+    }
+
+    /**
+     * notifies that this measurements is part of an existing 'flow', i.e. there is another measurement that 'started' a
+     *  set of measurements that are somehow correlated.
+     */
+    public void onJoinFlow(ACorrelationId correlationId) {
+        //TODO warn duplicates - in both collections
+        joinedFlows.add(correlationId);
     }
 }
 

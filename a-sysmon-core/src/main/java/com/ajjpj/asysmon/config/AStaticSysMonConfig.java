@@ -60,4 +60,13 @@ public class AStaticSysMonConfig {
             }
         };
     }
+
+    /**
+     * This flag switches off all 'risky' (or potentially expensive) functionality. It serves as a safeguard in case
+     *  A-SysMon has a bug that impacts an application.
+     */
+    public static boolean isGloballyDisabled() {
+        final String s = System.getProperty("com.ajjpj.asysmon.globallydisabled");
+        return "true".equals(s);
+    }
 }

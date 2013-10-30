@@ -1,14 +1,17 @@
 package com.ajjpj.asysmon.datasink.log;
 
+import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.datasink.ADataSink;
+
+import java.util.Collection;
 
 
 public abstract class ALoggingDataSink implements ADataSink {
     @Override public void onStartedHierarchicalMeasurement() {
     }
 
-    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data) {
+    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
         logDataRec(data, 0);
     }
 
