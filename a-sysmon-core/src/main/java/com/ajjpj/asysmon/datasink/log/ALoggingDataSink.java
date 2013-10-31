@@ -12,7 +12,13 @@ public abstract class ALoggingDataSink implements ADataSink {
     }
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
-        logDataRec(data, 0);
+        if(isLoggingEnabled()) {
+            logDataRec(data, 0);
+        }
+    }
+
+    protected boolean isLoggingEnabled() {
+        return true;
     }
 
     private String indent(int level) {

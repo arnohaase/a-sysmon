@@ -81,6 +81,10 @@ public class ASysMonJdbcDriver implements Driver {
     private Map<String, String> parseParams(String paramString) {
         final Map<String, String> result = new HashMap<String, String>();
 
+        if(paramString.trim().isEmpty()) {
+            return result;
+        }
+
         for(String part: paramString.split(";")) {
             final String[] keyValue = part.split("=");
             if(keyValue.length != 2) {

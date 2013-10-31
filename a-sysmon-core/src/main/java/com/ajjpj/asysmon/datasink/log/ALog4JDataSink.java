@@ -11,4 +11,8 @@ public class ALog4JDataSink extends ALoggingDataSink {
     @Override protected void log(String s) {
         log.debug(s);
     }
+
+    @Override protected boolean isLoggingEnabled() {
+        return log.isDebugEnabled();
+    }
 }

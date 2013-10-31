@@ -53,7 +53,7 @@ todo
   * per hierarchy: Thread name, Host, PID
 * 'push' (via UDP) vs. 'pull' (store locally, collect e.g. via servlet call --> provide servlet)
 
-
+* trace GC (?)
 * log asysmon overhead (?)
 
 * extract a-base
