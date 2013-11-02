@@ -20,6 +20,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     private final ATimer timer;
     private final ADataSink dataSink;
 
+    private int numCollectingMeasurements = 0;
+
+    private boolean hasSyntheticRoot = false;
+
     private final ArrayStack<ASimpleSerialMeasurementImpl> unfinished = new ArrayStack<ASimpleSerialMeasurementImpl>();
     private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<List<AHierarchicalData>>();
 
@@ -92,6 +96,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         else {
             childrenStack.peek().add(newData);
         }
+        checkFinishSyntheticRoot();
     }
 
     @Override public void finish(ASimpleParallelMeasurementImpl m) {
@@ -103,6 +108,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         final long finishedTimestamp = timer.getCurrentNanos();
         m.getChildrenOfParent().add(new AHierarchicalData(false, m.getStartTimeMillis(), finishedTimestamp - m.getStartTimeNanos(), m.getIdentifier(), m.getParameters(), Collections.<AHierarchicalData>emptyList()));
+        checkFinishSyntheticRoot();
     }
 
     @Override
@@ -111,9 +117,12 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             return new ACollectingMeasurement(null, null, true, null, null);
         }
 
+        numCollectingMeasurements += 1;
+
         checkNotFinished();
         if(unfinished.isEmpty()) {
-            throw new IllegalStateException("currently no support for top-level collecting measurements"); //TODO what is a good way to get around this?
+            start(IDENT_SYNTHETIC_ROOT, true);
+            hasSyntheticRoot = true;
         }
 
         return new ACollectingMeasurement(timer, this, isSerial, identifier, childrenStack.peek());
@@ -135,6 +144,16 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         final AHierarchicalData newData = new AHierarchicalData(m.isSerial(), m.getStartTimeMillis(), m.getTotalDurationNanos(), m.getIdentifier(), m.getParameters(), children);
         m.getChildrenOfParent().add(newData);
+        numCollectingMeasurements -= 1;
+        checkFinishSyntheticRoot();
+    }
+
+    private void checkFinishSyntheticRoot() {
+        if(hasSyntheticRoot &&
+                numCollectingMeasurements == 0 &&
+                unfinished.size() == 1) {
+            finish(unfinished.peek());
+        }
     }
 
     /**

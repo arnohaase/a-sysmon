@@ -61,4 +61,9 @@ public class AHierarchicalData {
     public List<AHierarchicalData> getChildren() {
         return children;
     }
+
+    @Override
+    public String toString() {
+        return "AHierarchicalData {" + identifier + " " + parameters + " : " + children + "}";
+    }
 }

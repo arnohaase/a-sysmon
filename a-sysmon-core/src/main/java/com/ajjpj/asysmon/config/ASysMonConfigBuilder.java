@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.config;
 
+import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
 import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
@@ -45,7 +46,11 @@ public class ASysMonConfigBuilder {
                withGlobalMeasurer(threadCountMeasurer);
     }
 
-    public synchronized ASysMonConfig build() {
+    public synchronized ASysMonConfig buildConfig() {
         return new ASysMonConfigImpl(timer, handlers, globalMeasurers);
+    }
+
+    public synchronized ASysMon build() {
+        return new ASysMon(buildConfig());
     }
 }

@@ -42,6 +42,6 @@ public class ADefaultSysMonConfig {
     }
 
     public static ASysMonConfig get() {
-        return builder.build();
+        return builder.buildConfig();
     }
 }
