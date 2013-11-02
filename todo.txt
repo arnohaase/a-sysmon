@@ -1,8 +1,11 @@
 todo
 ----
-* introduce logging - but how?!
-
+* DataSource
 * allow top-level collecting measurements --> wrap synthetic simple measurement around it
+* implicitly close measurements when a parent measurement is closed
+
+
+* load average from sun.misc.Unsafe
 
 * global measurements
   * /proc/diskstats
@@ -57,6 +60,8 @@ todo
 * log asysmon overhead (?)
 
 * extract a-base
+  * partial order
+  * mapWithDefault, mapWithDefaultValue
 
 
 AOP:
@@ -66,7 +71,6 @@ AOP:
 
 discuss
 -------
-* how to configure (non-static) ASysMon instance for JDBC logging
 * how to deal with data sources in app server --> outside application scope
 
 documentation

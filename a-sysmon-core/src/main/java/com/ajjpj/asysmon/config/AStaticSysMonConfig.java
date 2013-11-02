@@ -1,6 +1,9 @@
 package com.ajjpj.asysmon.config;
 
 
+import com.ajjpj.asysmon.config.log.ALog4JLogger;
+import com.ajjpj.asysmon.config.log.AStdOutLogger;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
 import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
@@ -25,6 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AStaticSysMonConfig {
     private static final AThreadCountMeasurer threadCountMeasurer = new AThreadCountMeasurer();
 
+    private static volatile ASysMonLogger logger = defaultLogger();
     private static volatile ATimer timer = new ASystemNanoTimer();
     private static final List<ADataSink> handlers = new CopyOnWriteArrayList<ADataSink>(Arrays.asList(threadCountMeasurer.counter));
 
@@ -36,6 +40,22 @@ public class AStaticSysMonConfig {
             AConnectionCounter.INSTANCE
     );
 
+    private static ASysMonLogger defaultLogger() {
+        try {
+            return ALog4JLogger.INSTANCE; //TODO verify that this works without log4j
+        }
+        catch (Throwable th) {
+            return AStdOutLogger.INSTANCE;
+        }
+    }
+
+    public static ASysMonLogger getLogger() {
+        return logger;
+    }
+
+    public static void setLogger(ASysMonLogger logger) {
+        AStaticSysMonConfig.logger = logger;
+    }
 
     public static void setTimer(ATimer timer) {
         AStaticSysMonConfig.timer = timer;
