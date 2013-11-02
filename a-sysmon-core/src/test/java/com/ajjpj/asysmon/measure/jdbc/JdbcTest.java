@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 public class JdbcTest {
     @Test
     public void testTopLevelJdbc() throws Exception {
+        //TODO refactor this test to use a sys mon holder to avoid hidden side effects through the default sysmon singleton
         final CollectingDataSink dataSink = new CollectingDataSink();
         ADefaultSysMonConfig.addHandler(dataSink);
 
