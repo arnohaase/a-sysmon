@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
-import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.config.ADefaultSysMonConfig;
 import com.ajjpj.asysmon.testutil.CollectingDataSink;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class JdbcTest {
     @Test
     public void testTopLevelJdbc() throws Exception {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        AStaticSysMonConfig.addHandler(dataSink);
+        ADefaultSysMonConfig.addHandler(dataSink);
 
         final Connection conn = DriverManager.getConnection("asysmon::jdbc:h2:mem:demo", "sa", "");
         conn.createStatement().execute("create table A (oid number primary key)");

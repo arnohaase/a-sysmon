@@ -188,6 +188,7 @@ public class ASysMonPreparedStatement extends ASysMonStatement implements Prepar
         inner.setAsciiStream(parameterIndex, x, length);
     }
 
+    @Deprecated
     @Override public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
         setSysMonParam(parameterIndex, x);
         inner.setUnicodeStream(parameterIndex, x, length);

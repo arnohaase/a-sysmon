@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
@@ -87,7 +87,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void startDetail(String detailIdentifier) {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return;
         }
 
@@ -100,7 +100,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void finishDetail() {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return;
         }
 
@@ -114,7 +114,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void addDetailMeasurement(String detailIdentifier, long durationNanos) {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return;
         }
 
@@ -130,7 +130,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void finish() {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return;
         }
 

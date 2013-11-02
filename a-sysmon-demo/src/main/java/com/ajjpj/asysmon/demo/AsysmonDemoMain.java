@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.demo;
 
 
-import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.config.ADefaultSysMonConfig;
 import com.ajjpj.asysmon.datasink.log.AStdOutDataSink;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -13,7 +13,7 @@ public class AsysmonDemoMain {
     public static void main(String[] args) throws Exception {
 //        System.setProperty("com.ajjpj.asysmon.globallydisabled", "true");
 
-        AStaticSysMonConfig.addHandler(new AStdOutDataSink());
+        ADefaultSysMonConfig.addHandler(new AStdOutDataSink());
 
         final Server server = new Server(8080);
 

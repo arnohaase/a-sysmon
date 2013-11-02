@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.datasink.aggregation.bottomup;
 
-import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.config.ADefaultSysMonConfig;
 import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
 import com.ajjpj.asysmon.datasink.aggregation.AbstractAsysmonServlet;
 import com.ajjpj.asysmon.util.APair;
@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import java.io.PrintWriter;
 import java.text.Collator;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -28,7 +27,7 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
     public void init() throws ServletException {
         synchronized (ABottomUpReportServlet.class) {
             collector = new ABottomUpDataSink(getLeafFilter());
-            AStaticSysMonConfig.addHandler(collector);
+            ADefaultSysMonConfig.addHandler(collector);
         }
     }
 
@@ -41,6 +40,7 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
         return collector;
     }
 
+    @SuppressWarnings("unchecked")
     @Override protected List<APair<String, String>> getCommands() {
         return Arrays.asList(
             new APair<String, String> ("Clear", "clear"),

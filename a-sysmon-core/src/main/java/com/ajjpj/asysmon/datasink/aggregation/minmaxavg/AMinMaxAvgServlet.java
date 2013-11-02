@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.datasink.aggregation.minmaxavg;
 
-import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.config.ADefaultSysMonConfig;
 import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
 import com.ajjpj.asysmon.datasink.aggregation.AbstractAsysmonServlet;
 import com.ajjpj.asysmon.util.APair;
@@ -27,7 +27,7 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
         synchronized (AMinMaxAvgServlet.class) {
             if(collector == null) {
                 collector = new AMinMaxAvgDataSink();
-                AStaticSysMonConfig.addHandler(collector);
+                ADefaultSysMonConfig.addHandler(collector);
             }
         }
     }

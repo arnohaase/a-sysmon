@@ -182,6 +182,7 @@ public class ASysMonResultSet implements ResultSet {
     }
 
     @Override
+    @Deprecated
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
         return inner.getBigDecimal(columnIndex, scale);
     }
@@ -212,6 +213,7 @@ public class ASysMonResultSet implements ResultSet {
     }
 
     @Override
+    @Deprecated
     public InputStream getUnicodeStream(int columnIndex) throws SQLException {
         return inner.getUnicodeStream(columnIndex);
     }
@@ -262,6 +264,7 @@ public class ASysMonResultSet implements ResultSet {
     }
 
     @Override
+    @Deprecated
     public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
         return inner.getBigDecimal(columnLabel, scale);
     }
@@ -292,6 +295,7 @@ public class ASysMonResultSet implements ResultSet {
     }
 
     @Override
+    @Deprecated
     public InputStream getUnicodeStream(String columnLabel) throws SQLException {
         return inner.getUnicodeStream(columnLabel);
     }

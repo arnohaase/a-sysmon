@@ -1,12 +1,12 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.util.timer.ATimer;
 import com.ajjpj.asysmon.util.AObjectHolder;
 import com.ajjpj.asysmon.util.ArrayStack;
+import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.*;
 
@@ -40,7 +40,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public ASimpleMeasurement start(String identifier, boolean isSerial) {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return new ASimpleMeasurement() {
                 @Override public void finish() {
                 }
@@ -68,7 +68,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ASimpleSerialMeasurementImpl measurement) {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return;
         }
 
@@ -95,7 +95,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ASimpleParallelMeasurementImpl m) {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return;
         }
 
@@ -107,7 +107,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
     @Override
     public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean isSerial) {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return new ACollectingMeasurement(null, null, true, null, null);
         }
 
@@ -120,7 +120,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ACollectingMeasurement m) {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return;
         }
 

@@ -311,6 +311,7 @@ public class ASysMonCallableStatement extends ASysMonPreparedStatement implement
         return inner.getDouble(parameterIndex);
     }
 
+    @Deprecated
     @Override
     public BigDecimal getBigDecimal(int parameterIndex, int scale) throws SQLException {
         return inner.getBigDecimal(parameterIndex, scale);

@@ -1,13 +1,14 @@
 package com.ajjpj.asysmon;
 
-import com.ajjpj.asysmon.config.AStaticSysMonConfig;
+import com.ajjpj.asysmon.config.AGlobalConfig;
+import com.ajjpj.asysmon.config.ADefaultSysMonConfig;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
-import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.*;
@@ -19,7 +20,7 @@ import java.util.*;
  * <ul>
  *     <li> Use the static get() method to access it as a singleton. That is simple and convenient, and it is
  *          sufficient for many applications. If it is used that way, all configuration must be done through
- *          the static methods of AStaticSysMonConfig. </li>
+ *          the static methods of ADefaultSysMonConfig. </li>
  *     <li> Create and manage your own instance (or instances) by calling the constructor, passing in your
  *          configuration. This is for maximum flexibility, but you lose some convenience. </li>
  * </ul>
@@ -93,7 +94,7 @@ public class ASysMon {
     }
 
     public Map<String, AGlobalDataPoint> getGlobalMeasurements() {
-        if(AStaticSysMonConfig.isGloballyDisabled()) {
+        if(AGlobalConfig.isGloballyDisabled()) {
             return new HashMap<String, AGlobalDataPoint>();
         }
         final Map<String, AGlobalDataPoint> result = new HashMap<String, AGlobalDataPoint>();
@@ -107,7 +108,7 @@ public class ASysMon {
      * this class has the sole purpose of providing really lazy init of the singleton instance
      */
     private static class ASysMonInstanceHolder {
-        public static final ASysMon INSTANCE = new ASysMon(AStaticSysMonConfig.get());
+        public static final ASysMon INSTANCE = new ASysMon(ADefaultSysMonConfig.get());
     }
 }
 
