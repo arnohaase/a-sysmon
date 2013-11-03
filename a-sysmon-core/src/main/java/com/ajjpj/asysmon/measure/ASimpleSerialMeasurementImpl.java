@@ -51,4 +51,9 @@ class ASimpleSerialMeasurementImpl implements ASimpleMeasurement {
     public Map<String, String> getParameters() {
         return parameters;
     }
+
+    @Override
+    public String toString() {
+        return "ASimpleMeasurement {" + identifier + " " + parameters + "}";
+    }
 }

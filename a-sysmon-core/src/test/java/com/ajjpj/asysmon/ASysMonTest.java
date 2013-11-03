@@ -1,12 +1,15 @@
 package com.ajjpj.asysmon;
 
 
+import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.config.ASysMonConfigBuilder;
+import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.measure.ACollectingMeasurement;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchy;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.testutil.CollectingDataSink;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,6 +19,11 @@ import static org.junit.Assert.*;
  * @author arno
  */
 public class ASysMonTest {
+    @Before
+    public void before() {
+        AGlobalConfig.setLogger(AStdOutLogger.INSTANCE);
+    }
+
     @Test
     public void testSimpleMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
@@ -159,6 +167,32 @@ public class ASysMonTest {
     }
 
     @Test
+    public void testFinishRootWithUnfinishedCollectingMeasurement() {
+        final CollectingDataSink dataSink = new CollectingDataSink();
+        final ASysMon sysMon = new ASysMonConfigBuilder()
+                .withDataSink(dataSink)
+                .build();
+
+        final ASimpleMeasurement m = sysMon.start("m");
+        final ACollectingMeasurement a = sysMon.startCollectingMeasurement("a");
+        m.finish();
+
+        assertEquals(1, dataSink.data.size());
+        assertEquals(0, dataSink.data.get(0).getChildren().size());
+
+        try {
+            a.finish();
+            fail("exception expected");
+        }
+        catch(IllegalStateException exc) {
+            // expected
+        }
+
+        assertEquals(1, dataSink.data.size());
+        assertEquals(0, dataSink.data.get(0).getChildren().size());
+    }
+
+    @Test
     public void testTimerRecording() {
         fail("todo");
     }
@@ -235,6 +269,20 @@ public class ASysMonTest {
 
     @Test
     public void testImplicitCloseChildAndDescendants() {
-        fail("todo");
+        final CollectingDataSink dataSink = new CollectingDataSink();
+        final ASysMon sysMon = new ASysMonConfigBuilder()
+                .withDataSink(dataSink)
+                .build();
+
+        final ASimpleMeasurement m = sysMon.start("m");
+        sysMon.start("a");
+        sysMon.start("b");
+
+        // a and b were not finished explicitly
+        m.finish();
+
+        assertEquals(1, dataSink.data.size());
+        assertEquals(1, dataSink.data.get(0).getChildren().size());
+        assertEquals(1, dataSink.data.get(0).getChildren().get(0).getChildren().size());
     }
 }

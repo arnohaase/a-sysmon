@@ -1,9 +1,6 @@
 todo
 ----
 * DataSource
-* allow top-level collecting measurements --> wrap synthetic simple measurement around it
-* implicitly close measurements when a parent measurement is closed
-
 
 * load average from sun.misc.Unsafe
 

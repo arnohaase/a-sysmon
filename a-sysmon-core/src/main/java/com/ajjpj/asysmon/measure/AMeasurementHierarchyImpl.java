@@ -30,7 +30,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     private final Collection<ACorrelationId> startedFlows = new HashSet<ACorrelationId>();
     private final Collection<ACorrelationId> joinedFlows = new HashSet<ACorrelationId>();
 
-    private final AObjectHolder<Boolean> isFinished = new AObjectHolder<Boolean>(Boolean.FALSE);
+    private boolean isFinished = false;
 
     public AMeasurementHierarchyImpl(ATimer timer, ADataSink dataSink) {
         this.timer = timer;
@@ -38,8 +38,8 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     private void checkNotFinished() {
-        if(isFinished.value) {
-            throw new IllegalStateException("measurements must not be reused - this measurement is already closed");
+        if(isFinished) {
+            throw new IllegalStateException("This measurement is already closed.");
         }
     }
 
@@ -79,8 +79,22 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         checkNotFinished();
 
         if (unfinished.peek() != measurement) {
-            //TODO this is a bug in using code - how to deal with it?!
-            throw new IllegalStateException("measurements must be strictly nested");
+            // This is basically a bug in using code: a measurement is 'finished' without being the innermost measurement
+            //  of this hierarchy. The most typical reason for this - and the only one we can recover from - is that
+            //  using code skipped finishing an inner measurement and is now finishing something further outside.
+
+
+            if(unfinished.contains(measurement)) {
+                AGlobalConfig.getLogger().warn("Calling 'finish' on a measurement " + measurement + " that is not innermost on the stack.");
+
+                while(unfinished.peek() != measurement) {
+                    AGlobalConfig.getLogger().warn("-> Implicitly unrolling the stack of open measurements: " + unfinished.peek());
+                    finish(unfinished.peek());
+                }
+            }
+            else {
+                throw new IllegalStateException("Calling 'finish' on a measurement that is not on the measurement stack: " + measurement);
+            }
         }
 
         final long finishedTimestamp = timer.getCurrentNanos();
@@ -90,7 +104,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         final AHierarchicalData newData = new AHierarchicalData(true, measurement.getStartTimeMillis(), finishedTimestamp - measurement.getStartTimeNanos(), measurement.getIdentifier(), measurement.getParameters(), children);
 
         if(unfinished.isEmpty()) {
-            isFinished.value = true;
+            isFinished = true;
             dataSink.onFinishedHierarchicalMeasurement(newData, startedFlows, joinedFlows);
         }
         else {

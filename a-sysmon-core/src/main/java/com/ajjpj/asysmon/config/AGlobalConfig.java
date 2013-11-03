@@ -19,11 +19,11 @@ public class AGlobalConfig {
         }
     }
 
-    public static ASysMonLogger get() {
+    public static ASysMonLogger getLogger() {
         return logger;
     }
 
-    public static void set(ASysMonLogger newLogger) {
+    public static void setLogger(ASysMonLogger newLogger) {
         logger = newLogger;
     }
 
