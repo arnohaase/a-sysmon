@@ -7,6 +7,7 @@ import com.ajjpj.asysmon.util.timer.ATimer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * This is a measurement that aggregates several - potentially many - measurements in a single object. It is intended
@@ -26,7 +27,7 @@ public class ACollectingMeasurement implements AWithParameters {
     private final String identifier;
 
     private final Map<String, String> parameters = new HashMap<String, String>();
-    private final Map<String, Detail> details = new HashMap<String, Detail>();
+    private final Map<String, Detail> details = new TreeMap<String, Detail>();
 
     private final List<AHierarchicalData> childrenOfParent;
 

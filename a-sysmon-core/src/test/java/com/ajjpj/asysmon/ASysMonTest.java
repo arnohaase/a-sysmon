@@ -9,6 +9,7 @@ import com.ajjpj.asysmon.measure.ACollectingMeasurement;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchy;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.testutil.CollectingDataSink;
+import com.ajjpj.asysmon.testutil.ExplicitTimer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -193,8 +194,138 @@ public class ASysMonTest {
     }
 
     @Test
-    public void testTimerRecording() {
-        fail("todo");
+    public void testSerialTimerRecording() {
+        final ExplicitTimer timer = new ExplicitTimer();
+        final CollectingDataSink dataSink = new CollectingDataSink();
+        final ASysMon sysMon = new ASysMonConfigBuilder()
+                .withDataSink(dataSink)
+                .withTimer(timer)
+                .build();
+
+        final ASimpleMeasurement m = sysMon.start("a");
+        timer.curNanos += 100;
+        sysMon.start("b").finish();
+        final ASimpleMeasurement m2 = sysMon.start("b");
+        timer.curNanos += 100;
+        m2.finish();
+        timer.curNanos += 100;
+        m.finish();
+
+        assertEquals(1, dataSink.data.size());
+        final AHierarchicalData root = dataSink.data.get(0);
+        assertEquals(300L, root.getDurationNanos());
+
+        assertEquals(2, root.getChildren().size());
+
+        assertEquals(0L, root.getChildren().get(0).getDurationNanos());
+        assertEquals(100L, root.getChildren().get(1).getDurationNanos());
+    }
+
+    @Test
+    public void testParallelTimerRecording() {
+        final ExplicitTimer timer = new ExplicitTimer();
+        final CollectingDataSink dataSink = new CollectingDataSink();
+        final ASysMon sysMon = new ASysMonConfigBuilder()
+                .withDataSink(dataSink)
+                .withTimer(timer)
+                .build();
+
+        final ASimpleMeasurement m = sysMon.start("m");
+        timer.curNanos += 100;
+
+        final ASimpleMeasurement a1 = sysMon.start("a1", false);
+        timer.curNanos += 100;
+
+        final ASimpleMeasurement a2 = sysMon.start("a2", false);
+        timer.curNanos += 100;
+
+        a1.finish();
+        timer.curNanos += 100;
+
+        a2.finish();
+        timer.curNanos += 100;
+
+        m.finish();
+
+        assertEquals(1, dataSink.data.size());
+        final AHierarchicalData root = dataSink.data.get(0);
+        assertEquals(500L, root.getDurationNanos());
+
+        assertEquals(2, root.getChildren().size());
+
+        assertEquals(200L, root.getChildren().get(0).getDurationNanos());
+        assertEquals(200L, root.getChildren().get(1).getDurationNanos());
+    }
+
+    @Test
+    public void testCollectingTimerRecording() {
+        final ExplicitTimer timer = new ExplicitTimer();
+        final CollectingDataSink dataSink = new CollectingDataSink();
+        final ASysMon sysMon = new ASysMonConfigBuilder()
+                .withDataSink(dataSink)
+                .withTimer(timer)
+                .build();
+
+        final ASimpleMeasurement m = sysMon.start("m");
+        timer.curNanos += 100;
+
+        final ACollectingMeasurement a1 = sysMon.startCollectingMeasurement("a1");
+        final ACollectingMeasurement a2 = sysMon.startCollectingMeasurement("a2");
+
+        a1.startDetail("x");
+        timer.curNanos += 100;
+
+        a2.startDetail("x");
+        timer.curNanos += 100;
+
+        a1.finishDetail();
+        a2.finishDetail();
+
+        a1.startDetail("x");
+        timer.curNanos += 100;
+
+        a2.startDetail("x");
+        timer.curNanos += 100;
+
+        a1.finishDetail();
+        a2.finishDetail();
+
+        a1.startDetail("y");
+        timer.curNanos += 100;
+
+        a2.startDetail("y");
+        timer.curNanos += 100;
+
+        a1.finishDetail();
+        a2.finishDetail();
+
+        a1.addDetailMeasurement("y", 123);
+
+        a1.finish();
+        a2.finish();
+        m.finish();
+
+        assertEquals(1, dataSink.data.size());
+        final AHierarchicalData root = dataSink.data.get(0);
+
+        assertEquals(2, root.getChildren().size());
+
+        final AHierarchicalData m1 = root.getChildren().get(0);
+        final AHierarchicalData m2 = root.getChildren().get(1);
+
+        assertEquals(723L, m1.getDurationNanos());
+        assertEquals(2,    m1.getChildren().size());
+        assertEquals("x",  m1.getChildren().get(0).getIdentifier());
+        assertEquals(400L, m1.getChildren().get(0).getDurationNanos());
+        assertEquals("y",  m1.getChildren().get(1).getIdentifier());
+        assertEquals(323L, m1.getChildren().get(1).getDurationNanos());
+
+        assertEquals(300L, m2.getDurationNanos());
+        assertEquals(2,    m2.getChildren().size());
+        assertEquals("x",  m2.getChildren().get(0).getIdentifier());
+        assertEquals(200L, m2.getChildren().get(0).getDurationNanos());
+        assertEquals("y",  m2.getChildren().get(1).getIdentifier());
+        assertEquals(100L, m2.getChildren().get(1).getDurationNanos());
     }
 
     @Test
