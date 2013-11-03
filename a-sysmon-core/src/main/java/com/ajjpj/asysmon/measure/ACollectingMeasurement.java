@@ -129,6 +129,10 @@ public class ACollectingMeasurement implements AWithParameters {
         }
     }
 
+    public boolean isFinished() {
+        return isFinished;
+    }
+
     public void finish() {
         if(AGlobalConfig.isGloballyDisabled()) {
             return;

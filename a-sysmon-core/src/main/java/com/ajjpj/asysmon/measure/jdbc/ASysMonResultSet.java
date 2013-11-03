@@ -133,6 +133,7 @@ public class ASysMonResultSet implements ResultSet {
 
     @Override
     public void close() throws SQLException {
+        m.finish();
         inner.close();
     }
 

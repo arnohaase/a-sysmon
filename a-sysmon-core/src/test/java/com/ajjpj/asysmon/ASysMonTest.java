@@ -178,7 +178,7 @@ public class ASysMonTest {
         m.finish();
 
         assertEquals(1, dataSink.data.size());
-        assertEquals(0, dataSink.data.get(0).getChildren().size());
+        assertEquals(1, dataSink.data.get(0).getChildren().size());
 
         try {
             a.finish();
@@ -189,7 +189,7 @@ public class ASysMonTest {
         }
 
         assertEquals(1, dataSink.data.size());
-        assertEquals(0, dataSink.data.get(0).getChildren().size());
+        assertEquals(1, dataSink.data.get(0).getChildren().size());
     }
 
     @Test
@@ -286,3 +286,5 @@ public class ASysMonTest {
         assertEquals(1, dataSink.data.get(0).getChildren().get(0).getChildren().size());
     }
 }
+
+//TODO test top-level parallel measurement: should be rejected

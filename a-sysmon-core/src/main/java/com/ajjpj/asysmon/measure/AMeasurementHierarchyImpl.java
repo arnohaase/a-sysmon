@@ -4,7 +4,6 @@ import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.util.AObjectHolder;
 import com.ajjpj.asysmon.util.ArrayStack;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
@@ -20,7 +19,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     private final ATimer timer;
     private final ADataSink dataSink;
 
-    private int numCollectingMeasurements = 0;
+    private Set<ACollectingMeasurement> collectingMeasurements = new HashSet<ACollectingMeasurement>();
 
     private boolean hasSyntheticRoot = false;
 
@@ -104,6 +103,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         final AHierarchicalData newData = new AHierarchicalData(true, measurement.getStartTimeMillis(), finishedTimestamp - measurement.getStartTimeNanos(), measurement.getIdentifier(), measurement.getParameters(), children);
 
         if(unfinished.isEmpty()) {
+            // copy into a separate collection because the collection is modified in the loop
+            for(ACollectingMeasurement m: new ArrayList<ACollectingMeasurement>(collectingMeasurements)) {
+                finish(m);
+            }
             isFinished = true;
             dataSink.onFinishedHierarchicalMeasurement(newData, startedFlows, joinedFlows);
         }
@@ -131,15 +134,15 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             return new ACollectingMeasurement(null, null, true, null, null);
         }
 
-        numCollectingMeasurements += 1;
-
         checkNotFinished();
         if(unfinished.isEmpty()) {
             start(IDENT_SYNTHETIC_ROOT, true);
             hasSyntheticRoot = true;
         }
 
-        return new ACollectingMeasurement(timer, this, isSerial, identifier, childrenStack.peek());
+        final ACollectingMeasurement result = new ACollectingMeasurement(timer, this, isSerial, identifier, childrenStack.peek());
+        collectingMeasurements.add(result);
+        return result;
     }
 
     @Override public void finish(ACollectingMeasurement m) {
@@ -158,13 +161,13 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         final AHierarchicalData newData = new AHierarchicalData(m.isSerial(), m.getStartTimeMillis(), m.getTotalDurationNanos(), m.getIdentifier(), m.getParameters(), children);
         m.getChildrenOfParent().add(newData);
-        numCollectingMeasurements -= 1;
+        collectingMeasurements.remove(m);
         checkFinishSyntheticRoot();
     }
 
     private void checkFinishSyntheticRoot() {
         if(hasSyntheticRoot &&
-                numCollectingMeasurements == 0 &&
+                collectingMeasurements.isEmpty() &&
                 unfinished.size() == 1) {
             finish(unfinished.peek());
         }

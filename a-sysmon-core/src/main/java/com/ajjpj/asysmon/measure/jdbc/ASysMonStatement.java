@@ -57,7 +57,6 @@ public class ASysMonStatement implements Statement {
             rs = inner.executeQuery(sql);
         } finally {
             m.finishDetail();
-            m.finish();
         }
 
         return wrap(rs, m);
