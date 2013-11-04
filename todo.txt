@@ -2,7 +2,9 @@ todo
 ----
 * DataSource
 
-* load average from sun.misc.Unsafe
+* presentation of active / open connections per pool: special treatment <active> / <open>
+
+* load average from sun.misc.Unsafe --> Windows?!
 
 * global measurements
   * /proc/diskstats
@@ -44,8 +46,6 @@ todo
 
 
 * logo in report servlets (?)
-
-* JUnit tests
 
 * offloading data sink
   * unique ids per measurement --> referencing (?)

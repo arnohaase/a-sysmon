@@ -4,6 +4,7 @@ import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.measure.AMeasureCallback;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.measure.AWithParameters;
+import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -25,6 +28,9 @@ public class AppServlet extends HttpServlet {
             // store the connection to keep the in-memory database
             conn = getConnection();
             conn.createStatement().execute("create table A (oid number primary key)");
+
+            conn.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -138,6 +144,7 @@ public class AppServlet extends HttpServlet {
                     ps.close();
                 }
             } finally {
+                conn.commit();
                 conn.close();
             }
         } catch (SQLException e) {
@@ -146,6 +153,8 @@ public class AppServlet extends HttpServlet {
     }
 
     private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("asysmon:qualifier=123:jdbc:h2:mem:demo", "sa", "");
+        final Connection result = DriverManager.getConnection("asysmon:qualifier=123:jdbc:h2:mem:demo", "sa", "");
+        result.setAutoCommit(false);
+        return result;
     }
 }

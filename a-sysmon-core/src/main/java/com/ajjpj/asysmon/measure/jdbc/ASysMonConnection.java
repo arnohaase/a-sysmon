@@ -24,17 +24,35 @@ public class ASysMonConnection implements Connection {
         this.sysMon = sysMon;
         this.poolIdentifier = poolIdentifier;
         this.connectionCounter = connectionCounter;
+
+        connectionCounter.onOpenConnection(poolIdentifier);
     }
 
-    private void makeActive() {
+    private void makeActive() throws SQLException {
+        if(getAutoCommit()) {
+            // autocommit invalidates the underlying heuristics of 'active / passive', so we play it safe here
+            makePassive();
+            return;
+        }
+
         if(!isActive) {
-            connectionCounter.onOpenConnection(poolIdentifier);
+            connectionCounter.onActivateConnection(poolIdentifier);
             isActive = true;
         }
     }
 
-    private void onClose() {
+    private void makePassive() {
         if(isActive) {
+            connectionCounter.onPassivateConnection(poolIdentifier);
+            isActive = false;
+        }
+    }
+
+    private void onClose() throws SQLException {
+        if(isActive) {
+            connectionCounter.onPassivateConnection(poolIdentifier);
+        }
+        if(! isClosed()) {
             connectionCounter.onCloseConnection(poolIdentifier);
         }
     }
@@ -112,17 +130,17 @@ public class ASysMonConnection implements Connection {
         return wrap(inner.prepareStatement(sql, columnNames), sql);
     }
 
-    private Statement wrap(Statement stmt) {
+    private Statement wrap(Statement stmt) throws SQLException {
         makeActive();
         return new ASysMonStatement(this, stmt, sysMon);
     }
 
-    private PreparedStatement wrap(PreparedStatement stmt, String sql) {
+    private PreparedStatement wrap(PreparedStatement stmt, String sql) throws SQLException {
         makeActive();
         return new ASysMonPreparedStatement(this, stmt, sysMon, sql);
     }
 
-    private CallableStatement wrap(CallableStatement stmt, String sql) {
+    private CallableStatement wrap(CallableStatement stmt, String sql) throws SQLException {
         makeActive();
         return new ASysMonCallableStatement(this, stmt, sysMon, sql);
     }
@@ -131,7 +149,7 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void commit() throws SQLException {
-        makeActive();
+        makePassive();
         final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "commit");
         try {
             inner.commit();
@@ -143,7 +161,7 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void rollback() throws SQLException {
-        makeActive();
+        makePassive();
         final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "rollback");
         try {
             inner.rollback();
@@ -154,7 +172,6 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public Savepoint setSavepoint() throws SQLException {
-        makeActive();
         final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "setSavepoint");
         try {
             return inner.setSavepoint();
@@ -165,7 +182,6 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public Savepoint setSavepoint(String name) throws SQLException {
-        makeActive();
         final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "setSavepoint");
         try {
             return inner.setSavepoint(name);
@@ -176,7 +192,6 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void rollback(Savepoint savepoint) throws SQLException {
-        makeActive();
         final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "rollback");
         try {
             inner.rollback(savepoint);
@@ -187,7 +202,6 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-        makeActive();
         final ASimpleMeasurement m = sysMon.start(ASysMonStatement.IDENT_PREFIX_JDBC + "releaseSavepoint");
         try {
             inner.releaseSavepoint(savepoint);
@@ -219,7 +233,6 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public boolean getAutoCommit() throws SQLException {
-        makeActive();
         return inner.getAutoCommit();
     }
 
@@ -338,13 +351,11 @@ public class ASysMonConnection implements Connection {
 
     @Override
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
-        makeActive();
         inner.setClientInfo(name, value);
     }
 
     @Override
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
-        makeActive();
         inner.setClientInfo(properties);
     }
 

@@ -1,5 +1,7 @@
 package com.ajjpj.asysmon.data;
 
+import java.math.BigDecimal;
+
 /**
  * @author arno
  */
@@ -26,5 +28,10 @@ public class AGlobalDataPoint {
 
     public int getNumFracDigits() {
         return numFracDigits;
+    }
+
+    @Override
+    public String toString() {
+        return "AGlobalDataPoint{" + name + ": " + getValue() + "}";
     }
 }
