@@ -5,11 +5,13 @@ import com.ajjpj.asysmon.measure.AMeasureCallback;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.measure.AWithParameters;
 import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
+import com.ajjpj.asysmon.measure.jdbc.ASysMonDataSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -21,6 +23,8 @@ import java.util.Random;
  * @author arno
  */
 public class AppServlet extends HttpServlet {
+    private static final DataSource dataSource = createDataSource();
+
     static Connection conn;
 
     static {
@@ -153,8 +157,56 @@ public class AppServlet extends HttpServlet {
     }
 
     private static Connection getConnection() throws SQLException {
-        final Connection result = DriverManager.getConnection("asysmon:qualifier=123:jdbc:h2:mem:demo", "sa", "");
-        result.setAutoCommit(false);
-        return result;
+        return dataSource.getConnection();
+//        final Connection result = DriverManager.getConnection("asysmon:qualifier=123:jdbc:h2:mem:demo", "sa", "");
+//        result.setAutoCommit(false);
+//        return result;
+    }
+
+    private static DataSource createDataSource() {
+        final DataSource inner = new DataSource() {
+            @Override public Connection getConnection() throws SQLException {
+                final Connection result = DriverManager.getConnection("jdbc:h2:mem:demo", "sa", "");
+                result.setAutoCommit(false);
+                return result;
+            }
+
+            @Override
+            public Connection getConnection(String username, String password) throws SQLException {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public PrintWriter getLogWriter() throws SQLException {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void setLogWriter(PrintWriter out) throws SQLException {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void setLoginTimeout(int seconds) throws SQLException {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public int getLoginTimeout() throws SQLException {
+                return 0;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public <T> T unwrap(Class<T> iface) throws SQLException {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public boolean isWrapperFor(Class<?> iface) throws SQLException {
+                return false;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        };
+
+        return new ASysMonDataSource(inner, "234", ASysMon.get());
     }
 }

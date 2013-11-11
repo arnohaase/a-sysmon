@@ -27,19 +27,21 @@ public class ASimpleHttpRequestAnalyzer implements AHttpRequestAnalyzer {
         };
     }
 
-    private Map<String, String> extractParameters(HttpServletRequest request) {
+    protected Map<String, String> extractParameters(HttpServletRequest request) {
         final Map<String, String> result = new HashMap<String, String>();
 
         result.put(PARAM_REMOTE_ADDR, request.getRemoteAddr());
 
-        for(Cookie cookie: request.getCookies()) {
-            result.put(PARAM_PREFIX_COOKIE + cookie.getName(), cookie.getValue());
+        if(request.getCookies() != null) {
+            for(Cookie cookie: request.getCookies()) {
+                result.put(PARAM_PREFIX_COOKIE + cookie.getName(), cookie.getValue());
+            }
         }
 
         return result;
     }
 
-    private String extractIdentifier(String url) {
+    protected String extractIdentifier(String url) {
         final int idxHash = url.indexOf('#');
         if(idxHash >= 0) {
             url = url.substring(0, idxHash);
