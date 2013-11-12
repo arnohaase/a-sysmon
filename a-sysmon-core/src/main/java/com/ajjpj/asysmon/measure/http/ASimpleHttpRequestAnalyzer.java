@@ -10,6 +10,7 @@ import java.util.Map;
  * @author arno
  */
 public class ASimpleHttpRequestAnalyzer implements AHttpRequestAnalyzer {
+    public static final String PARAM_FULL_URL = "http-full-url";
     public static final String PARAM_REMOTE_ADDR = "http-remote-addr";
     public static final String PARAM_PREFIX_COOKIE = "http-cookie-";
 
@@ -30,6 +31,7 @@ public class ASimpleHttpRequestAnalyzer implements AHttpRequestAnalyzer {
     protected Map<String, String> extractParameters(HttpServletRequest request) {
         final Map<String, String> result = new HashMap<String, String>();
 
+        result.put(PARAM_FULL_URL, request.getRequestURL().toString());
         result.put(PARAM_REMOTE_ADDR, request.getRemoteAddr());
 
         if(request.getCookies() != null) {
@@ -42,21 +44,6 @@ public class ASimpleHttpRequestAnalyzer implements AHttpRequestAnalyzer {
     }
 
     protected String extractIdentifier(String url) {
-        final int idxHash = url.indexOf('#');
-        if(idxHash >= 0) {
-            url = url.substring(0, idxHash);
-        }
-
-        final int idxQuestionMark = url.indexOf('?');
-        if(idxQuestionMark >= 0) {
-            url = url.substring(0, idxQuestionMark);
-        }
-
-        final int idxSemicolon = url.indexOf(';');
-        if(idxSemicolon >= 0) {
-            url = url.substring(0, idxSemicolon);
-        }
-
-        return url;
+        return "<http request>";
     }
 }
