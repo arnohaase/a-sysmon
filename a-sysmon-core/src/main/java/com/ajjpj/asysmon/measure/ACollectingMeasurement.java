@@ -140,7 +140,7 @@ public class ACollectingMeasurement implements AWithParameters {
         }
 
         if(isFinished) {
-            throw new IllegalStateException("a measurement can be finished only once.");
+            return; // TODO the statement may have been implicitly closed by now - how to handle this best? --> was 'throw new IllegalStateException("a measurement can be finished only once.");'
         }
         if(detailIdentifier != null) {
             //TODO log a warning
