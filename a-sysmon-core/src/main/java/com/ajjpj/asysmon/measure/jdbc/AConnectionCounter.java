@@ -48,10 +48,7 @@ public class AConnectionCounter implements AGlobalMeasurer {
     }
 
     public void onPassivateConnection(String qualifier) {
-        System.out.println("pass");
-        System.out.println(getCounter(qualifier, activePerConnectionPool));
         getCounter(qualifier, activePerConnectionPool).decrementAndGet();
-        System.out.println(getCounter(qualifier, activePerConnectionPool));
     }
 
     @Override public void contributeMeasurements(Map<String, AGlobalDataPoint> data) {
