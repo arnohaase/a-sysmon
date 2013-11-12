@@ -6,6 +6,7 @@ import com.ajjpj.asysmon.util.AObjectHolder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author arno
@@ -15,7 +16,7 @@ class ASimpleParallelMeasurementImpl implements ASimpleMeasurement {
     private final long startTimeNanos; // this number has no absolute meaning and is useful only for measuring differences
     private final String identifier;
 
-    private final Map<String, String> parameters = new HashMap<String, String>();
+    private final Map<String, String> parameters = new TreeMap<String, String>();
 
     private final AMeasurementHierarchy hierarchy;
     private final List<AHierarchicalData> childrenOfParent;

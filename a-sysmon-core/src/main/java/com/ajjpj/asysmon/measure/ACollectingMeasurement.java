@@ -26,7 +26,7 @@ public class ACollectingMeasurement implements AWithParameters {
     private final long startTimeMillis = System.currentTimeMillis();
     private final String identifier;
 
-    private final Map<String, String> parameters = new HashMap<String, String>();
+    private final Map<String, String> parameters = new TreeMap<String, String>();
     private final Map<String, Detail> details = new TreeMap<String, Detail>();
 
     private final List<AHierarchicalData> childrenOfParent;

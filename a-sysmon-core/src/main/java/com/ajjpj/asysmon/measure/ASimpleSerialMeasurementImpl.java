@@ -2,6 +2,7 @@ package com.ajjpj.asysmon.measure;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author arno
@@ -13,7 +14,7 @@ class ASimpleSerialMeasurementImpl implements ASimpleMeasurement {
     private final long startTimeNanos; // this number has no absolute meaning and is useful only for measuring differences
     private final String identifier;
 
-    private final Map<String, String> parameters = new HashMap<String, String>();
+    private final Map<String, String> parameters = new TreeMap<String, String>();
 
     private boolean isFinished = false;
 
