@@ -93,6 +93,15 @@ public class ASysMon {
         return result;
     }
 
+    public <E extends Exception> void measure(String identifier, AMeasureCallbackVoid<E> callback) throws E {
+        final ASimpleMeasurement m = start(identifier);
+        try {
+            callback.call(m);
+        } finally {
+            m.finish();
+        }
+    }
+
     public <R, E extends Exception> R measure(String identifier, AMeasureCallback<R,E> callback) throws E {
         final ASimpleMeasurement m = start(identifier);
         try {
