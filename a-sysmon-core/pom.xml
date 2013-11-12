@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.ajjpj.a-sysmon</groupId>
         <artifactId>a-sysmon-parent</artifactId>
-        <version>1.0-pre8-SNAPSHOT</version>
+        <version>1.0-pre8</version>
     </parent>
 
     <artifactId>a-sysmon-core</artifactId>
-    <version>1.0-pre8-SNAPSHOT</version>
+    <version>1.0-pre8</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}-${project.version}</name>
