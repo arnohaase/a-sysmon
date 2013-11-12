@@ -3,12 +3,33 @@ package com.ajjpj.asysmon.config;
 import com.ajjpj.asysmon.config.log.ALog4JLogger;
 import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
+import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
+import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
+import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
+import com.ajjpj.asysmon.util.timer.ASystemNanoTimer;
+import com.ajjpj.asysmon.util.timer.ATimer;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author arno
  */
 public class AGlobalConfig {
+    private static volatile ATimer timer = new ASystemNanoTimer();
     private static volatile ASysMonLogger logger = defaultLogger();
+
+    private static List<AGlobalMeasurer> globalMeasurers = new CopyOnWriteArrayList<AGlobalMeasurer>();
+
+    static {
+        globalMeasurers.add(new ASystemLoadMeasurer());
+        globalMeasurers.add(new AMemoryMeasurer());
+        globalMeasurers.add(AConnectionCounter.INSTANCE);
+    }
+
 
     private static ASysMonLogger defaultLogger() {
         try {
@@ -27,6 +48,17 @@ public class AGlobalConfig {
         logger = newLogger;
     }
 
+    public static ATimer getTimer() {
+        return timer;
+    }
+
+    public static void setTimer(ATimer timer) {
+        AGlobalConfig.timer = timer;
+    }
+
+    public static List<AGlobalMeasurer> getGlobalMeasurers() {
+        return globalMeasurers;
+    }
 
     /**
      * This flag switches off all 'risky' (or potentially expensive) functionality. It serves as a safeguard in case

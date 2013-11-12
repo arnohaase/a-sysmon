@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.datasink.aggregation.bottomup;
 
-import com.ajjpj.asysmon.config.ADefaultSysMonConfig;
+import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
 import com.ajjpj.asysmon.datasink.aggregation.AbstractAsysmonServlet;
 import com.ajjpj.asysmon.util.APair;
@@ -27,7 +27,7 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
     public void init() throws ServletException {
         synchronized (ABottomUpReportServlet.class) {
             collector = new ABottomUpDataSink(getLeafFilter());
-            ADefaultSysMonConfig.addHandler(collector);
+            ASysMonConfigurer.addDataSink(getSysMon(), collector);
         }
     }
 

@@ -1,8 +1,8 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
-import com.ajjpj.asysmon.config.ADefaultSysMonConfig;
+import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.datasink.log.AStdOutDataSink;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchy;
 import com.ajjpj.asysmon.testutil.CollectingDataSink;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class JdbcTest {
     public void testTopLevelJdbc() throws Exception {
         //TODO refactor this test to use a sys mon holder to avoid hidden side effects through the default sysmon singleton
         final CollectingDataSink dataSink = new CollectingDataSink();
-        ADefaultSysMonConfig.addHandler(dataSink);
+        ASysMonConfigurer.addDataSink(ASysMon.get(), dataSink);
 
         final Connection conn = DriverManager.getConnection("asysmon::jdbc:h2:mem:demo", "sa", "");
         final Statement stmt = conn.createStatement();

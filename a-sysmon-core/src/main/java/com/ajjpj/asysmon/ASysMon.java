@@ -1,14 +1,13 @@
 package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.config.ADefaultSysMonConfig;
-import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.*;
@@ -29,8 +28,8 @@ import java.util.*;
  */
 public class ASysMon {
     private final ATimer timer;
-    private final List<? extends ADataSink> handlers;
-    private final List<? extends AGlobalMeasurer> globalMeasurers;
+    private volatile AList<ADataSink> handlers = AList.nil();
+    private volatile AList<AGlobalMeasurer> globalMeasurers = AList.nil();
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
@@ -39,10 +38,34 @@ public class ASysMon {
         return ASysMonInstanceHolder.INSTANCE;
     }
 
-    public ASysMon(ASysMonConfig config) {
-        this.timer = config.getTimer();
-        this.handlers = new ArrayList<ADataSink>(config.getHandlers());
-        this.globalMeasurers = new ArrayList<AGlobalMeasurer> (config.getGlobalMeasurers());
+    public ASysMon() {
+        this(AGlobalConfig.getTimer());
+    }
+
+    public ASysMon(ATimer timer) {
+        this.timer = timer;
+        for(AGlobalMeasurer m: AGlobalConfig.getGlobalMeasurers()) {
+            globalMeasurers = globalMeasurers.cons(m);
+        }
+    }
+
+    public ASysMon(ADataSink... handlers) {
+        this(AGlobalConfig.getTimer(), handlers);
+    }
+
+    public ASysMon(ATimer timer, ADataSink... handlers) {
+        this.timer = timer;
+        for(ADataSink h: handlers) {
+            this.handlers = this.handlers.cons(h);
+        }
+    }
+
+    synchronized void addGlobalMeasurer(AGlobalMeasurer m) {
+        globalMeasurers = globalMeasurers.cons(m);
+    }
+
+    synchronized void addDataSink(ADataSink handler) {
+        handlers = handlers.cons(handler);
     }
 
     private AMeasurementHierarchy getMeasurementHierarchy() {
@@ -108,7 +131,7 @@ public class ASysMon {
      * this class has the sole purpose of providing really lazy init of the singleton instance
      */
     private static class ASysMonInstanceHolder {
-        public static final ASysMon INSTANCE = new ASysMon(ADefaultSysMonConfig.get());
+        public static final ASysMon INSTANCE = new ASysMon();
     }
 }
 
