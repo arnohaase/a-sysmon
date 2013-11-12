@@ -53,6 +53,12 @@ div.node-icon {
   text-align: center;
 }
 
+div.node-text {
+  margin-left: 1em;
+  padding-left: 1em;
+  text-indent: -1em;
+}
+
 div.column-short {
   width: 40px;
   text-align: right;

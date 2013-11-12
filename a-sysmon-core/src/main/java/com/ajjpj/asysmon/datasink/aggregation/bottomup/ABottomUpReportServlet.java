@@ -23,12 +23,19 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
     /**
      * override to customize
      */
-    @Override
-    public void init() throws ServletException {
+    @Override public void init() throws ServletException {
         synchronized (ABottomUpReportServlet.class) {
             collector = new ABottomUpDataSink(getLeafFilter());
             ASysMonConfigurer.addDataSink(getSysMon(), collector);
         }
+    }
+
+    @Override protected int getNumChildrenLevelsToExpandInitially() {
+        return 0;
+    }
+
+    @Override protected int getDataColumnWidth() {
+        return 6*60;
     }
 
     public abstract ABottomUpLeafFilter getLeafFilter();
@@ -99,7 +106,7 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getAvgNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getMaxNanos() / MILLION);
 
-        nodeRowAfterColumns(out, idGenerator, level, hasChildren);
+        nodeRowAfterColumns(out, idGenerator, ident, level, hasChildren, !data.isSerial());
 
         if(! data.getChildren().isEmpty()) {
             int totalChildCalls = 0;

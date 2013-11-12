@@ -29,6 +29,9 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
 
     protected static final int MILLION = 1000*1000;
 
+    abstract protected int getNumChildrenLevelsToExpandInitially();
+    abstract protected int getDataColumnWidth();
+
 
     /**
      * Default implementations returns the singleton instance. Override to customize.
@@ -184,15 +187,18 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
         out.println("<div class='" + (isSubdued ? "data-row-subdued " : "") + "data-row data-row-" + level + "' onclick=\"$('#" + idGenerator.nextId() + "').slideToggle(50);\">");
         out.println("<div class='node-icon'>" + (hasChildren ? "*" : "&nbsp;") + "</div>");
 
-        final String effIdent = isSubdued ? ("[" + ident + "]") : ident;
-        out.println(escapeHtml(effIdent));
         out.println("<div style=\"float: right;\">");
     }
 
-    protected void nodeRowAfterColumns(PrintWriter out, IdGenerator idGenerator, int level, boolean hasChildren) {
-        out.println ("</div></div>");
+    protected void nodeRowAfterColumns(PrintWriter out, IdGenerator idGenerator, String ident, int level, boolean hasChildren, boolean isSubdued) {
+        out.println ("</div>");
+        final String effIdent = isSubdued ? ("[" + ident + "]") : ident;
+        out.println("<div class='node-text' style='margin-right: " + getDataColumnWidth() + "px;'>");
+        out.println(escapeHtml(effIdent));
+        out.println("</div></div>");
         if(hasChildren) {
-            out.println("<div class='children' style='display:" + (level == 0 ? "block" : "none") +"' id=\"" + idGenerator.curId() + "\">");
+            final boolean expand = getNumChildrenLevelsToExpandInitially() - level > 0;
+            out.println("<div class='children' style='display:" + (expand ? "block" : "none") +"' id=\"" + idGenerator.curId() + "\">");
         }
     }
 

@@ -137,7 +137,7 @@ public class AppServlet extends HttpServlet {
         try {
             final Connection conn = getConnection();
             try {
-                final PreparedStatement ps = conn.prepareStatement("select * from A where oid < ?");
+                final PreparedStatement ps = conn.prepareStatement("select * from A where oid < ? and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1");
                 try {
                     ps.setLong(1, 25);
                     final ResultSet rs = ps.executeQuery();

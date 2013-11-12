@@ -32,6 +32,14 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
         }
     }
 
+    @Override protected int getNumChildrenLevelsToExpandInitially() {
+        return 1;
+    }
+
+    @Override protected int getDataColumnWidth() {
+        return 5*60 + 1*80;
+    }
+
     /**
      * All access to the collector is done through this method. Override to customize.
      */
@@ -138,7 +146,7 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getAvgNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getMaxNanos() / MILLION);
 
-        nodeRowAfterColumns(out, idGenerator, level, hasChildren);
+        nodeRowAfterColumns(out, idGenerator, ident, level, hasChildren, !data.isSerial());
 
         if(! data.getChildren().isEmpty()) {
             for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(data.getChildren(), selfNanos, data.getTotalNumInContext())) {
