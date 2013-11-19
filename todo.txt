@@ -1,10 +1,11 @@
 todo
 ----
-* DataSource
-
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
 * load average from sun.misc.Unsafe --> Windows?!
+
+* GC details: http://www.fasterj.com/articles/gcnotifs.shtml
+  * special treatment for GC data?
 
 * global measurements
   * /proc/diskstats
@@ -43,6 +44,10 @@ todo
 
   * how to differentiate between 'own' and 'foreign' load?!
 
+  * Felix: cache hit / miss etc.
+
+* cleanup
+  * aggregation for built-in servlets: change to lock-free implementation
 
 
 * logo in report servlets (?)
@@ -59,11 +64,31 @@ todo
 * extract a-base
   * partial order
   * mapWithDefault, mapWithDefaultValue
-
+  * queue
 
 AOP:
 --> File I/O
 --> Socket I/O
+
+* instrumentation
+  * 'correlation id' per thread, implicitly linked to other threads
+
+* global measurements
+  * JMX - tomcat, JVM, ...
+
+* 'environment': OS version, RAM, processor, software version ...
+
+* management server
+  * rolling average for scalars
+  * derived values - store them or calculate them on demand?
+  * dashboard: configurable views
+  * free JS graph library, update via server socket
+  * communication *initiated* by applications, but management server sends *back* administrative commands (e.g. change measurement frequency, filter stuff, ...)
+  * rapid changes in clock difference --> sound an alarm
+
+* JS performance api
+
+* rename 'global measurements' to 'scalars'
 
 
 discuss

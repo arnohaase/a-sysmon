@@ -35,7 +35,7 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
     }
 
     @Override protected int getDataColumnWidth() {
-        return 6*60;
+        return 5*60 + 80;
     }
 
     public abstract ABottomUpLeafFilter getLeafFilter();
