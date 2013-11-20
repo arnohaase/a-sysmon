@@ -19,4 +19,7 @@ public class AMemoryMeasurer implements AGlobalMeasurer {
         data.put(IDENT_MEM_MAX, new AGlobalDataPoint(IDENT_MEM_MAX, Runtime.getRuntime().maxMemory(), 0));
         data.put(IDENT_MEM_USED, new AGlobalDataPoint(IDENT_MEM_USED, Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory(), 0));
     }
+
+    @Override public void shutdown() {
+    }
 }

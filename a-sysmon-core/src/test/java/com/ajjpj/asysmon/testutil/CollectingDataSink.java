@@ -26,4 +26,7 @@ public class CollectingDataSink implements ADataSink {
         this.startedFlows.add(startedFlows);
         this.joinedFlows.add(joinedFlows);
     }
+
+    @Override public void shutdown() {
+    }
 }

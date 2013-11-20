@@ -12,11 +12,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AThreadCountMeasurer implements AGlobalMeasurer {
     public final AThreadPoolTrackingDataSink counter = new AThreadPoolTrackingDataSink();
 
-    @Override
-    public void contributeMeasurements(Map<String, AGlobalDataPoint> data) {
+    @Override public void contributeMeasurements(Map<String, AGlobalDataPoint> data) {
         for(Map.Entry<String, AtomicInteger> entry: counter.getThreadCounts().entrySet()) {
             final String ident = "Thread Pool " + entry.getKey();
             data.put(ident, new AGlobalDataPoint(ident, entry.getValue().get(), 0));
         }
+    }
+
+    @Override public void shutdown() {
     }
 }

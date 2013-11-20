@@ -49,6 +49,9 @@ public class ABottomUpDataSink implements ADataSink {
         }
     }
 
+    @Override public void shutdown() {
+    }
+
     public Map<String, AMinMaxAvgData> getData() {
         return Collections.unmodifiableMap(rootMap);
     }

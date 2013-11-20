@@ -8,6 +8,7 @@ import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
 import com.ajjpj.asysmon.util.AList;
+import com.ajjpj.asysmon.util.AShutdownable;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.*;
@@ -26,7 +27,7 @@ import java.util.*;
  *
  * @author arno
  */
-public class ASysMon {
+public class ASysMon implements AShutdownable {
     private final ATimer timer;
     private volatile AList<ADataSink> handlers = AList.nil();
     private volatile AList<AGlobalMeasurer> globalMeasurers = AList.nil();
@@ -88,6 +89,9 @@ public class ASysMon {
                     handler.onFinishedHierarchicalMeasurement(data, startedFlows, joinedFlows);
                 }
             }
+
+            @Override public void shutdown() {
+            }
         });
         hierarchyPerThread.set(result);
         return result;
@@ -134,6 +138,19 @@ public class ASysMon {
             measurer.contributeMeasurements(result);
         }
         return result;
+    }
+
+    @Override public void shutdown() {
+        //TODO log
+
+        for(ADataSink handler: handlers) {
+            handler.shutdown();
+        }
+        for(AGlobalMeasurer m: globalMeasurers) {
+            m.shutdown();
+        }
+
+        //TODO log
     }
 
     /**

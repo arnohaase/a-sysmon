@@ -49,6 +49,8 @@ todo
 * cleanup
   * aggregation for built-in servlets: change to lock-free implementation
 
+* acquire environment data
+* limit measurement time for scalars and environment data
 
 * logo in report servlets (?)
 
@@ -123,3 +125,8 @@ documentation
   * ASysMon.spawnNewCorrelation(...), ASysMon.joinCorrelation(...)
   * any time during a measurement --> knowledge of a correlation ID can come e.g. after parsing of a message, i.e. after JDBC or I/O
   * separate 'kind' and 'correlation id' to keep multiple
+
+* shutdown
+  * ASysMon.shutdown() shuts down all registered measurers and data sinks
+  * if one of the servlets is registered, container shutdown shuts down ASysMon (unless otherwise configured --> AGlobalConfig.setImplicitlyShutDownWithServlet)
+  * idempotent --> safe to shut down repeatedly

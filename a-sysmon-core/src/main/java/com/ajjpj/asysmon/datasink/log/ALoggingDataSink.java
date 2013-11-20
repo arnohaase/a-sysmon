@@ -17,6 +17,9 @@ public abstract class ALoggingDataSink implements ADataSink {
         }
     }
 
+    @Override public void shutdown() {
+    }
+
     protected boolean isLoggingEnabled() {
         return true;
     }

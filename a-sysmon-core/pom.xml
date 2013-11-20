@@ -25,11 +25,18 @@
         -->
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
 
+        <!-- required for HTTP offloading to A-SysMon server -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.3</version>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>

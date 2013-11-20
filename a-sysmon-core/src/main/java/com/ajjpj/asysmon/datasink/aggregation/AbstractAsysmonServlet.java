@@ -1,12 +1,13 @@
 package com.ajjpj.asysmon.datasink.aggregation;
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
 import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.util.APair;
 
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,19 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
         return ASysMon.get();
     }
 
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        final ServletContext ctx = config.getServletContext();
+        ctx.addListener(new ServletContextListener() {
+            @Override public void contextInitialized(ServletContextEvent sce) { }
+
+            @Override public void contextDestroyed(ServletContextEvent sce) {
+                if(AGlobalConfig.getImplicitlyShutDownWithServlet()) {
+                    getSysMon().shutdown();
+                }
+            }
+        });
+    }
 
     @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(req.getParameter("res") != null) {

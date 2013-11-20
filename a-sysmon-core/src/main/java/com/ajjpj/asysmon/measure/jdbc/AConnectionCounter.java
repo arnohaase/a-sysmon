@@ -61,4 +61,7 @@ public class AConnectionCounter implements AGlobalMeasurer {
             data.put(ident, new AGlobalDataPoint(ident, activePerConnectionPool.get(key).get(), 0));
         }
     }
+
+    @Override public void shutdown() {
+    }
 }

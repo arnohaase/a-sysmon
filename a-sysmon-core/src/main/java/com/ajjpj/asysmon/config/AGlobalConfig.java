@@ -21,6 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AGlobalConfig {
     private static volatile ATimer timer = new ASystemNanoTimer();
     private static volatile ASysMonLogger logger = defaultLogger();
+    private static volatile boolean implicitlyShutDownWithServlet = true;
 
     private static List<AGlobalMeasurer> globalMeasurers = new CopyOnWriteArrayList<AGlobalMeasurer>();
 
@@ -58,6 +59,14 @@ public class AGlobalConfig {
 
     public static List<AGlobalMeasurer> getGlobalMeasurers() {
         return globalMeasurers;
+    }
+
+    public static boolean getImplicitlyShutDownWithServlet() {
+        return implicitlyShutDownWithServlet;
+    }
+
+    public static void setImplicitlyShutDownWithServlet(boolean implicitlyShutDownWithServlet) {
+        AGlobalConfig.implicitlyShutDownWithServlet = implicitlyShutDownWithServlet;
     }
 
     /**

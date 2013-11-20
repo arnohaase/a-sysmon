@@ -34,4 +34,7 @@ public class ASystemLoadMeasurer implements AGlobalMeasurer {
         catch(Exception exc) { // do nothing
         }
     }
+
+    @Override public void shutdown() {
+    }
 }

@@ -45,6 +45,9 @@ public class AMinMaxAvgDataSink implements ADataSink {
         }
     }
 
+    @Override public void shutdown() {
+    }
+
     private synchronized void synchronizedCollect(AHierarchicalData newData) { //TODO change this to a non-blocking implementation
         recCollect(newData, rootMap);
     }

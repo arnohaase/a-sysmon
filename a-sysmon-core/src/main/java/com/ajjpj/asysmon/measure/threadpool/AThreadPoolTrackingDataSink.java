@@ -43,6 +43,9 @@ public class AThreadPoolTrackingDataSink implements ADataSink {
         threadCounts.get(curThreadPool()).decrementAndGet();
     }
 
+    @Override public void shutdown() {
+    }
+
     public Map<String, AtomicInteger> getThreadCounts() {
         return threadCounts;
     }
