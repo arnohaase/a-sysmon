@@ -133,7 +133,7 @@ public class ASysMon implements AShutdownable {
         if(AGlobalConfig.isGloballyDisabled()) {
             return new HashMap<String, AGlobalDataPoint>();
         }
-        final Map<String, AGlobalDataPoint> result = new HashMap<String, AGlobalDataPoint>();
+        final Map<String, AGlobalDataPoint> result = new TreeMap<String, AGlobalDataPoint>();
         for(AGlobalMeasurer measurer: globalMeasurers) {
             measurer.contributeMeasurements(result);
         }
