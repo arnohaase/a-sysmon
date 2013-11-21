@@ -21,29 +21,36 @@ import java.io.IOException;
  */
 public class JsonConnectorServlet extends HttpServlet {
     @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.print("received: ");
-        int ch;
-        while ((ch = req.getReader().read()) != -1) {
-            System.out.print((char) ch);
-        }
-        System.out.println();
+//        System.out.print("received: ");
+//        int ch;
+//        while ((ch = req.getReader().read()) != -1) {
+//            System.out.print((char) ch);
+//        }
+//        System.out.println();
 
-        final ObjectMapper om = new ObjectMapper();
-        final RootNode root = om.readValue(req.getInputStream(), RootNode.class);
+        try {
+            final ObjectMapper om = new ObjectMapper();
+            final RootNode root = om.readValue(req.getInputStream(), RootNode.class);
 
-        final InputProcessor processor = getProcessor();
-        final InstanceIdentifier instanceIdentifier = new InstanceIdentifier(root.getSender(), root.getSenderInstance());
+            System.out.println("received " + root);
 
-        processor.updateSystemClockDiff(instanceIdentifier, root.getSenderTimestamp());
+            final InputProcessor processor = getProcessor();
+            final InstanceIdentifier instanceIdentifier = new InstanceIdentifier(root.getSender(), root.getSenderInstance());
 
-        for(EnvironmentNode envNode: root.getEnvironment()) {
-            processor.addEnvironmentEntry(instanceIdentifier, envNode);
-        }
-        for(ScalarNode scalarNode: root.getScalars()) {
-            processor.addScalarEntry(instanceIdentifier, scalarNode);
-        }
-        for(TraceRootNode traceNode: root.getTraces()) {
-            processor.addTraceEntry(instanceIdentifier, traceNode);
+            processor.updateSystemClockDiff(instanceIdentifier, root.getSenderTimestamp());
+
+            for(EnvironmentNode envNode: root.getEnvironment()) {
+                processor.addEnvironmentEntry(instanceIdentifier, envNode);
+            }
+            for(ScalarNode scalarNode: root.getScalars()) {
+                processor.addScalarEntry(instanceIdentifier, scalarNode);
+            }
+            for(TraceRootNode traceNode: root.getTraces()) {
+                processor.addTraceEntry(instanceIdentifier, traceNode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
 
         //TODO error handling --> log unparsable request
