@@ -144,10 +144,18 @@ public class ASysMon implements AShutdownable {
         //TODO log
 
         for(ADataSink handler: handlers) {
-            handler.shutdown();
+            try {
+                handler.shutdown();
+            } catch (Exception e) {
+                e.printStackTrace(); //TODO log
+            }
         }
         for(AGlobalMeasurer m: globalMeasurers) {
-            m.shutdown();
+            try {
+                m.shutdown();
+            } catch (Exception e) {
+                e.printStackTrace(); //TODO log
+            }
         }
 
         //TODO log

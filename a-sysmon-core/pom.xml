@@ -30,12 +30,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- required for HTTP offloading to A-SysMon server -->
+        <!-- required for HTTP offloading to A-SysMon server - exclude if not required and / or there is a version conflict -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.2.3</version>
-            <optional>true</optional>
+            <version>4.3.1</version>
+            <!--<optional>true</optional>-->
         </dependency>
         <dependency>
             <groupId>log4j</groupId>

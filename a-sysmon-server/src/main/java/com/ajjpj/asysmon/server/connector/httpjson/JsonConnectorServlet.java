@@ -21,6 +21,13 @@ import java.io.IOException;
  */
 public class JsonConnectorServlet extends HttpServlet {
     @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.print("received: ");
+        int ch;
+        while ((ch = req.getReader().read()) != -1) {
+            System.out.print((char) ch);
+        }
+        System.out.println();
+
         final ObjectMapper om = new ObjectMapper();
         final RootNode root = om.readValue(req.getInputStream(), RootNode.class);
 
@@ -38,6 +45,8 @@ public class JsonConnectorServlet extends HttpServlet {
         for(TraceRootNode traceNode: root.getTraces()) {
             processor.addTraceEntry(instanceIdentifier, traceNode);
         }
+
+        //TODO error handling --> log unparsable request
     }
 
     protected InputProcessor getProcessor() {

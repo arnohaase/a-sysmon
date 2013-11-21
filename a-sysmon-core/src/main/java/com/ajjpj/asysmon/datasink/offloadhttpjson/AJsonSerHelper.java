@@ -64,6 +64,7 @@ class AJsonSerHelper {
         checkInArray();
         state.pop();
         out.write("]");
+        afterValueWritten();
     }
 
     public void writeStringLiteral(String s) throws IOException {
@@ -128,7 +129,7 @@ class AJsonSerHelper {
         afterValueWritten();
     }
 
-    // helper methods
+    //----------------------------------------- helper methods
 
     private void checkAcceptsValueAndPrefixComma() throws IOException {
         if(!state().acceptsValue) {
@@ -139,13 +140,17 @@ class AJsonSerHelper {
         }
     }
 
-    private void afterValueWritten() {
+    private void afterValueWritten() throws IOException {
         if(state() == JsonSerState.afterKey) {
             state.pop();
         }
         switch(state()) {
-            case startOfArray: replaceState(JsonSerState.inArray); break;
+            case startOfArray:  replaceState(JsonSerState.inArray); break;
             case startOfObject: replaceState(JsonSerState.inObject); break;
+            case initial:
+                replaceState(JsonSerState.finished);
+                out.flush();
+                break;
             default:
         }
     }

@@ -34,13 +34,15 @@
             <version>1.9.9</version>
         </dependency>
 
-        <!--
+        <!-- Jetty is required for stand-alone startup using the main method. A-SysMon server can however be deployed -->
+        <!--  as a web application, in which case the following dependency is not required. -->
         <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>2.5.0</version>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>9.0.4.v20130625</version>
+            <optional>true</optional>
         </dependency>
-        -->
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
