@@ -19,7 +19,7 @@ import java.nio.charset.Charset;
 class AJsonSerHelper {
     final Charset UTF_8 = Charset.forName("UTF-8");
 
-    private final int[] TEN_POW = new int[] {1, 10, 100, 1000, 10*1000, 100*1000, 1000*1000, 10*1000*1000, 100*1000*1000};
+    private final int[] TEN_POW = new int[] {1, 10, 100, 1000, 10*1000, 100*1000, 1000*1000, 10*1000*1000, 100*1000*1000, 1000*1000*1000};
 
     private final Writer out;
     private final ArrayStack<JsonSerState> state = new ArrayStack<JsonSerState>();
@@ -49,7 +49,7 @@ class AJsonSerHelper {
         if(state() == JsonSerState.inObject) {
             out.write(",");
         }
-        writeStringLiteral(key);
+        _writeStringLiteral(key);
         out.write(":");
         state.push(JsonSerState.afterKey);
     }
@@ -73,30 +73,34 @@ class AJsonSerHelper {
             writeNullLiteral();
         }
         else {
-            out.write('"');
-            for(int i=0; i<s.length(); i++) {
-                final char ch = s.charAt(i);
-
-                if(ch == '"') {
-                    out.write("\\\"");
-                }
-                else if (ch == '\\') {
-                    out.write ("\\\\");
-                }
-                else if(ch < 16) {
-                    out.write("\\u000" + Integer.toHexString(ch));
-                }
-                else if(ch < 32) {
-                    out.write("\\u00" + Integer.toHexString(ch));
-                }
-                else {
-                    out.write(ch);
-                }
-            }
-
-            out.write('"');
+            _writeStringLiteral(s);
         }
         afterValueWritten();
+    }
+
+    private void _writeStringLiteral(String s) throws IOException {
+        out.write('"');
+        for(int i=0; i<s.length(); i++) {
+            final char ch = s.charAt(i);
+
+            if(ch == '"') {
+                out.write("\\\"");
+            }
+            else if (ch == '\\') {
+                out.write ("\\\\");
+            }
+            else if(ch < 16) {
+                out.write("\\u000" + Integer.toHexString(ch));
+            }
+            else if(ch < 32) {
+                out.write("\\u00" + Integer.toHexString(ch));
+            }
+            else {
+                out.write(ch);
+            }
+        }
+
+        out.write('"');
     }
 
     public void writeNumberLiteral(long value, int numFracDigits) throws IOException {
