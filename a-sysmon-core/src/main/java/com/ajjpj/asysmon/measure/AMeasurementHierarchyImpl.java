@@ -3,6 +3,7 @@ package com.ajjpj.asysmon.measure;
 import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.util.ArrayStack;
 import com.ajjpj.asysmon.util.timer.ATimer;
@@ -108,7 +109,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
                 finish(m);
             }
             isFinished = true;
-            dataSink.onFinishedHierarchicalMeasurement(newData, startedFlows, joinedFlows);
+            dataSink.onFinishedHierarchicalMeasurement(new AHierarchicalDataRoot(newData, startedFlows, joinedFlows));
         }
         else {
             childrenStack.peek().add(newData);

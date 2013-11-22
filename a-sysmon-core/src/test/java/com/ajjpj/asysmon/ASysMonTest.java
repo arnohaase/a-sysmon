@@ -32,7 +32,7 @@ public class ASysMonTest {
         sysMon.start("a").finish();
 
         assertEquals(1, dataSink.data.size());
-        assertEquals("a", dataSink.data.get(0).getIdentifier());
+        assertEquals("a", dataSink.data.get(0).getRootNode().getIdentifier());
     }
 
     @Test
@@ -48,11 +48,11 @@ public class ASysMonTest {
         sysMon.start("d").finish();
 
         assertEquals(2, dataSink.data.size());
-        assertEquals("a", dataSink.data.get(0).getIdentifier());
-        assertEquals("b", dataSink.data.get(0).getChildren().get(0).getIdentifier());
-        assertEquals("c", dataSink.data.get(0).getChildren().get(1).getIdentifier());
+        assertEquals("a", dataSink.data.get(0).getRootNode().getIdentifier());
+        assertEquals("b", dataSink.data.get(0).getRootNode().getChildren().get(0).getIdentifier());
+        assertEquals("c", dataSink.data.get(0).getRootNode().getChildren().get(1).getIdentifier());
 
-        assertEquals("d", dataSink.data.get(1).getIdentifier());
+        assertEquals("d", dataSink.data.get(1).getRootNode().getIdentifier());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class ASysMonTest {
 
         assertEquals(1, dataSink.data.size());
 
-        final AHierarchicalData root = dataSink.data.get(0);
+        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
         assertEquals(2, root.getChildren().size());
 
         assertEquals("d", root.getChildren().get(0).getIdentifier());
@@ -135,7 +135,7 @@ public class ASysMonTest {
         a.finish();
 
         assertEquals(1, dataSink.data.size());
-        final AHierarchicalData ma = dataSink.data.get(0);
+        final AHierarchicalData ma = dataSink.data.get(0).getRootNode();
 
         // c1 and b were started directly within ma
         assertEquals(2, ma.getChildren().size());
@@ -166,7 +166,7 @@ public class ASysMonTest {
         m.finish();
 
         assertEquals(1, dataSink.data.size());
-        assertEquals(1, dataSink.data.get(0).getChildren().size());
+        assertEquals(1, dataSink.data.get(0).getRootNode().getChildren().size());
 
         try {
             a.finish();
@@ -177,7 +177,7 @@ public class ASysMonTest {
         }
 
         assertEquals(1, dataSink.data.size());
-        assertEquals(1, dataSink.data.get(0).getChildren().size());
+        assertEquals(1, dataSink.data.get(0).getRootNode().getChildren().size());
     }
 
     @Test
@@ -196,7 +196,7 @@ public class ASysMonTest {
         m.finish();
 
         assertEquals(1, dataSink.data.size());
-        final AHierarchicalData root = dataSink.data.get(0);
+        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
         assertEquals(300L, root.getDurationNanos());
 
         assertEquals(2, root.getChildren().size());
@@ -229,7 +229,7 @@ public class ASysMonTest {
         m.finish();
 
         assertEquals(1, dataSink.data.size());
-        final AHierarchicalData root = dataSink.data.get(0);
+        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
         assertEquals(500L, root.getDurationNanos());
 
         assertEquals(2, root.getChildren().size());
@@ -284,7 +284,7 @@ public class ASysMonTest {
         m.finish();
 
         assertEquals(1, dataSink.data.size());
-        final AHierarchicalData root = dataSink.data.get(0);
+        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
 
         assertEquals(2, root.getChildren().size());
 
@@ -317,7 +317,7 @@ public class ASysMonTest {
 
         assertEquals(1, dataSink.data.size());
 
-        final AHierarchicalData root = dataSink.data.get(0);
+        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
         assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, root.getIdentifier());
 
         assertEquals(1, root.getChildren().size());
@@ -336,7 +336,7 @@ public class ASysMonTest {
         b.finish();
         assertEquals(1, dataSink.data.size());
 
-        final AHierarchicalData root = dataSink.data.get(0);
+        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
         assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, root.getIdentifier());
 
         assertEquals(2, root.getChildren().size());
@@ -362,7 +362,7 @@ public class ASysMonTest {
 
         assertEquals(1, dataSink.data.size());
 
-        final AHierarchicalData root = dataSink.data.get(0);
+        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
         assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, root.getIdentifier());
 
         assertEquals(2, root.getChildren().size());
@@ -383,8 +383,8 @@ public class ASysMonTest {
         m.finish();
 
         assertEquals(1, dataSink.data.size());
-        assertEquals(1, dataSink.data.get(0).getChildren().size());
-        assertEquals(1, dataSink.data.get(0).getChildren().get(0).getChildren().size());
+        assertEquals(1, dataSink.data.get(0).getRootNode().getChildren().size());
+        assertEquals(1, dataSink.data.get(0).getRootNode().getChildren().get(0).getChildren().size());
     }
 }
 

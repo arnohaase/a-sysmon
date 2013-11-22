@@ -2,12 +2,10 @@ package com.ajjpj.asysmon.datasink.cyclicdump;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
-import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -60,7 +58,7 @@ public abstract class ACyclicMeasurementDumper implements ADataSink {
     @Override public void onStartedHierarchicalMeasurement() {
     }
 
-    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
+    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
     }
 
     @Override public void shutdown() {

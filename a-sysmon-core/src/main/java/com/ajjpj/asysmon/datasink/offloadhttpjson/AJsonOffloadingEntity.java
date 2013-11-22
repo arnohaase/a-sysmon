@@ -3,6 +3,7 @@ package com.ajjpj.asysmon.datasink.offloadhttpjson;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import org.apache.http.entity.AbstractHttpEntity;
 
 import java.io.IOException;
@@ -14,19 +15,14 @@ import java.util.*;
  * @author arno
  */
 class AJsonOffloadingEntity extends AbstractHttpEntity {
-    private final List<AHierarchicalData> traces = new ArrayList<AHierarchicalData>();
-    private final List<Collection<ACorrelationId>> startedFlows = new ArrayList<Collection<ACorrelationId>>();
-    private final List<Collection<ACorrelationId>> joinedFlows = new ArrayList<Collection<ACorrelationId>>();
+    private final List<AHierarchicalDataRoot> traces = new ArrayList<AHierarchicalDataRoot>();
     private final List<AGlobalDataPoint> scalarData = new ArrayList<AGlobalDataPoint>();
 
-    AJsonOffloadingEntity(List<AHierarchicalData> traces, List<Collection<ACorrelationId>> startedFlows, List<Collection<ACorrelationId>> joinedFlows, Collection<AGlobalDataPoint> scalarData) {
+    AJsonOffloadingEntity(List<AHierarchicalDataRoot> traces, Collection<AGlobalDataPoint> scalarData) {
         setChunked(true);
         //TODO content type, encoding
 
         this.traces.addAll(traces);
-        this.startedFlows.addAll(startedFlows);
-        this.joinedFlows.addAll(joinedFlows);
-
         this.scalarData.addAll(scalarData);
     }
 
@@ -58,8 +54,8 @@ class AJsonOffloadingEntity extends AbstractHttpEntity {
 
         ser.writeKey("traces");
         ser.startArray();
-        for(int i=0; i<traces.size(); i++) {
-            writeTraceRoot(ser, traces.get(i), startedFlows.get(i), joinedFlows.get(i));
+        for(AHierarchicalDataRoot trace: traces) {
+            writeTraceRoot(ser, trace);
         }
         ser.endArray();
 
@@ -73,25 +69,25 @@ class AJsonOffloadingEntity extends AbstractHttpEntity {
         ser.endObject();
     }
 
-    private void writeTraceRoot(AJsonSerHelper ser, AHierarchicalData trace, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) throws IOException {
+    private void writeTraceRoot(AJsonSerHelper ser, AHierarchicalDataRoot trace) throws IOException {
         ser.startObject(); // start 'TraceRootNode'
 
         ser.writeKey("startedFlows");
         ser.startArray();
-        for(ACorrelationId flow: startedFlows) {
+        for(ACorrelationId flow: trace.getStartedFlows()) {
             writeCorrelationId(ser, flow);
         }
         ser.endArray();
 
         ser.writeKey("joinedFlows");
         ser.startArray();
-        for(ACorrelationId flow: joinedFlows) {
+        for(ACorrelationId flow: trace.getJoinedFlows()) {
             writeCorrelationId(ser, flow);
         }
         ser.endArray();
 
         ser.writeKey("trace");
-        writeTraceRec(ser, trace);
+        writeTraceRec(ser, trace.getRootNode());
 
         ser.endObject();
     }

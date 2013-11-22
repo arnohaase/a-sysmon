@@ -1,9 +1,8 @@
 package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AGlobalDataPoint;
-import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
@@ -11,7 +10,9 @@ import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -82,11 +83,11 @@ public class ASysMon implements AShutdownable {
                 }
             }
 
-            @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
+            @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
                 hierarchyPerThread.remove();
 
                 for(ADataSink handler: handlers) {
-                    handler.onFinishedHierarchicalMeasurement(data, startedFlows, joinedFlows);
+                    handler.onFinishedHierarchicalMeasurement(data);
                 }
             }
 
