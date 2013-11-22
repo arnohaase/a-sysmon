@@ -137,8 +137,19 @@ class AJsonOffloadingEntity extends AbstractHttpEntity {
         ser.endObject();
     }
 
-    private void writeScalar(AJsonSerHelper ser, AGlobalDataPoint scalar) {
+    private void writeScalar(AJsonSerHelper ser, AGlobalDataPoint scalar) throws IOException {
+        ser.startObject(); // start 'ScalarNode'
 
+        ser.writeKey("senderTimestamp");
+        ser.writeNumberLiteral(0, 0); //TODO
+
+        ser.writeKey("name");
+        ser.writeStringLiteral(scalar.getName());
+
+        ser.writeKey("value");
+        ser.writeNumberLiteral(scalar.getValueRaw(), scalar.getNumFracDigits());
+
+        ser.endObject();
     }
 
     @Override public boolean isStreaming() {

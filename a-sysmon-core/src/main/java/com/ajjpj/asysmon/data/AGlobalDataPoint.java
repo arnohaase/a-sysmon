@@ -28,6 +28,9 @@ public class AGlobalDataPoint {
         return name;
     }
 
+    public long getValueRaw() {
+        return value;
+    }
     public double getValue() {
         return value / pow[numFracDigits];
     }
