@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.datasink.offloadhttpjson;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.data.AGlobalDataPoint;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.util.ASoftlyLimitedQueue;
@@ -32,7 +32,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
     private final URI uri;
 
     private final ASoftlyLimitedQueue<AHierarchicalDataRoot> traceQueue;
-    private final ASoftlyLimitedQueue<AGlobalDataPoint> scalarQueue;
+    private final ASoftlyLimitedQueue<AScalarDataPoint> scalarQueue;
 
     private final ExecutorService offloadingThreadPool;
     private final ScheduledExecutorService scalarMeasurementPool;
@@ -43,7 +43,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
         this.uri = URI.create(uri);
 
         this.traceQueue = new ASoftlyLimitedQueue<AHierarchicalDataRoot>(traceQueueSize, new DiscardedLogger("trace queue overflow - discarding oldest trace"));
-        this.scalarQueue = new ASoftlyLimitedQueue<AGlobalDataPoint>(scalarQueueSize, new DiscardedLogger("scalar queue overflow - discarding oldest data"));
+        this.scalarQueue = new ASoftlyLimitedQueue<AScalarDataPoint>(scalarQueueSize, new DiscardedLogger("scalar queue overflow - discarding oldest data"));
 
         //TODO offload scalars
 
@@ -56,7 +56,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
         scalarMeasurementPool.scheduleAtFixedRate(new Runnable() {
             @Override public void run() {
                 //TODO introduce 'AScalarProvider' interface for callbacks like this
-                for(AGlobalDataPoint scalar: sysMon.getGlobalMeasurements().values()) { //TODO ensure that this ASysMon call will never throw exceptions
+                for(AScalarDataPoint scalar: sysMon.getScalarMeasurements().values()) { //TODO ensure that this ASysMon call will never throw exceptions
                     scalarQueue.add(scalar);
                 }
             }
@@ -80,8 +80,8 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
             traces.add(candidate);
         }
 
-        final List<AGlobalDataPoint> scalars = new ArrayList<AGlobalDataPoint>();
-        AGlobalDataPoint scalar;
+        final List<AScalarDataPoint> scalars = new ArrayList<AScalarDataPoint>();
+        AScalarDataPoint scalar;
         while ((scalar = scalarQueue.poll()) != null) { //TODO limit number per HTTP request?
             scalars.add(scalar);
         }

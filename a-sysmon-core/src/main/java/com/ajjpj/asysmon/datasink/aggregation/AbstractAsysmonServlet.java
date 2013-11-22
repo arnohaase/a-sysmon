@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.datasink.aggregation;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.data.AGlobalDataPoint;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.util.APair;
@@ -101,22 +101,22 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
         out.println("<body>");
         out.println("<h1>" + escapeHtml(getTitle()) + "</h1>");
         writeCommands(url, out);
-        writeGlobalMeasurements(out);
+        writeScalarMeasurements(out);
         writeData(out);
         out.println("</body></html>");
     }
 
     protected abstract void writeData(PrintWriter out);
 
-    private void writeGlobalMeasurements(PrintWriter out) {
-        final Map<String, AGlobalDataPoint> allData = new TreeMap<String, AGlobalDataPoint>(getSysMon().getGlobalMeasurements());
+    private void writeScalarMeasurements(PrintWriter out) {
+        final Map<String, AScalarDataPoint> allData = new TreeMap<String, AScalarDataPoint>(getSysMon().getScalarMeasurements());
 
         out.println("<table class='global-measurements'>");
 
         // special handling for system load
-        final AGlobalDataPoint load1  = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_1_MIN);
-        final AGlobalDataPoint load5  = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_5_MIN);
-        final AGlobalDataPoint load15 = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_15_MIN);
+        final AScalarDataPoint load1  = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_1_MIN);
+        final AScalarDataPoint load5  = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_5_MIN);
+        final AScalarDataPoint load15 = allData.remove(ASystemLoadMeasurer.IDENT_LOAD_15_MIN);
 
         final String sLoad1  = load1  != null ? getDecimalFormat(load1. getNumFracDigits()).format(load1. getValue()) : "N/A";
         final String sLoad5  = load5  != null ? getDecimalFormat(load5. getNumFracDigits()).format(load5. getValue()) : "N/A";
@@ -124,12 +124,12 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
 
         //TODO color code system load
 
-        writeGlobalMeasurement(out, "System Load", sLoad1 + " / " + sLoad5 + " / " + sLoad15);
+        writeScalarMeasurement(out, "System Load", sLoad1 + " / " + sLoad5 + " / " + sLoad15);
 
         // special handling for memory
-        final AGlobalDataPoint memUsed = allData.remove(AMemoryMeasurer.IDENT_MEM_USED);
-        final AGlobalDataPoint memTotal = allData.remove(AMemoryMeasurer.IDENT_MEM_TOTAL);
-        final AGlobalDataPoint memMax = allData.remove(AMemoryMeasurer.IDENT_MEM_MAX);
+        final AScalarDataPoint memUsed = allData.remove(AMemoryMeasurer.IDENT_MEM_USED);
+        final AScalarDataPoint memTotal = allData.remove(AMemoryMeasurer.IDENT_MEM_TOTAL);
+        final AScalarDataPoint memMax = allData.remove(AMemoryMeasurer.IDENT_MEM_MAX);
         allData.remove(AMemoryMeasurer.IDENT_MEM_FREE);
 
         final int MEGA = 1024*1024;
@@ -139,17 +139,17 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
 
         //TODO color code memory usage
 
-        writeGlobalMeasurement(out, "Memory", sMemUsed + " / " + sMemTotal + " / " + sMemMax);
+        writeScalarMeasurement(out, "Memory", sMemUsed + " / " + sMemTotal + " / " + sMemMax);
 
         // generic handling for other global measurements
-        for(AGlobalDataPoint dp: allData.values()) {
-            writeGlobalMeasurement(out, dp.getName(), getDecimalFormat(dp.getNumFracDigits()).format(dp.getValue()));
+        for(AScalarDataPoint dp: allData.values()) {
+            writeScalarMeasurement(out, dp.getName(), getDecimalFormat(dp.getNumFracDigits()).format(dp.getValue()));
         }
 
         out.println("</table>");
     }
 
-    private void writeGlobalMeasurement(PrintWriter out, String ident, String value) {
+    private void writeScalarMeasurement(PrintWriter out, String ident, String value) {
         out.println("<tr class='global-measurements'><td class='global-measurements-key'>" + escapeHtml(ident) + "</td><td class='global-measuremnets-value'>" + escapeHtml(value) + "</td></tr>");
     }
 

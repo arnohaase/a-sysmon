@@ -1,11 +1,11 @@
 package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.data.AGlobalDataPoint;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
-import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.measure.global.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 import com.ajjpj.asysmon.util.timer.ATimer;
@@ -31,7 +31,7 @@ import java.util.TreeMap;
 public class ASysMon implements AShutdownable {
     private final ATimer timer;
     private volatile AList<ADataSink> handlers = AList.nil();
-    private volatile AList<AGlobalMeasurer> globalMeasurers = AList.nil();
+    private volatile AList<AScalarMeasurer> scalarMeasurers = AList.nil();
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
@@ -46,8 +46,8 @@ public class ASysMon implements AShutdownable {
 
     public ASysMon(ATimer timer) {
         this.timer = timer;
-        for(AGlobalMeasurer m: AGlobalConfig.getGlobalMeasurers()) {
-            globalMeasurers = globalMeasurers.cons(m);
+        for(AScalarMeasurer m: AGlobalConfig.getScalarMeasurers()) {
+            scalarMeasurers = scalarMeasurers.cons(m);
         }
     }
 
@@ -62,8 +62,8 @@ public class ASysMon implements AShutdownable {
         }
     }
 
-    synchronized void addGlobalMeasurer(AGlobalMeasurer m) {
-        globalMeasurers = globalMeasurers.cons(m);
+    synchronized void addScalarMeasurer(AScalarMeasurer m) {
+        scalarMeasurers = scalarMeasurers.cons(m);
     }
 
     synchronized void addDataSink(ADataSink handler) {
@@ -130,14 +130,17 @@ public class ASysMon implements AShutdownable {
         return getMeasurementHierarchy().startCollectingMeasurement(identifier, serial);
     }
 
-    public Map<String, AGlobalDataPoint> getGlobalMeasurements() {
+    public Map<String, AScalarDataPoint> getScalarMeasurements() {
         if(AGlobalConfig.isGloballyDisabled()) {
-            return new HashMap<String, AGlobalDataPoint>();
+            return new HashMap<String, AScalarDataPoint>();
         }
-        final Map<String, AGlobalDataPoint> result = new TreeMap<String, AGlobalDataPoint>();
-        for(AGlobalMeasurer measurer: globalMeasurers) {
-            measurer.contributeMeasurements(result);
+        final Map<String, AScalarDataPoint> result = new TreeMap<String, AScalarDataPoint>();
+        final long now = System.currentTimeMillis();
+        for(AScalarMeasurer measurer: scalarMeasurers) {
+            measurer.contributeMeasurements(result, now);
         }
+        //TODO protect against exceptions (per measurer)
+        //TODO limit duration per measurer
         return result;
     }
 
@@ -151,7 +154,7 @@ public class ASysMon implements AShutdownable {
                 e.printStackTrace(); //TODO log
             }
         }
-        for(AGlobalMeasurer m: globalMeasurers) {
+        for(AScalarMeasurer m: scalarMeasurers) {
             try {
                 m.shutdown();
             } catch (Exception e) {

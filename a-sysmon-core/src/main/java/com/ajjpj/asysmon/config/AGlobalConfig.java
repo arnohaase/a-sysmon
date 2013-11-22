@@ -3,15 +3,13 @@ package com.ajjpj.asysmon.config;
 import com.ajjpj.asysmon.config.log.ALog4JLogger;
 import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
-import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.measure.global.AScalarMeasurer;
 import com.ajjpj.asysmon.measure.global.AMemoryMeasurer;
 import com.ajjpj.asysmon.measure.global.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
 import com.ajjpj.asysmon.util.timer.ASystemNanoTimer;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -23,12 +21,12 @@ public class AGlobalConfig {
     private static volatile ASysMonLogger logger = defaultLogger();
     private static volatile boolean implicitlyShutDownWithServlet = true;
 
-    private static List<AGlobalMeasurer> globalMeasurers = new CopyOnWriteArrayList<AGlobalMeasurer>();
+    private static List<AScalarMeasurer> scalarMeasurers = new CopyOnWriteArrayList<AScalarMeasurer>();
 
     static {
-        globalMeasurers.add(new ASystemLoadMeasurer());
-        globalMeasurers.add(new AMemoryMeasurer());
-        globalMeasurers.add(AConnectionCounter.INSTANCE);
+        scalarMeasurers.add(new ASystemLoadMeasurer());
+        scalarMeasurers.add(new AMemoryMeasurer());
+        scalarMeasurers.add(AConnectionCounter.INSTANCE);
     }
 
 
@@ -57,8 +55,8 @@ public class AGlobalConfig {
         AGlobalConfig.timer = timer;
     }
 
-    public static List<AGlobalMeasurer> getGlobalMeasurers() {
-        return globalMeasurers;
+    public static List<AScalarMeasurer> getScalarMeasurers() {
+        return scalarMeasurers;
     }
 
     public static boolean getImplicitlyShutDownWithServlet() {

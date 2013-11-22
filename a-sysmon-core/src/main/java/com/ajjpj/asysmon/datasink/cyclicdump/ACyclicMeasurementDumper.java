@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.datasink.cyclicdump;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.data.AGlobalDataPoint;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 
@@ -29,7 +29,7 @@ public abstract class ACyclicMeasurementDumper implements ADataSink {
     private final Runnable dumper = new Runnable() {
         @Override public void run() {
             try {
-                final Map<String, AGlobalDataPoint> m = sysMon.getGlobalMeasurements();
+                final Map<String, AScalarDataPoint> m = sysMon.getScalarMeasurements();
                 for(String key: m.keySet()) {
                     dump("Scalar Measurement: " + key + " = " + m.get(key).getFormattedValue());
                 }

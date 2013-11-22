@@ -1,8 +1,8 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
 
-import com.ajjpj.asysmon.data.AGlobalDataPoint;
-import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
+import com.ajjpj.asysmon.measure.global.AScalarMeasurer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author arno
  */
-public class AConnectionCounter implements AGlobalMeasurer {
+public class AConnectionCounter implements AScalarMeasurer {
     public static final AConnectionCounter INSTANCE = new AConnectionCounter(); //TODO make instance management configurable
 
     private static final String DEFAULT_POOL_IDENTIFIER = " @@##++ ";
@@ -51,14 +51,14 @@ public class AConnectionCounter implements AGlobalMeasurer {
         getCounter(qualifier, activePerConnectionPool).decrementAndGet();
     }
 
-    @Override public void contributeMeasurements(Map<String, AGlobalDataPoint> data) {
+    @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp) {
         for(String key: openPerConnectionPool.keySet()) {
             final String ident = (DEFAULT_POOL_IDENTIFIER == key) ? "Open JDBC Connections" : ("Open JDBC Connections (" + key + ")");
-            data.put(ident, new AGlobalDataPoint(ident, openPerConnectionPool.get(key).get(), 0));
+            data.put(ident, new AScalarDataPoint(timestamp, ident, openPerConnectionPool.get(key).get(), 0));
         }
         for(String key: activePerConnectionPool.keySet()) {
             final String ident = (DEFAULT_POOL_IDENTIFIER == key) ? "Active JDBC Connections" : ("Active JDBC Connections (" + key + ")");
-            data.put(ident, new AGlobalDataPoint(ident, activePerConnectionPool.get(key).get(), 0));
+            data.put(ident, new AScalarDataPoint(timestamp, ident, activePerConnectionPool.get(key).get(), 0));
         }
     }
 

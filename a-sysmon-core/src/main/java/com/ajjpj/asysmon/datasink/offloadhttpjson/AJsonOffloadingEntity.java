@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.datasink.offloadhttpjson;
 
 import com.ajjpj.asysmon.data.ACorrelationId;
-import com.ajjpj.asysmon.data.AGlobalDataPoint;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import org.apache.http.entity.AbstractHttpEntity;
@@ -16,9 +16,9 @@ import java.util.*;
  */
 class AJsonOffloadingEntity extends AbstractHttpEntity {
     private final List<AHierarchicalDataRoot> traces = new ArrayList<AHierarchicalDataRoot>();
-    private final List<AGlobalDataPoint> scalarData = new ArrayList<AGlobalDataPoint>();
+    private final List<AScalarDataPoint> scalarData = new ArrayList<AScalarDataPoint>();
 
-    AJsonOffloadingEntity(List<AHierarchicalDataRoot> traces, Collection<AGlobalDataPoint> scalarData) {
+    AJsonOffloadingEntity(List<AHierarchicalDataRoot> traces, Collection<AScalarDataPoint> scalarData) {
         setChunked(true);
         //TODO content type, encoding
 
@@ -61,7 +61,7 @@ class AJsonOffloadingEntity extends AbstractHttpEntity {
 
         ser.writeKey("scalars");
         ser.startArray();
-        for(AGlobalDataPoint scalar: scalarData) {
+        for(AScalarDataPoint scalar: scalarData) {
             writeScalar(ser, scalar);
         }
         ser.endArray();
@@ -137,11 +137,11 @@ class AJsonOffloadingEntity extends AbstractHttpEntity {
         ser.endObject();
     }
 
-    private void writeScalar(AJsonSerHelper ser, AGlobalDataPoint scalar) throws IOException {
+    private void writeScalar(AJsonSerHelper ser, AScalarDataPoint scalar) throws IOException {
         ser.startObject(); // start 'ScalarNode'
 
         ser.writeKey("senderTimestamp");
-        ser.writeNumberLiteral(0, 0); //TODO
+        ser.writeNumberLiteral(scalar.getTimestamp(), 0);
 
         ser.writeKey("name");
         ser.writeStringLiteral(scalar.getName());
