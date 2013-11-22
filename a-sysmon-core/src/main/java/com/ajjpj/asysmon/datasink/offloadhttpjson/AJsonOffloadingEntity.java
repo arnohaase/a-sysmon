@@ -15,12 +15,18 @@ import java.util.*;
  * @author arno
  */
 class AJsonOffloadingEntity extends AbstractHttpEntity {
+    private final String sender;
+    private final String senderInstance;
+
     private final List<AHierarchicalDataRoot> traces = new ArrayList<AHierarchicalDataRoot>();
     private final List<AScalarDataPoint> scalarData = new ArrayList<AScalarDataPoint>();
 
-    AJsonOffloadingEntity(List<AHierarchicalDataRoot> traces, Collection<AScalarDataPoint> scalarData) {
+    AJsonOffloadingEntity(List<AHierarchicalDataRoot> traces, Collection<AScalarDataPoint> scalarData, String sender, String senderInstance) {
         setChunked(true);
         //TODO content type, encoding
+
+        this.sender = sender;
+        this.senderInstance = senderInstance;
 
         this.traces.addAll(traces);
         this.scalarData.addAll(scalarData);
@@ -44,10 +50,10 @@ class AJsonOffloadingEntity extends AbstractHttpEntity {
         ser.startObject(); // start 'RootNode'
 
         ser.writeKey("sender");
-        ser.writeStringLiteral("TODO"); //TODO
+        ser.writeStringLiteral(sender);
 
         ser.writeKey("senderInstance");
-        ser.writeStringLiteral("TODO"); //TODO
+        ser.writeStringLiteral(senderInstance);
 
         ser.writeKey("senderTimestamp");
         ser.writeNumberLiteral(System.currentTimeMillis(), 0);

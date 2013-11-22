@@ -31,6 +31,9 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
     private final CloseableHttpClient httpClient = HttpClients.createDefault(); //TODO make this configurable
     private final URI uri;
 
+    private final String sender;
+    private final String senderInstance;
+
     private final ASoftlyLimitedQueue<AHierarchicalDataRoot> traceQueue;
     private final ASoftlyLimitedQueue<AScalarDataPoint> scalarQueue;
 
@@ -39,13 +42,13 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
 
     private volatile boolean isShutDown = false;
 
-    public AHttpJsonOffloadingDataSink(final ASysMon sysMon, String uri, int traceQueueSize, int scalarQueueSize, int numOffloadingThreads, int scalarMeasurementFrequencyMillis) {
+    public AHttpJsonOffloadingDataSink(final ASysMon sysMon, String uri, String sender, String senderInstance, int traceQueueSize, int scalarQueueSize, int numOffloadingThreads, int scalarMeasurementFrequencyMillis) {
         this.uri = URI.create(uri);
+        this.sender = sender;
+        this.senderInstance = senderInstance;
 
         this.traceQueue = new ASoftlyLimitedQueue<AHierarchicalDataRoot>(traceQueueSize, new DiscardedLogger("trace queue overflow - discarding oldest trace"));
         this.scalarQueue = new ASoftlyLimitedQueue<AScalarDataPoint>(scalarQueueSize, new DiscardedLogger("scalar queue overflow - discarding oldest data"));
-
-        //TODO offload scalars
 
         offloadingThreadPool = Executors.newFixedThreadPool(numOffloadingThreads);
         for(int i=0; i<numOffloadingThreads; i++) {
@@ -92,7 +95,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
         else {
             final HttpPost httpPost = new HttpPost(uri);
 
-            final AJsonOffloadingEntity entity = new AJsonOffloadingEntity(traces, scalars);
+            final AJsonOffloadingEntity entity = new AJsonOffloadingEntity(traces, scalars, sender, senderInstance);
             httpPost.setEntity(entity);
 
             final CloseableHttpResponse response = httpClient.execute(httpPost);
