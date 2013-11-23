@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.server.processing;
 
 
+import com.ajjpj.asysmon.server.bus.EventBus;
 import com.ajjpj.asysmon.server.config.ASysMonServerConfig;
 import com.ajjpj.asysmon.server.data.InstanceIdentifier;
 import com.ajjpj.asysmon.server.data.json.EnvironmentNode;
@@ -17,18 +18,11 @@ public class InputProcessorImpl implements InputProcessor {
     private static final Logger log = Logger.getLogger(InputProcessorImpl.class);
 
     private final SystemClockCorrector systemClockCorrector;
+    private final EventBus eventBus;
 
-    private final ASoftlyLimitedQueue<EnvironmentNode> environmentQueue;
-    private final ASoftlyLimitedQueue<ScalarNode> scalarQueue;
-    private final ASoftlyLimitedQueue<TraceRootNode> traceQueue;
-
-    public InputProcessorImpl(SystemClockCorrector systemClockCorrector, ASysMonServerConfig config) {
+    public InputProcessorImpl(SystemClockCorrector systemClockCorrector, EventBus eventBus) {
         this.systemClockCorrector = systemClockCorrector;
-        this.environmentQueue = new ASoftlyLimitedQueue<>(config.getEnvironmentQueueSize(), new Log4JWarnCallback("environment queue overflow, discarding old entry"));
-        this.scalarQueue      = new ASoftlyLimitedQueue<>(config.getScalarQueueSize(),      new Log4JWarnCallback("scalar queue overflow, discarding old entry"));
-        this.traceQueue       = new ASoftlyLimitedQueue<>(config.getTraceQueueSize(),       new Log4JWarnCallback("trace queue overflow, discarding old entry"));
-
-        //TODO start processing workers
+        this.eventBus = eventBus;
     }
 
     @Override public void updateSystemClockDiff(InstanceIdentifier instance, long senderTimestamp) {
@@ -38,18 +32,18 @@ public class InputProcessorImpl implements InputProcessor {
     @Override public void addEnvironmentEntry(InstanceIdentifier instance, EnvironmentNode environmentNode) {
         final long adjustedTimestamp = systemClockCorrector.correctedTimestamp(instance, environmentNode.getSenderTimestamp());
         environmentNode.setAdjustedTimestamp(adjustedTimestamp);
-        environmentQueue.add(environmentNode);
+        eventBus.fireNewEnvironmentData(environmentNode);
     }
 
     @Override public void addScalarEntry(InstanceIdentifier instance, ScalarNode scalarNode) {
         final long adjustedTimestamp = systemClockCorrector.correctedTimestamp(instance, scalarNode.getSenderTimestamp());
         scalarNode.setAdjustedTimestamp(adjustedTimestamp);
-        scalarQueue.add(scalarNode);
+        eventBus.fireNewScalarData(scalarNode);
     }
 
     @Override public void addTraceEntry(InstanceIdentifier instance, TraceRootNode traceRootNode) {
         adjustTimestampRec(instance, traceRootNode.getTrace());
-        traceQueue.add(traceRootNode);
+        eventBus.fireNewTrace(traceRootNode);
     }
 
     private void adjustTimestampRec(InstanceIdentifier instance, TraceNode traceNode) {
@@ -58,18 +52,6 @@ public class InputProcessorImpl implements InputProcessor {
 
         for(TraceNode child: traceNode.getChildren()) {
             adjustTimestampRec(instance, child);
-        }
-    }
-
-    private static class Log4JWarnCallback implements Runnable {
-        private final String msg;
-
-        private Log4JWarnCallback(String msg) {
-            this.msg = msg;
-        }
-
-        @Override public void run() {
-            log.warn(msg);
         }
     }
 }

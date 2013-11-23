@@ -32,7 +32,7 @@ public class JsonConnectorServlet extends HttpServlet {
             final ObjectMapper om = new ObjectMapper();
             final RootNode root = om.readValue(req.getInputStream(), RootNode.class);
 
-            System.out.println("received " + root);
+//            System.out.println("received " + root);
 
             final InputProcessor processor = getProcessor();
             final InstanceIdentifier instanceIdentifier = new InstanceIdentifier(root.getSender(), root.getSenderInstance());
