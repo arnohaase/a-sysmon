@@ -1,5 +1,12 @@
 todo
 ----
+* architecture
+  * UUID per measurement --> robust wrt resend ("idempotence")
+
+* server features
+  * derived scalars as listeners on the event bus, e.g. 'requests per second', 'transactions per second' or 'GC frequency'
+
+
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
 * load average from sun.misc.Unsafe --> Windows?!
