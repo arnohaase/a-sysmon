@@ -78,6 +78,9 @@ class AJsonOffloadingEntity extends AbstractHttpEntity {
     private void writeTraceRoot(AJsonSerHelper ser, AHierarchicalDataRoot trace) throws IOException {
         ser.startObject(); // start 'TraceRootNode'
 
+        ser.writeKey("uuid");
+        ser.writeStringLiteral(trace.getUuid().toString());
+
         ser.writeKey("startedFlows");
         ser.startArray();
         for(ACorrelationId flow: trace.getStartedFlows()) {
@@ -145,6 +148,9 @@ class AJsonOffloadingEntity extends AbstractHttpEntity {
 
     private void writeScalar(AJsonSerHelper ser, AScalarDataPoint scalar) throws IOException {
         ser.startObject(); // start 'ScalarNode'
+
+        ser.writeKey("uuid");
+        ser.writeStringLiteral(scalar.getUuid().toString());
 
         ser.writeKey("senderTimestamp");
         ser.writeNumberLiteral(scalar.getTimestamp(), 0);
