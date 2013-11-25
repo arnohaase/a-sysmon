@@ -30,18 +30,21 @@ public class InputProcessorImpl implements InputProcessor {
     }
 
     @Override public void addEnvironmentEntry(InstanceIdentifier instance, EnvironmentNode environmentNode) {
+        environmentNode.setInstanceIdentifier(instance);
         final long adjustedTimestamp = systemClockCorrector.correctedTimestamp(instance, environmentNode.getSenderTimestamp());
         environmentNode.setAdjustedTimestamp(adjustedTimestamp);
         eventBus.fireNewEnvironmentData(environmentNode);
     }
 
     @Override public void addScalarEntry(InstanceIdentifier instance, ScalarNode scalarNode) {
+        scalarNode.setInstanceIdentifier(instance);
         final long adjustedTimestamp = systemClockCorrector.correctedTimestamp(instance, scalarNode.getSenderTimestamp());
         scalarNode.setAdjustedTimestamp(adjustedTimestamp);
         eventBus.fireNewScalarData(scalarNode);
     }
 
     @Override public void addTraceEntry(InstanceIdentifier instance, TraceRootNode traceRootNode) {
+        traceRootNode.setInstanceIdentifier(instance);
         adjustTimestampRec(instance, traceRootNode.getTrace());
         eventBus.fireNewTrace(traceRootNode);
     }

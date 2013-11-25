@@ -1,9 +1,18 @@
 todo
 ----
+* kurios
+  * UUID.randomUUID() --> performance, blocking behavior
+
 * architecture
-  * UUID per measurement --> robust wrt resend ("idempotence")
+  * resend data after failure --> just add to the queue again --> idempotence on the server
 
 * server features
+  * store data in 'Elastic Search'
+  * API for data retrieval
+    * scalars, environment, traces
+    * local and remote
+  * simple web UI
+    *
   * derived scalars as listeners on the event bus, e.g. 'requests per second', 'transactions per second' or 'GC frequency'
 
 
@@ -97,7 +106,7 @@ AOP:
 
 * JS performance api
 
-* rename 'global measurements' to 'scalars'
+* should 'refresh' maintain tree open/close state?
 
 
 discuss

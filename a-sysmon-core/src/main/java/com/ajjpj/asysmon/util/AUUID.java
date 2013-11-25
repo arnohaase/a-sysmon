@@ -74,7 +74,7 @@ public class AUUID {
         return data != null ? Arrays.hashCode(data) : 0;
     }
 
-    public static String bytesToHex(byte[] bytes) {
+    public static String bytesToHex(byte[] bytes) { //TODO extract this
         final char[] hexChars = new char[bytes.length * 2];
         int v;
         for ( int j = 0; j < bytes.length; j++ ) {

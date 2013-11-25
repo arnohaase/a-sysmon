@@ -4,6 +4,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
 
@@ -44,7 +45,9 @@ public class ElasticSearchPlay {
 
             Thread.sleep(1000);
 
-            final SearchResponse sr = client.prepareSearch()
+            final SearchResponse sr = client.prepareSearch("idx-1")
+                    .setTypes("tpe-1")
+                    .setQuery(QueryBuilders.fieldQuery("firstname", "Arno"))
                     .execute()
                     .actionGet();
 
