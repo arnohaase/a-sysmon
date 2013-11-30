@@ -66,6 +66,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
         }, 0, scalarMeasurementFrequencyMillis, TimeUnit.MILLISECONDS);
     }
 
+
     @Override public void onStartedHierarchicalMeasurement() { }
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
@@ -93,16 +94,30 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
             Thread.sleep(NO_DATA_SLEEP_MILLIS);
         }
         else {
+            try {
             final HttpPost httpPost = new HttpPost(uri);
 
-            final AJsonOffloadingEntity entity = new AJsonOffloadingEntity(traces, scalars, sender, senderInstance);
-            httpPost.setEntity(entity);
+                final AJsonOffloadingEntity entity = new AJsonOffloadingEntity(traces, scalars, sender, senderInstance);
+                httpPost.setEntity(entity);
 
-            final CloseableHttpResponse response = httpClient.execute(httpPost);
-            try {
-                //TODO response with commands for monitoring this app?!
-            } finally {
-                response.close();
+                final CloseableHttpResponse response = httpClient.execute(httpPost);
+                try {
+                    //TODO response with commands for monitoring this app?!
+                } finally {
+                    response.close();
+                }
+            }
+            catch(Exception exc) {
+                //TODO log the exception
+                exc.printStackTrace();
+
+                //TODO fix this 'resend' mechanism - it does not work
+
+                // add the data to the queue again for later retry
+                scalarQueue.addAll(scalars);
+
+                // wait a grace period for the situation to improve
+                Thread.sleep(5000); //TODO make this configurable
             }
         }
     }

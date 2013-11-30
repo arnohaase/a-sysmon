@@ -10,7 +10,7 @@ import com.ajjpj.asysmon.server.processing.SystemClockCorrectorNullImpl;
 import com.ajjpj.asysmon.server.store.BufferingPersistenceProcessor;
 import com.ajjpj.asysmon.server.store.DataPersister;
 import com.ajjpj.asysmon.server.store.DataProvider;
-import com.ajjpj.asysmon.server.store.DataStoreImpl;
+import com.ajjpj.asysmon.server.store.backend.mongo.DataStoreImpl;
 import com.ajjpj.asysmon.util.AShutdownable;
 
 
@@ -30,7 +30,7 @@ public class Components implements AShutdownable {
     private final BufferingPersistenceProcessor persistenceProcessor;
 
 
-    public static void init(ASysMonServerConfig config) {
+    public static void init(ASysMonServerConfig config) throws Exception {
         if(INSTANCE != null) {
             throw new IllegalStateException("already initialized");
         }
@@ -43,6 +43,8 @@ public class Components implements AShutdownable {
         final BufferingPersistenceProcessor persistenceProcessor = new BufferingPersistenceProcessor(eventBus, dataStore, config);
 
         INSTANCE = new Components(inputProc, clockCorrector, eventBus, dataStore, dataStore, persistenceProcessor);
+
+//        System.out.println(dataStore.findAll("demo", "load-1-minute", 0, Long.MAX_VALUE, "the-instance"));
     }
 
     private Components(InputProcessor inputProcessor, SystemClockCorrector systemClockCorrector, EventBus eventBus,
@@ -75,3 +77,4 @@ public class Components implements AShutdownable {
         persistenceProcessor.shutdown();
     }
 }
+

@@ -25,6 +25,9 @@ public class ASysMonServerMain {
 
         server.start();
         server.join();
+
+
+
 //        Tomcat tomcat = new Tomcat();
 //        tomcat.setPort(config.getUploadPortNumber());
 //
