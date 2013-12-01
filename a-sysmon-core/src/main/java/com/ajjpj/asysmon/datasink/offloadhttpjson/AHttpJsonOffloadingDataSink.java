@@ -111,10 +111,10 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
                 //TODO log the exception
                 exc.printStackTrace();
 
-                //TODO fix this 'resend' mechanism - it does not work
-
                 // add the data to the queue again for later retry
                 scalarQueue.addAll(scalars);
+
+                System.out.println(" == " + scalarQueue);
 
                 // wait a grace period for the situation to improve
                 Thread.sleep(5000); //TODO make this configurable

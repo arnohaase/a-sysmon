@@ -116,7 +116,7 @@ public class ASoftlyLimitedQueue<T> implements Queue<T> {
     @Override public boolean addAll(Collection<? extends T> c) {
         boolean result = false;
         for(T el: c) {
-            result = result || add(el);
+            result = add(el) || result;
         }
         return result;
     }
@@ -139,5 +139,10 @@ public class ASoftlyLimitedQueue<T> implements Queue<T> {
 
     @Override public int hashCode() {
         return inner.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return inner.toString();
     }
 }
