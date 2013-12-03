@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.server.processing;
+package com.ajjpj.asysmon.server.upload.preprocess;
 
 import com.ajjpj.asysmon.server.data.InstanceIdentifier;
 

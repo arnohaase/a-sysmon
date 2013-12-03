@@ -7,7 +7,6 @@ import com.ajjpj.asysmon.server.storage.ScalarDataDao;
 import com.ajjpj.asysmon.server.storage.ScalarMetaData;
 import com.ajjpj.asysmon.server.storage.ScalarMetaDataDao;
 import com.ajjpj.asysmon.server.storage.ScalarDataPoint;
-import com.ajjpj.asysmon.server.store__.backend.mongo.*;
 import com.mongodb.*;
 import org.apache.log4j.Logger;
 

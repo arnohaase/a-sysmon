@@ -1,6 +1,5 @@
-package com.ajjpj.asysmon.server.rest;
+package com.ajjpj.asysmon.server.init;
 
-import com.ajjpj.asysmon.server.ASysMonModule;
 import com.ajjpj.asysmon.server.services.AdminService;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -13,7 +12,6 @@ public class ASysMonJaxRsApplication extends ResourceConfig {
         register(JacksonFeature.class);
 
         registerInstances(
-                new DummyJsonService(),
                 ASysMonModule.INJECTOR.getInstance(AdminService.class)
         );
     }

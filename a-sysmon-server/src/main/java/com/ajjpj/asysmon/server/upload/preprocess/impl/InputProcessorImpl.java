@@ -1,6 +1,8 @@
-package com.ajjpj.asysmon.server.processing;
+package com.ajjpj.asysmon.server.upload.preprocess.impl;
 
 
+import com.ajjpj.asysmon.server.upload.preprocess.InputProcessor;
+import com.ajjpj.asysmon.server.upload.preprocess.SystemClockCorrector;
 import com.ajjpj.asysmon.server.eventbus.EventBus;
 import com.ajjpj.asysmon.server.data.InstanceIdentifier;
 import com.ajjpj.asysmon.server.data.json.EnvironmentNode;
@@ -8,6 +10,8 @@ import com.ajjpj.asysmon.server.data.json.ScalarNode;
 import com.ajjpj.asysmon.server.data.json.TraceNode;
 import com.ajjpj.asysmon.server.data.json.TraceRootNode;
 import org.apache.log4j.Logger;
+
+import javax.inject.Inject;
 
 /**
  * @author arno
@@ -18,6 +22,7 @@ public class InputProcessorImpl implements InputProcessor {
     private final SystemClockCorrector systemClockCorrector;
     private final EventBus eventBus;
 
+    @Inject
     public InputProcessorImpl(SystemClockCorrector systemClockCorrector, EventBus eventBus) {
         this.systemClockCorrector = systemClockCorrector;
         this.eventBus = eventBus;

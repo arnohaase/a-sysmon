@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>upload</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.server.connector.httpjson.JsonConnectorServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.server.upload.httpjson.JsonConnectorServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
@@ -14,7 +14,7 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
-            <param-value>com.ajjpj.asysmon.server.rest.ASysMonJaxRsApplication</param-value>
+            <param-value>com.ajjpj.asysmon.server.init.ASysMonJaxRsApplication</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

@@ -13,8 +13,10 @@ import com.ajjpj.asysmon.util.ASoftlyLimitedBlockingQueue;
 import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 /**
  * This class receives all new data from the event eventbus, buffering it in queues and storing it persistently from worker
@@ -23,6 +25,7 @@ import java.util.concurrent.Executors;
  *
  * @author arno
  */
+@Singleton
 public class BufferingPersistenceProcessorImpl implements BufferingPersistenceProcessor, AShutdownable {
         private static final Logger log = Logger.getLogger(BufferingPersistenceProcessorImpl.class);
 

@@ -1,9 +1,17 @@
-package com.ajjpj.asysmon.server;
+package com.ajjpj.asysmon.server.init;
 
 import com.ajjpj.asysmon.server.config.ASysMonServerConfig;
 import com.ajjpj.asysmon.server.config.ASysMonServerConfigBuilder;
 import com.ajjpj.asysmon.server.eventbus.EventBus;
 import com.ajjpj.asysmon.server.eventbus.EventBusImpl;
+import com.ajjpj.asysmon.server.services.BufferingPersistenceProcessor;
+import com.ajjpj.asysmon.server.services.impl.BufferingPersistenceProcessorImpl;
+import com.ajjpj.asysmon.server.storage.ScalarDataDao;
+import com.ajjpj.asysmon.server.storage.impl.ScalarDataDaoImpl;
+import com.ajjpj.asysmon.server.upload.preprocess.InputProcessor;
+import com.ajjpj.asysmon.server.upload.preprocess.impl.InputProcessorImpl;
+import com.ajjpj.asysmon.server.upload.preprocess.SystemClockCorrector;
+import com.ajjpj.asysmon.server.upload.preprocess.impl.SystemClockCorrectorNullImpl;
 import com.ajjpj.asysmon.server.services.AdminService;
 import com.ajjpj.asysmon.server.services.impl.AdminServiceImpl;
 import com.ajjpj.asysmon.server.storage.MonitoredApplicationDao;
@@ -32,12 +40,19 @@ public class ASysMonModule extends AbstractModule {
         // DAOs
         bind(MonitoredApplicationDao.class).to(MonitoredApplicationDaoImpl.class);
         bind(ScalarMetaDataDao.class).to(ScalarMetaDataDaoImpl.class);
+        bind(ScalarDataDao.class).to(ScalarDataDaoImpl.class);
 
         // services
         bind(AdminService.class).to(AdminServiceImpl.class);
 
-        // event bus
+        // event bus and processing
         bind(EventBus.class).to(EventBusImpl.class).asEagerSingleton();
+
+        bind(BufferingPersistenceProcessor.class).to(BufferingPersistenceProcessorImpl.class);
+
+        // upload
+        bind(InputProcessor.class).to(InputProcessorImpl.class).in(Singleton.class);
+        bind(SystemClockCorrector.class).to(SystemClockCorrectorNullImpl.class).in(Singleton.class); //TODO make this configurable
     }
 
 

@@ -6,7 +6,7 @@ package com.ajjpj.asysmon.server.config;
 public interface ASysMonServerConfig {
     int getUploadPortNumber();
 
-    // processing
+    // inputprocessing
     int getEnvironmentQueueSize();
     int getScalarQueueSize();
     int getTraceQueueSize();

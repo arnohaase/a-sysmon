@@ -1,12 +1,12 @@
-package com.ajjpj.asysmon.server.connector.httpjson;
+package com.ajjpj.asysmon.server.upload.httpjson;
 
-import com.ajjpj.asysmon.server.Components;
+import com.ajjpj.asysmon.server.upload.preprocess.InputProcessor;
 import com.ajjpj.asysmon.server.data.InstanceIdentifier;
 import com.ajjpj.asysmon.server.data.json.EnvironmentNode;
 import com.ajjpj.asysmon.server.data.json.RootNode;
 import com.ajjpj.asysmon.server.data.json.ScalarNode;
 import com.ajjpj.asysmon.server.data.json.TraceRootNode;
-import com.ajjpj.asysmon.server.processing.InputProcessor;
+import com.ajjpj.asysmon.server.init.ASysMonModule;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -57,6 +57,6 @@ public class JsonConnectorServlet extends HttpServlet {
     }
 
     protected InputProcessor getProcessor() {
-        return null; //TODO Components.get().getInputProcessor();
+        return ASysMonModule.INJECTOR.getInstance(InputProcessor.class);
     }
 }
