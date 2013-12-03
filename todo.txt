@@ -7,14 +7,20 @@ todo
   * resend data after failure --> just add to the queue again --> idempotence on the server
 
 * server features
-  * store data in 'Elastic Search'
   * API for data retrieval
     * scalars, environment, traces
     * local and remote
   * simple web UI
     *
   * derived scalars as listeners on the event bus, e.g. 'requests per second', 'transactions per second' or 'GC frequency'
+  * permission checks
+    * collection with users / MD5 of password
+    * admin flag, arrays of applications with read / write permissions
+    * ?!?!?! --> Felix
 
+* core
+  * presentation: percentage images
+  * horizontal lines
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
@@ -146,3 +152,5 @@ documentation
   * ASysMon.shutdown() shuts down all registered measurers and data sinks
   * if one of the servlets is registered, container shutdown shuts down ASysMon (unless otherwise configured --> AGlobalConfig.setImplicitlyShutDownWithServlet)
   * idempotent --> safe to shut down repeatedly
+
+* server separation into modules: ...-war allows import of all code while providing your own web.xml (or bundling with your own application)

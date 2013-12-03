@@ -21,6 +21,8 @@
     <modules>
         <module>a-sysmon-core</module>
         <module>a-sysmon-server</module>
+        <module>a-sysmon-server-webclient</module>
+        <module>a-sysmon-server-war</module>
     </modules>
 
     <licenses>
