@@ -30,7 +30,7 @@ public class AppServlet extends HttpServlet {
 
     static {
         try {
-            // store the connection to keep the in-memory database
+            // store__ the connection to keep the in-memory database
             conn = getConnection();
             conn.createStatement().execute("create table A (oid number primary key)");
 

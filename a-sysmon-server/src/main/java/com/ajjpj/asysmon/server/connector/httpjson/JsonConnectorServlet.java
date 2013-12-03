@@ -57,6 +57,6 @@ public class JsonConnectorServlet extends HttpServlet {
     }
 
     protected InputProcessor getProcessor() {
-        return Components.get().getInputProcessor();
+        return null; //TODO Components.get().getInputProcessor();
     }
 }

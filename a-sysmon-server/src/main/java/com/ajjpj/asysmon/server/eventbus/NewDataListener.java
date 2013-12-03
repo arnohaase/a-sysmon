@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.server.bus;
+package com.ajjpj.asysmon.server.eventbus;
 
 import com.ajjpj.asysmon.server.data.json.EnvironmentNode;
 import com.ajjpj.asysmon.server.data.json.ScalarNode;

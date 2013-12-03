@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.server.bus;
+package com.ajjpj.asysmon.server.eventbus;
 
 
 import com.ajjpj.asysmon.server.data.json.EnvironmentNode;
@@ -6,7 +6,7 @@ import com.ajjpj.asysmon.server.data.json.ScalarNode;
 import com.ajjpj.asysmon.server.data.json.TraceRootNode;
 
 /**
- * This event bus is the back bone of the A-SysMon server. All the different parts communicate through this bus, making
+ * This event eventbus is the back bone of the A-SysMon server. All the different parts communicate through this eventbus, making
  *  the overall architecture flexible and extensible.<p />
  *
  * Notification of listeners is done <em>synchronously</em>, i.e. it is done in the same thread and before the

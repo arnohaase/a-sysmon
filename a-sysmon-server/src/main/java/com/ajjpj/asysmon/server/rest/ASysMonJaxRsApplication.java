@@ -1,24 +1,20 @@
 package com.ajjpj.asysmon.server.rest;
 
-import javax.ws.rs.core.Application;
-import java.util.HashSet;
-import java.util.Set;
+import com.ajjpj.asysmon.server.ASysMonModule;
+import com.ajjpj.asysmon.server.services.AdminService;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 
 /**
  * @author arno
  */
-public class ASysMonJaxRsApplication extends Application {
-//    @Override
-//    public Set<Class<?>> getClasses() {
-//        final Set<Class<?>> result = new HashSet<>();
-//        result.add(DummyJsonService.class);
-//        return result;
-//    }
+public class ASysMonJaxRsApplication extends ResourceConfig {
+    public ASysMonJaxRsApplication() {
+        register(JacksonFeature.class);
 
-    @Override
-    public Set<Object> getSingletons() {
-        final Set<Object> result = new HashSet<>();
-        result.add(new DummyJsonService());
-        return result;
+        registerInstances(
+                new DummyJsonService(),
+                ASysMonModule.INJECTOR.getInstance(AdminService.class)
+        );
     }
 }

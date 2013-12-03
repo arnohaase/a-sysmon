@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.server.store.backend;
+package com.ajjpj.asysmon.server.storage;
 
 
 /**
