@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.server.services;
+package com.ajjpj.asysmon.server.processing;
 
 /**
  * @author arno

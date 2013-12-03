@@ -3,7 +3,7 @@ package com.ajjpj.asysmon.server.upload.preprocess.impl;
 
 import com.ajjpj.asysmon.server.upload.preprocess.InputProcessor;
 import com.ajjpj.asysmon.server.upload.preprocess.SystemClockCorrector;
-import com.ajjpj.asysmon.server.eventbus.EventBus;
+import com.ajjpj.asysmon.server.processing.EventBus;
 import com.ajjpj.asysmon.server.data.InstanceIdentifier;
 import com.ajjpj.asysmon.server.data.json.EnvironmentNode;
 import com.ajjpj.asysmon.server.data.json.ScalarNode;

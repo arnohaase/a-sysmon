@@ -1,12 +1,12 @@
 package com.ajjpj.asysmon.server.init;
 
-import com.ajjpj.asysmon.server.eventbus.EventBus;
-import com.ajjpj.asysmon.server.eventbus.EventBusImpl;
+import com.ajjpj.asysmon.server.processing.EventBus;
+import com.ajjpj.asysmon.server.processing.impl.EventBusImpl;
 import com.ajjpj.asysmon.server.services.AdminService;
-import com.ajjpj.asysmon.server.services.BufferingPersistenceProcessor;
+import com.ajjpj.asysmon.server.processing.BufferingPersistenceProcessor;
 import com.ajjpj.asysmon.server.services.ConfigProvider;
 import com.ajjpj.asysmon.server.services.impl.AdminServiceImpl;
-import com.ajjpj.asysmon.server.services.impl.BufferingPersistenceProcessorImpl;
+import com.ajjpj.asysmon.server.processing.impl.BufferingPersistenceProcessorImpl;
 import com.ajjpj.asysmon.server.services.impl.ConfigProviderImpl;
 import com.ajjpj.asysmon.server.storage.MonitoredApplicationDao;
 import com.ajjpj.asysmon.server.storage.ScalarDataDao;
