@@ -4,6 +4,10 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
 
+    <listener>
+        <listener-class>com.ajjpj.asysmon.server.init.InitServletContextListener</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>upload</servlet-name>
         <servlet-class>com.ajjpj.asysmon.server.upload.httpjson.JsonConnectorServlet</servlet-class>

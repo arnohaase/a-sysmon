@@ -12,7 +12,7 @@ public class ASysMonJaxRsApplication extends ResourceConfig {
         register(JacksonFeature.class);
 
         registerInstances(
-                ASysMonModule.INJECTOR.getInstance(AdminService.class)
+                InitServletContextListener.getInjector().getInstance(AdminService.class)
         );
     }
 }

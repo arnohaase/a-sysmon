@@ -32,8 +32,6 @@ import java.lang.annotation.Annotation;
  * @author arno
  */
 public class ASysMonModule extends AbstractModule {
-    public static final Injector INJECTOR = Guice.createInjector(new ASysMonModule());
-
     @Override protected void configure() {
         bind(DB.class).toProvider(MongoDbProvider.class).in(Singleton.class);
 
@@ -68,34 +66,34 @@ public class ASysMonModule extends AbstractModule {
 
     //TODO shutdown
 
-    static {
-        for(Binding<?> b: INJECTOR.getAllBindings().values()) {
-            final boolean isSingleton = b.acceptScopingVisitor(new BindingScopingVisitor<Boolean>() {
-                @Override public Boolean visitEagerSingleton() {
-                    System.out.println(1);
-                    return true;
-                }
-
-                @Override public Boolean visitScope(Scope scope) {
-                    System.out.println(2);
-                    return scope == Scopes.SINGLETON;
-                }
-
-                @Override public Boolean visitScopeAnnotation(Class<? extends Annotation> scopeAnnotation) {
-                    System.out.println(3);
-                    return scopeAnnotation == Singleton.class;
-                }
-
-                @Override public Boolean visitNoScoping() {
-                    System.out.println(4);
-                    return false;
-                }
-            });
-            if(isSingleton) {
-                System.out.println("singleton: " + INJECTOR.getInstance(b.getKey()));
-            }
-        }
-    }
+//    static {
+//        for(Binding<?> b: INJECTOR.getAllBindings().values()) {
+//            final boolean isSingleton = b.acceptScopingVisitor(new BindingScopingVisitor<Boolean>() {
+//                @Override public Boolean visitEagerSingleton() {
+//                    System.out.println(1);
+//                    return true;
+//                }
+//
+//                @Override public Boolean visitScope(Scope scope) {
+//                    System.out.println(2);
+//                    return scope == Scopes.SINGLETON;
+//                }
+//
+//                @Override public Boolean visitScopeAnnotation(Class<? extends Annotation> scopeAnnotation) {
+//                    System.out.println(3);
+//                    return scopeAnnotation == Singleton.class;
+//                }
+//
+//                @Override public Boolean visitNoScoping() {
+//                    System.out.println(4);
+//                    return false;
+//                }
+//            });
+//            if(isSingleton) {
+//                System.out.println("singleton: " + INJECTOR.getInstance(b.getKey()));
+//            }
+//        }
+//    }
 }
 
 

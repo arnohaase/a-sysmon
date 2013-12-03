@@ -23,21 +23,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>0.90.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.orientechnologies</groupId>
-            <artifactId>orientdb-enterprise</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.orientechnologies</groupId>
-            <artifactId>orientdb-server</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>2.11.3</version>
@@ -55,11 +40,6 @@
             <version>4.0-beta</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.codehaus.jackson</groupId>-->
-            <!--<artifactId>jackson-mapper-asl</artifactId>-->
-            <!--<version>1.9.9</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
@@ -94,15 +74,6 @@
             <artifactId>rrd4j</artifactId>
             <version>2.2</version>
         </dependency>
-
-        <!--
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
-            <scope>test</scope>
-        </dependency>
-        -->
     </dependencies>
 
     <build>

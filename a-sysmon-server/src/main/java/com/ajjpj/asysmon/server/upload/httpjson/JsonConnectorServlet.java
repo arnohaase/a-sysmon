@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.server.upload.httpjson;
 
+import com.ajjpj.asysmon.server.init.InitServletContextListener;
 import com.ajjpj.asysmon.server.upload.preprocess.InputProcessor;
 import com.ajjpj.asysmon.server.data.InstanceIdentifier;
 import com.ajjpj.asysmon.server.data.json.EnvironmentNode;
@@ -57,6 +58,6 @@ public class JsonConnectorServlet extends HttpServlet {
     }
 
     protected InputProcessor getProcessor() {
-        return ASysMonModule.INJECTOR.getInstance(InputProcessor.class);
+        return InitServletContextListener.getInjector().getInstance(InputProcessor.class);
     }
 }
