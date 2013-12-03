@@ -1,12 +1,13 @@
 package com.ajjpj.asysmon.server.services.impl;
 
-import com.ajjpj.asysmon.server.eventbus.EventBus;
-import com.ajjpj.asysmon.server.eventbus.NewDataListener;
-import com.ajjpj.asysmon.server.config.ASysMonServerConfig;
 import com.ajjpj.asysmon.server.data.json.EnvironmentNode;
 import com.ajjpj.asysmon.server.data.json.ScalarNode;
 import com.ajjpj.asysmon.server.data.json.TraceRootNode;
+import com.ajjpj.asysmon.server.eventbus.EventBus;
+import com.ajjpj.asysmon.server.eventbus.NewDataListener;
 import com.ajjpj.asysmon.server.services.BufferingPersistenceProcessor;
+import com.ajjpj.asysmon.server.services.ConfigData;
+import com.ajjpj.asysmon.server.services.ConfigProvider;
 import com.ajjpj.asysmon.server.storage.ScalarDataDao;
 import com.ajjpj.asysmon.util.AShutdownable;
 import com.ajjpj.asysmon.util.ASoftlyLimitedBlockingQueue;
@@ -95,9 +96,11 @@ public class BufferingPersistenceProcessorImpl implements BufferingPersistencePr
 
 
     @Inject
-    public BufferingPersistenceProcessorImpl(EventBus eventBus, ScalarDataDao scalarDataDao, ASysMonServerConfig config) {
+    public BufferingPersistenceProcessorImpl(EventBus eventBus, ScalarDataDao scalarDataDao, ConfigProvider configProvider) {
         this.scalarDataDao = scalarDataDao;
         this.eventBus = eventBus;
+
+        final ConfigData config = configProvider.getConfigData();
 
         scalarQueue      = new ASoftlyLimitedBlockingQueue<>(config.getScalarQueueSize(),      new Log4JWarnCallback("scalar queue overflow - discarding data"));
         traceQueue       = new ASoftlyLimitedBlockingQueue<>(config.getTraceQueueSize(),       new Log4JWarnCallback("trace queue overflow - discarding data"));

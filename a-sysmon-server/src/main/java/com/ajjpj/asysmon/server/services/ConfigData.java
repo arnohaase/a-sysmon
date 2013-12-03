@@ -1,23 +1,20 @@
-package com.ajjpj.asysmon.server.config;
+package com.ajjpj.asysmon.server.services;
 
 /**
  * @author arno
  */
-public class ASysMonServerConfigImpl implements ASysMonServerConfig {
-    private final int uploadPortNumber;
-
+public class ConfigData {
+    // queues that buffer uploaded data before it is stored in the database
     private final int environmentQueueSize;
     private final int scalarQueueSize;
     private final int traceQueueSize;
 
+    // thread pool sizes for pumping data from the queues into the database
     private final int numEnvironmentWorkerThreads;
     private final int numScalarWorkerThreads;
     private final int numTraceWorkerThreads;
 
-    public ASysMonServerConfigImpl(int uploadPortNumber,
-                                   int environmentQueueSize, int scalarQueueSize, int traceQueueSize,
-                                   int numEnvironmentWorkerThreads, int numScalarWorkerThreads, int numTraceWorkerThreads) {
-        this.uploadPortNumber = uploadPortNumber;
+    public ConfigData(int environmentQueueSize, int scalarQueueSize, int traceQueueSize, int numEnvironmentWorkerThreads, int numScalarWorkerThreads, int numTraceWorkerThreads) {
         this.environmentQueueSize = environmentQueueSize;
         this.scalarQueueSize = scalarQueueSize;
         this.traceQueueSize = traceQueueSize;
@@ -26,31 +23,27 @@ public class ASysMonServerConfigImpl implements ASysMonServerConfig {
         this.numTraceWorkerThreads = numTraceWorkerThreads;
     }
 
-    @Override public int getUploadPortNumber() {
-        return uploadPortNumber;
-    }
-
-    @Override public int getEnvironmentQueueSize() {
+    public int getEnvironmentQueueSize() {
         return environmentQueueSize;
     }
 
-    @Override public int getScalarQueueSize() {
+    public int getScalarQueueSize() {
         return scalarQueueSize;
     }
 
-    @Override public int getTraceQueueSize() {
+    public int getTraceQueueSize() {
         return traceQueueSize;
     }
 
-    @Override public int getNumEnvironmentWorkerThreads() {
+    public int getNumEnvironmentWorkerThreads() {
         return numEnvironmentWorkerThreads;
     }
 
-    @Override public int getNumScalarWorkerThreads() {
+    public int getNumScalarWorkerThreads() {
         return numScalarWorkerThreads;
     }
 
-    @Override public int getNumTraceWorkerThreads() {
+    public int getNumTraceWorkerThreads() {
         return numTraceWorkerThreads;
     }
 }
