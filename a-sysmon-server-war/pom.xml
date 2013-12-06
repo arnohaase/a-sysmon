@@ -19,11 +19,6 @@
             <artifactId>a-sysmon-server</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.ajjpj.a-sysmon</groupId>
-            <artifactId>a-sysmon-server-webclient</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- Jetty is required for stand-alone startup using the main method. A-SysMon server can however be deployed -->
         <!--  as a web application, in which case the following dependency is not required. -->
