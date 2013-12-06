@@ -43,6 +43,7 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
+        super.init(config);
         final ServletContext ctx = config.getServletContext();
         ctx.addListener(new ServletContextListener() {
             @Override public void contextInitialized(ServletContextEvent sce) { }
