@@ -1,6 +1,5 @@
 target/
 .idea
 *.iml
-data/
 tomcat.*
 mongo
