@@ -26,7 +26,7 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
     @Override public void init() throws ServletException {
         synchronized (AMinMaxAvgServlet.class) {
             if(collector == null) {
-                collector = new AMinMaxAvgDataSink();
+                collector = createCollector();
                 ASysMonConfigurer.addDataSink(getSysMon(), collector);
             }
         }
@@ -41,10 +41,10 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
     }
 
     /**
-     * All access to the collector is done through this method. Override to customize.
+     * Override to customize.
      */
-    protected AMinMaxAvgDataSink getCollector() {
-        return collector;
+    protected AMinMaxAvgDataSink createCollector() {
+        return new AMinMaxAvgDataSink();
     }
 
     @Override protected String getTitle() {
@@ -55,19 +55,19 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
     @Override protected List<APair<String, String>> getCommands() {
         return Arrays.asList(
                 new APair<String, String>("Clear", "clear"),
-                getCollector().isActive() ? new APair<String, String>("Stop", "stop") : new APair<String, String>("Start", "start")
+                collector.isActive() ? new APair<String, String>("Stop", "stop") : new APair<String, String>("Start", "start")
                 );
     }
 
     @Override protected void handleCommand(String cmd) {
         if("clear".equals(cmd)) {
-            getCollector().clear();
+            collector.clear();
         }
         else if("start".equals(cmd)) {
-            getCollector().setActive(true);
+            collector.setActive(true);
         }
         else if("stop".equals(cmd)) {
-            getCollector().setActive(false);
+            collector.setActive(false);
         }
     }
 
@@ -76,11 +76,11 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
         final IdGenerator idGenerator = new IdGenerator();
 
         long totalNanos = 0;
-        for(AMinMaxAvgData d: getCollector().getData().values()) {
+        for(AMinMaxAvgData d: collector.getData().values()) {
             totalNanos += d.getTotalNanos();
         }
 
-        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(getCollector().getData(), 0, 0)) {
+        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(collector.getData(), 0, 0)) {
             final String rootIdent = entry.getKey();
 
             out.println("<div class='table-header'>&nbsp;<div style=\"float: right;\">");

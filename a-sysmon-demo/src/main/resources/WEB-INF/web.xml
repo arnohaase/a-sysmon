@@ -40,6 +40,10 @@
     <filter>
         <filter-name>asysmon-filter</filter-name>
         <filter-class>com.ajjpj.asysmon.measure.http.AHttpRequestMeasuringFilter</filter-class>
+        <init-param>
+            <param-name>asysmon.http.analyzer</param-name>
+            <param-value>com.ajjpj.asysmon.demo.NullHttpRequestAnalyzer</param-value>
+        </init-param>
     </filter>
 
     <filter-mapping>
