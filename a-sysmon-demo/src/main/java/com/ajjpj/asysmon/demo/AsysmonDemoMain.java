@@ -21,7 +21,7 @@ public class AsysmonDemoMain {
         ASysMonConfigurer.addDataSink(ASysMon.get(), new AStdOutDataSink());
 //        ASysMonConfigurer.addDataSink(ASysMon.get(), new ALog4JDataSink());
         ASysMonConfigurer.addThreadCountSupport(ASysMon.get());
-        ASysMonConfigurer.addDataSink(ASysMon.get(), new AHttpJsonOffloadingDataSink(ASysMon.get(), "http://localhost:8899/upload", "demo", "the-instance", 100, 1000, 1, 10*1000));
+//        ASysMonConfigurer.addDataSink(ASysMon.get(), new AHttpJsonOffloadingDataSink(ASysMon.get(), "http://localhost:8899/upload", "demo", "the-instance", 100, 1000, 1, 10*1000));
 
         final Server server = new Server(8080);
 

@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.datasink.offloadhttpjson;
 
+import com.ajjpj.asysmon.util.AJsonSerHelper;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

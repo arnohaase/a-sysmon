@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.datasink.offloadhttpjson;
+package com.ajjpj.asysmon.util;
 
 /**
  * @author arno

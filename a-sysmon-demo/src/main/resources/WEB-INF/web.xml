@@ -15,6 +15,17 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>asysmon-dynamic-minmaxavg</servlet-name>
+        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.ADynamicMinMaxAvgServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>asysmon-dynamic-minmaxavg</servlet-name>
+        <url-pattern>/asysmon/dyn/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>asysmon-jdbc</servlet-name>
         <servlet-class>com.ajjpj.asysmon.datasink.aggregation.jdbc.AJdbcReportServlet</servlet-class>
         <load-on-startup>1</load-on-startup>

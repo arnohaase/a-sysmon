@@ -1,6 +1,4 @@
-package com.ajjpj.asysmon.datasink.offloadhttpjson;
-
-import com.ajjpj.asysmon.util.ArrayStack;
+package com.ajjpj.asysmon.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +14,7 @@ import java.nio.charset.Charset;
  *
  * @author arno
  */
-class AJsonSerHelper {
+public class AJsonSerHelper {
     final Charset UTF_8 = Charset.forName("UTF-8");
 
     private final int[] TEN_POW = new int[] {1, 10, 100, 1000, 10*1000, 100*1000, 1000*1000, 10*1000*1000, 100*1000*1000, 1000*1000*1000};
@@ -24,7 +22,7 @@ class AJsonSerHelper {
     private final Writer out;
     private final ArrayStack<JsonSerState> state = new ArrayStack<JsonSerState>();
 
-    AJsonSerHelper(OutputStream out) {
+    public AJsonSerHelper(OutputStream out) {
         this.out = new OutputStreamWriter(out, UTF_8);
         state.push(JsonSerState.initial);
     }

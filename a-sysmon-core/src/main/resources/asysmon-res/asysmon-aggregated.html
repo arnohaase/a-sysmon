@@ -1,0 +1,27 @@
+<!doctype html>
+<html ng-app="ASysMonApp" ng-controller="ASysMonCtrl">
+  <head>
+    <title ng-bind="title"></title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href=".?res=asysmon.css">
+    <script src="r?res=jquery-1.10.2.min.js"></script>
+    <script src="r?res=angular-1.2.3.js"></script>
+    <script src="r?res=asysmon.js"></script>
+  </head>
+  <body>
+      <h1 ng-cloak>{{title}}</h1>
+
+      <div class='button-box'>
+          <a class='btn' ng-click='refresh()'>Refresh</a>
+          <a class='btn' ng-click='clear()'>Clear</a>
+          <a class='btn' ng-hide='isStarted' ng-click='start()'>Start</a>
+          <a class='btn' ng-show='isStarted' ng-click='stop()'>Stop</a>
+      </div>
+
+      <table class='global-measurements'>
+          <tr ng-show="hasLoad()" class='global-measurements'><td class='global-measurements-key'>System Load</td><td class='global-measuremnets-value'>{{load1()}} / {{load5()}} / {{load15()}}</td></tr>
+          <tr ng-show="hasMem()" class='global-measurements'><td class='global-measurements-key'>Memory</td><td class='global-measuremnets-value'>{{memUsed()}} / {{memTotal()}} / {{memMax()}}</td></tr>
+          <tr ng-repeat="s in genericScalarNames()"><td class="global-measurements-key">{{s}}</td><td class="global-measurements-value">{{formattedScalar(s)}}</td></tr>
+      </table>
+  </body>
+</html>
