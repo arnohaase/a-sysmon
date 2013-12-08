@@ -28,8 +28,6 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
     public static final String CSS_COLUMN_MEDIUM = "column-medium";
     public static final String CSS_COLUMN_LONG = "column-long";
 
-    protected static final int MILLION = 1000*1000;
-
     abstract protected int getNumChildrenLevelsToExpandInitially();
     abstract protected int getDataColumnWidth();
 
@@ -63,8 +61,7 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
                 throw new IllegalArgumentException();
             }
 
-//            resp.addHeader("Cache-Control", "max-age=3600");
-            serveStaticResource(req.getParameter("res"), resp.getOutputStream());
+            serveStaticResource(req.getParameter("res"), resp);
             return;
         }
 
@@ -80,7 +77,10 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
 
     protected abstract void handleCommand(String cmd);
 
-    private void serveStaticResource(String name, OutputStream out) throws IOException {
+    private void serveStaticResource(String name, HttpServletResponse resp) throws IOException {
+        resp.addHeader("Cache-Control", "max-age=3600");
+
+        final OutputStream out = resp.getOutputStream();
         final InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("asysmon-res/" + name);
 
         final byte[] buf = new byte[4096];

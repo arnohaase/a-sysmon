@@ -11,7 +11,7 @@
 
     <servlet-mapping>
         <servlet-name>asysmon-minmaxavg</servlet-name>
-        <url-pattern>/asysmon/minmaxavg</url-pattern>
+        <url-pattern>/asysmon/minmaxavg/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -22,7 +22,7 @@
 
     <servlet-mapping>
         <servlet-name>asysmon-jdbc</servlet-name>
-        <url-pattern>/asysmon/jdbc</url-pattern>
+        <url-pattern>/asysmon/jdbc/*</url-pattern>
     </servlet-mapping>
 
 
