@@ -87,8 +87,8 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
             writeColumn(out, CSS_COLUMN_MEDIUM, "%");
             writeColumn(out, CSS_COLUMN_MEDIUM, "#");
             writeColumn(out, CSS_COLUMN_LONG, "total");
-            writeColumn(out, CSS_COLUMN_MEDIUM, "min");
             writeColumn(out, CSS_COLUMN_MEDIUM, "avg");
+            writeColumn(out, CSS_COLUMN_MEDIUM, "min");
             writeColumn(out, CSS_COLUMN_MEDIUM, "max");
             out.println("</div></div>");
 
@@ -142,8 +142,8 @@ public class AMinMaxAvgServlet extends AbstractAsysmonServlet {
         writeColumn(out, CSS_COLUMN_MEDIUM, percentStyle, 100.0 * fractionOfParent, 1);
         writeColumn(out, CSS_COLUMN_MEDIUM, (data.getTotalNumInContext() / numParentCalls), 2);
         writeColumn(out, CSS_COLUMN_LONG, data.getTotalNanos() / MILLION);
-        writeColumn(out, CSS_COLUMN_MEDIUM, data.getMinNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getAvgNanos() / MILLION);
+        writeColumn(out, CSS_COLUMN_MEDIUM, data.getMinNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getMaxNanos() / MILLION);
 
         nodeRowAfterColumns(out, idGenerator, ident, level, hasChildren, !data.isSerial());

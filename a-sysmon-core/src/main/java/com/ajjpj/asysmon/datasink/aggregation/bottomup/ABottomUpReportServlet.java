@@ -82,8 +82,8 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
             writeColumn(out, CSS_COLUMN_MEDIUM, "%");
             writeColumn(out, CSS_COLUMN_MEDIUM, "%local");
             writeColumn(out, CSS_COLUMN_MEDIUM, "#calls");
-            writeColumn(out, CSS_COLUMN_MEDIUM, "min");
             writeColumn(out, CSS_COLUMN_MEDIUM, "avg");
+            writeColumn(out, CSS_COLUMN_MEDIUM, "min");
             writeColumn(out, CSS_COLUMN_MEDIUM, "max");
             out.println("</div></div>");
 
@@ -102,8 +102,8 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
         writeColumn(out, CSS_COLUMN_MEDIUM, "background: " + greenToRed(timeFracGlobal), timeFracGlobal * 100, 2);
         writeColumn(out, CSS_COLUMN_MEDIUM, timeFracLocal * 100, 2);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getTotalNumInContext());
-        writeColumn(out, CSS_COLUMN_MEDIUM, data.getMinNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getAvgNanos() / MILLION);
+        writeColumn(out, CSS_COLUMN_MEDIUM, data.getMinNanos() / MILLION);
         writeColumn(out, CSS_COLUMN_MEDIUM, data.getMaxNanos() / MILLION);
 
         nodeRowAfterColumns(out, idGenerator, ident, level, hasChildren, !data.isSerial());
