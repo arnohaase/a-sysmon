@@ -2,6 +2,10 @@ html {
   font-family: sans-serif;
 }
 
+h1 {
+    margin: 0px;
+}
+
 table.global-measurements {
   margin-top: 20px;
   margin-bottom: 10px;

@@ -4,6 +4,8 @@ import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.datasink.aggregation.AbstractDynamicAsysmonServlet;
 
 import javax.servlet.ServletException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author arno
@@ -50,5 +52,16 @@ public class ADynamicMinMaxAvgServlet extends AbstractDynamicAsysmonServlet {
 
     @Override protected void doClearMeasurements() {
         collector.clear();
+    }
+
+    @Override protected List<ColDef> getColDefs() {
+        return Arrays.asList(
+                new ColDef("%",     true,  1, ColWidth.Medium),
+                new ColDef("#",     false, 2, ColWidth.Medium),
+                new ColDef("total", false, 0, ColWidth.Long),
+                new ColDef("avg",   false, 0, ColWidth.Medium),
+                new ColDef("min",   false, 0, ColWidth.Medium),
+                new ColDef("max",   false, 0, ColWidth.Medium)
+        );
     }
 }

@@ -23,5 +23,14 @@
           <tr ng-show="hasMem()" class='global-measurements'><td class='global-measurements-key'>Memory</td><td class='global-measuremnets-value'>{{memUsed()}} / {{memTotal()}} / {{memMax()}}</td></tr>
           <tr ng-repeat="s in genericScalarNames()"><td class="global-measurements-key">{{s}}</td><td class="global-measurements-value">{{formattedScalar(s)}}</td></tr>
       </table>
+
+      <table border="1">
+          <tr ng-repeat="col in columnDefs">
+              <td>{{col.name}}</td>
+              <td>{{col.isPercentage}}</td>
+              <td>{{col.numFracDigits}}</td>
+              <td>{{col.width}}</td>
+          </tr>
+      </table>
   </body>
 </html>

@@ -5,6 +5,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         $scope.title = data.title;
         $scope.isStarted = data.isStarted;
         $scope.scalars = data.scalars;
+        $scope.columnDefs = data.columnDefs;
     }
 
     function sendCommand(cmd) {

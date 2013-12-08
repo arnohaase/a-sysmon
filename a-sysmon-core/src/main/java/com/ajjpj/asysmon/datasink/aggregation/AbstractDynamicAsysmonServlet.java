@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * @author arno
@@ -91,6 +92,31 @@ public abstract class AbstractDynamicAsysmonServlet extends HttpServlet {
         }
         json.endObject();
 
+        json.writeKey("columnDefs");
+        json.startArray();
+        for(ColDef colDef: getColDefs()) {
+            writeColDef(json, colDef);
+        }
+        json.endArray();
+
+        json.endObject();
+    }
+
+    private void writeColDef(AJsonSerHelper json, ColDef colDef) throws IOException {
+        json.startObject();
+
+        json.writeKey("name");
+        json.writeStringLiteral(colDef.name);
+
+        json.writeKey("isPercentage");
+        json.writeBooleanLiteral(colDef.isPercentage);
+
+        json.writeKey("numFracDigits");
+        json.writeNumberLiteral(colDef.numFracDigits, 0);
+
+        json.writeKey("width");
+        json.writeStringLiteral(colDef.width.name());
+
         json.endObject();
     }
 
@@ -111,6 +137,23 @@ public abstract class AbstractDynamicAsysmonServlet extends HttpServlet {
     protected abstract void doStartMeasurements();
     protected abstract void doStopMeasurements();
     protected abstract void doClearMeasurements();
+
+    protected abstract List<ColDef> getColDefs();
+
+    protected enum ColWidth {Short, Medium, Long}
+    protected class ColDef {
+        public final String name;
+        public final boolean isPercentage;
+        public final int numFracDigits;
+        public final ColWidth width;
+
+        public ColDef(String name, boolean isPercentage, int numFracDigits, ColWidth width) {
+            this.name = name;
+            this.isPercentage = isPercentage;
+            this.numFracDigits = numFracDigits;
+            this.width = width;
+        }
+    }
 
     private void serveStaticResource(String resName, HttpServletResponse resp) throws IOException {
         if(resName.contains("..") || resName.contains("/")) {
