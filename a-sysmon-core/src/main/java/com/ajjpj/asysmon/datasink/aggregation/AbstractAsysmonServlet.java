@@ -78,7 +78,7 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
     protected abstract void handleCommand(String cmd);
 
     private void serveStaticResource(String name, HttpServletResponse resp) throws IOException {
-        resp.addHeader("Cache-Control", "max-age=3600");
+        resp.addHeader("Cache-Control", "max-age=36000");
 
         final OutputStream out = resp.getOutputStream();
         final InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("asysmon-res/" + name);
@@ -96,8 +96,9 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
         out.println("<html>");
         out.println("<head><title>" + escapeHtml(getTitle()) + "</title>");
         out.println("<meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\" />");
-        out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + url + "?res=asysmon-minmaxavg.css\">");
+        out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + url + "?res=asysmon.css\">");
         out.println("<script src=\"" + url + "?res=jquery-1.10.2.min.js\"></script>");
+        out.println("<script src=\"" + url + "?res=angular-1.2.3.min.js\"></script>");
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>" + escapeHtml(getTitle()) + "</h1>");
