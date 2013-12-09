@@ -80,12 +80,12 @@ public class ADynamicMinMaxAvgServlet extends AbstractDynamicAsysmonServlet {
             totalNanos += d.getTotalNanos();
         }
 
-        return getDataRec(collector.getData(), totalNanos, 1);
+        return getDataRec(collector.getData(), 0, totalNanos, 1);
     }
 
-    private List<TreeNode> getDataRec(Map<String, AMinMaxAvgData> map, double parentTotalNanos, double numParentCalls) {
+    private List<TreeNode> getDataRec(Map<String, AMinMaxAvgData> map, long parentSelfNanos, double parentTotalNanos, int numParentCalls) {
         final List<TreeNode> result = new ArrayList<TreeNode>();
-        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(map, 0, 0)) {
+        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(map, parentSelfNanos, numParentCalls)) {
             final AMinMaxAvgData rawData = entry.getValue();
 
             double fractionOfParent = rawData.getTotalNanos() / parentTotalNanos;
@@ -106,7 +106,7 @@ public class ADynamicMinMaxAvgServlet extends AbstractDynamicAsysmonServlet {
                     rawData.getMaxNanos() / MILLION
             };
 
-            result.add(new TreeNode(entry.getKey(), rawData.isSerial(), dataRaw, getDataRec(rawData.getChildren(), rawData.getTotalNanos(), rawData.getTotalNumInContext())));
+            result.add(new TreeNode(entry.getKey(), rawData.isSerial(), dataRaw, getDataRec(rawData.getChildren(), selfNanos, rawData.getTotalNanos(), rawData.getTotalNumInContext())));
         }
         return result;
     }
@@ -115,7 +115,7 @@ public class ADynamicMinMaxAvgServlet extends AbstractDynamicAsysmonServlet {
     private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw, long selfNanos, int numParent) {
         final List<Map.Entry<String, AMinMaxAvgData>> result = new ArrayList<Map.Entry<String, AMinMaxAvgData>>(raw.entrySet());
 
-        if(selfNanos != 0) {
+        if(selfNanos != 0 && !raw.isEmpty()) {
             final AMinMaxAvgData selfData = new AMinMaxAvgData(true, numParent, 0, 0, selfNanos / numParent, selfNanos, new ConcurrentHashMap<String, AMinMaxAvgData>());
             result.add(new AbstractMap.SimpleEntry<String, AMinMaxAvgData>("<self>", selfData));
         }

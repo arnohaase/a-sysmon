@@ -1,5 +1,9 @@
 todo
 ----
+* style
+  * JDBC report servlet
+  * merge back to '1.0' branch
+
 * kurios
   * UUID.randomUUID() --> performance, blocking behavior
 
