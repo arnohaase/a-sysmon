@@ -99,6 +99,13 @@ public abstract class AbstractDynamicAsysmonServlet extends HttpServlet {
         }
         json.endArray();
 
+        json.writeKey("traces");
+        json.startArray();
+        for(TreeNode n: getData()) {
+            writeDataNode(json, n);
+        }
+        json.endArray();
+
         json.endObject();
     }
 
@@ -133,6 +140,34 @@ public abstract class AbstractDynamicAsysmonServlet extends HttpServlet {
         json.endObject();
     }
 
+    private void writeDataNode(AJsonSerHelper json, TreeNode node) throws IOException {
+        json.startObject();
+
+        json.writeKey("name");
+        json.writeStringLiteral(node.identifier);
+
+        json.writeKey("isSerial");
+        json.writeBooleanLiteral(node.isSerial);
+
+        json.writeKey("data");
+        json.startArray();
+        for(int i=0; i<node.colDataRaw.length; i++) {
+            json.writeNumberLiteral(node.colDataRaw[i], getColDefs().get(i).numFracDigits);
+        }
+        json.endArray();
+
+        if(! node.children.isEmpty()) {
+            json.writeKey("children");
+            json.startArray();
+            for(TreeNode child: node.children) {
+                writeDataNode(json, child);
+            }
+            json.endArray();
+        }
+
+        json.endObject();
+    }
+
     protected abstract boolean isStarted();
     protected abstract void doStartMeasurements();
     protected abstract void doStopMeasurements();
@@ -140,8 +175,10 @@ public abstract class AbstractDynamicAsysmonServlet extends HttpServlet {
 
     protected abstract List<ColDef> getColDefs();
 
+    protected abstract List<TreeNode> getData();
+
     protected enum ColWidth {Short, Medium, Long}
-    protected class ColDef {
+    protected static class ColDef {
         public final String name;
         public final boolean isPercentage;
         public final int numFracDigits;
@@ -152,6 +189,20 @@ public abstract class AbstractDynamicAsysmonServlet extends HttpServlet {
             this.isPercentage = isPercentage;
             this.numFracDigits = numFracDigits;
             this.width = width;
+        }
+    }
+
+    protected static class TreeNode {
+        public final String identifier;
+        public final boolean isSerial;
+        public final long[] colDataRaw;
+        public final List<TreeNode> children;
+
+        public TreeNode(String identifier, boolean isSerial, long[] colDataRaw, List<TreeNode> children) {
+            this.identifier = identifier;
+            this.isSerial = isSerial;
+            this.colDataRaw = colDataRaw;
+            this.children = children;
         }
     }
 

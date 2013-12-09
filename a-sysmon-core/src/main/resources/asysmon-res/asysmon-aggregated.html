@@ -7,6 +7,24 @@
     <script src="r?res=jquery-1.10.2.min.js"></script>
     <script src="r?res=angular-1.2.3.js"></script>
     <script src="r?res=asysmon.js"></script>
+
+    <script type="text/ng-template" id="trace_node_template.html">
+        <div class="data-row data-row-{{curNode.level}}" ng-click="toggleTreeNode($event, curNode)">
+            <!-- TODO self -->
+            <!-- TODO subdued -->
+            <!-- TODO percent: color etc -->
+            <!-- TODO toggle children -->
+            <div class="node-icon" ng-show="curNode.children.length">*</div>
+            <div class="node-icon" ng-hide="curNode.children.length">&nbsp;</div>
+            <div style="float: right;">
+                <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div>
+            </div>
+            <div class="node-text" style="margin-right: {{totalDataWidth}}px;">{{curNode.name}}</div>
+        </div>
+        <div class="children" style="display: block;">
+            <div ng-repeat="curNode in curNode.children" ng-include="'trace_node_template.html'"/>
+        </div>
+    </script>
   </head>
   <body>
       <h1 ng-cloak>{{title}}</h1>
@@ -23,6 +41,420 @@
           <tr ng-show="hasMem()" class='global-measurements'><td class='global-measurements-key'>Memory</td><td class='global-measuremnets-value'>{{memUsed()}} / {{memTotal()}} / {{memMax()}}</td></tr>
           <tr ng-repeat="s in genericScalarNames()"><td class="global-measurements-key">{{s}}</td><td class="global-measurements-value">{{formattedScalar(s)}}</td></tr>
       </table>
+
+
+      <div ng-repeat="curNode in traces">
+          <div class='table-header'>&nbsp;<div style="float: right;">
+              <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">{{curCol.name}}</div>
+          </div>
+
+          <div ng-include="'trace_node_template.html'"/>
+      </div>
+
+
+
+
+      <hr/>
+
+      <!--<div class='table-header'>&nbsp;<div style="float: right;">-->
+          <!--<div class='column-medium'>%</div>-->
+          <!--<div class='column-medium'>#</div>-->
+          <!--<div class='column-long'>total</div>-->
+          <!--<div class='column-medium'>avg</div>-->
+          <!--<div class='column-medium'>min</div>-->
+          <!--<div class='column-medium'>max</div>-->
+      <!--</div></div>-->
+      <div class='data-row data-row-0' onclick="$('#id-1').slideToggle(50);">
+          <div class='node-icon'>*</div>
+          <div style="float: right;">
+              <div class='column-medium' style="background: #ff7878">100,0</div>
+              <div class='column-medium'>2,00</div>
+              <div class='column-long'>835</div>
+              <div class='column-medium'>417</div>
+              <div class='column-medium'>406</div>
+              <div class='column-medium'>428</div>
+          </div>
+          <div class='node-text' style='margin-right: 380px;'>
+              http://localhost:8080/content
+          </div></div>
+      <div class='children' style='display:block' id="id-1">
+      <div class='data-row-subdued data-row data-row-1' onclick="$('#id-2').slideToggle(50);">
+          <div class='node-icon'>&nbsp;</div>
+          <div style="float: right;">
+              <div class='column-medium'>92,6</div>
+              <div class='column-medium'>1,00</div>
+              <div class='column-long'>773</div>
+              <div class='column-medium'>386</div>
+              <div class='column-medium'>368</div>
+              <div class='column-medium'>405</div>
+          </div>
+          <div class='node-text' style='margin-right: 380px;'>
+              [parallel]
+          </div></div>
+      <div class='data-row data-row-1' onclick="$('#id-3').slideToggle(50);">
+          <div class='node-icon'>*</div>
+          <div style="float: right;">
+              <div class='column-medium' style="background: #e4bba0">51,0</div>
+              <div class='column-medium'>6,00</div>
+              <div class='column-long'>425</div>
+              <div class='column-medium'>35</div>
+              <div class='column-medium'>20</div>
+              <div class='column-medium'>78</div>
+          </div>
+          <div class='node-text' style='margin-right: 380px;'>
+              b
+          </div></div>
+      <div class='children' style='display:none' id="id-3">
+          <div class='data-row data-row-2' onclick="$('#id-4').slideToggle(50);">
+              <div class='node-icon'>&nbsp;</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #f68e85">84,0</div>
+                  <div class='column-medium'>1,00</div>
+                  <div class='column-long'>357</div>
+                  <div class='column-medium'>29</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  &lt;self&gt;
+              </div></div>
+          <div class='data-row data-row-2' onclick="$('#id-5').slideToggle(50);">
+              <div class='node-icon'>*</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #d0eabc">15,7</div>
+                  <div class='column-medium'>0,17</div>
+                  <div class='column-long'>66</div>
+                  <div class='column-medium'>33</div>
+                  <div class='column-medium'>26</div>
+                  <div class='column-medium'>39</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  x
+              </div></div>
+          <div class='children' style='display:none' id="id-5">
+              <div class='data-row data-row-3' onclick="$('#id-6').slideToggle(50);">
+                  <div class='node-icon'>&nbsp;</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #fe7a79">99,2</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>66</div>
+                      <div class='column-medium'>33</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      &lt;self&gt;
+                  </div></div>
+              <div class='data-row data-row-3' onclick="$('#id-7').slideToggle(50);">
+                  <div class='node-icon'>*</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #c8ffc8">0,5</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      jdbc: select * from A where oid &lt; ? and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1
+                  </div></div>
+              <div class='children' style='display:none' id="id-7">
+                  <div class='data-row data-row-4' onclick="$('#id-8').slideToggle(50);">
+                      <div class='node-icon'>&nbsp;</div>
+                      <div style="float: right;">
+                          <div class='column-medium' style="background: #f88881">88,8</div>
+                          <div class='column-medium'>1,00</div>
+                          <div class='column-long'>0</div>
+                          <div class='column-medium'>0</div>
+                          <div class='column-medium'>0</div>
+                          <div class='column-medium'>0</div>
+                      </div>
+                      <div class='node-text' style='margin-right: 380px;'>
+                          execute
+                      </div></div>
+                  <div class='data-row data-row-4' onclick="$('#id-9').slideToggle(50);">
+                      <div class='node-icon'>&nbsp;</div>
+                      <div style="float: right;">
+                          <div class='column-medium' style="background: #cef0c0">11,2</div>
+                          <div class='column-medium'>1,00</div>
+                          <div class='column-long'>0</div>
+                          <div class='column-medium'>0</div>
+                          <div class='column-medium'>0</div>
+                          <div class='column-medium'>0</div>
+                      </div>
+                      <div class='node-text' style='margin-right: 380px;'>
+                          result set access
+                      </div></div>
+              </div>
+              <div class='data-row data-row-3' onclick="$('#id-10').slideToggle(50);">
+                  <div class='node-icon'>&nbsp;</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #c8ffc8">0,3</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      jdbc:commit
+                  </div></div>
+          </div>
+          <div class='data-row data-row-2' onclick="$('#id-11').slideToggle(50);">
+              <div class='node-icon'>*</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #c8ffc8">0,2</div>
+                  <div class='column-medium'>0,67</div>
+                  <div class='column-long'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  jdbc: select * from A where oid &lt; ? and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1
+              </div></div>
+          <div class='children' style='display:none' id="id-11">
+              <div class='data-row data-row-3' onclick="$('#id-12').slideToggle(50);">
+                  <div class='node-icon'>&nbsp;</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #f98781">89,4</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      execute
+                  </div></div>
+              <div class='data-row data-row-3' onclick="$('#id-13').slideToggle(50);">
+                  <div class='node-icon'>&nbsp;</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #cdf1c0">10,6</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      result set access
+                  </div></div>
+          </div>
+          <div class='data-row data-row-2' onclick="$('#id-14').slideToggle(50);">
+              <div class='node-icon'>&nbsp;</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #c8ffc8">0,1</div>
+                  <div class='column-medium'>0,67</div>
+                  <div class='column-long'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  jdbc:commit
+              </div></div>
+      </div>
+      <div class='data-row data-row-1' onclick="$('#id-15').slideToggle(50);">
+          <div class='node-icon'>*</div>
+          <div style="float: right;">
+              <div class='column-medium' style="background: #d5deb5">24,5</div>
+              <div class='column-medium'>3,00</div>
+              <div class='column-long'>204</div>
+              <div class='column-medium'>34</div>
+              <div class='column-medium'>29</div>
+              <div class='column-medium'>38</div>
+          </div>
+          <div class='node-text' style='margin-right: 380px;'>
+              a
+          </div></div>
+      <div class='children' style='display:none' id="id-15">
+          <div class='data-row data-row-2' onclick="$('#id-16').slideToggle(50);">
+              <div class='node-icon'>&nbsp;</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #fe7979">99,7</div>
+                  <div class='column-medium'>1,00</div>
+                  <div class='column-long'>203</div>
+                  <div class='column-medium'>33</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  &lt;self&gt;
+              </div></div>
+          <div class='data-row data-row-2' onclick="$('#id-17').slideToggle(50);">
+              <div class='node-icon'>*</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #c8ffc8">0,2</div>
+                  <div class='column-medium'>0,33</div>
+                  <div class='column-long'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  jdbc: select * from A where oid &lt; ? and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1
+              </div></div>
+          <div class='children' style='display:none' id="id-17">
+              <div class='data-row data-row-3' onclick="$('#id-18').slideToggle(50);">
+                  <div class='node-icon'>&nbsp;</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #f88881">88,9</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      execute
+                  </div></div>
+              <div class='data-row data-row-3' onclick="$('#id-19').slideToggle(50);">
+                  <div class='node-icon'>&nbsp;</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #cef0c0">11,1</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      result set access
+                  </div></div>
+          </div>
+          <div class='data-row data-row-2' onclick="$('#id-20').slideToggle(50);">
+              <div class='node-icon'>&nbsp;</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #c8ffc8">0,1</div>
+                  <div class='column-medium'>0,33</div>
+                  <div class='column-long'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  jdbc:commit
+              </div></div>
+      </div>
+      <div class='data-row data-row-1' onclick="$('#id-21').slideToggle(50);">
+          <div class='node-icon'>*</div>
+          <div style="float: right;">
+              <div class='column-medium' style="background: #cdf1c0">10,5</div>
+              <div class='column-medium'>1,00</div>
+              <div class='column-long'>87</div>
+              <div class='column-medium'>43</div>
+              <div class='column-medium'>43</div>
+              <div class='column-medium'>44</div>
+          </div>
+          <div class='node-text' style='margin-right: 380px;'>
+              q
+          </div></div>
+      <div class='children' style='display:none' id="id-21">
+          <div class='data-row data-row-2' onclick="$('#id-22').slideToggle(50);">
+              <div class='node-icon'>&nbsp;</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #fd7b7a">98,1</div>
+                  <div class='column-medium'>1,00</div>
+                  <div class='column-long'>86</div>
+                  <div class='column-medium'>43</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  &lt;self&gt;
+              </div></div>
+          <div class='data-row data-row-2' onclick="$('#id-23').slideToggle(50);">
+              <div class='node-icon'>*</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #c8fec8">1,1</div>
+                  <div class='column-medium'>8,00</div>
+                  <div class='column-long'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  jdbc: select * from A where oid &lt; ? and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1 and 1=1
+              </div></div>
+          <div class='children' style='display:none' id="id-23">
+              <div class='data-row data-row-3' onclick="$('#id-24').slideToggle(50);">
+                  <div class='node-icon'>&nbsp;</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #f88882">88,3</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      execute
+                  </div></div>
+              <div class='data-row data-row-3' onclick="$('#id-25').slideToggle(50);">
+                  <div class='node-icon'>&nbsp;</div>
+                  <div style="float: right;">
+                      <div class='column-medium' style="background: #cef0bf">11,7</div>
+                      <div class='column-medium'>1,00</div>
+                      <div class='column-long'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                      <div class='column-medium'>0</div>
+                  </div>
+                  <div class='node-text' style='margin-right: 380px;'>
+                      result set access
+                  </div></div>
+          </div>
+          <div class='data-row data-row-2' onclick="$('#id-26').slideToggle(50);">
+              <div class='node-icon'>&nbsp;</div>
+              <div style="float: right;">
+                  <div class='column-medium' style="background: #c8fec8">0,8</div>
+                  <div class='column-medium'>8,00</div>
+                  <div class='column-long'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+                  <div class='column-medium'>0</div>
+              </div>
+              <div class='node-text' style='margin-right: 380px;'>
+                  jdbc:commit
+              </div></div>
+      </div>
+      <div class='data-row data-row-1' onclick="$('#id-27').slideToggle(50);">
+          <div class='node-icon'>&nbsp;</div>
+          <div style="float: right;">
+              <div class='column-medium' style="background: #ccf6c3">7,3</div>
+              <div class='column-medium'>1,00</div>
+              <div class='column-long'>61</div>
+              <div class='column-medium'>30</div>
+              <div class='column-medium'>23</div>
+              <div class='column-medium'>38</div>
+          </div>
+          <div class='node-text' style='margin-right: 380px;'>
+              c
+          </div></div>
+      <div class='data-row data-row-1' onclick="$('#id-28').slideToggle(50);">
+          <div class='node-icon'>&nbsp;</div>
+          <div style="float: right;">
+              <div class='column-medium' style="background: #cbf6c3">6,7</div>
+              <div class='column-medium'>1,00</div>
+              <div class='column-long'>55</div>
+              <div class='column-medium'>27</div>
+              <div class='column-medium'>0</div>
+              <div class='column-medium'>0</div>
+          </div>
+          <div class='node-text' style='margin-right: 380px;'>
+              &lt;self&gt;
+          </div>
+      </div>
+      </div>
+
+
+
+
+
+
+
+
 
       <table border="1">
           <tr ng-repeat="col in columnDefs">
