@@ -113,8 +113,11 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     }
 
 
-    $scope.hasProgressBackground = function(columnDef, node) {
-        return columnDef.isPercentage && node.isSerial;
+    $scope.isPercentage = function(columnDef) {
+        return columnDef.isPercentage;
+    };
+    $scope.isSubdued = function(node) {
+        return !node.isSerial;
     };
     $scope.dataRowSubdued = function(node) {
         return node.isSerial ? '' : 'data-row-subdued';

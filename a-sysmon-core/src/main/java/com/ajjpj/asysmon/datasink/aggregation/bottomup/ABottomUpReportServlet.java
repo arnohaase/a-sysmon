@@ -1,12 +1,8 @@
 package com.ajjpj.asysmon.datasink.aggregation.bottomup;
 
-import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
-import com.ajjpj.asysmon.datasink.aggregation.AbstractAsysmonServlet;
-import com.ajjpj.asysmon.util.APair;
+import com.ajjpj.asysmon.datasink.aggregation.AbstractAsysmonReportServlet;
 
-import javax.servlet.ServletException;
-import java.io.PrintWriter;
 import java.text.Collator;
 import java.util.*;
 
@@ -14,62 +10,41 @@ import java.util.*;
 /**
  * @author arno
  */
-public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
-    private volatile ABottomUpDataSink collector;
+public abstract class ABottomUpReportServlet extends AbstractAsysmonReportServlet {
+    public static final List<ColDef> COL_DEFS = Arrays.asList(
+            new ColDef("%", true, 1, ColWidth.Medium),
+            new ColDef("%local", false, 1, ColWidth.Medium),
+            new ColDef("#calls", false, 0, ColWidth.Medium),
+            new ColDef("avg", false, 0, ColWidth.Medium),
+            new ColDef("min", false, 0, ColWidth.Medium),
+            new ColDef("max", false, 0, ColWidth.Medium)
+    );
 
-    private static final int MILLION = 1000*1000;
-    private ABottomUpLeafFilter leafFilter;
+    public static final int MILLION = 1000*1000;
 
-    /**
-     * override to customize
-     */
-    @Override public void init() throws ServletException {
-        synchronized (ABottomUpReportServlet.class) {
-            collector = new ABottomUpDataSink(getLeafFilter());
-            ASysMonConfigurer.addDataSink(getSysMon(), collector);
-        }
+    protected abstract ABottomUpDataSink getCollector();
+
+    @Override protected boolean isStarted() {
+        return getCollector().isActive();
     }
 
-    @Override protected int getNumChildrenLevelsToExpandInitially() {
-        return 0;
+    @Override protected void doStartMeasurements() {
+        getCollector().setActive(true);
     }
 
-    @Override protected int getDataColumnWidth() {
-        return 5*60 + 80;
+    @Override protected void doStopMeasurements() {
+        getCollector().setActive(false);
     }
 
-    public abstract ABottomUpLeafFilter getLeafFilter();
-
-    /**
-     * override to customize
-     */
-    protected ABottomUpDataSink getCollector() {
-        return collector;
+    @Override protected void doClearMeasurements() {
+        getCollector().clear();
     }
 
-    @SuppressWarnings("unchecked")
-    @Override protected List<APair<String, String>> getCommands() {
-        return Arrays.asList(
-            new APair<String, String> ("Clear", "clear"),
-            getCollector().isActive() ? new APair<String, String>("Stop", "stop") : new APair<String, String>("Start", "start")
-        );
+    @Override protected List<ColDef> getColDefs() {
+        return COL_DEFS;
     }
 
-    @Override protected void handleCommand(String cmd) {
-        if("clear".equals(cmd)) {
-            getCollector().clear();
-        }
-        else if("start".equals(cmd)) {
-            getCollector().setActive(true);
-        }
-        else if("stop".equals(cmd)) {
-            getCollector().setActive(false);
-        }
-    }
-
-    @Override protected void writeData(PrintWriter out) {
-        final IdGenerator idGenerator = new IdGenerator();
-
+    @Override protected List<TreeNode> getData() {
         long totalJdbcNanos = 0;
         int totalJdbcCalls = 0;
         for(AMinMaxAvgData d: getCollector().getData().values()) {
@@ -77,49 +52,37 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
             totalJdbcCalls += d.getTotalNumInContext();
         }
 
-        for (Map.Entry<String, AMinMaxAvgData> entry: getSorted(getCollector().getData(), true)) {
-            out.println("<div class='table-header'>&nbsp;<div style=\"float: right;\">");
-            writeColumn(out, CSS_COLUMN_MEDIUM, "%");
-            writeColumn(out, CSS_COLUMN_MEDIUM, "%local");
-            writeColumn(out, CSS_COLUMN_MEDIUM, "#calls");
-            writeColumn(out, CSS_COLUMN_MEDIUM, "avg");
-            writeColumn(out, CSS_COLUMN_MEDIUM, "min");
-            writeColumn(out, CSS_COLUMN_MEDIUM, "max");
-            out.println("</div></div>");
-
-            writeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, 0, totalJdbcNanos, totalJdbcNanos, totalJdbcCalls);
-        }
+        return getDataRec(getCollector().getData(), 0, totalJdbcNanos, totalJdbcNanos, totalJdbcCalls);
     }
 
-    private void writeNodeRec(PrintWriter out, String ident, AMinMaxAvgData data, IdGenerator idGenerator, int level, double jdbcTimeInParent, double totalJdbcTime, int totalNumCallsInContext) {
-        final boolean hasChildren = data.getChildren().size() > 0;
-        startNodeRow(out, idGenerator, ident, level, hasChildren, !data.isSerial());
+    private List<TreeNode> getDataRec(Map<String, AMinMaxAvgData> map, int level, double jdbcTimeInParent, double totalJdbcTime, int totalNumCallsInContext) {
+        final List<TreeNode> result = new ArrayList<TreeNode>();
 
-        final double jdbcTimeHere = (level == 0) ? data.getTotalNanos() : jdbcTimeInParent * data.getTotalNumInContext() / totalNumCallsInContext;
-        final double timeFracLocal = jdbcTimeHere / jdbcTimeInParent;
-        final double timeFracGlobal = jdbcTimeHere / totalJdbcTime;
+        for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(map, level == 0)) {
+            final AMinMaxAvgData inputData = entry.getValue();
 
-        writeColumn(out, CSS_COLUMN_MEDIUM, "background: " + greenToRed(timeFracGlobal), timeFracGlobal * 100, 2);
-        writeColumn(out, CSS_COLUMN_MEDIUM, timeFracLocal * 100, 2);
-        writeColumn(out, CSS_COLUMN_MEDIUM, data.getTotalNumInContext());
-        writeColumn(out, CSS_COLUMN_MEDIUM, data.getAvgNanos() / MILLION);
-        writeColumn(out, CSS_COLUMN_MEDIUM, data.getMinNanos() / MILLION);
-        writeColumn(out, CSS_COLUMN_MEDIUM, data.getMaxNanos() / MILLION);
+            final double jdbcTimeHere = (level == 0) ? inputData.getTotalNanos() : jdbcTimeInParent * inputData.getTotalNumInContext() / totalNumCallsInContext;
+            final double timeFracLocal = jdbcTimeHere / jdbcTimeInParent;
+            final double timeFracGlobal = jdbcTimeHere / totalJdbcTime;
 
-        nodeRowAfterColumns(out, idGenerator, ident, level, hasChildren, !data.isSerial());
+            final long[] dataRaw = new long[] {
+                    (long)(timeFracGlobal * 100 * 10),
+                    (long)(timeFracLocal * 100 * 10),
+                    inputData.getTotalNumInContext(),
+                    inputData.getAvgNanos() / MILLION,
+                    inputData.getMinNanos() / MILLION,
+                    inputData.getMaxNanos() / MILLION
+            };
 
-        if(! data.getChildren().isEmpty()) {
             int totalChildCalls = 0;
-            for(AMinMaxAvgData childData: data.getChildren().values()) {
+            for(AMinMaxAvgData childData: inputData.getChildren().values()) {
                 totalChildCalls += childData.getTotalNumInContext();
             }
 
-            for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(data.getChildren(), false)) {
-                writeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, level + 1, jdbcTimeHere, totalJdbcTime, totalChildCalls);
-//                writeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, level+1, totalNanos, data.getTotalNumInContext());
-            }
+            result.add(new TreeNode(entry.getKey(), inputData.isSerial(), dataRaw, getDataRec(inputData.getChildren(), level+1, jdbcTimeHere, totalJdbcTime, totalChildCalls)));
         }
-        nodeRowAfterChildren(out, hasChildren);
+
+        return result;
     }
 
     private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw, final boolean rootLevel) {
@@ -139,4 +102,61 @@ public abstract class ABottomUpReportServlet extends AbstractAsysmonServlet {
         });
         return result;
     }
+
+//
+//    @Override protected void writeData(PrintWriter out) {
+//        final IdGenerator idGenerator = new IdGenerator();
+//
+//        long totalJdbcNanos = 0;
+//        int totalJdbcCalls = 0;
+//        for(AMinMaxAvgData d: getCollector().getData().values()) {
+//            totalJdbcNanos += d.getTotalNanos();
+//            totalJdbcCalls += d.getTotalNumInContext();
+//        }
+//
+//        for (Map.Entry<String, AMinMaxAvgData> entry: getSorted(getCollector().getData(), true)) {
+//            out.println("<div class='table-header'>&nbsp;<div style=\"float: right;\">");
+//            writeColumn(out, CSS_COLUMN_MEDIUM, "%");
+//            writeColumn(out, CSS_COLUMN_MEDIUM, "%local");
+//            writeColumn(out, CSS_COLUMN_MEDIUM, "#calls");
+//            writeColumn(out, CSS_COLUMN_MEDIUM, "avg");
+//            writeColumn(out, CSS_COLUMN_MEDIUM, "min");
+//            writeColumn(out, CSS_COLUMN_MEDIUM, "max");
+//            out.println("</div></div>");
+//
+//            writeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, 0, totalJdbcNanos, totalJdbcNanos, totalJdbcCalls);
+//        }
+//    }
+//
+//    private void writeNodeRec(PrintWriter out, String ident, AMinMaxAvgData data, IdGenerator idGenerator, int level, double jdbcTimeInParent, double totalJdbcTime, int totalNumCallsInContext) {
+//        final boolean hasChildren = data.getChildren().size() > 0;
+//        startNodeRow(out, idGenerator, ident, level, hasChildren, !data.isSerial());
+//
+//        final double jdbcTimeHere = (level == 0) ? data.getTotalNanos() : jdbcTimeInParent * data.getTotalNumInContext() / totalNumCallsInContext;
+//        final double timeFracLocal = jdbcTimeHere / jdbcTimeInParent;
+//        final double timeFracGlobal = jdbcTimeHere / totalJdbcTime;
+//
+//        writeColumn(out, CSS_COLUMN_MEDIUM, "background: " + greenToRed(timeFracGlobal), timeFracGlobal * 100, 2);
+//        writeColumn(out, CSS_COLUMN_MEDIUM, timeFracLocal * 100, 2);
+//        writeColumn(out, CSS_COLUMN_MEDIUM, data.getTotalNumInContext());
+//        writeColumn(out, CSS_COLUMN_MEDIUM, data.getAvgNanos() / MILLION);
+//        writeColumn(out, CSS_COLUMN_MEDIUM, data.getMinNanos() / MILLION);
+//        writeColumn(out, CSS_COLUMN_MEDIUM, data.getMaxNanos() / MILLION);
+//
+//        nodeRowAfterColumns(out, idGenerator, ident, level, hasChildren, !data.isSerial());
+//
+//        if(! data.getChildren().isEmpty()) {
+//            int totalChildCalls = 0;
+//            for(AMinMaxAvgData childData: data.getChildren().values()) {
+//                totalChildCalls += childData.getTotalNumInContext();
+//            }
+//
+//            for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(data.getChildren(), false)) {
+//                writeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, level + 1, jdbcTimeHere, totalJdbcTime, totalChildCalls);
+////                writeNodeRec(out, entry.getKey(), entry.getValue(), idGenerator, level+1, totalNanos, data.getTotalNumInContext());
+//            }
+//        }
+//        nodeRowAfterChildren(out, hasChildren);
+//    }
+//
 }

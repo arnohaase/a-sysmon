@@ -108,7 +108,10 @@ div div.progress-bar {
 }
 
 div.data-row-subdued {
-  color: #808080;
+  color: rgba(0,0,0,.6);
+}
+div.subdued-progress-background {
+  padding-right: 10px;
 }
 
 div.data-row {

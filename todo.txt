@@ -1,9 +1,5 @@
 todo
 ----
-* style
-  * JDBC report servlet
-  * merge back to '1.0' branch
-
 * kurios
   * UUID.randomUUID() --> performance, blocking behavior
 
@@ -23,8 +19,8 @@ todo
     * ?!?!?! --> Felix
 
 * core
-  * presentation: percentage images
-  * horizontal lines
+  * merge back to '1.0' branch
+  * export? printer friendly presentation?
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
@@ -115,8 +111,6 @@ AOP:
   * rapid changes in clock difference --> sound an alarm
 
 * JS performance api
-
-* should 'refresh' maintain tree open/close state?
 
 
 discuss

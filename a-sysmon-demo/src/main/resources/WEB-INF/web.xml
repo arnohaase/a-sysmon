@@ -5,24 +5,11 @@
 
     <servlet>
         <servlet-name>asysmon-minmaxavg</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.AMinMaxAvgServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>asysmon-minmaxavg</servlet-name>
         <url-pattern>/asysmon/minmaxavg/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>asysmon-dynamic-minmaxavg</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.ADynamicMinMaxAvgServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>asysmon-dynamic-minmaxavg</servlet-name>
-        <url-pattern>/asysmon/dyn/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -30,13 +17,10 @@
         <servlet-class>com.ajjpj.asysmon.datasink.aggregation.jdbc.AJdbcReportServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>asysmon-jdbc</servlet-name>
         <url-pattern>/asysmon/jdbc/*</url-pattern>
     </servlet-mapping>
-
-
 
     <servlet>
         <servlet-name>content</servlet-name>

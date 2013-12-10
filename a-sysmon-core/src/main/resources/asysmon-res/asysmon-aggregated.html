@@ -12,9 +12,11 @@
         <div class="data-row data-row-{{curNode.level}} {{dataRowSubdued(curNode)}}" ng-click="toggleTreeNode($event, curNode)">
             <div class="node-icon {{nodeIconClass(curNode)}}">&nbsp;</div>
             <div style="float: right;">
-                <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)"
-                        ><div ng-if="!hasProgressBackground(columnDefs[$index], curNode)">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div
-                        ><div ng-if="hasProgressBackground(columnDefs[$index], curNode)" class="progress-background"><div class="progress-bar" style="{{progressWidthStyle(curNode.data[$index])}}">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div></div></div>
+                <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">
+                    <div ng-if="isPercentage(columnDefs[$index]) && !isSubdued(curNode)" class="progress-background"><div class="progress-bar" style="{{progressWidthStyle(curNode.data[$index])}}">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div></div>
+                    <div ng-if="isPercentage(columnDefs[$index]) &&  isSubdued(curNode)" class="subdued-progress-background">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div>
+                    <div ng-if="!isPercentage(columnDefs[$index])">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div>
+                </div>
             </div>
             <div class="node-text" style="margin-right: {{totalDataWidth}}px;">{{curNode.name}}</div>
         </div>

@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.datasink.aggregation.minmaxavg;
 
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
-import com.ajjpj.asysmon.datasink.aggregation.AbstractDynamicAsysmonServlet;
+import com.ajjpj.asysmon.datasink.aggregation.AbstractAsysmonReportServlet;
 
 import javax.servlet.ServletException;
 import java.text.Collator;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author arno
  */
-public class ADynamicMinMaxAvgServlet extends AbstractDynamicAsysmonServlet {
+public class AMinMaxAvgReportServlet extends AbstractAsysmonReportServlet {
     private static final int MILLION = 1000*1000;
 
     private static final List<ColDef> colDefs = Arrays.asList(
@@ -33,7 +33,7 @@ public class ADynamicMinMaxAvgServlet extends AbstractDynamicAsysmonServlet {
      * Override to customize initialization (and potentially registration) of the collector.
      */
     @Override public void init() throws ServletException {
-        synchronized (AMinMaxAvgServlet.class) {
+        synchronized (AMinMaxAvgReportServlet.class) {
             if(collector == null) {
                 collector = createCollector();
                 ASysMonConfigurer.addDataSink(getSysMon(), collector);
@@ -86,12 +86,12 @@ public class ADynamicMinMaxAvgServlet extends AbstractDynamicAsysmonServlet {
     private List<TreeNode> getDataRec(Map<String, AMinMaxAvgData> map, long parentSelfNanos, double parentTotalNanos, int numParentCalls) {
         final List<TreeNode> result = new ArrayList<TreeNode>();
         for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(map, parentSelfNanos, numParentCalls)) {
-            final AMinMaxAvgData rawData = entry.getValue();
+            final AMinMaxAvgData inputData = entry.getValue();
 
-            double fractionOfParent = rawData.getTotalNanos() / parentTotalNanos;
+            double fractionOfParent = inputData.getTotalNanos() / parentTotalNanos;
 
-            long selfNanos = rawData.getTotalNanos();
-            for(AMinMaxAvgData childData: rawData.getChildren().values()) {
+            long selfNanos = inputData.getTotalNanos();
+            for(AMinMaxAvgData childData: inputData.getChildren().values()) {
                 if(childData.isSerial()) {
                     selfNanos -= childData.getTotalNanos();
                 }
@@ -99,14 +99,14 @@ public class ADynamicMinMaxAvgServlet extends AbstractDynamicAsysmonServlet {
 
             final long[] dataRaw = new long[] {
                     (long)(100 * 10 * fractionOfParent),
-                    (long)(100 * rawData.getTotalNumInContext() / numParentCalls),
-                    rawData.getTotalNanos() / MILLION,
-                    rawData.getAvgNanos() / MILLION,
-                    rawData.getMinNanos() / MILLION,
-                    rawData.getMaxNanos() / MILLION
+                    (long)(100 * inputData.getTotalNumInContext() / numParentCalls),
+                    inputData.getTotalNanos() / MILLION,
+                    inputData.getAvgNanos() / MILLION,
+                    inputData.getMinNanos() / MILLION,
+                    inputData.getMaxNanos() / MILLION
             };
 
-            result.add(new TreeNode(entry.getKey(), rawData.isSerial(), dataRaw, getDataRec(rawData.getChildren(), selfNanos, rawData.getTotalNanos(), rawData.getTotalNumInContext())));
+            result.add(new TreeNode(entry.getKey(), inputData.isSerial(), dataRaw, getDataRec(inputData.getChildren(), selfNanos, inputData.getTotalNanos(), inputData.getTotalNumInContext())));
         }
         return result;
     }

@@ -13,11 +13,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author arno
  */
-public abstract class AbstractDynamicAsysmonServlet extends HttpServlet {
+public abstract class AbstractAsysmonReportServlet extends HttpServlet {
+    private static final AtomicBoolean hasShutdownHook = new AtomicBoolean(false);
 
     /**
      * Default implementations returns the singleton instance. Override to customize.
@@ -29,16 +32,24 @@ public abstract class AbstractDynamicAsysmonServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        final ServletContext ctx = config.getServletContext();
-        ctx.addListener(new ServletContextListener() {
-            @Override public void contextInitialized(ServletContextEvent sce) { }
 
-            @Override public void contextDestroyed(ServletContextEvent sce) {
-                if(AGlobalConfig.getImplicitlyShutDownWithServlet()) {
-                    getSysMon().shutdown();
-                }
+        final boolean wasInitialized = hasShutdownHook.getAndSet(true);
+        if(!wasInitialized) {
+            try {
+                final ServletContext ctx = config.getServletContext();
+                ctx.addListener(new ServletContextListener() {
+                    @Override public void contextInitialized(ServletContextEvent sce) { }
+
+                    @Override public void contextDestroyed(ServletContextEvent sce) {
+                        if(AGlobalConfig.getImplicitlyShutDownWithServlet()) {
+                            getSysMon().shutdown();
+                        }
+                    }
+                });
+            } catch (IllegalStateException e) {
+                // ignore - this only works if init() is called during container startup, i.e. with load-on-startup in web.xml
             }
-        });
+        }
     }
 
     @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
