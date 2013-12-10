@@ -18,6 +18,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * @author arno
@@ -29,7 +30,7 @@ public class AppServlet extends HttpServlet {
 
     static {
         try {
-            // store the connection to keep the in-memory database
+            // store__ the connection to keep the in-memory database
             conn = getConnection();
             conn.createStatement().execute("create table A (oid number primary key)");
 
@@ -194,6 +195,10 @@ public class AppServlet extends HttpServlet {
             @Override
             public int getLoginTimeout() throws SQLException {
                 return 0;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+                return null;
             }
 
             @Override

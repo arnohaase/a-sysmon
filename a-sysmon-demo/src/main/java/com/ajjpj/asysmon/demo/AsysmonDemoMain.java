@@ -3,8 +3,6 @@ package com.ajjpj.asysmon.demo;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.datasink.log.ALog4JDataSink;
 import com.ajjpj.asysmon.datasink.log.AStdOutDataSink;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -15,6 +13,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class AsysmonDemoMain {
     public static void main(String[] args) throws Exception {
 //        System.setProperty("com.ajjpj.asysmon.globallydisabled", "true");
+
 
         ASysMonConfigurer.addDataSink(ASysMon.get(), new AStdOutDataSink());
 //        ASysMonConfigurer.addDataSink(ASysMon.get(), new ALog4JDataSink());
@@ -31,3 +30,5 @@ public class AsysmonDemoMain {
         server.join();
     }
 }
+
+

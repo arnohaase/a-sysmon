@@ -5,13 +5,11 @@
 
     <servlet>
         <servlet-name>asysmon-minmaxavg</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.AMinMaxAvgServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>asysmon-minmaxavg</servlet-name>
-        <url-pattern>/asysmon/minmaxavg</url-pattern>
+        <url-pattern>/asysmon/minmaxavg/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -19,13 +17,10 @@
         <servlet-class>com.ajjpj.asysmon.datasink.aggregation.jdbc.AJdbcReportServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>asysmon-jdbc</servlet-name>
-        <url-pattern>/asysmon/jdbc</url-pattern>
+        <url-pattern>/asysmon/jdbc/*</url-pattern>
     </servlet-mapping>
-
-
 
     <servlet>
         <servlet-name>content</servlet-name>
@@ -40,6 +35,10 @@
     <filter>
         <filter-name>asysmon-filter</filter-name>
         <filter-class>com.ajjpj.asysmon.measure.http.AHttpRequestMeasuringFilter</filter-class>
+        <init-param>
+            <param-name>asysmon.http.analyzer</param-name>
+            <param-value>com.ajjpj.asysmon.demo.NullHttpRequestAnalyzer</param-value>
+        </init-param>
     </filter>
 
     <filter-mapping>
