@@ -35,10 +35,10 @@ public class JdbcTest {
         conn.close();
 
         assertEquals(3, dataSink.data.size());
-        assertEquals("jdbc: create table A (oid number primary key)", dataSink.data.get(0).getIdentifier());
-        assertEquals("jdbc: insert into A (oid) values (1)", dataSink.data.get(1).getIdentifier());
+        assertEquals("jdbc: create table A (oid number primary key)", dataSink.data.get(0).getRootNode().getIdentifier());
+        assertEquals("jdbc: insert into A (oid) values (1)", dataSink.data.get(1).getRootNode().getIdentifier());
 
-        final AHierarchicalData selectRoot = dataSink.data.get(2);
+        final AHierarchicalData selectRoot = dataSink.data.get(2).getRootNode();
         assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, selectRoot.getIdentifier());
         assertEquals(1, selectRoot.getChildren().size());
         assertEquals("jdbc: select * from A", selectRoot.getChildren().get(0).getIdentifier());

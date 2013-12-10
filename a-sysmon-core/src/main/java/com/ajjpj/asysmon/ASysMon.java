@@ -1,16 +1,18 @@
 package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.data.ACorrelationId;
-import com.ajjpj.asysmon.data.AGlobalDataPoint;
-import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
-import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.measure.global.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
+import com.ajjpj.asysmon.util.AShutdownable;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -26,10 +28,10 @@ import java.util.*;
  *
  * @author arno
  */
-public class ASysMon {
+public class ASysMon implements AShutdownable {
     private final ATimer timer;
     private volatile AList<ADataSink> handlers = AList.nil();
-    private volatile AList<AGlobalMeasurer> globalMeasurers = AList.nil();
+    private volatile AList<AScalarMeasurer> scalarMeasurers = AList.nil();
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
@@ -44,8 +46,8 @@ public class ASysMon {
 
     public ASysMon(ATimer timer) {
         this.timer = timer;
-        for(AGlobalMeasurer m: AGlobalConfig.getGlobalMeasurers()) {
-            globalMeasurers = globalMeasurers.cons(m);
+        for(AScalarMeasurer m: AGlobalConfig.getScalarMeasurers()) {
+            scalarMeasurers = scalarMeasurers.cons(m);
         }
     }
 
@@ -60,8 +62,8 @@ public class ASysMon {
         }
     }
 
-    synchronized void addGlobalMeasurer(AGlobalMeasurer m) {
-        globalMeasurers = globalMeasurers.cons(m);
+    synchronized void addScalarMeasurer(AScalarMeasurer m) {
+        scalarMeasurers = scalarMeasurers.cons(m);
     }
 
     synchronized void addDataSink(ADataSink handler) {
@@ -81,12 +83,15 @@ public class ASysMon {
                 }
             }
 
-            @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
+            @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
                 hierarchyPerThread.remove();
 
                 for(ADataSink handler: handlers) {
-                    handler.onFinishedHierarchicalMeasurement(data, startedFlows, joinedFlows);
+                    handler.onFinishedHierarchicalMeasurement(data);
                 }
+            }
+
+            @Override public void shutdown() {
             }
         });
         hierarchyPerThread.set(result);
@@ -125,15 +130,39 @@ public class ASysMon {
         return getMeasurementHierarchy().startCollectingMeasurement(identifier, serial);
     }
 
-    public Map<String, AGlobalDataPoint> getGlobalMeasurements() {
+    public Map<String, AScalarDataPoint> getScalarMeasurements() {
         if(AGlobalConfig.isGloballyDisabled()) {
-            return new HashMap<String, AGlobalDataPoint>();
+            return new HashMap<String, AScalarDataPoint>();
         }
-        final Map<String, AGlobalDataPoint> result = new HashMap<String, AGlobalDataPoint>();
-        for(AGlobalMeasurer measurer: globalMeasurers) {
-            measurer.contributeMeasurements(result);
+        final Map<String, AScalarDataPoint> result = new TreeMap<String, AScalarDataPoint>();
+        final long now = System.currentTimeMillis();
+        for(AScalarMeasurer measurer: scalarMeasurers) {
+            measurer.contributeMeasurements(result, now);
         }
+        //TODO protect against exceptions (per measurer)
+        //TODO limit duration per measurer
         return result;
+    }
+
+    @Override public void shutdown() {
+        //TODO log
+
+        for(ADataSink handler: handlers) {
+            try {
+                handler.shutdown();
+            } catch (Exception e) {
+                e.printStackTrace(); //TODO log
+            }
+        }
+        for(AScalarMeasurer m: scalarMeasurers) {
+            try {
+                m.shutdown();
+            } catch (Exception e) {
+                e.printStackTrace(); //TODO log
+            }
+        }
+
+        //TODO log
     }
 
     /**

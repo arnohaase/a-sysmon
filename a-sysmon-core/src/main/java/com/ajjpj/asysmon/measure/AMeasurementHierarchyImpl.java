@@ -3,6 +3,7 @@ package com.ajjpj.asysmon.measure;
 import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.util.ArrayStack;
 import com.ajjpj.asysmon.util.timer.ATimer;
@@ -108,7 +109,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
                 finish(m);
             }
             isFinished = true;
-            dataSink.onFinishedHierarchicalMeasurement(newData, startedFlows, joinedFlows);
+            dataSink.onFinishedHierarchicalMeasurement(new AHierarchicalDataRoot(newData, startedFlows, joinedFlows));
         }
         else {
             childrenStack.peek().add(newData);
@@ -155,7 +156,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         final List<AHierarchicalData> children = new ArrayList<AHierarchicalData>();
         for(String detailIdentifier: m.getDetails().keySet()) {
             final ACollectingMeasurement.Detail detail = m.getDetails().get(detailIdentifier);
-            //TODO how to store m.getNum()?
+            //TODO how to store__ m.getNum()?
             children.add(new AHierarchicalData(true, m.getStartTimeMillis(), detail.getTotalNanos(), detailIdentifier, Collections.<String, String>emptyMap(), Collections.<AHierarchicalData>emptyList()));
         }
 

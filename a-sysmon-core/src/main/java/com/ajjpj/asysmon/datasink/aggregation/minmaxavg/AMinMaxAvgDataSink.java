@@ -1,11 +1,10 @@
 package com.ajjpj.asysmon.datasink.aggregation.minmaxavg;
 
-import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,10 +38,13 @@ public class AMinMaxAvgDataSink implements ADataSink {
     }
 
     @Override
-    public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
+    public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
         if(isActive) {
-            synchronizedCollect(data);
+            synchronizedCollect(data.getRootNode());
         }
+    }
+
+    @Override public void shutdown() {
     }
 
     private synchronized void synchronizedCollect(AHierarchicalData newData) { //TODO change this to a non-blocking implementation

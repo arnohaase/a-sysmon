@@ -2,7 +2,7 @@ package com.ajjpj.asysmon;
 
 
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.measure.global.AGlobalMeasurer;
+import com.ajjpj.asysmon.measure.global.AScalarMeasurer;
 import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
 
 /**
@@ -16,8 +16,8 @@ import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
  * @author arno
  */
 public class ASysMonConfigurer {
-    public static void addGlobalMeasurer(ASysMon sysMon, AGlobalMeasurer m) {
-        sysMon.addGlobalMeasurer(m);
+    public static void addScalarMeasurer(ASysMon sysMon, AScalarMeasurer m) {
+        sysMon.addScalarMeasurer(m);
     }
 
     public static void addDataSink(ASysMon sysMon, ADataSink handler) {
@@ -29,7 +29,7 @@ public class ASysMonConfigurer {
      */
     public static void addThreadCountSupport(ASysMon sysMon) {
         final AThreadCountMeasurer threadCountMeasurer = new AThreadCountMeasurer();
-        addGlobalMeasurer(sysMon, threadCountMeasurer);
+        addScalarMeasurer(sysMon, threadCountMeasurer);
         addDataSink(sysMon, threadCountMeasurer.counter);
     }
 }

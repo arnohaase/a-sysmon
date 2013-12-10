@@ -1,11 +1,9 @@
 package com.ajjpj.asysmon.measure.threadpool;
 
 
-import com.ajjpj.asysmon.data.ACorrelationId;
-import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,8 +37,11 @@ public class AThreadPoolTrackingDataSink implements ADataSink {
         }
     }
 
-    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalData data, Collection<ACorrelationId> startedFlows, Collection<ACorrelationId> joinedFlows) {
+    @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
         threadCounts.get(curThreadPool()).decrementAndGet();
+    }
+
+    @Override public void shutdown() {
     }
 
     public Map<String, AtomicInteger> getThreadCounts() {

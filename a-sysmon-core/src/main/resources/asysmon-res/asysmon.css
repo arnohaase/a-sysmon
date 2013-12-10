@@ -2,6 +2,10 @@ html {
   font-family: sans-serif;
 }
 
+h1 {
+    margin: 0px;
+}
+
 table.global-measurements {
   margin-top: 20px;
   margin-bottom: 10px;
@@ -50,12 +54,24 @@ div.table-header {
 div.node-icon {
   float: left;
   width: 1em;
-  text-align: center;
 }
+div.node-icon-collapsed {
+  background: url('i?res=treenode-closed.png');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+div.node-icon-expanded {
+  background: url('i?res=treenode-open.png');
+  background-repeat: no-repeat;
+    background-position: center;
+}
+div.node-icon-empty {
+}
+
 
 div.node-text {
   margin-left: 1em;
-  padding-left: 1em;
+  padding-left: 1.2em;
   text-indent: -1em;
 }
 
@@ -76,62 +92,81 @@ div.column-long {
   text-align: right;
   display: inline-block;
 }
-
+                                                                                                                                                                  ,
 div.children {
 }
 
+div div.progress-background {
+  background-color: rgb(202, 255, 214);
+}
+
+div div.progress-bar {
+  padding-right: 10px;
+  background: url('i?res=progress-bg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
 div.data-row-subdued {
-  color: #808080;
+  color: rgba(0,0,0,.6);
+}
+div.subdued-progress-background {
+  padding-right: 10px;
 }
 
 div.data-row {
   border-bottom: white solid 2px;
 }
 div:hover.data-row  {
-  background: #d0d0d0;
+  background: #a0a0a0;
+}
+
+div.data-row-0+div.children {
+    /*border-bottom: solid black 1px;*/
 }
 
 div.data-row-0 {
-  background: #fafafa;
+  /*border-top: solid black 1px;*/
+  background: #f2f2f2;
 }
 div.data-row-1 {
   padding-left: 1em;
-  background: #f6f6f6;
+  background: #eaeaea;
 }
 div.data-row-2 {
   padding-left: 2em;
-  background: #f2f2f2;
+  background: #e2e2e2;
 }
 div.data-row-3 {
   padding-left: 3em;
-  background: #ededed;
+  background: #dadada;
 }
 div.data-row-4 {
   padding-left: 4em;
-  background: #eaeaea;
+  background: #d2d2d2;
 }
 div.data-row-5 {
   padding-left: 5em;
-  background: #e6e6e6;
+  background: #cacaca;
 }
 div.data-row-6 {
   padding-left: 6em;
-  background: #e2e2e2;
+  background: #c2c2c2;
 }
 div.data-row-7 {
   padding-left: 7em;
-  background: #dddddd;
+  background: #bababa;
 }
 div.data-row-8 {
   padding-left: 8em;
-  background: #dadada;
+  background: #b2b2b2;
 }
 div.data-row-9 {
   padding-left: 9em;
-  background: #d6d6d6;
+  background: #aaaaaa;
 }
 div.data-row-10 {
   padding-left: 10em;
-  background: #d2d2d2;
+  background: #a2a2a2;
 }
 

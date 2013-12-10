@@ -1,0 +1,54 @@
+<!doctype html>
+<html ng-app="ASysMonApp" ng-controller="ASysMonCtrl">
+  <head>
+    <title ng-bind="title"></title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href=".?res=asysmon.css">
+    <script src="r?res=jquery-1.10.2.min.js"></script>
+    <script src="r?res=angular-1.2.3.js"></script>
+    <script src="r?res=asysmon.js"></script>
+
+    <script type="text/ng-template" id="trace_node_template.html">
+        <div class="data-row data-row-{{curNode.level}} {{dataRowSubdued(curNode)}}" ng-click="toggleTreeNode($event, curNode)">
+            <div class="node-icon {{nodeIconClass(curNode)}}">&nbsp;</div>
+            <div style="float: right;">
+                <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">
+                    <div ng-if="isPercentage(columnDefs[$index]) && !isSubdued(curNode)" class="progress-background"><div class="progress-bar" style="{{progressWidthStyle(curNode.data[$index])}}">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div></div>
+                    <div ng-if="isPercentage(columnDefs[$index]) &&  isSubdued(curNode)" class="subdued-progress-background">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div>
+                    <div ng-if="!isPercentage(columnDefs[$index])">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div>
+                </div>
+            </div>
+            <div class="node-text" style="margin-right: {{totalDataWidth}}px;">{{curNode.name}}</div>
+        </div>
+        <div class="children" style="display: {{expansionStyle(curNode)}};">
+            <div ng-repeat="curNode in curNode.children" ng-include="'trace_node_template.html'"/>
+        </div>
+    </script>
+  </head>
+  <body>
+      <h1 ng-cloak>{{title}}</h1>
+
+      <div class='button-box'>
+          <a class='btn' ng-click='refresh()'>Refresh</a>
+          <a class='btn' ng-click='clear()'>Clear</a>
+          <a class='btn' ng-hide='isStarted' ng-click='start()'>Start</a>
+          <a class='btn' ng-show='isStarted' ng-click='stop()'>Stop</a>
+      </div>
+
+      <table class='global-measurements'>
+          <tr ng-show="hasLoad()" class='global-measurements'><td class='global-measurements-key'>System Load</td><td class='global-measuremnets-value'>{{load1()}} / {{load5()}} / {{load15()}}</td></tr>
+          <tr ng-show="hasMem()" class='global-measurements'><td class='global-measurements-key'>Memory</td><td class='global-measuremnets-value'>{{memUsed()}} / {{memTotal()}} / {{memMax()}}</td></tr>
+          <tr ng-repeat="s in genericScalarNames()"><td class="global-measurements-key">{{s}}</td><td class="global-measurements-value">{{formattedScalar(s)}}</td></tr>
+      </table>
+
+
+      <div ng-repeat="curNode in traces">
+          <div class='table-header'>&nbsp;<div style="float: right;">
+              <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">{{curCol.name}}</div>
+          </div></div>
+
+          <div ng-include="'trace_node_template.html'"></div>
+      </div>
+
+  </body>
+</html>
