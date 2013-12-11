@@ -19,7 +19,6 @@ todo
     * ?!?!?! --> Felix
 
 * core
-  * merge back to '1.0' branch
   * export? printer friendly presentation?
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
