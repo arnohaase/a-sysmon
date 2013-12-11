@@ -20,6 +20,9 @@ todo
 
 * core
   * export? printer friendly presentation?
+  * selective presentation - pick just one top-level (or second-level or whatever?) sub-tree?
+  * lock-free aggregation implementation
+  * expand all / collapse all
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
