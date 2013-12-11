@@ -1,6 +1,25 @@
 todo
 ----
-* DataSource
+* kurios
+  * UUID.randomUUID() --> performance, blocking behavior
+
+* architecture
+  * resend data after failure --> just add to the queue again --> idempotence on the server
+
+* server features
+  * API for data retrieval
+    * scalars, environment, traces
+    * local and remote
+  * simple web UI
+    *
+  * derived scalars as listeners on the event bus, e.g. 'requests per second', 'transactions per second' or 'GC frequency'
+  * permission checks
+    * collection with users / MD5 of password
+    * admin flag, arrays of applications with read / write permissions
+    * ?!?!?! --> Felix
+
+* core
+  * export? printer friendly presentation?
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 

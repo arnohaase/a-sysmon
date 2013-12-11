@@ -3,6 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
+    <listener>
+        <listener-class>com.ajjpj.asysmon.AShutdownServletContextListener</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>asysmon-minmaxavg</servlet-name>
         <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
@@ -29,7 +33,7 @@
 
     <servlet-mapping>
         <servlet-name>content</servlet-name>
-        <url-pattern>content/*</url-pattern>
+        <url-pattern>/content/*</url-pattern>
     </servlet-mapping>
 
     <filter>

@@ -46,7 +46,8 @@ public abstract class AbstractAsysmonReportServlet extends HttpServlet {
                         }
                     }
                 });
-            } catch (IllegalStateException e) {
+            } catch (Exception e) {
+                //TODO log this (at warn level): A-SysMon servlets should be initialized first, i.e. have the lowest load-on-startup value
                 // ignore - this only works if init() is called during container startup, i.e. with load-on-startup in web.xml
             }
         }
