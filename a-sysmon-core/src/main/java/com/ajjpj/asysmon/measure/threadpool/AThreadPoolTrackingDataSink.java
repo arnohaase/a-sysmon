@@ -14,13 +14,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AThreadPoolTrackingDataSink implements ADataSink {
     private final Map<String, AtomicInteger> threadCounts = new ConcurrentHashMap<String, AtomicInteger>();
 
-    private String curThreadPool() {
-        final String threadName = Thread.currentThread().getName();
+    public static String threadPoolName(String threadName) {
         final int idxCount = threadName.lastIndexOf('-');
         if(idxCount < 0) {
             return "<other>";
         }
         return threadName.substring(0, idxCount);
+    }
+
+    private String curThreadPool() {
+        return threadPoolName(Thread.currentThread().getName());
     }
 
     @Override public void onStartedHierarchicalMeasurement() {

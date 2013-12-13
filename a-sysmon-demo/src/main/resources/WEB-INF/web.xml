@@ -9,7 +9,7 @@
 
     <servlet>
         <servlet-name>asysmon-minmaxavg</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.servlet.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>asysmon-minmaxavg</servlet-name>
@@ -18,12 +18,21 @@
 
     <servlet>
         <servlet-name>asysmon-jdbc</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.datasink.aggregation.jdbc.AJdbcReportServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.servlet.jdbc.AJdbcReportServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>asysmon-jdbc</servlet-name>
         <url-pattern>/asysmon/jdbc/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>asysmon-threaddump</servlet-name>
+        <servlet-class>com.ajjpj.asysmon.servlet.threaddump.AThreadDumpServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>asysmon-threaddump</servlet-name>
+        <url-pattern>/asysmon/threads/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

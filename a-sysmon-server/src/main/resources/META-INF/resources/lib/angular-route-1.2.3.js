@@ -21,7 +21,7 @@
  *
  * <div doc-module-components="ngRoute"></div>
  */
- /* global -ngRouteModule */
+ /* scalar -ngRouteModule */
 var ngRouteModule = angular.module('ngRoute', ['ng']).
                         provider('$route', $RouteProvider);
 

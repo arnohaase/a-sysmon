@@ -14,7 +14,7 @@ import com.ajjpj.asysmon.server.data.json.TraceRootNode;
  *  non-trivial work to be done, offload that work to a different thread.<p />
  *
  * NB: listeners will often be called with a large number of concurrent events, making every listener a potential
- *  global bottleneck. Listener implementations must therefore take care to scale very well!
+ *  scalar bottleneck. Listener implementations must therefore take care to scale very well!
  *
  * //TODO exception model - may listeners throw?
  *

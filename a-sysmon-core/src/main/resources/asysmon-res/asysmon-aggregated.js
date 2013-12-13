@@ -137,7 +137,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             return $scope.shadowExpansionModel[node.fqn] ? 'node-icon-expanded' : 'node-icon-collapsed';
         }
         return 'node-icon-empty';
-    }
+    };
     $scope.expansionStyle = function(node) {
         return $scope.isExpanded(node) ? 'block' : 'none';
     };

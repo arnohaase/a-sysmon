@@ -2,7 +2,7 @@ package com.ajjpj.asysmon;
 
 
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.measure.global.AScalarMeasurer;
+import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
 
 /**

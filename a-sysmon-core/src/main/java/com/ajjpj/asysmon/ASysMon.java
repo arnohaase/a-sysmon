@@ -5,7 +5,7 @@ import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
-import com.ajjpj.asysmon.measure.global.AScalarMeasurer;
+import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 import com.ajjpj.asysmon.util.timer.ATimer;
@@ -70,13 +70,8 @@ public class ASysMon implements AShutdownable {
         handlers = handlers.cons(handler);
     }
 
-    private AMeasurementHierarchy getMeasurementHierarchy() {
-        final AMeasurementHierarchy candidate = hierarchyPerThread.get();
-        if(candidate != null) {
-            return candidate;
-        }
-
-        final AMeasurementHierarchy result = new AMeasurementHierarchyImpl(timer, new ADataSink() {
+    private ADataSink getCompositeDataSink() {
+        return new ADataSink() {
             @Override public void onStartedHierarchicalMeasurement() {
                 for(ADataSink handler: handlers) {
                     handler.onStartedHierarchicalMeasurement();
@@ -93,7 +88,16 @@ public class ASysMon implements AShutdownable {
 
             @Override public void shutdown() {
             }
-        });
+        };
+    }
+
+    private AMeasurementHierarchy getMeasurementHierarchy() {
+        final AMeasurementHierarchy candidate = hierarchyPerThread.get();
+        if(candidate != null) {
+            return candidate;
+        }
+
+        final AMeasurementHierarchy result = new AMeasurementHierarchyImpl(timer, getCompositeDataSink());
         hierarchyPerThread.set(result);
         return result;
     }
@@ -121,6 +125,15 @@ public class ASysMon implements AShutdownable {
     }
     public ASimpleMeasurement start(String identifier, boolean serial) {
         return getMeasurementHierarchy().start(identifier, serial);
+    }
+
+    /**
+     * This is for the rare case that measurement data was collected by other means and should be 'injected'
+     *  into A-SysMon. If you do not understand this, this method is probably not for you.
+     */
+    public void injectSyntheticMeasurement(AHierarchicalDataRoot d) {
+        getCompositeDataSink().onStartedHierarchicalMeasurement();
+        getCompositeDataSink().onFinishedHierarchicalMeasurement(d);
     }
 
     public ACollectingMeasurement startCollectingMeasurement(String identifier) {

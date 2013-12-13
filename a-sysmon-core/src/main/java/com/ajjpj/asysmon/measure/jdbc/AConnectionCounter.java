@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.measure.jdbc;
 
 
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.measure.global.AScalarMeasurer;
+import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

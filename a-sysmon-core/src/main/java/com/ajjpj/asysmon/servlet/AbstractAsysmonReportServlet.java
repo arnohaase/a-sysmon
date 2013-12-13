@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.datasink.aggregation;
+package com.ajjpj.asysmon.servlet;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.AGlobalConfig;
@@ -29,8 +29,7 @@ public abstract class AbstractAsysmonReportServlet extends HttpServlet {
         return ASysMon.get();
     }
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
+    @Override public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         final boolean wasInitialized = hasShutdownHook.getAndSet(true);
@@ -84,7 +83,7 @@ public abstract class AbstractAsysmonReportServlet extends HttpServlet {
             return;
         }
 
-        serveStaticResource("asysmon-aggregated.html", resp);
+        serveStaticResource("aggregated.html", resp);
     }
 
     private void serveData(HttpServletResponse resp) throws IOException {

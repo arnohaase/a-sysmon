@@ -170,3 +170,48 @@ div.data-row-10 {
   background: #a2a2a2;
 }
 
+div.threads-header {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+div.thread-state {
+  width: 9em;
+  display: inline-block;
+  text-align: center;
+  margin-right: 10px;
+}
+.thread-state-RUNNABLE {
+  background: lightgreen;
+}
+.thread-state-WAITING, .thread-state-TIMED_WAITING {
+  background: #ffff80;
+}
+.thread-state-BLOCKED {
+  background: lightcoral;
+}
+.thread-state-NEW, .thread-state-TERMINATED {
+  background: lightblue;
+}
+.thread-state-DEADLOCKED {
+  background: red;
+}
+
+.stacktrace {
+}
+.stacktrace-native {
+  color: darkblue;
+  font-weight: bold;
+}
+.stacktrace-native-java {
+  color: rgba(0,0,128,.6);
+  font-weight: bold;
+}
+.stacktrace-no-source {
+  color: rgba(0,0,0,.6);
+}
+.stacktrace-java {
+  color: rgb(100,0,0);
+}
+.stacktrace-sun {
+  color: rgba(100,0,0,.6);
+}

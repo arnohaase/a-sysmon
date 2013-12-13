@@ -1,8 +1,8 @@
-package com.ajjpj.asysmon.datasink.aggregation.minmaxavg;
+package com.ajjpj.asysmon.servlet.minmaxavg;
 
 import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
-import com.ajjpj.asysmon.datasink.aggregation.AbstractAsysmonReportServlet;
+import com.ajjpj.asysmon.servlet.AMinMaxAvgData;
+import com.ajjpj.asysmon.servlet.AbstractAsysmonReportServlet;
 
 import javax.servlet.ServletException;
 import java.text.Collator;

@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.datasink.aggregation.bottomup;
+package com.ajjpj.asysmon.servlet.bottomup;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
 

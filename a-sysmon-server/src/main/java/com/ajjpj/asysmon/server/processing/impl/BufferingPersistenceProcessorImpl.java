@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 
 /**
  * This class receives all new data from the event eventbus, buffering it in queues and storing it persistently from worker
- *  threads. Its purpose is to decouple event eventbus response time from the potentially slow I/O required for
+ *  threaddump. Its purpose is to decouple event eventbus response time from the potentially slow I/O required for
  *  persistent storage.
  *
  * @author arno

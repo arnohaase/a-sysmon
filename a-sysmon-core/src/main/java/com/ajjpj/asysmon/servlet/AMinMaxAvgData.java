@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.datasink.aggregation;
+package com.ajjpj.asysmon.servlet;
 
 
 import java.util.concurrent.ConcurrentHashMap;

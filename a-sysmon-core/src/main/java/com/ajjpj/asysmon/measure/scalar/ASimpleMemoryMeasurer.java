@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.measure.global;
+package com.ajjpj.asysmon.measure.scalar;
 
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 
@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author arno
  */
-public class AMemoryMeasurer implements AScalarMeasurer {
+public class ASimpleMemoryMeasurer implements AScalarMeasurer {
     public static final String IDENT_MEM_FREE  = "mem-free";
     public static final String IDENT_MEM_USED = "mem-used";
     public static final String IDENT_MEM_TOTAL = "mem-total";

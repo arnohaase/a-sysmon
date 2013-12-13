@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.measure.global;
+package com.ajjpj.asysmon.measure.scalar;
 
 
 import com.ajjpj.asysmon.data.AScalarDataPoint;

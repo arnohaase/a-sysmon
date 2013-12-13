@@ -80,7 +80,7 @@ function minErr(module) {
 }
 
 /* We need to tell jshint what variables are being exported */
-/* global
+/* scalar
     -angular,
     -msie,
     -jqLite,
@@ -1461,7 +1461,7 @@ function setupModuleLoader(window) {
      * @name angular.module
      * @description
      *
-     * The `angular.module` is a global place for creating, registering and retrieving Angular
+     * The `angular.module` is a scalar place for creating, registering and retrieving Angular
      * modules.
      * All modules (angular core or 3rd party) that should be available to an application must be
      * registered using this mechanism.
@@ -1737,7 +1737,7 @@ function setupModuleLoader(window) {
 
 }
 
-/* global
+/* scalar
     angularModule: true,
     version: true,
     
@@ -1949,7 +1949,7 @@ function publishExternalAPI(angular){
   ]);
 }
 
-/* global
+/* scalar
 
   -JQLitePrototype,
   -addEventListenerFn,
@@ -3985,7 +3985,7 @@ var $AnimateProvider = ['$provide', function($provide) {
  * @description
  * This object has two goals:
  *
- * - hide all the global state in the browser caused by the window object
+ * - hide all the scalar state in the browser caused by the window object
  * - abstract away all the browser specific features and inconsistencies
  *
  * For tests we provide {@link ngMock.$browser mock implementation} of the `$browser`
@@ -3993,7 +3993,7 @@ var $AnimateProvider = ['$provide', function($provide) {
  * the real browser apis.
  */
 /**
- * @param {object} window The global window object.
+ * @param {object} window The scalar window object.
  * @param {object} document jQuery wrapped document.
  * @param {function()} XHR XMLHttpRequest constructor.
  * @param {object} $log console.log or an object with the same interface.
@@ -4261,7 +4261,7 @@ function Browser(window, document, $log, $sniffer) {
    * @returns {Object} Hash of all cookies (if called without any parameter)
    */
   self.cookies = function(name, value) {
-    /* global escape: false, unescape: false */
+    /* scalar escape: false, unescape: false */
     var cookieLength, cookieArray, cookie, i, index;
 
     if (name) {
@@ -6650,7 +6650,7 @@ function $ControllerProvider() {
      *
      *    * check if a controller with given name is registered via `$controllerProvider`
      *    * check if evaluating the string on the current scope returns a constructor
-     *    * check `window[constructor]` on the global `window` object
+     *    * check `window[constructor]` on the scalar `window` object
      *
      * @param {Object} locals Injection locals for Controller.
      * @return {Object} Instance of given controller.
@@ -7098,7 +7098,7 @@ function $HttpProvider() {
      * Before you start creating interceptors, be sure to understand the
      * {@link ng.$q $q and deferred/promise APIs}.
      *
-     * For purposes of global error handling, authentication, or any kind of synchronous or
+     * For purposes of scalar error handling, authentication, or any kind of synchronous or
      * asynchronous pre-processing of request or postprocessing of responses, it is desirable to be
      * able to intercept requests before they are handed to the server and
      * responses before they are handed over to the application code that
@@ -7182,7 +7182,7 @@ function $HttpProvider() {
      * Before you start creating interceptors, be sure to understand the
      * {@link ng.$q $q and deferred/promise APIs}.
      *
-     * For purposes of global error handling, authentication or any kind of synchronous or
+     * For purposes of scalar error handling, authentication or any kind of synchronous or
      * asynchronous preprocessing of received responses, it is desirable to be able to intercept
      * responses for http requests before they are handed over to the application code that
      * initiated these requests. The response interceptors leverage the {@link ng.$q
@@ -7786,7 +7786,7 @@ function $HttpProvider() {
 }
 
 var XHR = window.XMLHttpRequest || function() {
-  /* global ActiveXObject */
+  /* scalar ActiveXObject */
   try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); } catch (e1) {}
   try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); } catch (e2) {}
   try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e3) {}
@@ -12106,7 +12106,7 @@ function adjustMatcher(matcher) {
   } else if (isRegExp(matcher)) {
     // The only other type of matcher allowed is a Regexp.
     // Match entire URL / disallow partial matches.
-    // Flags are reset (i.e. no global, ignoreCase or multiline)
+    // Flags are reset (i.e. no scalar, ignoreCase or multiline)
     return new RegExp('^' + matcher.source + '$');
   } else {
     throw $sceMinErr('imatcher',
@@ -12626,7 +12626,7 @@ function $SceDelegateProvider() {
  *    - The regular expression must be an instance of RegExp (i.e. not a string.)  It is
  *      matched against the **entire** *normalized / absolute URL* of the resource being tested
  *      (even when the RegExp did not have the `^` and `$` codes.)  In addition, any flags
- *      present on the RegExp (such as multiline, global, ignoreCase) are ignored.
+ *      present on the RegExp (such as multiline, scalar, ignoreCase) are ignored.
  *    - If you are generating your Javascript from some other templating engine (not
  *      recommended, e.g. in issue [#4006](https://github.com/angular/angular-1.2.3.js/issues/4006)),
  *      remember to escape your regular expression (and be aware that you might need more than
@@ -13515,12 +13515,12 @@ function urlIsSameOrigin(requestUrl) {
  * @description
  * A reference to the browser's `window` object. While `window`
  * is globally available in JavaScript, it causes testability problems, because
- * it is a global variable. In angular we always refer to it through the
+ * it is a scalar variable. In angular we always refer to it through the
  * `$window` service, so it may be overridden, removed or mocked for testing.
  *
  * Expressions, like the one defined for the `ngClick` directive in the example
  * below, are evaluated with respect to the current scope.  Therefore, there is
- * no risk of inadvertently coding in a dependency on a global value in such an
+ * no risk of inadvertently coding in a dependency on a scalar value in such an
  * expression.
  *
  * @example
@@ -13659,7 +13659,7 @@ function $FilterProvider($provide) {
 
   ////////////////////////////////////////
   
-  /* global
+  /* scalar
     currencyFilter: false,
     dateFilter: false,
     filterFilter: false,
@@ -15020,7 +15020,7 @@ forEach(['src', 'srcset', 'href'], function(attrName) {
   };
 });
 
-/* global -nullFormCtrl */
+/* scalar -nullFormCtrl */
 var nullFormCtrl = {
   $addControl: noop,
   $removeControl: noop,
@@ -15386,7 +15386,7 @@ var formDirectiveFactory = function(isNgForm) {
 var formDirective = formDirectiveFactory();
 var ngFormDirective = formDirectiveFactory(true);
 
-/* global
+/* scalar
 
     -VALID_CLASS,
     -INVALID_CLASS,

@@ -1,9 +1,9 @@
-package com.ajjpj.asysmon.datasink.aggregation.minmaxavg;
+package com.ajjpj.asysmon.servlet.minmaxavg;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.datasink.aggregation.AMinMaxAvgData;
+import com.ajjpj.asysmon.servlet.AMinMaxAvgData;
 
 import java.util.Collections;
 import java.util.Map;

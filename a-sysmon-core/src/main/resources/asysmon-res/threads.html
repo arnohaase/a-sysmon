@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="ASysMonApp" ng-controller="ASysMonCtrl">
+  <head>
+    <title ng-bind="title"></title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href=".?res=asysmon.css">
+    <script src="r?res=jquery-1.10.2.min.js"></script>
+    <script src="r?res=angular-1.2.3.js"></script>
+    <script src="r?res=asysmon-threads.js"></script>
+  </head>
+  <body>
+      <h1 ng-cloak>{{title}}</h1>
+
+      <div class="threads-header">
+          <div class='button-box'>
+              <a class='btn' ng-click='refresh()'>Refresh</a>
+          </div>
+
+          <input type="checkbox" ng-model="hideReflection">Hide reflection <br>
+          <input type="checkbox" ng-model="stacktraceWithSourceOnly">Hide stack trace elements without source
+
+      </div>
+
+      <div ng-repeat="t in threads">
+          <div class="data-row data-row-0" ng-click="toggleTreeNode($event, t)">
+              <div class="node-icon {{nodeIconClass(t)}}">&nbsp;</div>
+              <div class="thread-state thread-state-{{t.state}}">{{t.state}}</div>
+              {{t.name}}
+          </div>
+          <div class="children" style="display: {{expansionStyle(t)}}">
+              <div ng-repeat="ste in filteredStackTrace(t)" class="data-row data-row-3 {{stacktraceClass(ste)}}">{{ste.repr}}</div>
+          </div>
+      </div>
+
+  </body>
+</html>

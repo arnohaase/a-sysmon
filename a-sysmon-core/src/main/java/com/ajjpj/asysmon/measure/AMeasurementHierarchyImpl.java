@@ -12,7 +12,7 @@ import java.util.*;
 
 
 /**
- * This class collects a tree of hierarchical measurements, i.e. it lives in a single thread.
+ * This class collects a tree of hierarchical measurements. It lives in a single thread.
  *
  * @author arno
  */
