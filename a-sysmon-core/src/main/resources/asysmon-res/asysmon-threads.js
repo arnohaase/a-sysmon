@@ -10,12 +10,17 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         $scope.title = data.title;
         $scope.threads = data.threads;
 
+        var appPkg = new RegExp(data.appPkg || '.');
+
         for(var i=0; i<$scope.threads.length; i++) {
             var t = $scope.threads[i];
+            var hasApplicationFrame = false;
             for(var j=0; j<t.stacktrace.length; j++) {
                 var ste = t.stacktrace[j];
                 ste.isReflection = isReflectionSte(ste);
+                hasApplicationFrame = hasApplicationFrame || appPkg.test(ste.repr);
             }
+            t.hasApplicationFrame = hasApplicationFrame;
         }
 
         $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
@@ -26,6 +31,25 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             initFromResponse(data);
         });
     }
+
+    $scope.activeThreads = function() {
+        var result = [];
+        for(var i=0; i<$scope.threads.length; i++) {
+            if($scope.threads[i].hasApplicationFrame) {
+                result.push($scope.threads[i]);
+            }
+        }
+        return result;
+    };
+    $scope.nonActiveThreads = function() {
+        var result = [];
+        for(var i=0; i<$scope.threads.length; i++) {
+            if(! $scope.threads[i].hasApplicationFrame) {
+                result.push($scope.threads[i]);
+            }
+        }
+        return result;
+    };
 
     $scope.refresh = function() {
         sendCommand('getData');

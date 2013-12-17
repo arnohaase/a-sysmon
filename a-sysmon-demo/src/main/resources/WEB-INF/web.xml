@@ -29,6 +29,10 @@
     <servlet>
         <servlet-name>asysmon-threaddump</servlet-name>
         <servlet-class>com.ajjpj.asysmon.servlet.threaddump.AThreadDumpServlet</servlet-class>
+        <init-param>
+            <param-name>application.package</param-name>
+            <param-value>com.ajjpj.asysmon.demo</param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>asysmon-threaddump</servlet-name>

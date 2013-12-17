@@ -17,6 +17,13 @@ import java.util.Collection;
  * @author arno
  */
 public class AThreadDumpServlet extends HttpServlet {
+    public static final String INIT_PARAM_APP_PACKAGE = "application.package";
+
+    private volatile String appPkg;
+
+    @Override public void init() throws ServletException {
+        appPkg = getServletConfig().getInitParameter(INIT_PARAM_APP_PACKAGE);
+    }
 
     @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(req.getParameter("res") != null) {
@@ -44,6 +51,9 @@ public class AThreadDumpServlet extends HttpServlet {
 
         json.writeKey("title");
         json.writeStringLiteral("A-SysMon: Thread Dump");
+
+        json.writeKey("appPkg");
+        json.writeStringLiteral(appPkg);
 
         json.writeKey("threads");
         dumpThreads(json, AThreadDumper.getThreadInfo(), AThreadDumper.getDeadlockedThreads());

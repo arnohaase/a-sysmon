@@ -5,6 +5,11 @@ html {
 h1 {
     margin: 0px;
 }
+h2 {
+    margin-top: 22px;
+    margin-bottom: 15px;
+}
+
 
 table.global-measurements {
   margin-top: 20px;
@@ -172,7 +177,7 @@ div.data-row-10 {
 
 div.threads-header {
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 div.thread-state {
   width: 9em;

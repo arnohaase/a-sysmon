@@ -23,7 +23,6 @@ todo
   * selective presentation - pick just one top-level (or second-level or whatever?) sub-tree?
   * lock-free aggregation implementation
   * expand all / collapse all
-  * thread dump: configure 'application' package, show 'active' threads (i.e. those with at least one frame in the 'application')
   * 'start' page with links to other pages?
   * 'scalar' / dashboard page
   * beautified presentation of memory
@@ -90,7 +89,6 @@ todo
   * per hierarchy: Thread name, Host, PID
 * 'push' (via UDP) vs. 'pull' (store locally, collect e.g. via servlet call --> provide servlet)
 
-* trace GC (?)
 * log asysmon overhead (?)
 
 * extract a-base
