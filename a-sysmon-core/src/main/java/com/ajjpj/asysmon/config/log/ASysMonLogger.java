@@ -7,7 +7,7 @@ import com.ajjpj.asysmon.util.AStringFunction;
  * @author arno
  */
 public interface ASysMonLogger {
-    boolean isDebugEnabled();
     void debug(AStringFunction msg);
     void warn(String msg);
+    void error(String s);
 }

@@ -34,7 +34,7 @@ public class AMinMaxAvgDataSink implements ADataSink {
         return Collections.unmodifiableMap(rootMap);
     }
 
-    @Override public void onStartedHierarchicalMeasurement() {
+    @Override public void onStartedHierarchicalMeasurement(String identifier) {
     }
 
     @Override

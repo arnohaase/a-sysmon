@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
 import com.ajjpj.asysmon.config.AGlobalConfig;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
@@ -17,6 +18,14 @@ import java.util.*;
  * @author arno
  */
 public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
+    /**
+     * This is the number of nested measurements currently supported - when this level is reached, A-SysMon assumes
+     *  there is a memory leak (i.e. there are measurements that are started but never finished) and kills the
+     *  measurement hierarchy.
+     */
+    public static final int MAX_CALL_DEPTH = 1000;
+
+    private final ASysMonLogger log;
     private final ATimer timer;
     private final ADataSink dataSink;
 
@@ -30,9 +39,18 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     private final Collection<ACorrelationId> startedFlows = new HashSet<ACorrelationId>();
     private final Collection<ACorrelationId> joinedFlows = new HashSet<ACorrelationId>();
 
+    /**
+     * shows if this measurement was finished in an orderly fashion
+     */
     private boolean isFinished = false;
 
-    public AMeasurementHierarchyImpl(ATimer timer, ADataSink dataSink) {
+    /**
+     * shows if this measurement was killed forcibly e.g. because there was an overflow on the stack
+     */
+    private boolean wasKilled = false;
+
+    public AMeasurementHierarchyImpl(ASysMonLogger log, ATimer timer, ADataSink dataSink) {
+        this.log = log;
         this.timer = timer;
         this.dataSink = dataSink;
     }
@@ -57,10 +75,11 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         checkNotFinished();
 
         if(unfinished.isEmpty()) {
-            dataSink.onStartedHierarchicalMeasurement();
+            dataSink.onStartedHierarchicalMeasurement(identifier);
         }
 
         if(isSerial) {
+            checkOverflow();
             final ASimpleSerialMeasurementImpl result = new ASimpleSerialMeasurementImpl(this, timer.getCurrentNanos(), identifier);
             unfinished.push(result);
             childrenStack.push(new ArrayList<AHierarchicalData>());
@@ -71,11 +90,34 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         }
     }
 
+    private void checkOverflow() {
+        if(unfinished.size() < MAX_CALL_DEPTH) {
+            return;
+        }
+
+        ASimpleSerialMeasurementImpl rootMeasurement = null;
+        while(unfinished.nonEmpty()) {
+            rootMeasurement = unfinished.peek();
+            finish(unfinished.peek());
+        }
+
+        log.error("Detected probably memory leak, forcefully cleaning measurement stack. Root measurement was " + rootMeasurement.getIdentifier() + " with parameters " + rootMeasurement.getParameters() + ", started at " + new Date(rootMeasurement.getStartTimeMillis()));
+        wasKilled = true;
+    }
+
+    private void logWasKilled() {
+        log.warn("Interacting with a forcefully killed measurement. This is a consequence of A-SysMon cleaning up a (suspected) memory leak. It has no consequences aside from potentially weird measurements being reported.");
+    }
+
     @Override public void finish(ASimpleSerialMeasurementImpl measurement) {
         if(AGlobalConfig.isGloballyDisabled()) {
             return;
         }
 
+        if(wasKilled) {
+            logWasKilled();
+            return;
+        }
         checkNotFinished();
 
         if (unfinished.peek() != measurement) {
@@ -122,6 +164,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             return;
         }
 
+        if(wasKilled) {
+            logWasKilled();
+            return;
+        }
         checkNotFinished();
 
         final long finishedTimestamp = timer.getCurrentNanos();
@@ -151,6 +197,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             return;
         }
 
+        if(wasKilled) {
+            logWasKilled();
+            return;
+        }
         checkNotFinished();
 
         final List<AHierarchicalData> children = new ArrayList<AHierarchicalData>();
@@ -193,5 +243,3 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 }
 
-//TODO limit stack depth - if deeper than limit, discard and print error message --> prevent memory leak!
-//TODO mechanism for applications to say 'we *should* be finished now'

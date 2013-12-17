@@ -11,6 +11,6 @@ import java.util.Collection;
  * @author arno
  */
 public interface ADataSink extends AShutdownable {
-    void onStartedHierarchicalMeasurement();
+    void onStartedHierarchicalMeasurement(String identifier);
     void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data);
 }

@@ -2,16 +2,13 @@ package com.ajjpj.asysmon.config.log;
 
 import com.ajjpj.asysmon.util.AStringFunction;
 
+
 /**
  * @author arno
  */
 public class AStdOutLogger implements ASysMonLogger {
     public static AStdOutLogger INSTANCE = new AStdOutLogger();
     public volatile boolean isDebugEnabled = false;
-
-    @Override public boolean isDebugEnabled() {
-        return isDebugEnabled;
-    }
 
     @Override public void debug(AStringFunction msg) {
         if(isDebugEnabled) {
@@ -25,5 +22,9 @@ public class AStdOutLogger implements ASysMonLogger {
 
     @Override public void warn(String msg) {
         log("WARN ", msg);
+    }
+
+    @Override public void error(String msg) {
+        log("ERROR", msg);
     }
 }

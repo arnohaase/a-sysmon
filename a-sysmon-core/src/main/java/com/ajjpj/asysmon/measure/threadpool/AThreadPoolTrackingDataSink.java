@@ -26,7 +26,7 @@ public class AThreadPoolTrackingDataSink implements ADataSink {
         return threadPoolName(Thread.currentThread().getName());
     }
 
-    @Override public void onStartedHierarchicalMeasurement() {
+    @Override public void onStartedHierarchicalMeasurement(String identifier) {
         final String poolName = curThreadPool();
         if (threadCounts.get(poolName) == null) {
             final AtomicInteger prev = threadCounts.put(poolName, new AtomicInteger(1));

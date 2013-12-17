@@ -55,7 +55,7 @@ public abstract class ACyclicMeasurementDumper implements ADataSink {
 
     protected abstract void dump(String s);
 
-    @Override public void onStartedHierarchicalMeasurement() {
+    @Override public void onStartedHierarchicalMeasurement(String identifier) {
     }
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {

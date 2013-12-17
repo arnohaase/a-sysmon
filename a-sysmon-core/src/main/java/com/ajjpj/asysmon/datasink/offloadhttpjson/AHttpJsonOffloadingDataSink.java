@@ -67,7 +67,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
     }
 
 
-    @Override public void onStartedHierarchicalMeasurement() { }
+    @Override public void onStartedHierarchicalMeasurement(String identifier) { }
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
 

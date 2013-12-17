@@ -6,8 +6,11 @@ import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.measure.ACollectingMeasurement;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchy;
+import com.ajjpj.asysmon.measure.AMeasurementHierarchyImpl;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.testutil.CollectingDataSink;
+import com.ajjpj.asysmon.testutil.CountingDataSink;
+import com.ajjpj.asysmon.testutil.CountingLogger;
 import com.ajjpj.asysmon.testutil.ExplicitTimer;
 import org.junit.Before;
 import org.junit.Test;
@@ -385,6 +388,22 @@ public class ASysMonTest {
         assertEquals(1, dataSink.data.size());
         assertEquals(1, dataSink.data.get(0).getRootNode().getChildren().size());
         assertEquals(1, dataSink.data.get(0).getRootNode().getChildren().get(0).getChildren().size());
+    }
+
+    @Test
+    public void testMemoryLeak() {
+        final CountingLogger log = new CountingLogger();
+        AGlobalConfig.setLogger(log);
+        final CountingDataSink dataSink = new CountingDataSink();
+        final ASysMon sysMon = new ASysMon(dataSink);
+
+        for(int i=0; i<100 * AMeasurementHierarchyImpl.MAX_CALL_DEPTH; i++) {
+            sysMon.start("a");
+        }
+
+        assertEquals(100, dataSink.started);
+        assertEquals(99, dataSink.finished);
+        assertEquals(99, log.numError);
     }
 }
 

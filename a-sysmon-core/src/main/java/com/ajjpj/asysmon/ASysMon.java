@@ -72,9 +72,9 @@ public class ASysMon implements AShutdownable {
 
     private ADataSink getCompositeDataSink() {
         return new ADataSink() {
-            @Override public void onStartedHierarchicalMeasurement() {
+            @Override public void onStartedHierarchicalMeasurement(String identifier) {
                 for(ADataSink handler: handlers) {
-                    handler.onStartedHierarchicalMeasurement();
+                    handler.onStartedHierarchicalMeasurement(identifier);
                 }
             }
 
@@ -97,7 +97,7 @@ public class ASysMon implements AShutdownable {
             return candidate;
         }
 
-        final AMeasurementHierarchy result = new AMeasurementHierarchyImpl(timer, getCompositeDataSink());
+        final AMeasurementHierarchy result = new AMeasurementHierarchyImpl(AGlobalConfig.getLogger(), timer, getCompositeDataSink());
         hierarchyPerThread.set(result);
         return result;
     }
@@ -132,7 +132,7 @@ public class ASysMon implements AShutdownable {
      *  into A-SysMon. If you do not understand this, this method is probably not for you.
      */
     public void injectSyntheticMeasurement(AHierarchicalDataRoot d) {
-        getCompositeDataSink().onStartedHierarchicalMeasurement();
+        getCompositeDataSink().onStartedHierarchicalMeasurement(d.getRootNode().getIdentifier());
         getCompositeDataSink().onFinishedHierarchicalMeasurement(d);
     }
 

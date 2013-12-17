@@ -6,7 +6,7 @@ import com.ajjpj.asysmon.datasink.ADataSink;
 
 
 public abstract class ALoggingDataSink implements ADataSink {
-    @Override public void onStartedHierarchicalMeasurement() {
+    @Override public void onStartedHierarchicalMeasurement(String identifier) {
     }
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {

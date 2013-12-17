@@ -39,7 +39,7 @@ public class ABottomUpDataSink implements ADataSink {
         return this.isActive;
     }
 
-    @Override public void onStartedHierarchicalMeasurement() {
+    @Override public void onStartedHierarchicalMeasurement(String identifier) {
     }
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {

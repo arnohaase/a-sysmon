@@ -3,24 +3,21 @@ package com.ajjpj.asysmon.testutil;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author arno
  */
-public class CollectingDataSink implements ADataSink {
-    public int numStarted = 0;
-    public List<AHierarchicalDataRoot> data = new ArrayList<AHierarchicalDataRoot>();
+public class CountingDataSink implements ADataSink {
+    public int started = 0;
+    public int finished = 0;
 
     @Override public void onStartedHierarchicalMeasurement(String identifier) {
-        numStarted += 1;
+        started += 1;
     }
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
-        this.data.add(data);
+        finished += 1;
     }
 
-    @Override public void shutdown() {
+    @Override public void shutdown() throws Exception {
     }
 }
