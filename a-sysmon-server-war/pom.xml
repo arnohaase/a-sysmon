@@ -5,12 +5,12 @@
     <parent>
         <artifactId>a-sysmon-parent</artifactId>
         <groupId>com.ajjpj.a-sysmon</groupId>
-        <version>2.0-pre1-SNAPSHOT</version>
+        <version>1.0-pre12-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>a-sysmon-server-war</artifactId>
-    <version>2.0-pre1-SNAPSHOT</version>
+    <version>1.0-pre12-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <dependencies>
