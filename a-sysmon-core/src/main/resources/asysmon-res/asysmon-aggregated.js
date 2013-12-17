@@ -64,11 +64,21 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     $scope.refresh();
 
 
+    $scope.a = 1234321.23;
+
+    var thousandsSeparator = 1234.5.toLocaleString().charAt(1);
+    var decimalSeparator   = 1234.5.toLocaleString().charAt(5);
+
+    $scope.formatNumber = function(number, numFracDigits) {
+        var parts = number.toFixed(numFracDigits).toString().split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator);
+        return parts.join(decimalSeparator);
+    };
+
     $scope.formattedScalar = function(name, factor) {
         factor = factor || 1;
-
         var s = $scope.scalars && $scope.scalars[name];
-        return s ? (s.value*factor).toFixed(s.numFracDigits) : '';
+        return s ? $scope.formatNumber(s.value*factor, s.numFracDigits) : '';
     };
     $scope.hasLoad = function() {
         return $scope.scalars && $scope.scalars['load-1-minute'];
@@ -83,27 +93,11 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         return $scope.formattedScalar('load-15-minutes');
     };
 
-    $scope.hasMem = function() {
-        return $scope.scalars && $scope.scalars['mem-used'];
-    };
-    $scope.memUsed = function() {
-        return $scope.formattedScalar('mem-used', 1/1024/1024) + 'M';
-    };
-    $scope.memTotal = function() {
-        return $scope.formattedScalar('mem-total', 1/1024/1024) + 'M';
-    };
-    $scope.memMax = function() {
-        return $scope.formattedScalar('mem-max', 1/1024/1024) + 'M';
-    };
-
     $scope.genericScalarNames = function() {
         var result = [];
         if($scope.scalars) {
             $.each($scope.scalars, function(n) {
                 if(n.startsWith('load-')) {
-                    return;
-                }
-                if(n.startsWith('mem-')) {
                     return;
                 }
                 result.push(n);
@@ -127,9 +121,6 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     };
     $scope.colClass = function(idx) {
         return 'column-' + $scope.columnDefs[idx].width.toLowerCase();
-    };
-    $scope.formatNumber = function(num, numFracDigits) { //TODO make this a filter?
-        return num.toFixed(numFracDigits);
     };
 
     $scope.nodeIconClass = function(node) {

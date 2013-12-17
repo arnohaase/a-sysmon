@@ -35,9 +35,10 @@
           <a class='btn' ng-show='isStarted' ng-click='stop()'>Stop</a>
       </div>
 
+      {{formattedNumber(a, 3)}}
+
       <table class='global-measurements'>
           <tr ng-show="hasLoad()" class='global-measurements'><td class='global-measurements-key'>System Load</td><td class='global-measuremnets-value'>{{load1()}} / {{load5()}} / {{load15()}}</td></tr>
-          <tr ng-show="hasMem()" class='global-measurements'><td class='global-measurements-key'>Memory</td><td class='global-measuremnets-value'>{{memUsed()}} / {{memTotal()}} / {{memMax()}}</td></tr>
           <tr ng-repeat="s in genericScalarNames()"><td class="global-measurements-key">{{s}}</td><td class="global-measurements-value">{{formattedScalar(s)}}</td></tr>
       </table>
 

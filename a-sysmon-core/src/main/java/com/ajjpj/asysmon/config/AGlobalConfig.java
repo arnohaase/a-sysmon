@@ -4,7 +4,6 @@ import com.ajjpj.asysmon.config.log.ALog4JLogger;
 import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
-import com.ajjpj.asysmon.measure.scalar.ASimpleMemoryMeasurer;
 import com.ajjpj.asysmon.measure.scalar.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
 import com.ajjpj.asysmon.util.timer.ASystemNanoTimer;
@@ -25,7 +24,6 @@ public class AGlobalConfig {
 
     static {
         scalarMeasurers.add(new ASystemLoadMeasurer());
-        scalarMeasurers.add(new ASimpleMemoryMeasurer());
         scalarMeasurers.add(AConnectionCounter.INSTANCE);
     }
 
