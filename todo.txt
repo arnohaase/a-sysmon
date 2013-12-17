@@ -23,6 +23,12 @@ todo
   * selective presentation - pick just one top-level (or second-level or whatever?) sub-tree?
   * lock-free aggregation implementation
   * expand all / collapse all
+  * thread dump: configure 'application' package, show 'active' threads (i.e. those with at least one frame in the 'application')
+  * 'start' page with links to other pages?
+  * 'scalar' / dashboard page
+  * beautified presentation of memory
+  * GC and memory servlet
+  * regular servlets: show only explicit 'positive' list of scalar data
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
