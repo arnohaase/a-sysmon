@@ -3,6 +3,9 @@ var aSysMonApp = angular.module('ASysMonApp', []);
 aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     //TODO zoom in / out on the time axis
     //TODO display committed and maximum memory
+    //TODO get 'current' memory consumption in addition to GC requests
+    //TODO hide 'points' for full GC if check box is removed
+    //TODO check box to show / hide legend
 
     $scope.showFullGcMarkers = true;
     $scope.$watch('showFullGcMarkers', function() {
@@ -64,11 +67,24 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                     if(! result[memKind]) {
                         result[memKind] = {
                             label: memKind,
+                            hoverable: false,
                             data: []
                         };
                     }
                     result[memKind].data.push([gc.startMillis, gc.mem[memKind].usedBefore / 1024 / 1024]);
                     result[memKind].data.push([gc.startMillis + (gc.durationNanos / 1000000), gc.mem[memKind].usedAfter / 1024 / 1024]);
+                }
+                if(!result['_full_']) {
+                    result['_full_'] = {
+                        label: '_full_',
+                        data: [],
+                        lines: {show: false},
+                        color: 'rgb(0,0,100)',
+                        points: {show: true, radius: 7, fill: true, fillColor: 'rgb(100, 100, 200)'}
+                    }
+                }
+                if(isFullGc(gc)) {
+                    result['_full_'].data.push([gc.startMillis, 0]);
                 }
             }
 
@@ -111,7 +127,8 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         'PS Perm Gen': 1,
         'PS Old Gen': 2,
         'PS Survivor Space': 3,
-        'PS Eden Space': 4
+        'PS Eden Space': 4,
+        '_full_': 10
     };
 
     function sendCommand(cmd) {
@@ -133,51 +150,107 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             '#mem-gc-placeholder',
             $scope.dataSets,
             {
-                legend: {position: 'ne', backgroundOpacity:.7},
+                legend: {
+                    position: 'ne',
+                    backgroundOpacity: .7,
+                    labelFormatter: function(label) {return label.charAt(0) === '_' ? null : label;}
+                },
                 xaxis: {mode: 'time'},
                 yaxis: {
                     axisLabel: 'Memory Size (MB)',
                     transform: function(v) {return v;}
                 },
                 series: {stack: true},
+//                colors: [0, 1, 2, 3, 4, 5, 6],
                 lines: {fill: true},
-                grid: {markings: $scope.gcMarkings}
-//                grid: {markings: [{color: 'red', lineWidth: 1, xaxis: {from: 1387556623973, to: 1387556623973 }}]}
+                grid: {
+                    hoverable: true,
+                    mouseActiveRadius: 15,
+//                    backgroundColor: { colors: ["#D1D1D1", "#7A7A7A"] },
+                    markings: $scope.gcMarkings
+                }
             }
         );
     }
 
-    function plotDummy() {
-        var d1 = [];
-        for (var i = 0; i < 14; i += 0.5) {
-            d1.push([i*10000000, Math.sin(i)]);
+    (function() {
+        var previousPoint = null;
+
+        function tooltipFor(item) {
+            for(var i=0; i<$scope.gcs.length; i++) {
+                var gc = $scope.gcs[i];
+                if(gc.startMillis !== item.datapoint[0]) { //TODO is there a better way to do this?
+                    continue;
+                }
+                //TODO layout of tool tip
+                //TODO relative change of used memory per mem kind
+                //TODO *committed* memory (+ info if changed)
+                return 'cause: ' + gc.cause + '<br>' +
+                    'type: ' + gc.type + '<br>' +
+                    'algorithm: ' + gc.algorithm + '<br>' +
+                    'duration: ' + gc.durationNanos + 'ns';
+            }
+            return '';
         }
 
-        var d2 = [[0, 3], [40000000, 8], [80000000, 5], [90000000, 13], [13.5*10000000, 14]];
+        $('#mem-gc-placeholder').bind("plothover", function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
 
-        // A null signifies separate line segments
+                    $("#tooltip").remove();
 
-        var d3 = [[0, 12], [70000000, 12], null, [70000000, 2.5], [120000000, 2.5]];
+                    var x = item.datapoint[0];
+                    var y = item.datapoint[1];
 
-        $.plot("#mem-gc-placeholder",
-            [
-                {label: "my sin()", data: d1, points: {show: true}, lines: {show: true}},
-                {label: "asd ajsdflkajs dflköadsj flösdaj f", data: d2},
-                d3
-            ],
-            {
-                legend: {position: "ne", backgroundOpacity:.7},
-                xaxis: {mode: "time"},
-                yaxis: {
-                    transform: function(v) {return Math.log(v+3);}
-                },
-                series: {stack: true},
-                lines: {fill: true},
-                grid: {markings: [{color: "rgba(0,0,100,.8)", lineWidth: 1, xaxis: {from: 40000000, to: 40000000}}]}
+//                    var text = 'moin moin: ' + item.series.label;
+
+                    showTooltip(item.pageX, item.pageY, tooltipFor(item));
+//                        months[x-  1] + "<br/>" + "<strong>" + y + "</strong> (" + item.series.label + ")");
+                }
             }
-        );
-    }
+            else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
 
-//    plotDummy();
+        //TODO nicer styling, move styling to CSS file
+        function showTooltip(x, y, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x + 20,
+                border: '2px solid #4572A7',
+                padding: '2px',
+                size: '10',
+                'background-color': '#fff',
+                opacity: 0.90
+            }).appendTo("body").fadeIn(200);
+        }
+    }());
+
+
+
+//    var asdf = {
+//        "datapoint":[1387572019779,628.5712509155273],
+//        "dataIndex":1532,
+//        "series":{
+//            "points":{"show":false,"radius":3,"lineWidth":2,"fill":true,"fillColor":"#ffffff","symbol":"circle"},
+//            "lines":{"lineWidth":2,"fill":false,"fillColor":null,"steps":false,"show":true,"zero":false},
+//            "bars":{"show":false,"lineWidth":2,"barWidth":1,"fill":true,"fillColor":null,"align":"left","horizontal":false,"zero":true},
+//            "shadowSize":3,
+//            "highlightColor":null,
+//            "stack":true,
+//            "data": '...',
+//            "label":"PS Eden Space",
+//            "color":"rgb(77,167,77)",
+//            "xaxis": '...',
+//            "datapoints":'...'
+//        },
+//        "seriesIndex":3,
+//        "pageX":1152,
+//        "pageY":229};
 });
 
