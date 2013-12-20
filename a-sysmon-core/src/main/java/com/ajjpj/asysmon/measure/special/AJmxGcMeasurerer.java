@@ -132,6 +132,10 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
             paramMap.put(KEY_ALGORITHM, info.getGcName());
 
             for(String memKey: info.getGcInfo().getMemoryUsageAfterGc().keySet()) {
+                if(!isGcRelevantMemoryKind(memKey)) {
+                    continue;
+                }
+
                 final MemoryUsage before = info.getGcInfo().getMemoryUsageBeforeGc().get(memKey);
                 final MemoryUsage after  = info.getGcInfo().getMemoryUsageAfterGc().get(memKey);
 
@@ -148,6 +152,13 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
 
             final AHierarchicalData byGcTypeNode = new AHierarchicalData(true, startMillis, durationNanos, gcType, Collections.<String,String>emptyMap(), Collections.<AHierarchicalData>emptyList());
             return new AHierarchicalData(true, startMillis, durationNanos, IDENT_GC_TRACE_ROOT, paramMap, Arrays.asList(byGcTypeNode));
+        }
+
+        private boolean isGcRelevantMemoryKind(String memKey) {
+            if("Code Cache".equals(memKey)) {
+                return false;
+            }
+            return true;
         }
 
         @Override public void handleNotification(Notification notification, Object handback) {

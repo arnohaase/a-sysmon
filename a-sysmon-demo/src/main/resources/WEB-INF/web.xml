@@ -40,6 +40,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>asysmon-mem</servlet-name>
+        <servlet-class>com.ajjpj.asysmon.servlet.mem.AMemoryAndGcServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>asysmon-mem</servlet-name>
+        <url-pattern>/asysmon/mem/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>content</servlet-name>
         <servlet-class>com.ajjpj.asysmon.demo.AppServlet</servlet-class>
     </servlet>

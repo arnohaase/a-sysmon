@@ -10,6 +10,9 @@ import com.ajjpj.asysmon.measure.scalar.AJmxMemMeasurer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author arno
  */
@@ -35,6 +38,12 @@ public class AsysmonDemoMain {
         webapp.setContextPath("/");
         webapp.setWar("a-sysmon-demo/src/main/resources");
         server.setHandler(webapp);
+
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
+            @Override public void run() {
+                System.gc();
+            }
+        }, 10, 6, TimeUnit.SECONDS);
 
         server.start();
         server.join();

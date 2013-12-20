@@ -58,13 +58,6 @@ public class AThreadDumpServlet extends HttpServlet {
         json.writeKey("threads");
         dumpThreads(json, AThreadDumper.getThreadInfo(), AThreadDumper.getDeadlockedThreads());
 
-//        json.writeKey("threadPools");
-//        json.startArray();
-//        for(Map.Entry<String, Collection<ThreadInfo>> threadPool: new AThreadDumper().dumpThreadsByGroup().entrySet()) {
-//            dumpThreadPool(json, threadPool);
-//        }
-//        json.endArray();
-
         json.endObject();
     }
 
