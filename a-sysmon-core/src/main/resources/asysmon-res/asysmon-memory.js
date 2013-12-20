@@ -4,12 +4,11 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     //TODO zoom in / out on the time axis
     //TODO display committed and maximum memory
     //TODO get 'current' memory consumption in addition to GC requests
-    //TODO hide 'points' for full GC if check box is removed
-    //TODO check box to show / hide legend
 
     $scope.showFullGcMarkers = true;
     $scope.$watch('showFullGcMarkers', function() {
         if($scope.gcs) {
+            $scope.dataAsMap['_full_'].points.show = $scope.showFullGcMarkers;
             extractGcMarkings($scope.gcs);
             plot();
         }
@@ -19,6 +18,13 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     $scope.$watch('showOtherGcMarkers', function() {
         if($scope.gcs) {
             extractGcMarkings($scope.gcs);
+            plot();
+        }
+    });
+
+    $scope.showLegend = true;
+    $scope.$watch('showLegend', function() {
+        if($scope.gcs) {
             plot();
         }
     });
@@ -40,7 +46,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                 $scope.gcMarkings.push({color: 'rgba(0,0,100,.8)', lineWidth: 1, xaxis: {from: gc.startMillis, to: endMillis(gc)}});
             }
             if(! isFullGc(gc) && $scope.showOtherGcMarkers) {
-                $scope.gcMarkings.push({color: 'rgba(100,200,100,.7)', lineWidth: 1, xaxis: {from: gc.startMillis, to: endMillis(gc)}});
+                $scope.gcMarkings.push({color: 'rgba(50,50,150,.7)', lineWidth: 1, xaxis: {from: gc.startMillis, to: endMillis(gc)}});
             }
         }
     }
@@ -111,12 +117,12 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         }
 
         if(data.gcs && data.gcs.length) {
-            var dataAsMap = extractDataAsMap();
-            var memKinds = sortedMemKinds(dataAsMap);
+            $scope.dataAsMap = extractDataAsMap();
+            var memKinds = sortedMemKinds($scope.dataAsMap);
 
             $scope.dataSets = [];
             for(var i=0; i<memKinds.length; i++) {
-                $scope.dataSets.push(dataAsMap[memKinds[i]]);
+                $scope.dataSets.push($scope.dataAsMap[memKinds[i]]);
             }
 
             extractGcMarkings(data.gcs);
@@ -151,6 +157,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             $scope.dataSets,
             {
                 legend: {
+                    show: $scope.showLegend,
                     position: 'ne',
                     backgroundOpacity: .7,
                     labelFormatter: function(label) {return label.charAt(0) === '_' ? null : label;}
@@ -162,7 +169,10 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                 },
                 series: {stack: true},
 //                colors: [0, 1, 2, 3, 4, 5, 6],
-                lines: {fill: true},
+                lines: {
+                    lineWidth: 1,
+                    fill: true
+                },
                 grid: {
                     hoverable: true,
                     mouseActiveRadius: 15,
