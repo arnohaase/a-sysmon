@@ -19,6 +19,11 @@
 
 <div class="mem-header">
     <div class='button-box'>
+        <div class="btn-group">
+            <a class="btn btn-img" ng-click="zoomOut()"><img src="r?res=zoom-out.png"></a>
+            <a class="btn btn-img" ng-click="zoomReset()"><img src="r?res=zoom.png"></a>
+            <a class="btn btn-img" ng-click="zoomIn()"><img src="r?res=zoom-in.png"></a>
+        </div>
         <a class='btn' ng-click='refresh()'>Refresh</a>
     </div>
 
@@ -30,8 +35,8 @@
     <div style="margin-top: 10px;">
         <div>Zoom:</div>
         <div class="mem-gc-zoom-container">
-            <div class="mem-gc-zoom-range" style="width: {{zoomMinPercent()}}%;"></div>
-            <div class="mem-gc-zoom-range mem-gc-zoom-range-present" style="width: {{zoomVisiblePercent()}}%;"></div>
+            <div class="mem-gc-zoom-range" style="width: {{getZoomMinPercent()}}%;"></div>
+            <div class="mem-gc-zoom-range mem-gc-zoom-range-present" style="width: {{getZoomVisiblePercent()}}%;"></div>
         </div>
     </div>
 </div>

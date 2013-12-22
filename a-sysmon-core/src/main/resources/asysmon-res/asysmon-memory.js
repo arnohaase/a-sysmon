@@ -1,17 +1,27 @@
 var aSysMonApp = angular.module('ASysMonApp', []);
 
 aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
-    //TODO zoom in / out on the time axis
     //TODO display committed and maximum memory
     //TODO get 'current' memory consumption in addition to GC requests
     //TODO tool tip: left or right, depending on x coordinate
+
+    $scope.safeApply = function(fn) {
+        var phase = this.$root.$$phase;
+        if(phase == '$apply' || phase == '$digest') {
+            if(fn && (typeof(fn) === 'function')) {
+                fn();
+            }
+        } else {
+            this.$apply(fn);
+        }
+    };
 
     $scope.showFullGcMarkers = true;
     $scope.$watch('showFullGcMarkers', function() {
         if($scope.gcs) {
             $scope.dataAsMap['_full_'].points.show = $scope.showFullGcMarkers;
             extractGcMarkings($scope.gcs);
-            plot();
+            doPlot();
         }
     });
 
@@ -19,14 +29,14 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     $scope.$watch('showOtherGcMarkers', function() {
         if($scope.gcs) {
             extractGcMarkings($scope.gcs);
-            plot();
+            doPlot();
         }
     });
 
     $scope.showLegend = true;
     $scope.$watch('showLegend', function() {
         if($scope.gcs) {
-            plot();
+            doPlot();
         }
     });
 
@@ -149,7 +159,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     function sendCommand(cmd) {
         $http.get(cmd).success(function(data) {
             initFromResponse(data);
-            plot();
+            doPlot();
         });
     }
 
@@ -159,8 +169,9 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
 
     $scope.refresh();
 
-    function plot() {
-        $.plot(
+    var plot;
+    function doPlot() {
+        plot = $.plot(
             '#mem-gc-placeholder',
             $scope.dataSets,
             {
@@ -222,23 +233,39 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         };
     }
 
-    $scope.zoomMinPercent = function() {
+    $scope.getZoomMinPercent = function() {
         return presentationZoomPercents().percentOffset;
     };
-    $scope.zoomVisiblePercent = function() {
+    $scope.getZoomVisiblePercent = function() {
         return presentationZoomPercents().percentVisible;
     };
 
+    $scope.zoomIn = function() {
+        plot.zoom();
+    };
+    $scope.zoomOut = function() {
+        plot.zoomOut();
+    };
+    $scope.zoomReset = function() {
+        plot.getAxes().xaxis.min = $scope.xMinData;
+        plot.getAxes().xaxis.max = $scope.xMaxData;
+        $scope.xMinDisplay = $scope.xMinData;
+        $scope.xMaxDisplay = $scope.xMaxData;
+        doPlot();
+    };
+
     function refreshZoom(evt, plot) {
-        $scope.$apply(function() {
+        $scope.safeApply(function() {
             var xaxis = plot.getAxes().xaxis;
             $scope.xMinDisplay = xaxis.min;
             $scope.xMaxDisplay = xaxis.max;
         });
     }
 
-    $('#mem-gc-placeholder').bind('plotzoom', refreshZoom);
-    $('#mem-gc-placeholder').bind('plotpan', refreshZoom);
+    //TODO limit zoom, limit pan
+    $('#mem-gc-placeholder')
+        .bind('plotzoom', refreshZoom)
+        .bind('plotpan', refreshZoom);
 
     (function() {
         var previousPoint = null;

@@ -47,6 +47,31 @@ div.button-box {
   background-color: rgb(245,245,245);
   border-color: rgb(173,173,173);
 }
+.btn>img {
+  position: relative;
+  top: 8px;
+  width: 24px;
+  height: 24px;
+}
+.btn-img {
+  padding: 6px;
+}
+.btn-group {
+  display: inline-block;
+  margin-left: 6px;
+}
+.btn-group>.btn {
+  border-radius: 0px;
+  margin-left: -6px;
+}
+.btn-group>.btn:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+.btn-group>.btn:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
 
 .btn:hover {
    background-color: rgb(235,235,235);
