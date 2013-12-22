@@ -4,6 +4,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     //TODO zoom in / out on the time axis
     //TODO display committed and maximum memory
     //TODO get 'current' memory consumption in addition to GC requests
+    //TODO tool tip: left or right, depending on x coordinate
 
     $scope.showFullGcMarkers = true;
     $scope.$watch('showFullGcMarkers', function() {
@@ -65,6 +66,9 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         function extractDataAsMap () {
             var result = {};
 
+            if(data.gcs && data.gcs.length) {
+                $scope.xMinData = data.gcs[0].startMillis;
+            }
             for(var i=0; i<data.gcs.length; i++) {
                 var gc = data.gcs[i];
 
@@ -77,8 +81,11 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                             data: []
                         };
                     }
+
+                    var end = endMillis(gc);
+                    $scope.xMaxData = end;
                     result[memKind].data.push([gc.startMillis, gc.mem[memKind].usedBefore / 1024 / 1024]);
-                    result[memKind].data.push([gc.startMillis + (gc.durationNanos / 1000000), gc.mem[memKind].usedAfter / 1024 / 1024]);
+                    result[memKind].data.push([end, gc.mem[memKind].usedAfter / 1024 / 1024]);
                 }
                 if(!result['_full_']) {
                     result['_full_'] = {
@@ -93,6 +100,8 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                     result['_full_'].data.push([gc.startMillis, 0]);
                 }
             }
+            $scope.xMinDisplay = $scope.xMinData;
+            $scope.xMaxDisplay = $scope.xMaxData;
 
             return result;
         }
@@ -150,7 +159,6 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
 
     $scope.refresh();
 
-//    $scope.plot = $scope.plotDummy;
     function plot() {
         $.plot(
             '#mem-gc-placeholder',
@@ -162,9 +170,13 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                     backgroundOpacity: .7,
                     labelFormatter: function(label) {return label.charAt(0) === '_' ? null : label;}
                 },
-                xaxis: {mode: 'time'},
+                xaxis: {
+                    mode: 'time'
+                },
                 yaxis: {
                     axisLabel: 'Memory Size (MB)',
+                    zoomRange: false, // flot.navigate
+                    panRange: false, // flot.navigate
                     transform: function(v) {return v;}
                 },
                 series: {stack: true},
@@ -178,10 +190,46 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                     mouseActiveRadius: 15,
 //                    backgroundColor: { colors: ["#D1D1D1", "#7A7A7A"] },
                     markings: $scope.gcMarkings
-                }
+                },
+                zoom: { interactive: true }, // flot.navigate
+                pan: { interactive: true } // flot.navigate
             }
         );
     }
+
+    //TODO deal with 'over-panning'
+    $scope.zoomMinPercent = function() {
+        var offset = $scope.xMinDisplay - $scope.xMinData;
+        var dataRange = $scope.xMaxData - $scope.xMinData;
+
+        return offset / dataRange * 100;
+    };
+    $scope.zoomVisiblePercent = function() {
+        var visibleRange = $scope.xMaxDisplay - $scope.xMinDisplay;
+        var dataRange = $scope.xMaxData - $scope.xMinData;
+
+        return visibleRange / dataRange * 100;
+    };
+
+    function refreshZoom(evt, plot) {
+        $scope.$apply(function() {
+            var xaxis = plot.getAxes().xaxis;
+
+            var curMin = xaxis.min;
+            var curMax = xaxis.max;
+
+            var curRange = curMax - curMin;
+            var totalRange = $scope.xMaxData - $scope.xMinData;
+
+            var curZoom = totalRange / curRange;
+
+            $scope.xMinDisplay = curMin;
+            $scope.xMaxDisplay = curMax;
+        });
+    }
+
+    $('#mem-gc-placeholder').bind('plotzoom', refreshZoom);
+    $('#mem-gc-placeholder').bind('plotpan', refreshZoom);
 
     (function() {
         var previousPoint = null;
@@ -240,27 +288,5 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             }).appendTo("body").fadeIn(200);
         }
     }());
-
-
-
-//    var asdf = {
-//        "datapoint":[1387572019779,628.5712509155273],
-//        "dataIndex":1532,
-//        "series":{
-//            "points":{"show":false,"radius":3,"lineWidth":2,"fill":true,"fillColor":"#ffffff","symbol":"circle"},
-//            "lines":{"lineWidth":2,"fill":false,"fillColor":null,"steps":false,"show":true,"zero":false},
-//            "bars":{"show":false,"lineWidth":2,"barWidth":1,"fill":true,"fillColor":null,"align":"left","horizontal":false,"zero":true},
-//            "shadowSize":3,
-//            "highlightColor":null,
-//            "stack":true,
-//            "data": '...',
-//            "label":"PS Eden Space",
-//            "color":"rgb(77,167,77)",
-//            "xaxis": '...',
-//            "datapoints":'...'
-//        },
-//        "seriesIndex":3,
-//        "pageX":1152,
-//        "pageY":229};
 });
 

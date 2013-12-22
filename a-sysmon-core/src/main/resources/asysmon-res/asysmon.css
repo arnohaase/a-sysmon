@@ -10,7 +10,6 @@ h2 {
     margin-bottom: 15px;
 }
 
-
 table.global-measurements {
   margin-top: 20px;
   margin-bottom: 10px;
@@ -68,7 +67,7 @@ div.node-icon-collapsed {
 div.node-icon-expanded {
   background: url('i?res=treenode-open.png');
   background-repeat: no-repeat;
-    background-position: center;
+  background-position: center;
 }
 div.node-icon-empty {
 }
@@ -261,5 +260,20 @@ div.mem-header {
     border-spacing: 5px;
 }
 
-
+div.mem-gc-zoom-container {
+    height: 20px;
+    width: 800px;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+div.mem-gc-zoom-range {
+    float: left;
+    display: inline-block;
+    height: 100%;
+}
+div.mem-gc-zoom-range-present {
+    background-color: #a9c1e6; /* TODO customize */
+}
 

@@ -11,6 +11,7 @@
     <script src="r?res=jquery.flot.stack-0.8.2.js"></script>
     <script src="r?res=jquery.flot.time-0.8.2.js"></script>
     <script src="r?res=jquery.flot.axislabels-0.8.2.js"></script>
+    <script src="r?res=jquery.flot.navigate-0.8.2.js"></script>
     <script src="r?res=asysmon-memory.js"></script>
 </head>
 <body>
@@ -21,15 +22,23 @@
         <a class='btn' ng-click='refresh()'>Refresh</a>
     </div>
 
-    <input type="checkbox" ng-model="showFullGcMarkers">Show Full GC markers &nbsp; &nbsp; &nbsp;
-    <input type="checkbox" ng-model="showOtherGcMarkers">Show other GC markers &nbsp; &nbsp; &nbsp;
-    <input type="checkbox" ng-model="showLegend">Show Legend
+    <div>
+        <input type="checkbox" ng-model="showFullGcMarkers">Show Full GC markers &nbsp; &nbsp; &nbsp;
+        <input type="checkbox" ng-model="showOtherGcMarkers">Show other GC markers &nbsp; &nbsp; &nbsp;
+        <input type="checkbox" ng-model="showLegend">Show Legend
+    </div>
+    <div style="margin-top: 10px;">
+        <div>Zoom:</div>
+        <div class="mem-gc-zoom-container">
+            <div class="mem-gc-zoom-range" style="width: {{zoomMinPercent()}}%;"></div>
+            <div class="mem-gc-zoom-range mem-gc-zoom-range-present" style="width: {{zoomVisiblePercent()}}%;"></div>
+        </div>
+    </div>
 </div>
 
 <div class="mem-gc-container">
     <div id="mem-gc-placeholder" class="flot-placeholder"></div>
 </div>
-
 
 </body>
 </html>
