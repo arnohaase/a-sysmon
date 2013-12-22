@@ -197,34 +197,43 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         );
     }
 
-    //TODO deal with 'over-panning'
-    $scope.zoomMinPercent = function() {
-        var offset = $scope.xMinDisplay - $scope.xMinData;
-        var dataRange = $scope.xMaxData - $scope.xMinData;
 
-        return offset / dataRange * 100;
+    function presentationZoomPercents() {
+        var overPan = 0;
+        if($scope.xMinDisplay < $scope.xMinData) {
+            // positive value for left overpan
+            overPan = $scope.xMinData - $scope.xMinDisplay;
+        }
+        if($scope.xMaxDisplay > $scope.xMaxData) {
+            // negative value for right overpan
+            overPan = $scope.xMaxDisplay - $scope.xMaxData;
+        }
+
+        var offsetAbs = ($scope.xMinDisplay - $scope.xMinData);
+        if(overPan < 0) {
+            offsetAbs -= overPan;
+        }
+        var visibleAbs = $scope.xMaxDisplay - $scope.xMinDisplay - Math.abs(overPan);
+
+        var dataRange = $scope.xMaxData - $scope.xMinData;
+        return {
+            percentOffset: offsetAbs  / dataRange * 100,
+            percentVisible: visibleAbs  / dataRange * 100
+        };
+    }
+
+    $scope.zoomMinPercent = function() {
+        return presentationZoomPercents().percentOffset;
     };
     $scope.zoomVisiblePercent = function() {
-        var visibleRange = $scope.xMaxDisplay - $scope.xMinDisplay;
-        var dataRange = $scope.xMaxData - $scope.xMinData;
-
-        return visibleRange / dataRange * 100;
+        return presentationZoomPercents().percentVisible;
     };
 
     function refreshZoom(evt, plot) {
         $scope.$apply(function() {
             var xaxis = plot.getAxes().xaxis;
-
-            var curMin = xaxis.min;
-            var curMax = xaxis.max;
-
-            var curRange = curMax - curMin;
-            var totalRange = $scope.xMaxData - $scope.xMinData;
-
-            var curZoom = totalRange / curRange;
-
-            $scope.xMinDisplay = curMin;
-            $scope.xMaxDisplay = curMax;
+            $scope.xMinDisplay = xaxis.min;
+            $scope.xMaxDisplay = xaxis.max;
         });
     }
 
