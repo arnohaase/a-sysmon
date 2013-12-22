@@ -182,7 +182,8 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                     labelFormatter: function(label) {return label.charAt(0) === '_' ? null : label;}
                 },
                 xaxis: {
-                    mode: 'time'
+                    mode: 'time',
+                    timezone: 'browser'
                 },
                 yaxis: {
                     axisLabel: 'Memory Size (MB)',
