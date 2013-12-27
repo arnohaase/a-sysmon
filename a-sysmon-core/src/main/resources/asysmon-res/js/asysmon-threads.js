@@ -27,7 +27,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     }
 
     function sendCommand(cmd) {
-        $http.get(cmd).success(function(data) {
+        $http.get('_$_asysmon_$_/rest/' + cmd).success(function(data) {
             initFromResponse(data);
         });
     }

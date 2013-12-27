@@ -1,14 +1,11 @@
 package com.ajjpj.asysmon.servlet.threaddump;
 
+import com.ajjpj.asysmon.servlet.AbstractAsysmonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.management.ThreadInfo;
 import java.util.Collection;
 
@@ -16,7 +13,7 @@ import java.util.Collection;
 /**
  * @author arno
  */
-public class AThreadDumpServlet extends HttpServlet {
+public class AThreadDumpServlet extends AbstractAsysmonServlet {
     public static final String INIT_PARAM_APP_PACKAGE = "application.package";
 
     private volatile String appPkg;
@@ -25,23 +22,17 @@ public class AThreadDumpServlet extends HttpServlet {
         appPkg = getServletConfig().getInitParameter(INIT_PARAM_APP_PACKAGE);
     }
 
-    @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(req.getParameter("res") != null) {
-            serveStaticResource(req.getParameter("res"), resp);
-            return;
-        }
+    @Override protected String getDefaultHtmlName() {
+        return "threads.html";
+    }
 
-        if(req.getRequestURI().endsWith("/getData")) {
+    @Override protected boolean handleRestCall(String service, HttpServletResponse resp) throws IOException {
+        if("getData".equals(service)) {
             serveData(resp);
-            return;
+            return true;
         }
 
-        if(! req.getRequestURL().toString().endsWith("/")) {
-            resp.sendRedirect(req.getRequestURL() + "/");
-            return;
-        }
-
-        serveStaticResource("threads.html", resp);
+        return false;
     }
 
     private void serveData(HttpServletResponse resp) throws IOException {
@@ -111,21 +102,4 @@ public class AThreadDumpServlet extends HttpServlet {
     }
 
     //TODO keep 'head' fixed at the top (here and on other pages)
-
-    private void serveStaticResource(String resName, HttpServletResponse resp) throws IOException {
-        if(resName.contains("..") || resName.contains("/")) {
-            throw new IllegalArgumentException();
-        }
-
-        resp.addHeader("Cache-Control", "max-age=36000");
-
-        final OutputStream out = resp.getOutputStream();
-        final InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("asysmon-res/" + resName);
-
-        final byte[] buf = new byte[4096];
-        int numRead=0;
-        while((numRead = in.read(buf)) > 0) {
-            out.write(buf, 0, numRead);
-        }
-    }
 }

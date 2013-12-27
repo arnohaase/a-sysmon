@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author arno
  */
-public abstract class AbstractAsysmonReportServlet extends HttpServlet {
+public abstract class AbstractAsysmonReportServlet extends AbstractAsysmonServlet {
     private static final AtomicBoolean hasShutdownHook = new AtomicBoolean(false);
 
     /**
@@ -29,61 +29,32 @@ public abstract class AbstractAsysmonReportServlet extends HttpServlet {
         return ASysMon.get();
     }
 
-    @Override public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-
-        final boolean wasInitialized = hasShutdownHook.getAndSet(true);
-        if(!wasInitialized) {
-            try {
-                final ServletContext ctx = config.getServletContext();
-                ctx.addListener(new ServletContextListener() {
-                    @Override public void contextInitialized(ServletContextEvent sce) { }
-
-                    @Override public void contextDestroyed(ServletContextEvent sce) {
-                        if(AGlobalConfig.getImplicitlyShutDownWithServlet()) {
-                            getSysMon().shutdown();
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                //TODO log this (at warn level): A-SysMon servlets should be initialized first, i.e. have the lowest load-on-startup value
-                // ignore - this only works if init() is called during container startup, i.e. with load-on-startup in web.xml
-            }
-        }
+    @Override protected String getDefaultHtmlName() {
+        return "aggregated.html";
     }
 
-    @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(req.getParameter("res") != null) {
-            serveStaticResource(req.getParameter("res"), resp);
-            return;
-        }
-
-        if(req.getRequestURI().endsWith("/getData")) {
+    @Override protected boolean handleRestCall(String service, HttpServletResponse resp) throws IOException {
+        if("getData".equals(service)) {
             serveData(resp);
-            return;
+            return true;
         }
-        if(req.getRequestURI().endsWith("/doStart")) {
+        if("doStart".equals(service)) {
             doStartMeasurements();
             serveData(resp);
-            return;
+            return true;
         }
-        if(req.getRequestURI().endsWith("/doStop")) {
+        if("doStop".equals(service)) {
             doStopMeasurements();
             serveData(resp);
-            return;
+            return true;
         }
-        if(req.getRequestURI().endsWith("/doClear")) {
+        if("doClear".equals(service)) {
             doClearMeasurements();
             serveData(resp);
-            return;
+            return true;
         }
 
-        if(! req.getRequestURL().toString().endsWith("/")) {
-            resp.sendRedirect(req.getRequestURL() + "/");
-            return;
-        }
-
-        serveStaticResource("aggregated.html", resp);
+        return false;
     }
 
     private void serveData(HttpServletResponse resp) throws IOException {
@@ -217,23 +188,5 @@ public abstract class AbstractAsysmonReportServlet extends HttpServlet {
         }
     }
 
-    private void serveStaticResource(String resName, HttpServletResponse resp) throws IOException {
-        if(resName.contains("..") || resName.contains("/")) {
-            throw new IllegalArgumentException();
-        }
-
-        resp.addHeader("Cache-Control", "max-age=36000");
-
-        final OutputStream out = resp.getOutputStream();
-        final InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("asysmon-res/" + resName);
-
-        final byte[] buf = new byte[4096];
-        int numRead=0;
-        while((numRead = in.read(buf)) > 0) {
-            out.write(buf, 0, numRead);
-        }
-    }
-
     protected abstract String getTitle();
-
 }

@@ -85,12 +85,12 @@ div.node-icon {
   width: 1em;
 }
 div.node-icon-collapsed {
-  background: url('i?res=treenode-closed.png');
+  background: url('../img/treenode-closed.png');
   background-repeat: no-repeat;
   background-position: center;
 }
 div.node-icon-expanded {
-  background: url('i?res=treenode-open.png');
+  background: url('../img/treenode-open.png');
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -131,7 +131,7 @@ div div.progress-background {
 
 div div.progress-bar {
   padding-right: 10px;
-  background: url('i?res=progress-bg.png');
+  background: url('../img/progress-bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
