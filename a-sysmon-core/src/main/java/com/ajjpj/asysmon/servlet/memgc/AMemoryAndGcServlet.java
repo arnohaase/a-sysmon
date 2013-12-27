@@ -5,13 +5,9 @@ import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.servlet.AbstractAsysmonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 
@@ -38,31 +34,14 @@ public class AMemoryAndGcServlet extends AbstractAsysmonServlet {
         return "memgc.html";
     }
 
-    @Override protected void handleRestCall(String service, HttpServletResponse resp) throws IOException {
+    @Override protected boolean handleRestCall(String service, HttpServletResponse resp) throws IOException {
         if("getData".equals(service)) {
             serveData(resp);
-            return;
+            return true;
         }
-    }
 
-//    @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        if(req.getParameter("res") != null) {
-//            serveStaticResource(req.getParameter("res"), resp);
-//            return;
-//        }
-//
-//        if(req.getRequestURI().endsWith("/getData")) {
-//            serveData(resp);
-//            return;
-//        }
-//
-//        if(! req.getRequestURL().toString().endsWith("/")) {
-//            resp.sendRedirect(req.getRequestURL() + "/");
-//            return;
-//        }
-//
-//        serveStaticResource("memgc.html", resp);
-//    }
+        return false;
+    }
 
     private void serveData(HttpServletResponse resp) throws IOException {
         final AJsonSerHelper json = new AJsonSerHelper(resp.getOutputStream());
@@ -129,24 +108,5 @@ public class AMemoryAndGcServlet extends AbstractAsysmonServlet {
         json.endObject();
     }
 
-
     //TODO getMostRecentTimestamp
-
-    //TODO extract AbstractAsysmonServlet
-    private void serveStaticResource(String resName, HttpServletResponse resp) throws IOException {
-        if(resName.contains("..") || resName.contains("/")) {
-            throw new IllegalArgumentException();
-        }
-
-        resp.addHeader("Cache-Control", "max-age=36000");
-
-        final OutputStream out = resp.getOutputStream();
-        final InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("asysmon-res/" + resName);
-
-        final byte[] buf = new byte[4096];
-        int numRead=0;
-        while((numRead = in.read(buf)) > 0) {
-            out.write(buf, 0, numRead);
-        }
-    }
 }

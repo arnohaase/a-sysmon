@@ -29,7 +29,9 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
         }
 
         if(uri.contains(ASYSMON_MARKER_REST)) {
-            handleRestCall(substringAfter(uri, ASYSMON_MARKER_REST), resp);
+            if(!handleRestCall(substringAfter(uri, ASYSMON_MARKER_REST), resp)) {
+                throw new IllegalArgumentException("unsupported REST call: " + uri);
+            }
             return;
         }
 
@@ -45,7 +47,7 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
     }
 
     protected abstract String getDefaultHtmlName();
-    protected abstract void handleRestCall(String service, HttpServletResponse resp) throws IOException;
+    protected abstract boolean handleRestCall(String service, HttpServletResponse resp) throws IOException;
 
     private static String substringAfter(String s, String sub) {
         final int idx = s.indexOf(sub);
