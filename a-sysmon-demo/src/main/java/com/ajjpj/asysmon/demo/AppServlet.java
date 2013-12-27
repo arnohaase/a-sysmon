@@ -159,7 +159,7 @@ public class AppServlet extends HttpServlet {
 
     private static Connection getConnection() throws SQLException {
         return dataSource.getConnection();
-//        final Connection result = DriverManager.getConnection("asysmon:qualifier=123:jdbc:h2:mem:demo", "sa", "");
+//        final Connection result = DriverManager.getConnection("asysmon:qualifier=123:jdbc:h2:memgc:demo", "sa", "");
 //        result.setAutoCommit(false);
 //        return result;
     }
@@ -167,7 +167,7 @@ public class AppServlet extends HttpServlet {
     private static DataSource createDataSource() {
         final DataSource inner = new DataSource() {
             @Override public Connection getConnection() throws SQLException {
-                final Connection result = DriverManager.getConnection("jdbc:h2:mem:demo", "sa", "");
+                final Connection result = DriverManager.getConnection("jdbc:h2:memgc:demo", "sa", "");
                 result.setAutoCommit(false);
                 return result;
             }

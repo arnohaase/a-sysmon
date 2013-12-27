@@ -41,7 +41,7 @@
 
     <servlet>
         <servlet-name>asysmon-mem</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet.mem.AMemoryAndGcServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.servlet.memgc.AMemoryAndGcServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

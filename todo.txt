@@ -19,14 +19,17 @@ todo
     * ?!?!?! --> Felix
 
 * core
+  * thread servlet:
+    * highlight 'application' stack frames
+    * beautify colored 'thread state' presentation - frame with rounded borders, smaller font?
+    * fix this: there is always the '+' icon, even for expanced tree nodes
   * export? printer friendly presentation?
   * selective presentation - pick just one top-level (or second-level or whatever?) sub-tree?
   * lock-free aggregation implementation
   * expand all / collapse all
   * 'start' page with links to other pages?
   * 'scalar' / dashboard page
-  * beautified presentation of memory
-  * GC and memory servlet
+  * beautified presentation of current memory consumption
   * regular servlets: show only explicit 'positive' list of scalar data
 
 * presentation of active / open connections per pool: special treatment <active> / <open>

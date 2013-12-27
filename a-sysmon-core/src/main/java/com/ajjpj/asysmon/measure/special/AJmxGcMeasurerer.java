@@ -32,7 +32,7 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
     public static final String KEY_CAUSE = "cause";
     public static final String KEY_ALGORITHM = "algorithm";
 
-    public static final String KEY_PREFIX_MEM = "mem:";
+    public static final String KEY_PREFIX_MEM = "memgc:";
 
     public static final String KEY_SUFFIX_USED = ":used-after";
     public static final String KEY_SUFFIX_USED_DELTA = ":used-delta";

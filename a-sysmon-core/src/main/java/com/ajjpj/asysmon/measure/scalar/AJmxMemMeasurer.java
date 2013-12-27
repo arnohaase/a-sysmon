@@ -14,7 +14,7 @@ import java.util.Map;
  * @author arno
  */
 public class AJmxMemMeasurer implements AScalarMeasurer {
-    public static final String PREFIX_MEM = "mem:";
+    public static final String PREFIX_MEM = "memgc:";
     public static final String SUFFIX_INITIAL = ":initial";
     public static final String SUFFIX_COMMITTED = ":committed";
     public static final String SUFFIX_MAX = ":max";

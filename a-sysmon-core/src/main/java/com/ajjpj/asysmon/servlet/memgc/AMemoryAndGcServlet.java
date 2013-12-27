@@ -1,8 +1,8 @@
-package com.ajjpj.asysmon.servlet.mem;
+package com.ajjpj.asysmon.servlet.memgc;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.config.AGlobalConfig;
+import com.ajjpj.asysmon.servlet.AbstractAsysmonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
 import javax.servlet.*;
@@ -13,13 +13,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
  * @author arno
  */
-public class AMemoryAndGcServlet extends HttpServlet {
+public class AMemoryAndGcServlet extends AbstractAsysmonServlet {
     private GcDataSink gcDataSink;
 
     /**
@@ -35,24 +34,35 @@ public class AMemoryAndGcServlet extends HttpServlet {
     }
 
 
-    @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(req.getParameter("res") != null) {
-            serveStaticResource(req.getParameter("res"), resp);
-            return;
-        }
+    @Override protected String getDefaultHtmlName() {
+        return "memgc.html";
+    }
 
-        if(req.getRequestURI().endsWith("/getData")) {
+    @Override protected void handleRestCall(String service, HttpServletResponse resp) throws IOException {
+        if("getData".equals(service)) {
             serveData(resp);
             return;
         }
-
-        if(! req.getRequestURL().toString().endsWith("/")) {
-            resp.sendRedirect(req.getRequestURL() + "/");
-            return;
-        }
-
-        serveStaticResource("memory.html", resp);
     }
+
+//    @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        if(req.getParameter("res") != null) {
+//            serveStaticResource(req.getParameter("res"), resp);
+//            return;
+//        }
+//
+//        if(req.getRequestURI().endsWith("/getData")) {
+//            serveData(resp);
+//            return;
+//        }
+//
+//        if(! req.getRequestURL().toString().endsWith("/")) {
+//            resp.sendRedirect(req.getRequestURL() + "/");
+//            return;
+//        }
+//
+//        serveStaticResource("memgc.html", resp);
+//    }
 
     private void serveData(HttpServletResponse resp) throws IOException {
         final AJsonSerHelper json = new AJsonSerHelper(resp.getOutputStream());

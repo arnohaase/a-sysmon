@@ -82,6 +82,8 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             for(var i=0; i<data.gcs.length; i++) {
                 var gc = data.gcs[i];
 
+                $log.log(angular.toJson(gc.mem));
+
                 for(var memKind in gc.mem) {
                     if(!gc.mem.hasOwnProperty(memKind)) continue;
                     if(! result[memKind]) {
@@ -157,7 +159,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     };
 
     function sendCommand(cmd) {
-        $http.get(cmd).success(function(data) {
+        $http.get('_$_asysmon_$_/rest/' + cmd).success(function(data) {
             initFromResponse(data);
             doPlot();
         });
@@ -278,7 +280,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
                     continue;
                 }
                 //TODO layout of tool tip
-                //TODO relative change of used memory per mem kind
+                //TODO relative change of used memory per memgc kind
                 //TODO *committed* memory (+ info if changed)
                 return 'cause: ' + gc.cause + '<br>' +
                     'type: ' + gc.type + '<br>' +

@@ -52,7 +52,7 @@ public class MongoDummyMain {
 
         System.out.println(db.getCollectionNames());
 
-        final DBCollection coll = db.getCollection("demo:mem-free");
+        final DBCollection coll = db.getCollection("demo:memgc-free");
         System.out.println(coll.getIndexInfo());
         System.out.println(coll.getCount());
     }
