@@ -17,7 +17,7 @@ public class AMinMaxAvgReportServlet extends AbstractAsysmonReportServlet {
 
     private static final List<ColDef> colDefs = Arrays.asList(
             new ColDef("%",     true,  1, ColWidth.Medium),
-            new ColDef("#",     false, 2, ColWidth.Medium),
+            new ColDef("#",     false, 2, ColWidth.Long),
             new ColDef("total", false, 0, ColWidth.Long),
             new ColDef("avg",   false, 0, ColWidth.Medium),
             new ColDef("min",   false, 0, ColWidth.Medium),

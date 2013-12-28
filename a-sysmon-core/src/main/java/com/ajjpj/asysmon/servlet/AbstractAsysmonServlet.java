@@ -61,8 +61,12 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
 
         resp.addHeader("Cache-Control", "max-age=36000");
 
-        final OutputStream out = resp.getOutputStream();
         final InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("asysmon-res/" + resName);
+        if(in == null) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+
+        final OutputStream out = resp.getOutputStream();
 
         final byte[] buf = new byte[4096];
         int numRead=0;
