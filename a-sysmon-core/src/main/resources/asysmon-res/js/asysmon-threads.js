@@ -18,7 +18,8 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             for(var j=0; j<t.stacktrace.length; j++) {
                 var ste = t.stacktrace[j];
                 ste.isReflection = isReflectionSte(ste);
-                hasApplicationFrame = hasApplicationFrame || appPkg.test(ste.repr);
+                ste.isAppPkg = appPkg.test(ste.repr);
+                hasApplicationFrame = hasApplicationFrame || ste.isAppPkg;
             }
             t.hasApplicationFrame = hasApplicationFrame;
         }
@@ -59,7 +60,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
 
     $scope.nodeIconClass = function(thread) {
         if(thread.stacktrace && thread.stacktrace.length) {
-            return $scope.shadowExpansionModel[thread.fqn] ? 'node-icon-expanded' : 'node-icon-collapsed';
+            return $scope.shadowExpansionModel[thread.id] ? 'node-icon-expanded' : 'node-icon-collapsed';
         }
         return 'node-icon-empty';
     };
@@ -76,8 +77,6 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             dataRow = clicked.parents('.data-row');
         }
         var childrenDiv = dataRow.next();
-        $log.log(dataRow.length);
-        $log.log(childrenDiv.length);
         childrenDiv.slideToggle(50, function() {
             $scope.$apply(function() {
                 $scope.shadowExpansionModel[thread.id] = !$scope.shadowExpansionModel[thread.id];
@@ -87,16 +86,19 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
 
     $scope.stacktraceClass = function(ste) {
         if(ste.repr.indexOf('java.') === 0 || ste.repr.indexOf('javax.') === 0) {
-            return "stacktrace-java";
+            return 'stacktrace-java';
         }
-        if(ste.repr.indexOf('sun.') === 0) {
-            return "stacktrace-sun";
+        if(ste.repr.indexOf('sun.') === 0 || ste.repr.indexOf('com.sun') === 0) {
+            return 'stacktrace-sun';
         }
         if(ste.isNative) {
-            return "stacktrace-native";
+            return 'stacktrace-native';
         }
         if(! ste.hasSource) {
-            return "stacktrace-no-source";
+            return 'stacktrace-no-source';
+        }
+        if(ste.isAppPkg) {
+            return 'stacktrace-app-pkg';
         }
         return "stacktrace";
     }

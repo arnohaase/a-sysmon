@@ -236,6 +236,9 @@ div.thread-state {
 }
 
 .stacktrace {
+  color: rgb(0,70,0);
+}
+.stacktrace-app-pkg {
 }
 .stacktrace-native {
   color: darkblue;

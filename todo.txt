@@ -19,9 +19,6 @@ todo
     * ?!?!?! --> Felix
 
 * core
-  * thread servlet:
-    * highlight 'application' stack frames
-    * fix this: there is always the '+' icon, even for expanced tree nodes
   * export? printer friendly presentation?
   * selective presentation - pick just one top-level (or second-level or whatever?) sub-tree?
   * lock-free aggregation implementation
