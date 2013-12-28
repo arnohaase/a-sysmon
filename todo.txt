@@ -19,10 +19,11 @@ todo
     * ?!?!?! --> Felix
 
 * core
+  * tooltips for buttons
+  * view of 'recent requests' (filtered)
   * export? printer friendly presentation?
   * selective presentation - pick just one top-level (or second-level or whatever?) sub-tree?
   * lock-free aggregation implementation
-  * expand all / collapse all
   * 'start' page with links to other pages?
   * 'scalar' / dashboard page
   * beautified presentation of current memory consumption
@@ -31,9 +32,6 @@ todo
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
 * load average from sun.misc.Unsafe --> Windows?!
-
-* GC details: http://www.fasterj.com/articles/gcnotifs.shtml
-  * special treatment for GC data?
 
 * global measurements
   * /proc/diskstats
@@ -81,12 +79,6 @@ todo
 * limit measurement time for scalars and environment data
 
 * logo in report servlets (?)
-
-* offloading data sink
-  * unique ids per measurement --> referencing (?)
-  * support for 'correcting' real time clocks of systems
-  * per hierarchy: Thread name, Host, PID
-* 'push' (via UDP) vs. 'pull' (store locally, collect e.g. via servlet call --> provide servlet)
 
 * log asysmon overhead (?)
 

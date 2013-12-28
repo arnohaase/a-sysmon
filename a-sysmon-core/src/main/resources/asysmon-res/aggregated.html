@@ -29,6 +29,10 @@
       <h1 ng-cloak>{{title}}</h1>
 
       <div class='button-box'>
+          <div class="btn-group">
+              <a class="btn btn-img" ng-click="expandAll()"><img src="_$_asysmon_$_/static/img/treenode-closed.png" /></a>
+              <a class="btn btn-img" ng-click="collapseAll()"><img src="_$_asysmon_$_/static/img/treenode-open.png" /></a>
+          </div>
           <a class='btn' ng-click='refresh()'>Refresh</a>
           <a class='btn' ng-click='clear()'>Clear</a>
           <a class='btn' ng-hide='isStarted' ng-click='start()'>Start</a>

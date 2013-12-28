@@ -104,7 +104,27 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
             });
         }
         return result;
-    }
+    };
+
+    $scope.expandAll = function() {
+        $('div.children').show(50);
+
+        function setExpanded(nodes) {
+            if(nodes) {
+                for(var i=0; i<nodes.length; i++) {
+                    $scope.shadowExpansionModel[nodes[i].fqn] = true;
+                    setExpanded(nodes[i].children);
+                }
+            }
+        }
+
+        setExpanded($scope.traces);
+    };
+
+    $scope.collapseAll = function() {
+        $('div.children').hide(50);
+        $scope.shadowExpansionModel = {};
+    };
 
 
     $scope.isPercentage = function(columnDef) {

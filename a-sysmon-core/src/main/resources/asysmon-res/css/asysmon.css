@@ -127,6 +127,11 @@ div.children {
 
 div div.progress-background {
   background-color: rgb(202, 255, 214);
+  margin-top: 1px;
+  height: 15px;
+  border: 1px solid #808080;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 div div.progress-bar {
@@ -141,10 +146,15 @@ div.data-row-subdued {
 }
 div.subdued-progress-background {
   padding-right: 10px;
+  margin-top: 1px;
+  height: 15px;
+  border: 1px solid #808080;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 div.data-row {
-  height: 19px;
+  /*height: 19px;*/
   font-size: 15px;
   border-bottom: white solid 2px;
 }

@@ -167,7 +167,7 @@ public class AppServlet extends HttpServlet {
     private static DataSource createDataSource() {
         final DataSource inner = new DataSource() {
             @Override public Connection getConnection() throws SQLException {
-                final Connection result = DriverManager.getConnection("jdbc:h2:memgc:demo", "sa", "");
+                final Connection result = DriverManager.getConnection("jdbc:h2:mem:demo", "sa", "");
                 result.setAutoCommit(false);
                 return result;
             }
