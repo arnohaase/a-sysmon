@@ -59,12 +59,12 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
             throw new IllegalArgumentException("rejected resource request '"  + resName + "' for security reasons");
         }
 
-        resp.addHeader("Cache-Control", "max-age=36000");
-
         final InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("asysmon-res/" + resName);
         if(in == null) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
+
+        resp.addHeader("Cache-Control", "max-age=36000");
 
         final OutputStream out = resp.getOutputStream();
 

@@ -144,6 +144,8 @@ div.subdued-progress-background {
 }
 
 div.data-row {
+  height: 19px;
+  font-size: 15px;
   border-bottom: white solid 2px;
 }
 div:hover.data-row  {
@@ -210,6 +212,12 @@ div.thread-state {
   display: inline-block;
   text-align: center;
   margin-right: 10px;
+
+  margin-top: 1px;
+  height: 15px;
+  border: 1px solid #808080;
+  border-radius: 4px;
+  font-size: 12px;
 }
 .thread-state-RUNNABLE {
   background: lightgreen;
