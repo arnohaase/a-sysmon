@@ -3,6 +3,7 @@ var aSysMonApp = angular.module('ASysMonApp', []);
 aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     $scope.expansionModel = {}; // bound to the DOM, used for initial rendering
     $scope.shadowExpansionModel = {}; // continually updated, kept separate to allow for jQuery animations
+    $scope.rootLevel = 0;
 
     function initFromResponse(data) {
         $scope.title = data.title;
@@ -10,6 +11,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         $scope.scalars = data.scalars;
         $scope.columnDefs = data.columnDefs;
         $scope.traces = data.traces;
+        $scope.pickedTraces = $scope.traces; //TODO keep selection on 'refresh'
 
         initTraceNodes($scope.traces, 0, '');
 
@@ -155,15 +157,46 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     $scope.isExpanded = function(node) {
         return $scope.expansionModel[node.fqn];
     };
-    $scope.toggleTreeNode = function(event, node) {
-        var clicked = $(event.target);
-        var dataRow = clicked.parents('.data-row');
+    $scope.clickTreeNode = function(event, node) {
+        if($scope.isInPickMode) {
+            pickTreeNode(node);
+        }
+        else {
+            var clicked = $(event.target);
+            var dataRow = clicked.parents('.data-row');
+            toggleTreeNode(dataRow, node);
+        }
+    };
+
+    function toggleTreeNode(dataRow, node) {
+        $log.log('toggle');
         var childrenDiv = dataRow.next();
         childrenDiv.slideToggle(50, function() {
             $scope.$apply(function() {
                 $scope.shadowExpansionModel[node.fqn] = !$scope.shadowExpansionModel[node.fqn];
             });
         });
+    }
+
+    $scope.pickClass = function() {
+        return $scope.isInPickMode ? 'pick-mode btn-no-hover' : '';
+    }
+    $scope.unpickClass = function() {
+        return $scope.traces === $scope.pickedTraces ? 'btn-disabled btn-no-hover' : '';
+    };
+    function pickTreeNode(node) {
+        $scope.pickedTraces = [node];
+        $scope.isInPickMode = false;
+        $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
+        $scope.rootLevel = node.level;
+    }
+    $scope.togglePickMode = function() {
+        $scope.isInPickMode = ! $scope.isInPickMode;
+    };
+    $scope.unpick = function() {
+        $scope.pickedTraces = $scope.traces;
+        $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
+        $scope.rootLevel = 0;
     };
 });
 

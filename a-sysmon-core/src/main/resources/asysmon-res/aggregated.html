@@ -9,7 +9,7 @@
     <script src="_$_asysmon_$_/static/js/asysmon-aggregated.js"></script>
 
     <script type="text/ng-template" id="trace_node_template.html">
-        <div class="data-row data-row-{{curNode.level}} {{dataRowSubdued(curNode)}}" ng-click="toggleTreeNode($event, curNode)">
+        <div class="data-row data-row-{{curNode.level - rootLevel}} {{dataRowSubdued(curNode)}}" ng-click="clickTreeNode($event, curNode)">
             <div class="node-icon {{nodeIconClass(curNode)}}">&nbsp;</div>
             <div style="float: right;">
                 <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">
@@ -28,15 +28,21 @@
   <body>
       <h1 ng-cloak>{{title}}</h1>
 
-      <div class='button-box'>
+      <div class="button-box">
           <div class="btn-group">
               <a class="btn btn-img" ng-click="expandAll()"><img src="_$_asysmon_$_/static/img/treenode-closed.png" /></a>
               <a class="btn btn-img" ng-click="collapseAll()"><img src="_$_asysmon_$_/static/img/treenode-open.png" /></a>
           </div>
-          <a class='btn' ng-click='refresh()'>Refresh</a>
-          <a class='btn' ng-click='clear()'>Clear</a>
-          <a class='btn' ng-hide='isStarted' ng-click='start()'>Start</a>
-          <a class='btn' ng-show='isStarted' ng-click='stop()'>Stop</a>
+          <div class="btn-group">
+              <a class="btn {{pickClass()}}" ng-click="togglePickMode()">Pick</a>
+              <a class="btn {{unpickClass()}}" ng-click="unpick()">Unpick</a>
+          </div>
+          <div class="btn-group">
+              <a class='btn' ng-click='refresh()'>Refresh</a>
+              <a class='btn' ng-click='clear()'>Clear</a>
+              <a class='btn' ng-if='!isStarted' ng-click='start()'>Start</a>
+              <a class='btn' ng-if='isStarted' ng-click='stop()'>Stop</a>
+          </div>
       </div>
 
       <table class='global-measurements'>
@@ -45,7 +51,7 @@
       </table>
 
 
-      <div ng-repeat="curNode in traces">
+      <div ng-repeat="curNode in pickedTraces">
           <div class='table-header'>&nbsp;<div style="float: right;">
               <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">{{curCol.name}}</div>
           </div></div>

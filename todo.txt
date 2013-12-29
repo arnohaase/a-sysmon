@@ -23,12 +23,11 @@ todo
   * '+' / '-' icons for buttons; naming convention 'icon-...png' for tool bar icons (or suffix '...-<size>.png')
   * view of 'recent requests' (filtered)
   * export? printer friendly presentation?
-  * selective presentation - pick just one top-level (or second-level or whatever?) sub-tree?
   * lock-free aggregation implementation
   * 'start' page with links to other pages?
   * 'scalar' / dashboard page
   * beautified presentation of current memory consumption
-  * regular servlets: show only explicit 'positive' list of scalar data
+  * aggregated servlets: show only explicit 'positive' list of scalar data
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 

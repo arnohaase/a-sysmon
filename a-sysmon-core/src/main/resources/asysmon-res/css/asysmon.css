@@ -73,11 +73,18 @@ div.button-box {
     border-bottom-right-radius: 6px;
 }
 
-.btn:hover {
-   background-color: rgb(235,235,235);
+.btn:hover:not(.btn-no-hover) {
+    background-color: rgb(235,235,235);
+}
+.btn-disabled {
+    color: #a0a0a0;
 }
 
 div.table-header {
+}
+
+a.pick-mode {
+    background-color: red;
 }
 
 div.node-icon {
