@@ -4,20 +4,21 @@
     <title ng-bind="title"></title>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="_$_asysmon_$_/static/css/asysmon.css">
+    <link rel="stylesheet" type="text/css" href="_$_asysmon_$_/static/css/bootstrap-3.0.2.min.css">
+    <link rel="stylesheet" type="text/css" href="_$_asysmon_$_/static/css/bootstrap-theme-3.0.2.min.css">
     <script src="_$_asysmon_$_/static/lib/jquery-1.10.2.min.js"></script>
     <script src="_$_asysmon_$_/static/lib/angular-1.2.3.js"></script>
     <script src="_$_asysmon_$_/static/lib/FileSaver.js"></script>
+    <script src="_$_asysmon_$_/static/lib/bootstrap-3.0.2.min.js"></script>
     <script src="_$_asysmon_$_/static/js/asysmon-aggregated.js"></script>
 
     <script type="text/ng-template" id="trace_node_template.html">
         <div class="data-row data-row-{{curNode.level - rootLevel}} {{dataRowSubdued(curNode)}}" ng-click="clickTreeNode($event, curNode)">
             <div class="node-icon {{nodeIconClass(curNode)}}">&nbsp;</div>
-            <div style="float: right;">
-                <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">
-                    <div ng-if="isPercentage(columnDefs[$index]) && !isSubdued(curNode)" class="progress-background"><div class="progress-bar" style="{{progressWidthStyle(curNode.data[$index])}}">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div></div>
-                    <div ng-if="isPercentage(columnDefs[$index]) &&  isSubdued(curNode)" class="subdued-progress-background">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div>
-                    <div ng-if="!isPercentage(columnDefs[$index])">{{formatNumber(curNode.data[$index], columnDefs[$index].numFracDigits)}}</div>
-                </div>
+            <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">
+                <div ng-if="isPercentage(columnDefs[$index]) && !isSubdued(curNode)" class="aprogress-background"><div class="aprogress-bar" style="{{progressWidthStyle(curNode.data[revIdx($index)])}}">{{formatNumber(curNode.data[revIdx($index)], columnDefs[$index].numFracDigits)}}</div></div>
+                <div ng-if="isPercentage(columnDefs[$index]) &&  isSubdued(curNode)" class="subdued-progress-background">{{formatNumber(curNode.data[revIdx($index)], columnDefs[$index].numFracDigits)}}</div>
+                <div ng-if="!isPercentage(columnDefs[$index])">{{formatNumber(curNode.data[revIdx($index)], columnDefs[$index].numFracDigits)}}</div>
             </div>
             <div class="node-text" style="margin-right: {{totalDataWidth}}px;">{{curNode.name}}</div>
         </div>
@@ -30,24 +31,24 @@
       <h1 ng-cloak>{{title}}</h1>
 
       <div class="button-box">
-          <div class="btn-group">
-              <a class="btn btn-img" ng-click="expandAll()"><img src="_$_asysmon_$_/static/img/treenode-closed.png" /></a>
-              <a class="btn btn-img" ng-click="collapseAll()"><img src="_$_asysmon_$_/static/img/treenode-open.png" /></a>
+          <div class="abtn-group">
+              <a class="abtn" ng-click="expandAll()"><img src="_$_asysmon_$_/static/img/treenode-closed.png" /></a>
+              <a class="abtn" ng-click="collapseAll()"><img src="_$_asysmon_$_/static/img/treenode-open.png" /></a>
           </div>
-          <div class="btn-group">
-              <a class="btn {{pickClass()}}" ng-click="togglePickMode()">Pick</a>
-              <a class="btn {{unpickClass()}}" ng-click="unpick()">Unpick</a>
+          <div class="abtn-group">
+              <a class="abtn {{pickClass()}}" ng-click="togglePickMode()">Pick</a>
+              <a class="abtn {{unpickClass()}}" ng-click="unpick()">Unpick</a>
           </div>
-          <div class="btn-group">
-              <a class='btn' ng-click='refresh()'>Refresh</a>
-              <a class='btn' ng-click='clear()'>Clear</a>
-              <a class='btn' ng-if='!isStarted' ng-click='start()'>Start</a>
-              <a class='btn' ng-if='isStarted' ng-click='stop()'>Stop</a>
+          <div class="abtn-group">
+              <a class="abtn" ng-click="refresh()">Refresh</a>
+              <a class="abtn" ng-click="clear()">Clear</a>
+              <a class="abtn" ng-if="!isStarted" ng-click="start()">Start</a>
+              <a class="abtn" ng-if="isStarted" ng-click="stop()">Stop</a>
           </div>
-          <a class="btn" ng-click="doExport()">Export</a>
+          <a class="abtn" ng-click="doExport()">Export</a>
       </div>
 
-      <table class='global-measurements'>
+      <table class="global-measurements">
           <tr ng-show="hasLoad()" class='global-measurements'><td class='global-measurements-key'>System Load</td><td class='global-measuremnets-value'>{{load1()}} / {{load5()}} / {{load15()}}</td></tr>
           <tr ng-repeat="s in genericScalarNames()"><td class="global-measurements-key">{{s}}</td><td class="global-measurements-value">{{formattedScalar(s)}}</td></tr>
       </table>

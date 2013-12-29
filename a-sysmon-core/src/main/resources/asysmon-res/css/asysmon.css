@@ -1,7 +1,10 @@
 html {
   font-family: sans-serif;
 }
-
+html>body {
+  margin-left: 10px;
+  margin-right: 10px;
+}
 h1 {
     margin: 0px;
 }
@@ -26,7 +29,7 @@ div.button-box {
   margin-top: 8px;
 }
 
-.btn {
+.abtn {
   -moz-box-sizing: border-box;
   text-transform: none;
   font-family: inherit;
@@ -47,40 +50,36 @@ div.button-box {
   background-color: rgb(245,245,245);
   border-color: rgb(173,173,173);
 }
-.btn>img {
-  position: relative;
-  top: 8px;
+.abtn>img {
   width: 24px;
   height: 24px;
 }
-.btn-img {
-  padding: 6px;
-}
-.btn-group {
+.abtn-group {
   display: inline-block;
   margin-left: 6px;
 }
-.btn-group>.btn {
+.abtn-group>.abtn {
   border-radius: 0px;
   margin-left: -6px;
 }
-.btn-group>.btn:first-child {
+.abtn-group>.abtn:first-child {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
 }
-.btn-group>.btn:last-child {
+.abtn-group>.abtn:last-child {
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
 }
 
-.btn:hover:not(.btn-no-hover) {
+.abtn:hover:not(.abtn-no-hover) {
     background-color: rgb(235,235,235);
 }
-.btn-disabled {
+.abtn-disabled {
     color: #a0a0a0;
 }
 
 div.table-header {
+    margin-right: 7px;
 }
 
 a.pick-mode {
@@ -115,55 +114,66 @@ div.column-short {
   width: 40px;
   text-align: right;
   display: inline-block;
+  float: right;
 }
 
 div.column-medium {
   width: 60px;
   text-align: right;
   display: inline-block;
+  float: right;
 }
 
 div.column-long {
   width: 80px;
   text-align: right;
   display: inline-block;
+  float: right;
 }
                                                                                                                                                                   ,
 div.children {
 }
 
-div div.progress-background {
+div div.aprogress-background {
   background-color: rgb(202, 255, 214);
   margin-top: 1px;
-  height: 15px;
+  height: 20px;
   border: 1px solid #808080;
   border-radius: 4px;
-  font-size: 12px;
+  overflow: hidden;
 }
 
-div div.progress-bar {
-  padding-right: 10px;
+div div.aprogress-bar {
+  padding-right: 15px;
   background: url('../img/progress-bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  font-size: 10px;
+  text-align: right;
 }
 
 div.data-row-subdued {
   color: rgba(0,0,0,.6);
 }
 div.subdued-progress-background {
-  padding-right: 10px;
   margin-top: 1px;
-  height: 15px;
+  height: 19px;
   border: 1px solid #808080;
   border-radius: 4px;
-  font-size: 12px;
+  padding-right: 15px;
+  font-size: 10px;
+  text-align: right;
+  vertical-align: middle;
 }
 
 div.data-row {
   /*height: 19px;*/
   font-size: 15px;
-  border-bottom: white solid 2px;
+  overflow: hidden;
+  margin-bottom: 2px;
+  line-height: 22px;
+  padding-left: 4px;
+  padding-right: 7px;
 }
 div:hover.data-row  {
   background: #a0a0a0;
@@ -228,13 +238,15 @@ div.thread-state {
   width: 9em;
   display: inline-block;
   text-align: center;
+  margin-left: 3px;
   margin-right: 10px;
+  font-size: 12px;
 
   margin-top: 1px;
-  height: 15px;
+  height: 21px;
+
   border: 1px solid #808080;
   border-radius: 4px;
-  font-size: 12px;
 }
 .thread-state-RUNNABLE {
   background: lightgreen;

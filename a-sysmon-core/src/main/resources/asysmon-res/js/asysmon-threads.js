@@ -69,7 +69,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         return $scope.expansionModel[thread.id] ? 'block' : 'none';
     };
 
-    $scope.clickTreeNode = function(event, thread) {
+    $scope.toggleTreeNode = function(event, thread) {
         var clicked = $(event.target);
 
         var dataRow = clicked.filter('.data-row');

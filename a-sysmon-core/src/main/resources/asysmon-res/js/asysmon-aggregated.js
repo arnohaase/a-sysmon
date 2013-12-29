@@ -9,7 +9,7 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         $scope.title = data.title;
         $scope.isStarted = data.isStarted;
         $scope.scalars = data.scalars;
-        $scope.columnDefs = data.columnDefs;
+        $scope.columnDefs = data.columnDefs.reverse();
         $scope.traces = data.traces;
         $scope.pickedTraces = $scope.traces; //TODO keep selection on 'refresh'
 
@@ -65,8 +65,9 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
 
     $scope.refresh();
 
-
-    $scope.a = 1234321.23;
+    $scope.revIdx = function(idx) {
+        return $scope.columnDefs.length - idx - 1;
+    };
 
     var thousandsSeparator = 1234.5.toLocaleString().charAt(1);
     var decimalSeparator   = 1234.5.toLocaleString().charAt(5);
@@ -179,10 +180,10 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     }
 
     $scope.pickClass = function() {
-        return $scope.isInPickMode ? 'pick-mode btn-no-hover' : '';
+        return $scope.isInPickMode ? 'pick-mode abtn-no-hover' : '';
     }
     $scope.unpickClass = function() {
-        return $scope.traces === $scope.pickedTraces ? 'btn-disabled btn-no-hover' : '';
+        return $scope.traces === $scope.pickedTraces ? 'abtn-disabled abtn-no-hover' : '';
     };
     function pickTreeNode(node) {
         $scope.pickedTraces = [node];

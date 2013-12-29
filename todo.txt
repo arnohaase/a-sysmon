@@ -19,6 +19,8 @@ todo
 
 * core
   * beautify
+    * Chrome: faulty rendering of button group in mem/gc
+    * hide 'pick' buttons for JDBC report
     * tooltips for buttons
     * '+' / '-' icons for buttons; naming convention 'icon-...png' for tool bar icons (or suffix '...-<size>.png')
     * beautified presentation of current memory consumption
@@ -28,6 +30,8 @@ todo
     * 'start' page with links to other pages?
     * 'scalar' / dashboard page
   * lock-free aggregation implementation
+
+* documentation (!!!)
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
