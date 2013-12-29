@@ -20,6 +20,7 @@ todo
 
 * core
   * tooltips for buttons
+  * '+' / '-' icons for buttons; naming convention 'icon-...png' for tool bar icons (or suffix '...-<size>.png')
   * view of 'recent requests' (filtered)
   * export? printer friendly presentation?
   * selective presentation - pick just one top-level (or second-level or whatever?) sub-tree?

@@ -26,9 +26,9 @@ public class AsysmonDemoMain {
 
 //        System.setProperty("com.ajjpj.asysmon.globallydisabled", "true");
 
-        new ALog4JInfoCyclicMeasurementDumper(ASysMon.get(), 120);
+//        new ALog4JInfoCyclicMeasurementDumper(ASysMon.get(), 120);
 
-        ASysMonConfigurer.addDataSink(ASysMon.get(), new AStdOutDataSink());
+//        ASysMonConfigurer.addDataSink(ASysMon.get(), new AStdOutDataSink());
         ASysMonConfigurer.addThreadCountSupport(ASysMon.get()); //TODO unify the mechanism with GC support
         AJmxGcMeasurerer.init(ASysMon.get());
         ASysMonConfigurer.addScalarMeasurer(ASysMon.get(), new AJmxMemMeasurer());
