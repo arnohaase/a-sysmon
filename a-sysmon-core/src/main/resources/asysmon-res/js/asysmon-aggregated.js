@@ -198,5 +198,41 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
         $scope.rootLevel = 0;
     };
+
+    $scope.doExport = function() {
+        function pad2(n) {
+            var result = n.toString();
+            while(result.length < 2) {
+                result = '0' + result;
+            }
+            return result;
+        }
+        var now = new Date();
+        var formattedNow = now.getFullYear() + '-' + pad2((now.getMonth()+1)) + '-' + pad2(now.getDate()) + '-' + pad2(now.getHours()) + '-' + pad2(now.getMinutes()) + '-' + pad2(now.getSeconds());
+
+        var data = 'Name\tLevel';
+        for(var i=0; i<$scope.columnDefs.length; i++) {
+            data += '\t' + $scope.columnDefs[i].name;
+        }
+
+        function append(node) {
+            var row = '\n';
+            row += '                                                                                                     '.substring(0, 2*(node.level - $scope.rootLevel));
+            row += node.name + '\t' + node.level;
+            for(var i=0; i < $scope.columnDefs.length; i++) {
+                row += '\t' + $scope.formatNumber(node.data[i], $scope.columnDefs[i].numFracDigits);
+            }
+            data += row;
+            for(var j=0; j<(node.children || []).length; j++) {
+                append(node.children[j]);
+            }
+        }
+        for(var j=0; j<$scope.pickedTraces.length; j++) {
+            append($scope.pickedTraces[j]);
+        }
+
+        var blob = new Blob([data], {type: "application/excel;charset=utf-8"});
+        saveAs(blob, "asysmon-export-" + formattedNow + '.csv');
+    };
 });
 

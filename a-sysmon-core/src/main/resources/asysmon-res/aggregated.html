@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="_$_asysmon_$_/static/css/asysmon.css">
     <script src="_$_asysmon_$_/static/lib/jquery-1.10.2.min.js"></script>
     <script src="_$_asysmon_$_/static/lib/angular-1.2.3.js"></script>
+    <script src="_$_asysmon_$_/static/lib/FileSaver.js"></script>
     <script src="_$_asysmon_$_/static/js/asysmon-aggregated.js"></script>
 
     <script type="text/ng-template" id="trace_node_template.html">
@@ -43,6 +44,7 @@
               <a class='btn' ng-if='!isStarted' ng-click='start()'>Start</a>
               <a class='btn' ng-if='isStarted' ng-click='stop()'>Stop</a>
           </div>
+          <a class="btn" ng-click="doExport()">Export</a>
       </div>
 
       <table class='global-measurements'>

@@ -11,7 +11,6 @@ todo
     * scalars, environment, traces
     * local and remote
   * simple web UI
-    *
   * derived scalars as listeners on the event bus, e.g. 'requests per second', 'transactions per second' or 'GC frequency'
   * permission checks
     * collection with users / MD5 of password
@@ -22,7 +21,6 @@ todo
   * tooltips for buttons
   * '+' / '-' icons for buttons; naming convention 'icon-...png' for tool bar icons (or suffix '...-<size>.png')
   * view of 'recent requests' (filtered)
-  * export? printer friendly presentation?
   * lock-free aggregation implementation
   * 'start' page with links to other pages?
   * 'scalar' / dashboard page
