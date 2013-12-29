@@ -18,14 +18,16 @@ todo
     * ?!?!?! --> Felix
 
 * core
-  * tooltips for buttons
-  * '+' / '-' icons for buttons; naming convention 'icon-...png' for tool bar icons (or suffix '...-<size>.png')
-  * view of 'recent requests' (filtered)
+  * beautify
+    * tooltips for buttons
+    * '+' / '-' icons for buttons; naming convention 'icon-...png' for tool bar icons (or suffix '...-<size>.png')
+    * beautified presentation of current memory consumption
+    * aggregated servlets: show only explicit 'positive' list of scalar data
+  * added views
+    * view of 'recent requests' (filtered)
+    * 'start' page with links to other pages?
+    * 'scalar' / dashboard page
   * lock-free aggregation implementation
-  * 'start' page with links to other pages?
-  * 'scalar' / dashboard page
-  * beautified presentation of current memory consumption
-  * aggregated servlets: show only explicit 'positive' list of scalar data
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
