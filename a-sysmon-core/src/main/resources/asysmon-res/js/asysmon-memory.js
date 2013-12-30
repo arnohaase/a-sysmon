@@ -1,6 +1,12 @@
 var aSysMonApp = angular.module('ASysMonApp', []);
 
 aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
+    $('.btn').tooltip({
+        container: 'body',
+        html: true
+    });
+
+
     //TODO display committed and maximum memory
     //TODO get 'current' memory consumption in addition to GC requests
     //TODO tool tip: left or right, depending on x coordinate

@@ -8,18 +8,19 @@
       <link rel="stylesheet" type="text/css" href="_$_asysmon_$_/static/css/bootstrap-theme-3.0.2.min.css">
     <script src="_$_asysmon_$_/static/lib/jquery-1.10.2.min.js"></script>
     <script src="_$_asysmon_$_/static/lib/angular-1.2.3.js"></script>
+    <script src="_$_asysmon_$_/static/lib/bootstrap-3.0.2.min.js"></script>
     <script src="_$_asysmon_$_/static/js/asysmon-threads.js"></script>
   </head>
   <body>
       <h1 ng-cloak>{{title}}</h1>
 
       <div class="threads-header">
-          <div class='button-box'>
-              <a class='abtn' ng-click='refresh()'>Refresh</a>
+          <div class="button-box">
+              <a class="btn btn-default" ng-click="refresh()" data-toggle="tooltip" title="Fetch a new thread dump from the server">Refresh</a>
           </div>
 
-          <input type="checkbox" ng-model="hideReflection">Hide reflection <br>
-          <input type="checkbox" ng-model="stacktraceWithSourceOnly">Hide stack trace elements without source
+          <input type="checkbox" ng-model="hideReflection"> Hide reflection <br>
+          <input type="checkbox" ng-model="stacktraceWithSourceOnly"> Hide stack trace elements without source
       </div>
 
       <h2>Active Application Threads</h2>

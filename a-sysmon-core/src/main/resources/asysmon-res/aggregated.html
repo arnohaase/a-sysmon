@@ -31,21 +31,21 @@
       <h1 ng-cloak>{{title}}</h1>
 
       <div class="button-box">
-          <div class="abtn-group">
-              <a class="abtn" ng-click="expandAll()"><img src="_$_asysmon_$_/static/img/treenode-closed.png" /></a>
-              <a class="abtn" ng-click="collapseAll()"><img src="_$_asysmon_$_/static/img/treenode-open.png" /></a>
+          <div class="btn-group">
+              <a class="btn btn-default" ng-click="expandAll()" data-toggle="tooltip" title="Expand All"><img src="_$_asysmon_$_/static/img/treenode-closed.png" /></a>
+              <a class="btn btn-default" ng-click="collapseAll()" data-toggle="tooltip" title="Collapse All"><img src="_$_asysmon_$_/static/img/treenode-open.png" /></a>
           </div>
-          <div class="abtn-group">
-              <a class="abtn {{pickClass()}}" ng-click="togglePickMode()">Pick</a>
-              <a class="abtn {{unpickClass()}}" ng-click="unpick()">Unpick</a>
+          <div class="btn-group">
+              <a class="btn {{pickClass()}}" ng-click="togglePickMode()" data-toggle="tooltip" title="Click on a node to show only that node and its children">Pick</a>
+              <a id="unpick" class="btn btn-default" ng-click="unpick()" data-toggle="tooltip" title="Undo the effect of previous 'pick' operation, showing all root nodes">Unpick</a>
           </div>
-          <div class="abtn-group">
-              <a class="abtn" ng-click="refresh()">Refresh</a>
-              <a class="abtn" ng-click="clear()">Clear</a>
-              <a class="abtn" ng-if="!isStarted" ng-click="start()">Start</a>
-              <a class="abtn" ng-if="isStarted" ng-click="stop()">Stop</a>
+          <div class="btn-group">
+              <a class="btn btn-default" ng-click="refresh()" data-toggle="tooltip" title="Fetch fresh data from the server">Refresh</a>
+              <a class="btn btn-default" ng-click="clear()" data-toggle="tooltip" title="Discard recorded data in the server">Clear</a>
+              <a class="btn btn-default" ng-if="!isStarted" ng-click="start()" data-toggle="tooltip" title="Start recording data in the server">Start</a>
+              <a class="btn btn-default" ng-if="isStarted" ng-click="stop()" data-toggle="tooltip" title="Stop recording data in the server">Stop</a>
           </div>
-          <a class="abtn" ng-click="doExport()">Export</a>
+          <a class="btn btn-default" ng-click="doExport()" data-toggle="tooltip" title="Export currently visible data to Excel as CSV">Export</a>
       </div>
 
       <table class="global-measurements">

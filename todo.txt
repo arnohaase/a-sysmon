@@ -18,11 +18,10 @@ todo
     * ?!?!?! --> Felix
 
 * core
+  * unified servlet / single page application
   * beautify
-    * Chrome: faulty rendering of button group in mem/gc
+    * aggregated: somehow show what is currently 'picked' --> bread crumbs?
     * hide 'pick' buttons for JDBC report
-    * tooltips for buttons
-    * '+' / '-' icons for buttons; naming convention 'icon-...png' for tool bar icons (or suffix '...-<size>.png')
     * beautified presentation of current memory consumption
     * aggregated servlets: show only explicit 'positive' list of scalar data
   * added views
@@ -30,6 +29,7 @@ todo
     * 'start' page with links to other pages?
     * 'scalar' / dashboard page
   * lock-free aggregation implementation
+  * thread dump: keep track (and show) how long each thread has been inside an active measurement
 
 * documentation (!!!)
 

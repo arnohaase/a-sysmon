@@ -1,6 +1,11 @@
 var aSysMonApp = angular.module('ASysMonApp', []);
 
 aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
+    $('.btn').tooltip({
+        container: 'body',
+        html: true
+    });
+
     $scope.expansionModel = {}; // bound to the DOM, used for initial rendering
     $scope.shadowExpansionModel = {}; // continually updated, kept separate to allow for jQuery animations
 
@@ -35,18 +40,22 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
 
     $scope.activeThreads = function() {
         var result = [];
-        for(var i=0; i<$scope.threads.length; i++) {
-            if($scope.threads[i].hasApplicationFrame) {
-                result.push($scope.threads[i]);
+        if($scope.threads) {
+            for(var i=0; i<$scope.threads.length; i++) {
+                if($scope.threads[i].hasApplicationFrame) {
+                    result.push($scope.threads[i]);
+                }
             }
         }
         return result;
     };
     $scope.nonActiveThreads = function() {
         var result = [];
-        for(var i=0; i<$scope.threads.length; i++) {
-            if(! $scope.threads[i].hasApplicationFrame) {
-                result.push($scope.threads[i]);
+        if($scope.threads) {
+            for(var i=0; i<$scope.threads.length; i++) {
+                if(! $scope.threads[i].hasApplicationFrame) {
+                    result.push($scope.threads[i]);
+                }
             }
         }
         return result;

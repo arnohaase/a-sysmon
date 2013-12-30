@@ -1,6 +1,20 @@
 var aSysMonApp = angular.module('ASysMonApp', []);
 
 aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
+    function reinitTooltips() {
+        $('.btn').tooltip({
+            container: 'body',
+            html: true
+        });
+    }
+
+    reinitTooltips();
+    $scope.$watch('isStarted', function() {
+        $('.btn').tooltip('hide');
+        setTimeout(reinitTooltips, 0);
+    });
+
+
     $scope.expansionModel = {}; // bound to the DOM, used for initial rendering
     $scope.shadowExpansionModel = {}; // continually updated, kept separate to allow for jQuery animations
     $scope.rootLevel = 0;
@@ -96,11 +110,20 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
         return $scope.formattedScalar('load-15-minutes');
     };
 
+    function startsWith(s, prefix) {
+        s = s || '';
+        prefix = prefix || '';
+
+        return s.indexOf(prefix) === 0;
+    }
+
     $scope.genericScalarNames = function() {
+
+
         var result = [];
         if($scope.scalars) {
             $.each($scope.scalars, function(n) {
-                if(n.startsWith('load-')) {
+                if(startsWith(n, 'load-')) {
                     return;
                 }
                 result.push(n);
@@ -170,7 +193,6 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     };
 
     function toggleTreeNode(dataRow, node) {
-        $log.log('toggle');
         var childrenDiv = dataRow.next();
         childrenDiv.slideToggle(50, function() {
             $scope.$apply(function() {
@@ -180,11 +202,11 @@ aSysMonApp.controller('ASysMonCtrl', function($scope, $http, $log) {
     }
 
     $scope.pickClass = function() {
-        return $scope.isInPickMode ? 'pick-mode abtn-no-hover' : '';
-    }
-    $scope.unpickClass = function() {
-        return $scope.traces === $scope.pickedTraces ? 'abtn-disabled abtn-no-hover' : '';
+        return $scope.isInPickMode ? 'btn-danger' : 'btn-default';
     };
+    $scope.$watch('traces === pickedTraces', function() {
+        $('#unpick').attr('disabled', $scope.traces === $scope.pickedTraces);
+    });
     function pickTreeNode(node) {
         $scope.pickedTraces = [node];
         $scope.isInPickMode = false;
