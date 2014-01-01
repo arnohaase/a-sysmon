@@ -153,3 +153,6 @@ documentation
   * idempotent --> safe to shut down repeatedly
 
 * server separation into modules: ...-war allows import of all code while providing your own web.xml (or bundling with your own application)
+
+* configuration
+* AWithDataSink

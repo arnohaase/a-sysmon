@@ -8,14 +8,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
- * This servlet class serves static resources and dispatches RESTful service calls
+ * This servlet_ class serves static resources and dispatches RESTful service calls
  *
  * @author arno
  */
-public abstract class AbstractAsysmonServlet extends HttpServlet {
+public abstract class AbstractASysMonServlet extends HttpServlet {
     public static final String ASYSMON_MARKER_SEGMENT = "/_$_asysmon_$_/";
     public static final String ASYSMON_MARKER_STATIC = ASYSMON_MARKER_SEGMENT + "static/";
     public static final String ASYSMON_MARKER_REST = ASYSMON_MARKER_SEGMENT + "rest/";
@@ -29,7 +32,18 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
         }
 
         if(uri.contains(ASYSMON_MARKER_REST)) {
-            if(!handleRestCall(substringAfter(uri, ASYSMON_MARKER_REST), resp)) {
+            final String restPart = substringAfter(uri, ASYSMON_MARKER_REST);
+
+            final int idxSlash = restPart.indexOf('/');
+            String restService = restPart;
+            final List<String> restParams = new ArrayList<String>();
+            if(idxSlash > 0) {
+                final String paramsRaw = restPart.substring(idxSlash+1);
+                restParams.addAll(Arrays.asList(paramsRaw.split("/")));
+                restService = restService.substring(0, idxSlash);
+            }
+
+            if(!handleRestCall(restService, restParams, resp)) {
                 throw new IllegalArgumentException("unsupported REST call: " + uri);
             }
             return;
@@ -47,7 +61,7 @@ public abstract class AbstractAsysmonServlet extends HttpServlet {
     }
 
     protected abstract String getDefaultHtmlName();
-    protected abstract boolean handleRestCall(String service, HttpServletResponse resp) throws IOException;
+    protected abstract boolean handleRestCall(String service, List<String> serviceParams, HttpServletResponse resp) throws IOException;
 
     private static String substringAfter(String s, String sub) {
         final int idx = s.indexOf(sub);

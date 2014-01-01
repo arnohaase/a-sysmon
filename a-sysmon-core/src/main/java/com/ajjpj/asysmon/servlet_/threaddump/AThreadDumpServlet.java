@@ -1,6 +1,6 @@
-package com.ajjpj.asysmon.servlet.threaddump;
+package com.ajjpj.asysmon.servlet_.threaddump;
 
-import com.ajjpj.asysmon.servlet.AbstractAsysmonServlet;
+import com.ajjpj.asysmon.servlet.AbstractASysMonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
 import javax.servlet.ServletException;
@@ -8,12 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.management.ThreadInfo;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
  * @author arno
  */
-public class AThreadDumpServlet extends AbstractAsysmonServlet {
+public class AThreadDumpServlet extends AbstractASysMonServlet {
     public static final String INIT_PARAM_APP_PACKAGE = "application.package";
 
     private volatile String appPkg;
@@ -26,7 +27,7 @@ public class AThreadDumpServlet extends AbstractAsysmonServlet {
         return "threads.html";
     }
 
-    @Override protected boolean handleRestCall(String service, HttpServletResponse resp) throws IOException {
+    @Override protected boolean handleRestCall(String service, List<String> restParams, HttpServletResponse resp) throws IOException {
         if("getData".equals(service)) {
             serveData(resp);
             return true;

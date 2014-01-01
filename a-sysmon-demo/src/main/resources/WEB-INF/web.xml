@@ -9,7 +9,7 @@
 
     <servlet>
         <servlet-name>asysmon-minmaxavg</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.servlet_.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>asysmon-minmaxavg</servlet-name>
@@ -18,7 +18,7 @@
 
     <servlet>
         <servlet-name>asysmon-jdbc</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet.jdbc.AJdbcReportServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.servlet_.jdbc.AJdbcReportServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
@@ -28,7 +28,7 @@
 
     <servlet>
         <servlet-name>asysmon-threaddump</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet.threaddump.AThreadDumpServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.servlet_.threaddump.AThreadDumpServlet</servlet-class>
         <init-param>
             <param-name>application.package</param-name>
             <param-value>com.ajjpj.asysmon.demo</param-value>
@@ -41,7 +41,7 @@
 
     <servlet>
         <servlet-name>asysmon-mem</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet.memgc.AMemoryAndGcServlet</servlet-class>
+        <servlet-class>com.ajjpj.asysmon.servlet_.memgc.AMemoryAndGcServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

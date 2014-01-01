@@ -1,25 +1,19 @@
-package com.ajjpj.asysmon.servlet;
+package com.ajjpj.asysmon.servlet_;
 
 import com.ajjpj.asysmon.ASysMon;
-import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
+import com.ajjpj.asysmon.servlet.AbstractASysMonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author arno
  */
-public abstract class AbstractAsysmonReportServlet extends AbstractAsysmonServlet {
+public abstract class AbstractAsysmonReportServlet extends AbstractASysMonServlet {
     private static final AtomicBoolean hasShutdownHook = new AtomicBoolean(false);
 
     /**
@@ -33,7 +27,7 @@ public abstract class AbstractAsysmonReportServlet extends AbstractAsysmonServle
         return "aggregated.html";
     }
 
-    @Override protected boolean handleRestCall(String service, HttpServletResponse resp) throws IOException {
+    @Override protected boolean handleRestCall(String service, List<String> restParams, HttpServletResponse resp) throws IOException {
         if("getData".equals(service)) {
             serveData(resp);
             return true;

@@ -1,9 +1,9 @@
-package com.ajjpj.asysmon.servlet.bottomup;
+package com.ajjpj.asysmon.servlet_.bottomup;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.servlet.AMinMaxAvgData;
+import com.ajjpj.asysmon.servlet_.AMinMaxAvgData;
 import com.ajjpj.asysmon.util.ArrayStack;
 
 import java.util.Collections;

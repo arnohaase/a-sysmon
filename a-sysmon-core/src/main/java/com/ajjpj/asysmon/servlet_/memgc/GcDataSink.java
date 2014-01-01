@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.servlet.memgc;
+package com.ajjpj.asysmon.servlet_.memgc;
 
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;

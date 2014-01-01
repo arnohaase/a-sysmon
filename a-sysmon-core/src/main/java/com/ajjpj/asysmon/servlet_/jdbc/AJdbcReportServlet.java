@@ -1,10 +1,10 @@
-package com.ajjpj.asysmon.servlet.jdbc;
+package com.ajjpj.asysmon.servlet_.jdbc;
 
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.servlet.bottomup.ABottomUpDataSink;
-import com.ajjpj.asysmon.servlet.bottomup.ABottomUpLeafFilter;
-import com.ajjpj.asysmon.servlet.bottomup.ABottomUpReportServlet;
+import com.ajjpj.asysmon.servlet_.bottomup.ABottomUpDataSink;
+import com.ajjpj.asysmon.servlet_.bottomup.ABottomUpLeafFilter;
+import com.ajjpj.asysmon.servlet_.bottomup.ABottomUpReportServlet;
 import com.ajjpj.asysmon.measure.jdbc.ASysMonStatement;
 
 import javax.servlet.ServletConfig;

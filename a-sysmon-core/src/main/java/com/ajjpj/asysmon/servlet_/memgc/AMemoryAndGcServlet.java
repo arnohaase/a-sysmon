@@ -1,8 +1,8 @@
-package com.ajjpj.asysmon.servlet.memgc;
+package com.ajjpj.asysmon.servlet_.memgc;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.servlet.AbstractAsysmonServlet;
+import com.ajjpj.asysmon.servlet.AbstractASysMonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
 import javax.servlet.ServletException;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author arno
  */
-public class AMemoryAndGcServlet extends AbstractAsysmonServlet {
+public class AMemoryAndGcServlet extends AbstractASysMonServlet {
     private GcDataSink gcDataSink;
 
     /**
@@ -34,7 +34,7 @@ public class AMemoryAndGcServlet extends AbstractAsysmonServlet {
         return "memgc.html";
     }
 
-    @Override protected boolean handleRestCall(String service, HttpServletResponse resp) throws IOException {
+    @Override protected boolean handleRestCall(String service, List<String> restParams, HttpServletResponse resp) throws IOException {
         if("getData".equals(service)) {
             serveData(resp);
             return true;
