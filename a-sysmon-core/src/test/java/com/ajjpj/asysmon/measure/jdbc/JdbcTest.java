@@ -24,7 +24,7 @@ public class JdbcTest {
         final CollectingDataSink dataSink = new CollectingDataSink();
         ASysMonConfigurer.addDataSink(ASysMon.get(), dataSink);
 
-        final Connection conn = DriverManager.getConnection("asysmon::jdbc:h2:memgc:demo", "sa", "");
+        final Connection conn = DriverManager.getConnection("asysmon::jdbc:h2:mem:demo", "sa", "");
         final Statement stmt = conn.createStatement();
         stmt.execute("create table A (oid number primary key)");
         stmt.execute("insert into A (oid) values (1)");

@@ -2,7 +2,6 @@ package com.ajjpj.asysmon.measure.jdbc;
 
 
 import com.ajjpj.asysmon.ASysMon;
-import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.measure.ASysMonSource;
 
 import java.sql.*;
@@ -53,7 +52,7 @@ public class ASysMonJdbcDriver implements Driver {
 
         final ASysMon sysMon = getSysMon(params);
 
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(sysMon.getConfig().isGloballyDisabled()) {
             return inner;
         }
 

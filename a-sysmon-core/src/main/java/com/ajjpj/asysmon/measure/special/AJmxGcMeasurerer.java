@@ -2,7 +2,6 @@ package com.ajjpj.asysmon.measure.special;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.config.AGlobalConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
@@ -58,7 +57,7 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
      *  orderly deregistration during shutdown.
      */
     public static void init(ASysMon sysMon) {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(sysMon.getConfig().isGloballyDisabled()) {
             return;
         }
 

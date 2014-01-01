@@ -1,10 +1,8 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.asysmon.config.AGlobalConfig;
+import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.util.timer.ATimer;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -20,7 +18,7 @@ import java.util.TreeMap;
  * @author arno
  */
 public class ACollectingMeasurement implements AWithParameters {
-    private final ATimer timer;
+    private final ASysMonConfig config;
     private final AMeasurementHierarchy hierarchy;
     private final boolean isSerial;
 
@@ -39,8 +37,8 @@ public class ACollectingMeasurement implements AWithParameters {
 
     private boolean isFinished = false;
 
-    public ACollectingMeasurement(ATimer timer, AMeasurementHierarchy hierarchy, boolean isSerial, String identifier, List<AHierarchicalData> childrenOfParent) {
-        this.timer = timer;
+    public ACollectingMeasurement(ASysMonConfig config, AMeasurementHierarchy hierarchy, boolean isSerial, String identifier, List<AHierarchicalData> childrenOfParent) {
+        this.config = config;
         this.hierarchy = hierarchy;
         this.isSerial = isSerial;
         this.identifier = identifier;
@@ -89,7 +87,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void startDetail(String detailIdentifier) {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return;
         }
 
@@ -98,11 +96,11 @@ public class ACollectingMeasurement implements AWithParameters {
         }
 
         this.detailIdentifier = detailIdentifier;
-        detailStartTimeNanos = timer.getCurrentNanos();
+        detailStartTimeNanos = config.timer.getCurrentNanos();
     }
 
     public void finishDetail() {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return;
         }
 
@@ -110,13 +108,13 @@ public class ACollectingMeasurement implements AWithParameters {
             throw new IllegalStateException("no current detail measurement");
         }
 
-        final long duration = timer.getCurrentNanos() - detailStartTimeNanos;
+        final long duration = config.timer.getCurrentNanos() - detailStartTimeNanos;
         addDetailMeasurement(detailIdentifier, duration);
         detailIdentifier = null;
     }
 
     public void addDetailMeasurement(String detailIdentifier, long durationNanos) {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return;
         }
 
@@ -136,7 +134,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void finish() {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return;
         }
 

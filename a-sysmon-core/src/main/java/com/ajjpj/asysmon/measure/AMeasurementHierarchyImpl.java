@@ -1,13 +1,11 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.config.log.ASysMonLogger;
+import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.util.ArrayStack;
-import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.*;
 
@@ -25,8 +23,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
      */
     public static final int MAX_CALL_DEPTH = 1000;
 
-    private final ASysMonLogger log;
-    private final ATimer timer;
+    private final ASysMonConfig config;
     private final ADataSink dataSink;
 
     private Set<ACollectingMeasurement> collectingMeasurements = new HashSet<ACollectingMeasurement>();
@@ -49,9 +46,8 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
      */
     private boolean wasKilled = false;
 
-    public AMeasurementHierarchyImpl(ASysMonLogger log, ATimer timer, ADataSink dataSink) {
-        this.log = log;
-        this.timer = timer;
+    public AMeasurementHierarchyImpl(ASysMonConfig config, ADataSink dataSink) {
+        this.config = config;
         this.dataSink = dataSink;
     }
 
@@ -62,7 +58,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public ASimpleMeasurement start(String identifier, boolean isSerial) {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return new ASimpleMeasurement() {
                 @Override public void finish() {
                 }
@@ -80,13 +76,13 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         if(isSerial) {
             checkOverflow();
-            final ASimpleSerialMeasurementImpl result = new ASimpleSerialMeasurementImpl(this, timer.getCurrentNanos(), identifier);
+            final ASimpleSerialMeasurementImpl result = new ASimpleSerialMeasurementImpl(this, config.timer.getCurrentNanos(), identifier);
             unfinished.push(result);
             childrenStack.push(new ArrayList<AHierarchicalData>());
             return result;
         }
         else {
-            return new ASimpleParallelMeasurementImpl(this, timer.getCurrentNanos(), identifier, childrenStack.peek());
+            return new ASimpleParallelMeasurementImpl(this, config.timer.getCurrentNanos(), identifier, childrenStack.peek());
         }
     }
 
@@ -101,16 +97,16 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             finish(unfinished.peek());
         }
 
-        log.error("Detected probably memory leak, forcefully cleaning measurement stack. Root measurement was " + rootMeasurement.getIdentifier() + " with parameters " + rootMeasurement.getParameters() + ", started at " + new Date(rootMeasurement.getStartTimeMillis()));
+        config.logger.error("Detected probably memory leak, forcefully cleaning measurement stack. Root measurement was " + rootMeasurement.getIdentifier() + " with parameters " + rootMeasurement.getParameters() + ", started at " + new Date(rootMeasurement.getStartTimeMillis()));
         wasKilled = true;
     }
 
     private void logWasKilled() {
-        log.warn("Interacting with a forcefully killed measurement. This is a consequence of A-SysMon cleaning up a (suspected) memory leak. It has no consequences aside from potentially weird measurements being reported.");
+        config.logger.warn("Interacting with a forcefully killed measurement. This is a consequence of A-SysMon cleaning up a (suspected) memory leak. It has no consequences aside from potentially weird measurements being reported.");
     }
 
     @Override public void finish(ASimpleSerialMeasurementImpl measurement) {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return;
         }
 
@@ -127,10 +123,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
 
             if(unfinished.contains(measurement)) {
-                AGlobalConfig.getLogger().warn("Calling 'finish' on a measurement " + measurement + " that is not innermost on the stack.");
+                config.logger.warn("Calling 'finish' on a measurement " + measurement + " that is not innermost on the stack.");
 
                 while(unfinished.peek() != measurement) {
-                    AGlobalConfig.getLogger().warn("-> Implicitly unrolling the stack of open measurements: " + unfinished.peek());
+                    config.logger.warn("-> Implicitly unrolling the stack of open measurements: " + unfinished.peek());
                     finish(unfinished.peek());
                 }
             }
@@ -139,7 +135,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             }
         }
 
-        final long finishedTimestamp = timer.getCurrentNanos();
+        final long finishedTimestamp = config.timer.getCurrentNanos();
 
         unfinished.pop();
         final List<AHierarchicalData> children = childrenStack.pop();
@@ -160,7 +156,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ASimpleParallelMeasurementImpl m) {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return;
         }
 
@@ -170,14 +166,14 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         }
         checkNotFinished();
 
-        final long finishedTimestamp = timer.getCurrentNanos();
+        final long finishedTimestamp = config.timer.getCurrentNanos();
         m.getChildrenOfParent().add(new AHierarchicalData(false, m.getStartTimeMillis(), finishedTimestamp - m.getStartTimeNanos(), m.getIdentifier(), m.getParameters(), Collections.<AHierarchicalData>emptyList()));
         checkFinishSyntheticRoot();
     }
 
     @Override
     public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean isSerial) {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return new ACollectingMeasurement(null, null, true, null, null);
         }
 
@@ -187,13 +183,13 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             hasSyntheticRoot = true;
         }
 
-        final ACollectingMeasurement result = new ACollectingMeasurement(timer, this, isSerial, identifier, childrenStack.peek());
+        final ACollectingMeasurement result = new ACollectingMeasurement(config, this, isSerial, identifier, childrenStack.peek());
         collectingMeasurements.add(result);
         return result;
     }
 
     @Override public void finish(ACollectingMeasurement m) {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return;
         }
 

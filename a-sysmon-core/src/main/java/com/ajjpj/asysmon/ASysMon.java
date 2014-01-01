@@ -1,14 +1,14 @@
 package com.ajjpj.asysmon;
 
-import com.ajjpj.asysmon.config.AGlobalConfig;
-import com.ajjpj.asysmon.data.AScalarDataPoint;
+import com.ajjpj.asysmon.config.ADefaultConfigFactory;
+import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
-import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ import java.util.TreeMap;
  * @author arno
  */
 public class ASysMon implements AShutdownable {
-    private final ATimer timer;
+    private final ASysMonConfig config;
     private volatile AList<ADataSink> handlers = AList.nil();
     private volatile AList<AScalarMeasurer> scalarMeasurers = AList.nil();
 
@@ -40,26 +40,20 @@ public class ASysMon implements AShutdownable {
         return ASysMonInstanceHolder.INSTANCE;
     }
 
-    public ASysMon() {
-        this(AGlobalConfig.getTimer());
-    }
+    public ASysMon(ASysMonConfig config) {
+        this.config = config;
 
-    public ASysMon(ATimer timer) {
-        this.timer = timer;
-        for(AScalarMeasurer m: AGlobalConfig.getScalarMeasurers()) {
+        for(AScalarMeasurer m: config.initialScalarMeasurers) {
             scalarMeasurers = scalarMeasurers.cons(m);
         }
-    }
 
-    public ASysMon(ADataSink... handlers) {
-        this(AGlobalConfig.getTimer(), handlers);
-    }
-
-    public ASysMon(ATimer timer, ADataSink... handlers) {
-        this.timer = timer;
-        for(ADataSink h: handlers) {
+        for(ADataSink h: config.initialDataSinks) {
             this.handlers = this.handlers.cons(h);
         }
+    }
+
+    public ASysMonConfig getConfig() {
+        return config;
     }
 
     synchronized void addScalarMeasurer(AScalarMeasurer m) {
@@ -97,7 +91,7 @@ public class ASysMon implements AShutdownable {
             return candidate;
         }
 
-        final AMeasurementHierarchy result = new AMeasurementHierarchyImpl(AGlobalConfig.getLogger(), timer, getCompositeDataSink());
+        final AMeasurementHierarchy result = new AMeasurementHierarchyImpl(config, getCompositeDataSink());
         hierarchyPerThread.set(result);
         return result;
     }
@@ -144,7 +138,7 @@ public class ASysMon implements AShutdownable {
     }
 
     public Map<String, AScalarDataPoint> getScalarMeasurements() {
-        if(AGlobalConfig.isGloballyDisabled()) {
+        if(config.isGloballyDisabled()) {
             return new HashMap<String, AScalarDataPoint>();
         }
         final Map<String, AScalarDataPoint> result = new TreeMap<String, AScalarDataPoint>();
@@ -182,7 +176,7 @@ public class ASysMon implements AShutdownable {
      * this class has the sole purpose of providing really lazy init of the singleton instance
      */
     private static class ASysMonInstanceHolder {
-        public static final ASysMon INSTANCE = new ASysMon();
+        public static final ASysMon INSTANCE = new ASysMon (new ADefaultConfigFactory().getConfig());
     }
 }
 

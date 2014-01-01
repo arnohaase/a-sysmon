@@ -1,9 +1,11 @@
 package com.ajjpj.asysmon;
 
 
-import com.ajjpj.asysmon.config.AGlobalConfig;
+import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.config.ASysMonConfigBuilder;
 import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.ACollectingMeasurement;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchy;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchyImpl;
@@ -22,15 +24,24 @@ import static org.junit.Assert.*;
  * @author arno
  */
 public class ASysMonTest {
+    private ASysMonConfigBuilder configBuilder;
+
     @Before
     public void before() {
-        AGlobalConfig.setLogger(AStdOutLogger.INSTANCE);
+        configBuilder = new ASysMonConfigBuilder("dummy", "version", "instance", "#ff8000");
+        configBuilder.setLogger(AStdOutLogger.INSTANCE);
+    }
+
+    private ASysMon createSysMon(ADataSink dataSink) {
+        final ASysMon result = new ASysMon(configBuilder.build());
+        ASysMonConfigurer.addDataSink(result, dataSink);
+        return result;
     }
 
     @Test
     public void testSimpleMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         sysMon.start("a").finish();
 
@@ -41,7 +52,7 @@ public class ASysMonTest {
     @Test
     public void testNestedMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ASimpleMeasurement m = sysMon.start("a");
         sysMon.start("b").finish();
@@ -61,7 +72,7 @@ public class ASysMonTest {
     @Test
     public void testCollectingMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ASimpleMeasurement m = sysMon.start("a");
         final ACollectingMeasurement coll = sysMon.startCollectingMeasurement("b");
@@ -97,7 +108,7 @@ public class ASysMonTest {
     @Test
     public void testOverlappingDetails() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ASimpleMeasurement m = sysMon.start("a");
         final ACollectingMeasurement coll = sysMon.startCollectingMeasurement("b");
@@ -117,7 +128,7 @@ public class ASysMonTest {
     @Test
     public void testParallelMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         // NB: Parallel measurements do not nest. They can have no children, and they can be closed at any point,
         //      regardless of hierarchy (i.e. as long as the root measurement is not finished).
@@ -162,7 +173,7 @@ public class ASysMonTest {
     @Test
     public void testFinishRootWithUnfinishedCollectingMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ASimpleMeasurement m = sysMon.start("m");
         final ACollectingMeasurement a = sysMon.startCollectingMeasurement("a");
@@ -187,7 +198,8 @@ public class ASysMonTest {
     public void testSerialTimerRecording() {
         final ExplicitTimer timer = new ExplicitTimer();
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(timer, dataSink);
+        configBuilder.setTimer(timer);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ASimpleMeasurement m = sysMon.start("a");
         timer.curNanos += 100;
@@ -212,7 +224,8 @@ public class ASysMonTest {
     public void testParallelTimerRecording() {
         final ExplicitTimer timer = new ExplicitTimer();
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(timer, dataSink);
+        configBuilder.setTimer(timer);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ASimpleMeasurement m = sysMon.start("m");
         timer.curNanos += 100;
@@ -245,7 +258,8 @@ public class ASysMonTest {
     public void testCollectingTimerRecording() {
         final ExplicitTimer timer = new ExplicitTimer();
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(timer, dataSink);
+        configBuilder.setTimer(timer);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ASimpleMeasurement m = sysMon.start("m");
         timer.curNanos += 100;
@@ -312,7 +326,7 @@ public class ASysMonTest {
     @Test
     public void testTopLevelCollectingMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         // top-level collecting measurement is permitted, and A-SysMon implicitly creates (and finishes) a
         //  simple measurement that serves as a root wrapper
@@ -330,7 +344,7 @@ public class ASysMonTest {
     @Test
     public void testTopLevelNestedCollectingMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ACollectingMeasurement a = sysMon.startCollectingMeasurement("a");
         final ACollectingMeasurement b = sysMon.startCollectingMeasurement("b");
@@ -350,7 +364,7 @@ public class ASysMonTest {
     @Test
     public void testTopLevelCollectingAndSimpleMeasurement() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         // If a top-level collecting measurement is started, and then a simple measurement is started before
         //  that collecting measurement is finished, the implicitly created synthetic root measurement is finished
@@ -376,7 +390,7 @@ public class ASysMonTest {
     @Test
     public void testImplicitCloseChildAndDescendants() {
         final CollectingDataSink dataSink = new CollectingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         final ASimpleMeasurement m = sysMon.start("m");
         sysMon.start("a");
@@ -393,9 +407,9 @@ public class ASysMonTest {
     @Test
     public void testMemoryLeak() {
         final CountingLogger log = new CountingLogger();
-        AGlobalConfig.setLogger(log);
+        configBuilder.setLogger(log);
         final CountingDataSink dataSink = new CountingDataSink();
-        final ASysMon sysMon = new ASysMon(dataSink);
+        final ASysMon sysMon = createSysMon(dataSink);
 
         for(int i=0; i<100 * AMeasurementHierarchyImpl.MAX_CALL_DEPTH; i++) {
             sysMon.start("a");

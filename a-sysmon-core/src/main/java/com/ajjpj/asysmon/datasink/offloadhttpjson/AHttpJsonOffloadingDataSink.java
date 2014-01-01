@@ -1,7 +1,8 @@
 package com.ajjpj.asysmon.datasink.offloadhttpjson;
 
 import com.ajjpj.asysmon.ASysMon;
-import com.ajjpj.asysmon.config.AGlobalConfig;
+import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
@@ -27,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 public class AHttpJsonOffloadingDataSink implements ADataSink {
     public static final int NO_DATA_SLEEP_MILLIS = 10;
 
+    private final ASysMonConfig config;
+
     //TODO how many concurrent HTTP connections does this provide? --> configure!
     private final CloseableHttpClient httpClient = HttpClients.createDefault(); //TODO make this configurable
     private final URI uri;
@@ -43,12 +46,14 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
     private volatile boolean isShutDown = false;
 
     public AHttpJsonOffloadingDataSink(final ASysMon sysMon, String uri, String sender, String senderInstance, int traceQueueSize, int scalarQueueSize, int numOffloadingThreads, int scalarMeasurementFrequencyMillis) {
+        this.config = sysMon.getConfig();
+
         this.uri = URI.create(uri);
         this.sender = sender;
         this.senderInstance = senderInstance;
 
-        this.traceQueue = new ASoftlyLimitedQueue<AHierarchicalDataRoot>(traceQueueSize, new DiscardedLogger("trace queue overflow - discarding oldest trace"));
-        this.scalarQueue = new ASoftlyLimitedQueue<AScalarDataPoint>(scalarQueueSize, new DiscardedLogger("scalar queue overflow - discarding oldest data"));
+        this.traceQueue = new ASoftlyLimitedQueue<AHierarchicalDataRoot>(traceQueueSize, new DiscardedLogger(config.logger, "trace queue overflow - discarding oldest trace"));
+        this.scalarQueue = new ASoftlyLimitedQueue<AScalarDataPoint>(scalarQueueSize, new DiscardedLogger(config.logger, "scalar queue overflow - discarding oldest data"));
 
         offloadingThreadPool = Executors.newFixedThreadPool(numOffloadingThreads);
         for(int i=0; i<numOffloadingThreads; i++) {
@@ -130,14 +135,16 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
     }
 
     private static class DiscardedLogger implements Runnable {
+        private final ASysMonLogger logger;
         private final String msg;
 
-        private DiscardedLogger(String msg) {
+        private DiscardedLogger(ASysMonLogger logger, String msg) {
+            this.logger = logger;
             this.msg = msg;
         }
 
         @Override public void run() {
-            AGlobalConfig.getLogger().warn(msg);
+            logger.warn(msg);
         }
     }
 
