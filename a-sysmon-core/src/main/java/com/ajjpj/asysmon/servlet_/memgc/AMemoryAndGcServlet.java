@@ -34,8 +34,8 @@ public class AMemoryAndGcServlet extends AbstractASysMonServlet {
         return "memgc.html";
     }
 
-    @Override protected boolean handleRestCall(String service, List<String> restParams, HttpServletResponse resp) throws IOException {
-        if("getData".equals(service)) {
+    @Override protected boolean handleRestCall(List<String> restParams, HttpServletResponse resp) throws IOException {
+        if("getData".equals(restParams.get(0))) {
             serveData(resp);
             return true;
         }

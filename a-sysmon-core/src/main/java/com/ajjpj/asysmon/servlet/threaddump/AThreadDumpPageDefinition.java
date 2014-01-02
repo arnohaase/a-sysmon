@@ -1,10 +1,10 @@
-package com.ajjpj.asysmon.servlet_.threaddump;
+package com.ajjpj.asysmon.servlet.threaddump;
 
-import com.ajjpj.asysmon.servlet.AbstractASysMonServlet;
+
+import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.management.ThreadInfo;
 import java.util.Collection;
@@ -14,38 +14,59 @@ import java.util.List;
 /**
  * @author arno
  */
-public class AThreadDumpServlet extends AbstractASysMonServlet {
-    public static final String INIT_PARAM_APP_PACKAGE = "application.package";
+public class AThreadDumpPageDefinition implements APresentationPageDefinition {
+    private final String applicationPackage;
+    private final String idSuffix;
+    private final String labelSuffix;
 
-    public volatile String appPkg;
-
-    @Override public void init() throws ServletException {
-        appPkg = getServletConfig().getInitParameter(INIT_PARAM_APP_PACKAGE);
+    public AThreadDumpPageDefinition(String applicationPackage) {
+        this(applicationPackage, "", "");
     }
 
-    @Override protected String getDefaultHtmlName() {
-        return "threads.html";
+    public AThreadDumpPageDefinition(String applicationPackage, String idSuffix, String labelSuffix) {
+        this.applicationPackage = applicationPackage;
+        this.idSuffix = idSuffix;
+        this.labelSuffix = labelSuffix;
     }
 
-    @Override public boolean handleRestCall(List<String> restParams, HttpServletResponse resp) throws IOException {
-        if("getData".equals(restParams.get(0))) {
-            serveData(resp);
+    @Override public String getId() {
+        return "threaddump" + idSuffix;
+    }
+
+    @Override
+    public String getShortLabel() {
+        return "Thread Dump" + labelSuffix;
+    }
+
+    @Override public String getFullLabel() {
+        return getShortLabel();
+    }
+
+    @Override public String getHtmlFileName() {
+        return "threaddump.html";
+    }
+
+    @Override public String getControllerName() {
+        return "CtrlThreadDump";
+    }
+
+    @Override public boolean handleRestCall(String service, List<String> params, AJsonSerHelper json) throws IOException {
+        if("getData".equals(service)) {
+            serveData(json);
             return true;
         }
 
         return false;
     }
 
-    private void serveData(HttpServletResponse resp) throws IOException {
-        final AJsonSerHelper json = new AJsonSerHelper(resp.getOutputStream());
-
+    private void serveData(AJsonSerHelper json) throws IOException {
         json.startObject();
 
-        json.writeKey("title");
-        json.writeStringLiteral("A-SysMon: Thread Dump");
-
+//        json.writeKey("title");
+//        json.writeStringLiteral("A-SysMon: Thread Dump");
+//
         json.writeKey("appPkg");
-        json.writeStringLiteral(appPkg);
+        json.writeStringLiteral(applicationPackage);
 
         json.writeKey("threads");
         dumpThreads(json, AThreadDumper.getThreadInfo(), AThreadDumper.getDeadlockedThreads());
@@ -102,5 +123,6 @@ public class AThreadDumpServlet extends AbstractASysMonServlet {
         json.endArray();
     }
 
-    //TODO keep 'head' fixed at the top (here and on other pages)
+    @Override public void init(ASysMon sysMon) {
+    }
 }

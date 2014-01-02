@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="ASysMonApp">
+<html ng-app="ASysMonApp" ng-controller="ASysMonCtrl">
 <head>
     <title ng-bind="title"></title>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
@@ -11,6 +11,11 @@
     <script src="_$_asysmon_$_/static/lib/angular-route-1.2.3.js"></script>
     <script src="_$_asysmon_$_/static/lib/FileSaver.js"></script>
     <script src="_$_asysmon_$_/static/lib/bootstrap-3.0.2.min.js"></script>
+
+    <script>
+        var asysmon = {};
+    </script>
+    <script src="_$_asysmon_$_/config.js"></script>
     <script src="_$_asysmon_$_/static/js/asysmon-app.js"></script>
     <script src="_$_asysmon_$_/static/js/ctrl-threaddump.js"></script>
     <!--TODO asysmon-module.js-->
@@ -19,41 +24,40 @@
 <body>
 <!--TODO menu-->
 
-<!--<div class="container-liquid">-->
-    <!--<div class="navbar-header">-->
-        <!--<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">-->
-            <!--<span class="sr-only">Toggle navigation</span>-->
-            <!--<span class="icon-bar"></span>-->
-            <!--<span class="icon-bar"></span>-->
-            <!--<span class="icon-bar"></span>-->
-        <!--</button>-->
-        <!--<a href="../" class="navbar-brand">Bootstrap</a>-->
-    <!--</div>-->
-    <!--<nav class="collapse navbar-collapse bs-navbar-collapse navbar-inverse" role="navigation">-->
-        <!--<ul class="nav navbar-nav">-->
-            <!--<li>-->
-                <!--<a href="../getting-started">Getting started</a>-->
-            <!--</li>-->
-            <!--<li class="active">-->
-                <!--<a href="../css">CSS</a>-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<a href="../components">Components</a>-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<a href="../javascript">JavaScript</a>-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<a href="../customize">Customize</a>-->
-            <!--</li>-->
-        <!--</ul>-->
-        <!--<ul class="nav navbar-nav navbar-right">-->
-            <!--<li>-->
-                <!--<a href="../about">About</a>-->
-            <!--</li>-->
-        <!--</ul>-->
-    <!--</nav>-->
-<!--</div>-->
+<div class="container-liquid">
+    <div class="navbar-header">
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a href="#" class="navbar-brand">A-SysMon Live Monitoring</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse navbar-inverse" role="navigation" >
+        <ul class="nav navbar-nav">
+            <li class="dropdown" ng-repeat="menuItem in config.menuEntries">
+                <ul class="dropdown-menu">
+                    <li ng-repeat="pageDef in menuItem.entries"><a href="#/{{pageDef.id}}">{{pageDef.shortLabel}}</a></li>
+                </ul>
+                <a class="dropdown-toggle" data-toggle="dropdown">{{menuItem.label}} <b class="caret"></b></a>
+            </li>
+
+
+            <li>
+                <a href="../getting-started">Getting started</a>
+            </li>
+            <li class="active">
+                <a href="../css">CSS</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="../about">About</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
 <div ng-view></div>
 

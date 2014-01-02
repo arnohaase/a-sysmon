@@ -3,12 +3,15 @@ package com.ajjpj.asysmon.config;
 import com.ajjpj.asysmon.config.log.ALog4JLogger;
 import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
+import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
+import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.timer.ASystemNanoTimer;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -28,6 +31,8 @@ public class ASysMonConfigBuilder {
 
     private final List<AScalarMeasurer> scalarMeasurers = new ArrayList<AScalarMeasurer>();
     private final List<ADataSink> dataSinks = new ArrayList<ADataSink>();
+
+    private final List<APresentationMenuEntry> presentationMenuEntries = new ArrayList<APresentationMenuEntry>();
 
     public ASysMonConfigBuilder(String applicationId, String applicationVersionId, String applicationInstanceId, String applicationInstanceHtmlColorCode) {
         this.applicationId = applicationId;
@@ -77,12 +82,23 @@ public class ASysMonConfigBuilder {
         return this;
     }
 
+    public ASysMonConfigBuilder addPresentationMenuEntry(String label, List<APresentationPageDefinition> entries) {
+        presentationMenuEntries.add(new APresentationMenuEntry(label, entries));
+        return this;
+    }
+
+    public ASysMonConfigBuilder addPresentationMenuEntry(String label, APresentationPageDefinition... entries) {
+        return addPresentationMenuEntry(label, Arrays.asList(entries));
+    }
+
     public ASysMonConfig build() {
         return new ASysMonConfig(
                 applicationId, applicationVersionId, applicationInstanceId, applicationInstanceHtmlColorCode,
                 logger, timer,
                 implicitlyShutDownWithServlet,
-                scalarMeasurers, dataSinks);
+                scalarMeasurers, dataSinks,
+                presentationMenuEntries
+                );
     }
 
     private static ASysMonLogger defaultLogger() {

@@ -32,7 +32,8 @@ function CtrlThreadDump($scope, $http, $log) {
     }
 
     function sendCommand(cmd) {
-        $http.get('_$_asysmon_$_/rest/' + cmd + '/threaddump').success(function(data) {
+        //TODO extract to asysmon module; add error handling
+        $http.get('_$_asysmon_$_/rest/threaddump/' + cmd).success(function(data) {
             initFromResponse(data);
         });
     }
@@ -109,7 +110,7 @@ function CtrlThreadDump($scope, $http, $log) {
             return 'stacktrace-app-pkg';
         }
         return "stacktrace";
-    }
+    };
 
     function isReflectionSte(ste) {
         if(ste.repr.indexOf('java.lang.reflect.') === 0) {

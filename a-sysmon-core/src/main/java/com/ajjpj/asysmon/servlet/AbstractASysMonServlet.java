@@ -32,23 +32,20 @@ public abstract class AbstractASysMonServlet extends HttpServlet {
         }
 
         if(uri.contains(ASYSMON_MARKER_REST)) {
-            final String restPart = substringAfter(uri, ASYSMON_MARKER_REST);
-
-            final int idxSlash = restPart.indexOf('/');
-            String restService = restPart;
-            final List<String> restParams = new ArrayList<String>();
-            if(idxSlash > 0) {
-                final String paramsRaw = restPart.substring(idxSlash+1);
-                restParams.addAll(Arrays.asList(paramsRaw.split("/")));
-                restService = restService.substring(0, idxSlash);
-            }
-
-            if(!handleRestCall(restService, restParams, resp)) {
+            final String[] restPart = substringAfter(uri, ASYSMON_MARKER_REST).split("/");
+            if(!handleRestCall(new ArrayList<String>(Arrays.asList(restPart)), resp)) {
                 throw new IllegalArgumentException("unsupported REST call: " + uri);
             }
             return;
         }
 
+        if(uri.contains(ASYSMON_MARKER_SEGMENT)) {
+            final String[] dynamicPart = substringAfter(uri, ASYSMON_MARKER_SEGMENT).split("/");
+            if(! handleDynamic(new ArrayList<String>(Arrays.asList(dynamicPart)), resp)) {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+            return;
+        }
 
         //TODO handle 'not found'
 
@@ -61,7 +58,10 @@ public abstract class AbstractASysMonServlet extends HttpServlet {
     }
 
     protected abstract String getDefaultHtmlName();
-    protected abstract boolean handleRestCall(String service, List<String> serviceParams, HttpServletResponse resp) throws IOException;
+    protected abstract boolean handleRestCall(List<String> pathSegments, HttpServletResponse resp) throws IOException;
+    protected boolean handleDynamic(List<String> pathSegments, HttpServletResponse resp) throws IOException {
+        return false;
+    }
 
     private static String substringAfter(String s, String sub) {
         final int idx = s.indexOf(sub);

@@ -27,7 +27,9 @@ public abstract class AbstractAsysmonReportServlet extends AbstractASysMonServle
         return "threaddump.html";
     }
 
-    @Override protected boolean handleRestCall(String service, List<String> restParams, HttpServletResponse resp) throws IOException {
+    @Override protected boolean handleRestCall(List<String> restParams, HttpServletResponse resp) throws IOException {
+        final String service = restParams.get(0);
+
         if("getData".equals(service)) {
             serveData(resp);
             return true;
