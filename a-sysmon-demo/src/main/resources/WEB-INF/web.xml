@@ -8,6 +8,15 @@
     </listener>
 
     <servlet>
+        <servlet-name>asysmon</servlet-name>
+        <servlet-class>com.ajjpj.asysmon.servlet.ASysMonServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>asysmon</servlet-name>
+        <url-pattern>/asysmon/all/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>asysmon-minmaxavg</servlet-name>
         <servlet-class>com.ajjpj.asysmon.servlet_.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
     </servlet>

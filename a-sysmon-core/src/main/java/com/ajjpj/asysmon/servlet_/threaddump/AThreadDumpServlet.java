@@ -17,7 +17,7 @@ import java.util.List;
 public class AThreadDumpServlet extends AbstractASysMonServlet {
     public static final String INIT_PARAM_APP_PACKAGE = "application.package";
 
-    private volatile String appPkg;
+    public volatile String appPkg;
 
     @Override public void init() throws ServletException {
         appPkg = getServletConfig().getInitParameter(INIT_PARAM_APP_PACKAGE);
@@ -27,7 +27,7 @@ public class AThreadDumpServlet extends AbstractASysMonServlet {
         return "threads.html";
     }
 
-    @Override protected boolean handleRestCall(String service, List<String> restParams, HttpServletResponse resp) throws IOException {
+    @Override public boolean handleRestCall(String service, List<String> restParams, HttpServletResponse resp) throws IOException {
         if("getData".equals(service)) {
             serveData(resp);
             return true;

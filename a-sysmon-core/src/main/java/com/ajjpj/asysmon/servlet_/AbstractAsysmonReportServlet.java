@@ -24,7 +24,7 @@ public abstract class AbstractAsysmonReportServlet extends AbstractASysMonServle
     }
 
     @Override protected String getDefaultHtmlName() {
-        return "aggregated.html";
+        return "threaddump.html";
     }
 
     @Override protected boolean handleRestCall(String service, List<String> restParams, HttpServletResponse resp) throws IOException {
