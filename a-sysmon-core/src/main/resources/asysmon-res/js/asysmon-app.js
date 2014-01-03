@@ -1,16 +1,14 @@
 
-angular.module('ASysMonApp', ['ngRoute', 'asysmon'], function($routeProvider) {
-    for(var i=0; i<asysmon.config.menuEntries.length; i++) {
-        var menuEntry = asysmon.config.menuEntries[i];
-        for(var j=0; j<menuEntry.entries.length; j++) {
-            var pageDef = menuEntry.entries[j];
+angular.module('ASysMonApp', ['ngRoute', 'asysmon'], function($routeProvider, configRaw) {
+    angular.forEach(configRaw.menuEntries, function(menuEntry) {
+        angular.forEach(menuEntry.entries, function(pageDef) {
             $routeProvider.when('/' + pageDef.id, {templateUrl: '_$_asysmon_$_/static/partials/' + pageDef.htmlFileName, controller: pageDef.controller});
-        }
-    }
+        });
+    });
 
     $routeProvider.otherwise({ redirectTo: '/threaddump' }); //TODO get default page into config
 });
 
-angular.module('ASysMonApp').controller('ASysMonCtrl', function($scope, $route, $location) {
-    $scope.config = asysmon.config;
+angular.module('ASysMonApp').controller('ASysMonCtrl', function($scope, $route, $location, config) {
+    $scope.configRaw = config.raw();
 });

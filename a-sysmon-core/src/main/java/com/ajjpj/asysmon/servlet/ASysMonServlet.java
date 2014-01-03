@@ -81,7 +81,7 @@ public class ASysMonServlet extends AbstractASysMonServlet {
 
         final ServletOutputStream out = resp.getOutputStream();
 
-        out.print("asysmon.config = ");
+        out.print("angular.module('ASysMonApp').constant('configRaw', ");
         out.flush();
 
         final AJsonSerHelper json = new AJsonSerHelper(out);
@@ -105,7 +105,7 @@ public class ASysMonServlet extends AbstractASysMonServlet {
 
         json.endObject();
 
-        out.println(";");
+        out.println(");");
     }
 
     private void writeMenuEntry(APresentationMenuEntry menuEntry, AJsonSerHelper json) throws IOException {

@@ -12,18 +12,12 @@
     <script src="_$_asysmon_$_/static/lib/FileSaver.js"></script>
     <script src="_$_asysmon_$_/static/lib/bootstrap-3.0.2.min.js"></script>
 
-    <script>
-        var asysmon = {};
-    </script>
-    <script src="_$_asysmon_$_/config.js"></script>
     <script src="_$_asysmon_$_/static/js/asysmon-app.js"></script>
     <script src="_$_asysmon_$_/static/js/ctrl-threaddump.js"></script>
     <script src="_$_asysmon_$_/static/js/asysmon-module.js"></script>
-    <!--TODO asysmon-module.js-->
-    <!--TODO asysmon-init.js-->
+    <script src="_$_asysmon_$_/config.js"></script>
 </head>
 <body>
-<!--TODO menu-->
 
 <div class="container-liquid">
     <div class="navbar-header">
@@ -37,7 +31,7 @@
     </div>
     <nav class="collapse navbar-collapse bs-navbar-collapse navbar-inverse" role="navigation" >
         <ul class="nav navbar-nav">
-            <li class="dropdown" ng-repeat="menuItem in config.menuEntries">
+            <li class="dropdown" ng-repeat="menuItem in configRaw.menuEntries">
                 <ul class="dropdown-menu">
                     <li ng-repeat="pageDef in menuItem.entries"><a href="#/{{pageDef.id}}">{{pageDef.shortLabel}}</a></li>
                 </ul>
@@ -59,11 +53,7 @@
         </ul>
     </nav>
 
-    route: {{asdf()}}
-    <div>
-        {{routeRaw()}}
-    </div>
-    rr: {{route()}}
+    <h1>{{asdf}}</h1>
 
     <div ng-view></div>
 </div>

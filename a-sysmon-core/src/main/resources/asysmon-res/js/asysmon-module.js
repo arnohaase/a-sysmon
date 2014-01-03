@@ -20,6 +20,25 @@
                 .success(success); //TODO error handling
         };
     }]);
+
+    asysmon.service('config', ['$location', 'configRaw', function($location, configRaw) {
+        var byPageId = {};
+        angular.forEach(configRaw.menuEntries, function(menuEntry) {
+            angular.forEach(menuEntry.entries, function(pageDef) {
+                byPageId[pageDef.id] = pageDef;
+            });
+        });
+
+        this.forPage = function(pageId) {
+            return byPageId[pageId];
+        };
+        this.forCurrentPage = function() {
+            return this.forPage(curPage($location));
+        };
+        this.raw = function() {
+            return configRaw;
+        };
+    }]);
 }());
 
 
