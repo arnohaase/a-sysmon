@@ -18,8 +18,9 @@ todo
     * ?!?!?! --> Felix
 
 * core
-  * unified servlet / single page application
+  * remove code that is now unused (_servlet, static web resources), web.xml
   * beautify
+    * make menu full width, keep menu and header part 'floating' at the top
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?
     * hide 'pick' buttons for JDBC report
     * beautified presentation of current memory consumption

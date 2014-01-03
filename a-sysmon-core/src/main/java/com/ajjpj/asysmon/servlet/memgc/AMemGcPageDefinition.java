@@ -19,11 +19,11 @@ public class AMemGcPageDefinition implements APresentationPageDefinition {
     }
 
     @Override public String getShortLabel() {
-        return "GC Log";
+        return "GC View";
     }
 
     @Override public String getFullLabel() {
-        return "Garbage Collection Log";
+        return "Garbage Collection History";
     }
 
     @Override public String getHtmlFileName() {

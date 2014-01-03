@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.servlet_.memgc;
+package com.ajjpj.asysmon.servlet.memgc;
 
 import org.junit.Test;
 

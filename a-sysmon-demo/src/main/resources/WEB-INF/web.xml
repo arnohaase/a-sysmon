@@ -13,49 +13,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>asysmon</servlet-name>
-        <url-pattern>/asysmon/all/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>asysmon-minmaxavg</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet_.minmaxavg.AMinMaxAvgReportServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>asysmon-minmaxavg</servlet-name>
-        <url-pattern>/asysmon/minmaxavg/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>asysmon-jdbc</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet_.jdbc.AJdbcReportServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>asysmon-jdbc</servlet-name>
-        <url-pattern>/asysmon/jdbc/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>asysmon-threaddump</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet_.threaddump.AThreadDumpServlet</servlet-class>
-        <init-param>
-            <param-name>application.package</param-name>
-            <param-value>com.ajjpj.asysmon.demo</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>asysmon-threaddump</servlet-name>
-        <url-pattern>/asysmon/threads/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>asysmon-mem</servlet-name>
-        <servlet-class>com.ajjpj.asysmon.servlet_.memgc.AMemoryAndGcServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>asysmon-mem</servlet-name>
-        <url-pattern>/asysmon/mem/*</url-pattern>
+        <url-pattern>/asysmon/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
