@@ -1,0 +1,27 @@
+<div class="mem-header">
+    <div class="button-box">
+        <div class="btn-group">
+            <a class="btn btn-default" ng-click="zoomOut()" data-toggle="tooltip" title="Zoom out by a factor of 1.5"><span class="glyphicon glyphicon-zoom-out"></span></a>
+            <a class="btn btn-default" ng-click="zoomReset()" data-toggle="tooltip" title="Reset zoom to display the entire graph."><span class="glyphicon glyphicon-search"></span></a>
+            <a class="btn btn-default" ng-click="zoomIn()" data-toggle="tooltip" title="Zoom in to the center by a factor of 1.5. For more control on where to zoom, double click on the graph."><span class="glyphicon glyphicon-zoom-in"></span></a>
+        </div>
+        <a class="btn btn-default" ng-click="refresh()" data-toggle="tooltip" title="Export data to Excel as CSV">Refresh</a>
+    </div>
+
+    <div>
+        <input type="checkbox" ng-model="showFullGcMarkers">Show Full GC markers &nbsp; &nbsp; &nbsp;
+        <input type="checkbox" ng-model="showOtherGcMarkers">Show other GC markers &nbsp; &nbsp; &nbsp;
+        <input type="checkbox" ng-model="showLegend">Show Legend
+    </div>
+    <div style="margin-top: 10px;">
+        <div>Zoom:</div>
+        <div class="mem-gc-zoom-container">
+            <div class="mem-gc-zoom-range" style="width: {{getZoomMinPercent()}}%;"></div>
+            <div class="mem-gc-zoom-range mem-gc-zoom-range-present" style="width: {{getZoomVisiblePercent()}}%;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="mem-gc-container">
+    <div id="mem-gc-placeholder" class="flot-placeholder"></div>
+</div>

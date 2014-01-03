@@ -12,8 +12,16 @@
     <script src="_$_asysmon_$_/static/lib/FileSaver.js"></script>
     <script src="_$_asysmon_$_/static/lib/bootstrap-3.0.2.min.js"></script>
 
+    <script src="_$_asysmon_$_/static/lib/jquery.flot-0.8.2.js"></script>
+    <script src="_$_asysmon_$_/static/lib/jquery.flot.resize-0.8.2.js"></script>
+    <script src="_$_asysmon_$_/static/lib/jquery.flot.stack-0.8.2.js"></script>
+    <script src="_$_asysmon_$_/static/lib/jquery.flot.time-0.8.2.js"></script>
+    <script src="_$_asysmon_$_/static/lib/jquery.flot.axislabels-0.8.2.js"></script>
+    <script src="_$_asysmon_$_/static/lib/jquery.flot.navigate-0.8.2.js"></script>
+
     <script src="_$_asysmon_$_/static/js/asysmon-app.js"></script>
     <script src="_$_asysmon_$_/static/js/ctrl-threaddump.js"></script>
+    <script src="_$_asysmon_$_/static/js/ctrl-memgc.js"></script>
     <script src="_$_asysmon_$_/static/js/asysmon-module.js"></script>
     <script src="_$_asysmon_$_/config.js"></script>
 </head>
@@ -37,20 +45,13 @@
                 </ul>
                 <a class="dropdown-toggle" data-toggle="dropdown">{{menuItem.label}} <b class="caret"></b></a>
             </li>
-
-
-            <li>
-                <a href="../getting-started">Getting started</a>
-            </li>
-            <li class="active">
-                <a href="../css">CSS</a>
-            </li>
+            <!--TODO class="active"-->
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a href="../about">About</a>
-            </li>
-        </ul>
+        <!--<ul class="nav navbar-nav navbar-right">-->
+            <!--<li>-->
+                <!--<a href="../about">About</a>-->
+            <!--</li>-->
+        <!--</ul>-->
     </nav>
 
     <h1>{{curTitle()}}</h1>

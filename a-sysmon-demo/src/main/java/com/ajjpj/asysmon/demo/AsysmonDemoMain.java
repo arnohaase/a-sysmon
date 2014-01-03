@@ -30,7 +30,7 @@ public class AsysmonDemoMain {
 
 //        ASysMonConfigurer.addDataSink(ASysMon.get(), new AStdOutDataSink());
         ASysMonConfigurer.addThreadCountSupport(ASysMon.get()); //TODO unify the mechanism with GC support
-        AJmxGcMeasurerer.init(ASysMon.get());
+        AJmxGcMeasurerer.init(ASysMon.get()); //TODO move this to configuration
         ASysMonConfigurer.addScalarMeasurer(ASysMon.get(), new AJmxMemMeasurer());
 
 //        ASysMonConfigurer.addDataSink(ASysMon.get(), new ALog4JDataSink());

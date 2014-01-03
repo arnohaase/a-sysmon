@@ -62,9 +62,6 @@ public class AThreadDumpPageDefinition implements APresentationPageDefinition {
     private void serveData(AJsonSerHelper json) throws IOException {
         json.startObject();
 
-//        json.writeKey("title");
-//        json.writeStringLiteral("A-SysMon: Thread Dump");
-//
         json.writeKey("appPkg");
         json.writeStringLiteral(applicationPackage);
 
