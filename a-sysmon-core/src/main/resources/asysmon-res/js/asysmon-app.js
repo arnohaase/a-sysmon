@@ -11,4 +11,7 @@ angular.module('ASysMonApp', ['ngRoute', 'asysmon'], function($routeProvider, co
 
 angular.module('ASysMonApp').controller('ASysMonCtrl', function($scope, $route, $location, config) {
     $scope.configRaw = config.raw();
+    $scope.curTitle = function() {
+        return config.forCurrentPage().fullLabel;
+    };
 });
