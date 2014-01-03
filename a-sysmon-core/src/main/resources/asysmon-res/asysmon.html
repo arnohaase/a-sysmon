@@ -18,6 +18,7 @@
     <script src="_$_asysmon_$_/config.js"></script>
     <script src="_$_asysmon_$_/static/js/asysmon-app.js"></script>
     <script src="_$_asysmon_$_/static/js/ctrl-threaddump.js"></script>
+    <script src="_$_asysmon_$_/static/js/asysmon-module.js"></script>
     <!--TODO asysmon-module.js-->
     <!--TODO asysmon-init.js-->
 </head>
@@ -57,12 +58,15 @@
             </li>
         </ul>
     </nav>
+
+    route: {{asdf()}}
+    <div>
+        {{routeRaw()}}
+    </div>
+    rr: {{route()}}
+
+    <div ng-view></div>
 </div>
-
-<div ng-view></div>
-
-</div>
-
 
 </body>
 </html>

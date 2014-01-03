@@ -31,7 +31,7 @@ todo
   * lock-free aggregation implementation
   * thread dump:
     * keep track (and show) how long each thread has been inside an active measurement
-    * option: 'hide before first application frame'
+    * option: 'hide stack before first application frame'
 
 
 * documentation (!!!)
