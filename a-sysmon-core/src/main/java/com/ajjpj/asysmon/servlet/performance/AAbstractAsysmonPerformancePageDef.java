@@ -1,70 +1,72 @@
-package com.ajjpj.asysmon.servlet_;
+package com.ajjpj.asysmon.servlet.performance;
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.servlet.AbstractASysMonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author arno
  */
-public abstract class AbstractAsysmonReportServlet extends AbstractASysMonServlet {
+public abstract class AAbstractAsysmonPerformancePageDef implements APresentationPageDefinition {
+    private volatile ASysMon sysMon;
 
-    /**
-     * Default implementations returns the singleton instance. Override to customize.
-     */
-    protected ASysMon getSysMon() {
-        return ASysMon.get();
+    @Override public String getHtmlFileName() {
+        return "aggregated.html";
     }
 
-    @Override protected String getDefaultHtmlName() {
-        return "threaddump.html";
+    @Override public String getControllerName() {
+        return "CtrlAggregated";
     }
 
-    @Override protected boolean handleRestCall(List<String> restParams, HttpServletResponse resp) throws IOException {
-        final String service = restParams.get(0);
+    @Override public void init(ASysMon sysMon) {
+        this.sysMon = sysMon;
+    }
 
+    @Override public boolean handleRestCall(String service, List<String> params, AJsonSerHelper json) throws IOException {
         if("getData".equals(service)) {
-            serveData(resp);
+            serveData(json);
             return true;
         }
         if("doStart".equals(service)) {
             doStartMeasurements();
-            serveData(resp);
+            serveData(json);
             return true;
         }
         if("doStop".equals(service)) {
             doStopMeasurements();
-            serveData(resp);
+            serveData(json);
             return true;
         }
         if("doClear".equals(service)) {
             doClearMeasurements();
-            serveData(resp);
+            serveData(json);
             return true;
         }
 
         return false;
     }
 
-    private void serveData(HttpServletResponse resp) throws IOException {
-        final AJsonSerHelper json = new AJsonSerHelper(resp.getOutputStream());
+    protected abstract void doStartMeasurements();
+    protected abstract void doStopMeasurements();
+    protected abstract void doClearMeasurements();
 
+    protected abstract boolean isStarted();
+    protected abstract List<ColDef> getColDefs();
+    protected abstract List<TreeNode> getData();
+
+    private void serveData(AJsonSerHelper json) throws IOException {
         json.startObject();
 
-        json.writeKey("title");
-        json.writeStringLiteral(getTitle());
         json.writeKey("isStarted");
         json.writeBooleanLiteral(isStarted());
 
         json.writeKey("scalars");
         json.startObject();
-        for(AScalarDataPoint scalar: getSysMon().getScalarMeasurements().values()) {
+        for(AScalarDataPoint scalar: sysMon.getScalarMeasurements().values()) {
             writeScalar(json, scalar);
         }
         json.endObject();
@@ -145,15 +147,6 @@ public abstract class AbstractAsysmonReportServlet extends AbstractASysMonServle
         json.endObject();
     }
 
-    protected abstract boolean isStarted();
-    protected abstract void doStartMeasurements();
-    protected abstract void doStopMeasurements();
-    protected abstract void doClearMeasurements();
-
-    protected abstract List<ColDef> getColDefs();
-
-    protected abstract List<TreeNode> getData();
-
     protected enum ColWidth {Short, Medium, Long}
     protected static class ColDef {
         public final String name;
@@ -182,6 +175,4 @@ public abstract class AbstractAsysmonReportServlet extends AbstractASysMonServle
             this.children = children;
         }
     }
-
-    protected abstract String getTitle();
 }

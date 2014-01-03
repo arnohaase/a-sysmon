@@ -1,4 +1,6 @@
-function CtrlAggregated ($scope, $http, $log) {
+
+angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log, Rest) {
+
     function reinitTooltips() {
         $('.btn').tooltip({
             container: 'body',
@@ -56,9 +58,7 @@ function CtrlAggregated ($scope, $http, $log) {
     }
 
     function sendCommand(cmd) {
-        $http.get('_$_asysmon_$_/rest/' + cmd).success(function(data) {
-            initFromResponse(data);
-        });
+        Rest.call(cmd, initFromResponse);
     }
 
     $scope.refresh = function() {
@@ -255,5 +255,5 @@ function CtrlAggregated ($scope, $http, $log) {
         var blob = new Blob([data], {type: "application/excel;charset=utf-8"});
         saveAs(blob, "asysmon-export-" + formattedNow + '.csv');
     };
-}
+});
 
