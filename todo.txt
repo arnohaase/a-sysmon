@@ -18,13 +18,14 @@ todo
     * ?!?!?! --> Felix
 
 * core
-  * remove code that is now unused (_servlet, static web resources), web.xml
   * beautify
+    * show application ID etc. (with color code)
     * make menu full width, keep menu and header part 'floating' at the top
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?
     * hide 'pick' buttons for JDBC report
     * beautified presentation of current memory consumption
     * aggregated servlets: show only explicit 'positive' list of scalar data
+    * memgc: remove 'end of' before major / minor gc
   * added views
     * view of 'recent requests' (filtered)
     * 'start' page with links to other pages?

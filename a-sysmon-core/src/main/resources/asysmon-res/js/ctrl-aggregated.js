@@ -20,9 +20,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     $scope.rootLevel = 0;
 
     function initFromResponse(data) {
-        $scope.title = data.title;
         $scope.isStarted = data.isStarted;
-        $scope.scalars = data.scalars;
         $scope.columnDefs = data.columnDefs.reverse();
         $scope.traces = data.traces;
         $scope.pickedTraces = $scope.traces; //TODO keep selection on 'refresh'

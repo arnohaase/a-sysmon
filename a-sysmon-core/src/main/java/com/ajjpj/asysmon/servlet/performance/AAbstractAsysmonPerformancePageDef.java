@@ -2,7 +2,6 @@ package com.ajjpj.asysmon.servlet.performance;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
-import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
 import java.io.IOException;
@@ -64,13 +63,6 @@ public abstract class AAbstractAsysmonPerformancePageDef implements APresentatio
         json.writeKey("isStarted");
         json.writeBooleanLiteral(isStarted());
 
-        json.writeKey("scalars");
-        json.startObject();
-        for(AScalarDataPoint scalar: sysMon.getScalarMeasurements().values()) {
-            writeScalar(json, scalar);
-        }
-        json.endObject();
-
         json.writeKey("columnDefs");
         json.startArray();
         for(ColDef colDef: getColDefs()) {
@@ -102,19 +94,6 @@ public abstract class AAbstractAsysmonPerformancePageDef implements APresentatio
 
         json.writeKey("width");
         json.writeStringLiteral(colDef.width.name());
-
-        json.endObject();
-    }
-
-    private void writeScalar(AJsonSerHelper json, AScalarDataPoint scalar) throws IOException {
-        json.writeKey(scalar.getName());
-        json.startObject();
-
-        json.writeKey("value");
-        json.writeNumberLiteral(scalar.getValueRaw(), scalar.getNumFracDigits());
-
-        json.writeKey("numFracDigits");
-        json.writeNumberLiteral(scalar.getNumFracDigits(), 0);
 
         json.endObject();
     }

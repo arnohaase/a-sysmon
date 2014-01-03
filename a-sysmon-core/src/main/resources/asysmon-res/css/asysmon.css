@@ -24,6 +24,9 @@ td.global-measurements-key {
   padding-right: 10px;
 }
 
+div.button-segment {
+  height: 60px;
+}
 div.button-box {
   float: right;
   margin-top: 8px;
