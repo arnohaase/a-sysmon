@@ -12,7 +12,7 @@ import java.util.Map;
  * @author arno
  */
 public class AHttpRequestMeasuringFilter implements Filter {
-    public static final String PARAM_ANALYZER_CLASS_FQN = "asysmon.http.analyzer";
+    public static final String PARAM_ANALYZER_CLASS_FQN = "asysmon.http.analyzer"; //TODO move to configuration
 
     private AHttpRequestAnalyzer analyzer;
 

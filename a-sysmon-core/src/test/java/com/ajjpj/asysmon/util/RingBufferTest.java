@@ -1,5 +1,6 @@
-package com.ajjpj.asysmon.servlet.memgc;
+package com.ajjpj.asysmon.util;
 
+import com.ajjpj.asysmon.util.ARingBuffer;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import static org.junit.Assert.*;
 public class RingBufferTest {
     @Test
     public void testSingleThreaded() {
-        final RingBuffer<Long> rb = new RingBuffer<Long>(Long.class, 100);
+        final ARingBuffer<Long> rb = new ARingBuffer<Long>(Long.class, 100);
 
         assertFalse(rb.iterator().hasNext());
         try {
@@ -41,7 +42,7 @@ public class RingBufferTest {
 
         final AtomicBoolean finished = new AtomicBoolean(false);
         final AtomicBoolean failed = new AtomicBoolean(false);
-        final RingBuffer<Long> rb = new RingBuffer<Long>(Long.class, BUF_SIZE);
+        final ARingBuffer<Long> rb = new ARingBuffer<Long>(Long.class, BUF_SIZE);
 
         for(int i=0; i<10; i++) {
             new Thread() {

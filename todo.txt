@@ -28,12 +28,11 @@ todo
     * memgc: remove 'end of' before major / minor gc
   * added views
     * view of 'recent requests' (filtered)
-    * 'start' page with links to other pages?
-    * 'scalar' / dashboard page
   * lock-free aggregation implementation
   * thread dump:
     * keep track (and show) how long each thread has been inside an active measurement
     * option: 'hide stack before first application frame'
+  * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
 
 
 * documentation (!!!)

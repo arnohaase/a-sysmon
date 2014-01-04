@@ -4,6 +4,7 @@ import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.special.AJmxGcMeasurerer;
+import com.ajjpj.asysmon.util.ARingBuffer;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,10 +17,10 @@ import java.util.Set;
  * @author arno
  */
 class GcDataSink implements ADataSink {
-    private final RingBuffer<GcDetails> dataBuffer;
+    private final ARingBuffer<GcDetails> dataBuffer;
 
     GcDataSink(int maxNumDetails) {
-        dataBuffer = new RingBuffer<GcDetails>(GcDetails.class, maxNumDetails);
+        dataBuffer = new ARingBuffer<GcDetails>(GcDetails.class, maxNumDetails);
     }
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {

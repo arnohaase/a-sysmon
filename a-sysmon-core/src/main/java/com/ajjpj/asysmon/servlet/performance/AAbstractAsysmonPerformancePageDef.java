@@ -11,8 +11,6 @@ import java.util.List;
  * @author arno
  */
 public abstract class AAbstractAsysmonPerformancePageDef implements APresentationPageDefinition {
-    private volatile ASysMon sysMon;
-
     @Override public String getHtmlFileName() {
         return "aggregated.html";
     }
@@ -22,7 +20,6 @@ public abstract class AAbstractAsysmonPerformancePageDef implements APresentatio
     }
 
     @Override public void init(ASysMon sysMon) {
-        this.sysMon = sysMon;
     }
 
     @Override public boolean handleRestCall(String service, List<String> params, AJsonSerHelper json) throws IOException {
@@ -101,8 +98,13 @@ public abstract class AAbstractAsysmonPerformancePageDef implements APresentatio
     private void writeDataNode(AJsonSerHelper json, TreeNode node) throws IOException {
         json.startObject();
 
+        if(node.id != null) {
+            json.writeKey("id");
+            json.writeStringLiteral(node.id);
+        }
+
         json.writeKey("name");
-        json.writeStringLiteral(node.identifier);
+        json.writeStringLiteral(node.label);
 
         json.writeKey("isSerial");
         json.writeBooleanLiteral(node.isSerial);
@@ -142,13 +144,18 @@ public abstract class AAbstractAsysmonPerformancePageDef implements APresentatio
     }
 
     protected static class TreeNode {
-        public final String identifier;
+        public final String id;
+        public final String label;
         public final boolean isSerial;
         public final long[] colDataRaw;
         public final List<TreeNode> children;
 
-        public TreeNode(String identifier, boolean isSerial, long[] colDataRaw, List<TreeNode> children) {
-            this.identifier = identifier;
+        public TreeNode(String label, boolean isSerial, long[] colDataRaw, List<TreeNode> children) {
+            this(null, label, isSerial, colDataRaw, children);
+        }
+        public TreeNode(String id, String label, boolean isSerial, long[] colDataRaw, List<TreeNode> children) {
+            this.id = id;
+            this.label = label;
             this.isSerial = isSerial;
             this.colDataRaw = colDataRaw;
             this.children = children;

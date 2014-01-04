@@ -48,7 +48,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         if(nodes) {
             for(var i=0; i<nodes.length; i++) {
                 nodes[i].level = level;
-                var fqn = prefix + '\n' + nodes[i].name;
+                var fqn = prefix + '\n' + (nodes[i].id || nodes[i].name);
                 nodes[i].fqn = fqn;
                 initTraceNodes(nodes[i].children, level+1, fqn);
             }

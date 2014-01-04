@@ -1,16 +1,14 @@
-package com.ajjpj.asysmon.servlet.memgc;
+package com.ajjpj.asysmon.util;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Iterator;
 
 
 /**
- * This is a highly specialized ring buffer implementation custom tailored for holding GC data. It is probably not
- *  fit for use in any other context.
- *
  * @author arno
  */
-class RingBuffer<T> implements Iterable<T> {
+public class ARingBuffer<T> implements Iterable<T> {
     /**
      * This is the number of bins allocated in addition to the nominal buffer size to allow room for buffering write
      *  lag when reading.
@@ -27,7 +25,7 @@ class RingBuffer<T> implements Iterable<T> {
 
     private boolean isFull = false;
 
-    RingBuffer(Class<T> cls, int maxSize) {
+    public ARingBuffer(Class<T> cls, int maxSize) {
         elementClass = cls;
         bufSize = maxSize;
         buffer = allocate();
@@ -40,6 +38,12 @@ class RingBuffer<T> implements Iterable<T> {
         if(next == 0) {
             isFull = true;
         }
+    }
+
+    public synchronized void clear() { //TODO test this
+        next = 0;
+        isFull = false;
+        Arrays.fill(buffer, null);
     }
 
     @SuppressWarnings("unchecked")
