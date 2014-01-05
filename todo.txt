@@ -20,10 +20,8 @@ todo
 * core
   * beautify
     * show application ID etc. (with color code)
-    * make menu full width, keep menu and header part 'floating' at the top
+    * keep menu and header part 'floating' at the top
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?
-    * hide 'pick' buttons for JDBC report
-    * beautified presentation of current memory consumption
   * clean up
     * clean up 'aggregated.js', remove superfluous code, move stuff from scope visibility to internal visibility
     * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
@@ -31,6 +29,9 @@ todo
   * thread dump:
     * keep track (and show) how long each thread has been inside an active measurement
     * option: 'hide stack before first application frame'
+  * scalars:
+    * beautified presentation of current memory consumption
+
 
 * documentation (!!!)
 
