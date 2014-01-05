@@ -18,10 +18,13 @@ todo
     * ?!?!?! --> Felix
 
 * core
+  * aggregated: pick --> unpick --> pick does not work any more
+  * aggregated: 'expand all' does not change node icons
+
   * beautify
     * show application ID etc. (with color code)
-    * keep menu and header part 'floating' at the top
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?
+    * beautify memgc gc tooltips
   * clean up
     * clean up 'aggregated.js', remove superfluous code, move stuff from scope visibility to internal visibility
     * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'

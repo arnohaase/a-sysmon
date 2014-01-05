@@ -1,6 +1,12 @@
 
 angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log, Rest) {
 
+    $('.button-segment').affix({
+        offset: {
+            top: 95
+        }
+    });
+
     function reinitTooltips() {
         $('.btn').tooltip({
             container: 'body',
@@ -281,6 +287,8 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
 
     function renderTree() {
+        $('#theTree .data-row').tooltip('hide');
+
         $('#theTree').html(htmlForAllTrees()); // (or .child(...) or whatever)
 
         $('#theTree .data-row')
