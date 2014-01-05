@@ -115,6 +115,19 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
         prevGcTimeMillis.put(gcType, now);
     }
 
+    public static String getUsedAfterKey(String memKind) {
+        return KEY_PREFIX_MEM + memKind + KEY_SUFFIX_USED;
+    }
+    public static String getCommittedAfterKey(String memKind) {
+        return KEY_PREFIX_MEM + memKind + KEY_SUFFIX_COMMITTED;
+    }
+    public static String getUsedDeltaKey(String memKind) {
+        return KEY_PREFIX_MEM + memKind + KEY_SUFFIX_USED_DELTA;
+    }
+    public static String getCommittedDeltaKey(String memKind) {
+        return KEY_PREFIX_MEM + memKind + KEY_SUFFIX_COMMITTED_DELTA;
+    }
+
     // code based on http://www.fasterj.com/articles/gcnotifs.shtml - thanks for the input, it was extremely helpful!!!
     class GcNotificationListener implements NotificationListener {
         private AHierarchicalData toHierarchicalData(GarbageCollectionNotificationInfo info) {
@@ -138,11 +151,11 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
                 final MemoryUsage before = info.getGcInfo().getMemoryUsageBeforeGc().get(memKey);
                 final MemoryUsage after  = info.getGcInfo().getMemoryUsageAfterGc().get(memKey);
 
-                paramMap.put(KEY_PREFIX_MEM + memKey + KEY_SUFFIX_USED, String.valueOf(after.getUsed()));
-                paramMap.put(KEY_PREFIX_MEM + memKey + KEY_SUFFIX_COMMITTED, String.valueOf(after.getCommitted()));
+                paramMap.put(getUsedAfterKey(memKey), String.valueOf(after.getUsed()));
+                paramMap.put(getCommittedAfterKey(memKey), String.valueOf(after.getCommitted()));
 
-                paramMap.put(KEY_PREFIX_MEM + memKey + KEY_SUFFIX_USED_DELTA, String.valueOf(after.getUsed() - before.getUsed()));
-                paramMap.put(KEY_PREFIX_MEM + memKey + KEY_SUFFIX_COMMITTED_DELTA, String.valueOf(after.getCommitted() - before.getCommitted()));
+                paramMap.put(getUsedDeltaKey(memKey), String.valueOf(after.getUsed() - before.getUsed()));
+                paramMap.put(getCommittedDeltaKey(memKey), String.valueOf(after.getCommitted() - before.getCommitted()));
 
                 // 'initial' and 'max' are independent of individual garbage collections and are better monitored separately
 //                after.getInit();

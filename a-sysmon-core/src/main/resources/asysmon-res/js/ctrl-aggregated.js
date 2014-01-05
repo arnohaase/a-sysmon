@@ -283,15 +283,20 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     function renderTree() {
         $('#theTree').html(htmlForAllTrees()); // (or .child(...) or whatever)
 
-        $('#theTree .data-row').click(function() {
-            var fqn = $(this).children('.fqn-holder').text();
-            if($scope.isInPickMode) {
-                pickTreeNode(nodesByFqn[fqn]);
-            }
-            else {
-                toggleTreeNode($(this), nodesByFqn[fqn]);
-            }
-        });
+        $('#theTree .data-row')
+            .click(function() {
+                var fqn = $(this).children('.fqn-holder').text();
+                if($scope.isInPickMode) {
+                    pickTreeNode(nodesByFqn[fqn]);
+                }
+                else {
+                    toggleTreeNode($(this), nodesByFqn[fqn]);
+                }
+            })
+            .tooltip({
+                container: 'body',
+                html: true
+            });
     }
 
     function htmlForAllTrees() {
@@ -345,8 +350,27 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
             dataCols += '</div>';
         });
 
+        var tooltip = '';
+        if(curNode.tooltip) {
+            var tooltipContent = '<table>';
+            angular.forEach(curNode.tooltip, function(row) {
+                tooltipContent += '<tr>';
+
+                angular.forEach(row, function(cell, idx) {
+                    tooltipContent += '<td class=\'tooltip-column-' + idx + '\'>' + escapeHtml(cell) + '</td>'
+                });
+
+                tooltipContent += '</tr>';
+            });
+
+            tooltipContent += '</table>';
+
+
+            tooltip = 'data-toggle="tooltip" title="' + tooltipContent + '" ';
+        }
+
         var result =
-            '<div class="data-row data-row-' + (curNode.level - $scope.rootLevel) + ' ' + dataRowSubdued + '">' +
+            '<div class="data-row data-row-' + (curNode.level - $scope.rootLevel) + ' ' + dataRowSubdued + '" ' + tooltip + '>' +
                 '<div class="fqn-holder">' + curNode.fqn + '</div>' +
                 '<div class="node-icon ' + $scope.nodeIconClass(curNode.fqn) + '">&nbsp;</div>' + //TODO {{nodeIconClass(curNode.fqn)}}
                 dataCols +

@@ -24,17 +24,13 @@ todo
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?
     * hide 'pick' buttons for JDBC report
     * beautified presentation of current memory consumption
-    * aggregated servlets: show only explicit 'positive' list of scalar data
-    * memgc: remove 'end of' before major / minor gc
+  * clean up
     * clean up 'aggregated.js', remove superfluous code, move stuff from scope visibility to internal visibility
-  * added views
-    * view of 'recent requests' (filtered)
+    * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
   * lock-free aggregation implementation
   * thread dump:
     * keep track (and show) how long each thread has been inside an active measurement
     * option: 'hide stack before first application frame'
-  * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
-
 
 * documentation (!!!)
 

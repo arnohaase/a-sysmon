@@ -345,3 +345,14 @@ div.mem-gc-zoom-range-present {
     background-color: #a9c1e6; /* TODO customize */
 }
 
+
+.tooltip-column-0 {
+    padding-right: 10px;
+    text-align: right;
+}
+.tooltip-column-1 {
+    text-align: left;
+}
+div.tooltip-inner {
+    max-width: 800px;
+}

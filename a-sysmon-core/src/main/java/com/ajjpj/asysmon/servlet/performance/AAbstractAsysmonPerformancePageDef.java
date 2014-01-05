@@ -106,6 +106,23 @@ public abstract class AAbstractAsysmonPerformancePageDef implements APresentatio
         json.writeKey("name");
         json.writeStringLiteral(node.label);
 
+        if(node.tooltip != null) {
+            json.writeKey("tooltip");
+            json.startArray();
+
+            for(List<String> row: node.tooltip) {
+                json.startArray();
+
+                for(String cell: row) {
+                    json.writeStringLiteral(cell);
+                }
+
+                json.endArray();
+            }
+
+            json.endArray();
+        }
+
         json.writeKey("isSerial");
         json.writeBooleanLiteral(node.isSerial);
 
@@ -146,16 +163,18 @@ public abstract class AAbstractAsysmonPerformancePageDef implements APresentatio
     protected static class TreeNode {
         public final String id;
         public final String label;
+        public final List<List<String>> tooltip; // list of rows, each row is a list of columns
         public final boolean isSerial;
         public final long[] colDataRaw;
         public final List<TreeNode> children;
 
         public TreeNode(String label, boolean isSerial, long[] colDataRaw, List<TreeNode> children) {
-            this(null, label, isSerial, colDataRaw, children);
+            this(null, label, null, isSerial, colDataRaw, children);
         }
-        public TreeNode(String id, String label, boolean isSerial, long[] colDataRaw, List<TreeNode> children) {
+        public TreeNode(String id, String label, List<List<String>> tooltip, boolean isSerial, long[] colDataRaw, List<TreeNode> children) {
             this.id = id;
             this.label = label;
+            this.tooltip = tooltip;
             this.isSerial = isSerial;
             this.colDataRaw = colDataRaw;
             this.children = children;
