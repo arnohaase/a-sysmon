@@ -23,7 +23,7 @@ public class ADefaultConfigFactory {
                 new ASysMonConfigBuilder("demo", "1.0", "theInstance", "#ff8000")
                         .addScalarMeasurer(new ASystemLoadMeasurer())
                         .addScalarMeasurer(AConnectionCounter.INSTANCE)
-                        .addPresentationMenuEntry("Trace", new ATracePageDefinition(ATraceFilter.ALL, 20))
+                        .addPresentationMenuEntry("Trace", new ATracePageDefinition(ATraceFilter.ALL, 50))
                         .addPresentationMenuEntry("Environment", new AScalarPageDefinition())
                         .addPresentationMenuEntry("Performance", new ADrillDownPageDefinition(), new AJdbcPageDefinition())
                         .addPresentationMenuEntry("Threads", new AThreadDumpPageDefinition("com.ajjpj")) //TODO make app package configurable

@@ -1,19 +1,4 @@
 
-<script type="text/ng-template" id="trace_node_template.html">
-    <div class="data-row data-row-{{curNode.level - rootLevel}} {{dataRowSubdued(curNode)}}" ng-click="clickTreeNode($event, curNode)">
-        <div class="node-icon {{nodeIconClass(curNode)}}">&nbsp;</div>
-        <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">
-            <div ng-if="isPercentage(columnDefs[$index]) && !isSubdued(curNode)" class="aprogress-background"><div class="aprogress-bar" style="{{progressWidthStyle(curNode.data[revIdx($index)])}}">{{formatNumber(curNode.data[revIdx($index)], columnDefs[$index].numFracDigits)}}</div></div>
-            <div ng-if="isPercentage(columnDefs[$index]) &&  isSubdued(curNode)" class="subdued-progress-background">{{formatNumber(curNode.data[revIdx($index)], columnDefs[$index].numFracDigits)}}</div>
-            <div ng-if="!isPercentage(columnDefs[$index])">{{formatNumber(curNode.data[revIdx($index)], columnDefs[$index].numFracDigits)}}</div>
-        </div>
-        <div class="node-text" style="margin-right: {{totalDataWidth}}px;">{{curNode.name}}</div>
-    </div>
-    <div class="children" style="display: {{expansionStyle(curNode)}};">
-        <div ng-repeat="curNode in curNode.children" ng-include="'trace_node_template.html'"/>
-    </div>
-</script>
-
 <div class="button-segment">
     <div class="button-box">
         <div class="btn-group">
@@ -34,10 +19,6 @@
     </div>
 </div>
 
-<div ng-repeat="curNode in pickedTraces">
-    <div class='table-header'>&nbsp;<div style="float: right;">
-        <div ng-repeat="curCol in columnDefs" ng-class="colClass($index)">{{curCol.name}}</div>
-    </div></div>
+<div id="theTree"></div>
 
-    <div ng-include="'trace_node_template.html'"></div>
-</div>
+

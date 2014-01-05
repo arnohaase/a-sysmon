@@ -19,12 +19,15 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     $scope.shadowExpansionModel = {}; // continually updated, kept separate to allow for jQuery animations
     $scope.rootLevel = 0;
 
+    var nodesByFqn = {};
+
     function initFromResponse(data) {
         $scope.isStarted = data.isStarted;
         $scope.columnDefs = data.columnDefs.reverse();
         $scope.traces = data.traces;
         $scope.pickedTraces = $scope.traces; //TODO keep selection on 'refresh'
 
+        nodesByFqn = {};
         initTraceNodes($scope.traces, 0, '');
 
         $scope.totalDataWidth = 0;
@@ -42,6 +45,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         }
 
         $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
+        renderTree();
     }
 
     function initTraceNodes(nodes, level, prefix) {
@@ -50,6 +54,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                 nodes[i].level = level;
                 var fqn = prefix + '\n' + (nodes[i].id || nodes[i].name);
                 nodes[i].fqn = fqn;
+                nodesByFqn[fqn] = nodes[i];
                 initTraceNodes(nodes[i].children, level+1, fqn);
             }
         }
@@ -75,6 +80,9 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
     $scope.refresh();
 
+    function revIdx(idx) {
+        return $scope.columnDefs.length - idx - 1;
+    }
     $scope.revIdx = function(idx) {
         return $scope.columnDefs.length - idx - 1;
     };
@@ -166,6 +174,11 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     };
 
     $scope.nodeIconClass = function(node) {
+        if(! node.fqn) {
+            //TODO remove this heuristic
+            node = nodesByFqn[node];
+        }
+
         if(node.children && node.children.length) {
             return $scope.shadowExpansionModel[node.fqn] ? 'node-icon-expanded' : 'node-icon-collapsed';
         }
@@ -193,6 +206,14 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         childrenDiv.slideToggle(50, function() {
             $scope.$apply(function() {
                 $scope.shadowExpansionModel[node.fqn] = !$scope.shadowExpansionModel[node.fqn];
+
+                var nodeIconDiv = dataRow.children('.node-icon');
+                if($scope.shadowExpansionModel[node.fqn]) {
+                    nodeIconDiv.removeClass('node-icon-collapsed').addClass('node-icon-expanded');
+                }
+                else {
+                    nodeIconDiv.addClass('node-icon-collapsed').removeClass('node-icon-expanded');
+                }
             });
         });
     }
@@ -204,10 +225,13 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         $('#unpick').attr('disabled', $scope.traces === $scope.pickedTraces);
     });
     function pickTreeNode(node) {
-        $scope.pickedTraces = [node];
-        $scope.isInPickMode = false;
-        $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
-        $scope.rootLevel = node.level;
+        $scope.$apply(function() {
+            $scope.pickedTraces = [node];
+            $scope.isInPickMode = false;
+            $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
+            $scope.rootLevel = node.level;
+        });
+        renderTree();
     }
     $scope.togglePickMode = function() {
         $scope.isInPickMode = ! $scope.isInPickMode;
@@ -216,6 +240,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         $scope.pickedTraces = $scope.traces;
         $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
         $scope.rootLevel = 0;
+        renderTree();
     };
 
     $scope.doExport = function() {
@@ -253,5 +278,104 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         var blob = new Blob([data], {type: "application/excel;charset=utf-8"});
         saveAs(blob, "asysmon-export-" + formattedNow + '.csv');
     };
+
+
+    function renderTree() {
+        $('#theTree').html(htmlForAllTrees()); // (or .child(...) or whatever)
+
+        $('#theTree .data-row').click(function() {
+            var fqn = $(this).children('.fqn-holder').text();
+            if($scope.isInPickMode) {
+                pickTreeNode(nodesByFqn[fqn]);
+            }
+            else {
+                toggleTreeNode($(this), nodesByFqn[fqn]);
+            }
+        });
+    }
+
+    function htmlForAllTrees() {
+        var htmlForTableHeader = (function(){
+            var titles = '';
+
+            angular.forEach($scope.columnDefs, function(curCol, colIdx) {
+                titles += '<div class="' + $scope.colClass(colIdx) + '">' + curCol.name + '</div>';
+            });
+
+            return '' +
+                '<div class="table-header">&nbsp;<div style="float:right;">' +
+                titles +
+                '</div></div>';
+        }());
+
+        var result = '';
+
+        angular.forEach($scope.pickedTraces, function(rootNode) {
+            result +=
+                '<div>' +
+                    htmlForTableHeader +
+                    htmlForTreeNode(rootNode) +
+                '</div>';
+        });
+
+        return result;
+    }
+
+    //TODO remove most function from $scope
+    //TODO move 'formatNumber' to asysmon module
+    function htmlForTreeNode(curNode) {
+        var dataRowSubdued = curNode.isSerial ? '' : 'data-row-subdued';
+
+        var dataCols = '';
+        angular.forEach($scope.columnDefs, function(curCol, colIdx) {
+            dataCols += '<div class="' + $scope.colClass(colIdx) + '">';
+
+            var formattedValue = $scope.formatNumber(curNode.data[revIdx(colIdx)], $scope.columnDefs[colIdx].numFracDigits);
+
+            if(curCol.isPercentage) {
+                if(curNode.isSerial)
+                    dataCols += '<div class="aprogress-background"><div class="aprogress-bar" style="' + $scope.progressWidthStyle(curNode.data[revIdx(colIdx)]) + '">' + formattedValue + '</div></div>';
+                else
+                    dataCols += '<div class="subdued-progress-background">' + formattedValue + '</div>';
+            }
+            else {
+                dataCols += '<div>' + formattedValue + '</div>';
+            }
+
+            dataCols += '</div>';
+        });
+
+        var result =
+            '<div class="data-row data-row-' + (curNode.level - $scope.rootLevel) + ' ' + dataRowSubdued + '">' +
+                '<div class="fqn-holder">' + curNode.fqn + '</div>' +
+                '<div class="node-icon ' + $scope.nodeIconClass(curNode.fqn) + '">&nbsp;</div>' + //TODO {{nodeIconClass(curNode.fqn)}}
+                dataCols +
+                '<div class="node-text" style="margin-right: ' + $scope.totalDataWidth + 'px;">' + escapeHtml(curNode.name) + '</div>' +
+                '</div>';
+
+        if(curNode.children && curNode.children.length) {
+            result += '<div class="children" style="display: ' + $scope.expansionStyle(curNode) + ';">';
+            angular.forEach(curNode.children, function(child) {
+                result += htmlForTreeNode(child, $scope.rootLevel);
+            });
+            result += '</div>';
+        }
+        return result;
+    }
+
+    var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"'\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
 });
 

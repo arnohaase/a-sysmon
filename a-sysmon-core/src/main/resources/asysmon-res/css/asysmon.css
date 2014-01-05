@@ -165,6 +165,10 @@ div.subdued-progress-background {
   vertical-align: middle;
 }
 
+.fqn-holder {
+    display: none;
+}
+
 div.data-row {
   /*height: 19px;*/
   font-size: 15px;
