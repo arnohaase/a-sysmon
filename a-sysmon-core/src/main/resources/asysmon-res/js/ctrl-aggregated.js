@@ -40,7 +40,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                 $scope.totalDataWidth += 60;
             }
             if(cw === 'long') {
-                $scope.totalDataWidth += 80;
+                $scope.totalDataWidth += 100;
             }
         }
 
@@ -256,7 +256,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
         var data = 'Name\tLevel';
         for(var i=0; i<$scope.columnDefs.length; i++) {
-            data += '\t' + $scope.columnDefs[i].name;
+            data += '\t' + $scope.columnDefs[revIdx(i)].name;
         }
 
         function append(node) {

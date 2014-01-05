@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.servlet.trace;
 
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
+import com.ajjpj.asysmon.measure.http.ASimpleHttpRequestAnalyzer;
 
 /**
  * @author arno
@@ -27,6 +28,24 @@ public interface ATraceFilter {
 
         @Override public boolean shouldCollect(AHierarchicalDataRoot trace) {
             return true;
+        }
+    };
+
+    ATraceFilter HTTP = new ATraceFilter() {
+        @Override public String getId() {
+            return "tracesHttp";
+        }
+
+        @Override public String getShortLabel() {
+            return "HTTP Requests";
+        }
+
+        @Override public String getFullLabel() {
+            return "Traces for all HTTP requests";
+        }
+
+        @Override  public boolean shouldCollect(AHierarchicalDataRoot trace) {
+            return trace.getRootNode().getParameters().containsKey(ASimpleHttpRequestAnalyzer.PARAM_FULL_URL);
         }
     };
 }

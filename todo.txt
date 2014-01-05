@@ -26,6 +26,7 @@ todo
     * beautified presentation of current memory consumption
     * aggregated servlets: show only explicit 'positive' list of scalar data
     * memgc: remove 'end of' before major / minor gc
+    * clean up 'aggregated.js', remove superfluous code, move stuff from scope visibility to internal visibility
   * added views
     * view of 'recent requests' (filtered)
   * lock-free aggregation implementation

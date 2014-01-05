@@ -124,7 +124,7 @@ div.column-medium {
 }
 
 div.column-long {
-  width: 80px;
+  width: 100px;
   text-align: right;
   display: inline-block;
   float: right;
