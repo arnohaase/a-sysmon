@@ -35,8 +35,6 @@ todo
     * clean up 'aggregated.js', remove superfluous code, move stuff from scope visibility to internal visibility
     * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
   * lock-free aggregation implementation?
-  * thread dump:
-    * option: 'hide stack before first application frame' or 'hide library frames' (except at the top)
   * scalars:
     * beautified presentation of current memory consumption
 

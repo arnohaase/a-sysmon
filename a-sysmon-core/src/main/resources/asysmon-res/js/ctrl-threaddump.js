@@ -9,6 +9,7 @@ angular.module('ASysMonApp').controller('CtrlThreadDump', function($scope, $http
     $scope.shadowExpansionModel = {}; // continually updated, kept separate to allow for jQuery animations
 
     $scope.hideReflection = true;
+    $scope.hideLibraries = true;
 
     function initFromResponse(data) {
         $scope.title = data.title;
@@ -24,6 +25,8 @@ angular.module('ASysMonApp').controller('CtrlThreadDump', function($scope, $http
                 ste.isReflection = isReflectionSte(ste);
                 ste.isAppPkg = appPkg.test(ste.repr);
                 hasApplicationFrame = hasApplicationFrame || ste.isAppPkg;
+
+                ste.isHideableLib = hasApplicationFrame && !ste.isAppPkg;
             }
             t.hasApplicationFrame = hasApplicationFrame;
         }
@@ -135,6 +138,9 @@ angular.module('ASysMonApp').controller('CtrlThreadDump', function($scope, $http
                 continue;
             }
             if($scope.stacktraceWithSourceOnly && !(ste.hasSource || ste.isNative)) {
+                continue;
+            }
+            if($scope.hideLibraries && ste.isHideableLib) {
                 continue;
             }
             result.push(ste);
