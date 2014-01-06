@@ -40,7 +40,19 @@
         };
     }]);
 
+    var thousandsSeparator = 1234.5.toLocaleString().charAt(1);
+    var decimalSeparator   = 1234.5.toLocaleString().charAt(5);
 
+    asysmon.constant('formatNumber', function(number, numFracDigits) {
+        if(!number) {
+            return '';
+        }
+        numFracDigits = numFracDigits || 0;
+
+        var parts = number.toFixed(numFracDigits).toString().split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator);
+        return parts.join(decimalSeparator);
+    });
 
 }());
 

@@ -100,24 +100,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         return parts.join(decimalSeparator);
     };
 
-    $scope.formattedScalar = function(name, factor) {
-        factor = factor || 1;
-        var s = $scope.scalars && $scope.scalars[name];
-        return s ? $scope.formatNumber(s.value*factor, s.numFracDigits) : '';
-    };
-    $scope.hasLoad = function() {
-        return $scope.scalars && $scope.scalars['load-1-minute'];
-    };
-    $scope.load1 = function() {
-        return $scope.formattedScalar('load-1-minute');
-    };
-    $scope.load5 = function() {
-        return $scope.formattedScalar('load-5-minutes');
-    };
-    $scope.load15 = function() {
-        return $scope.formattedScalar('load-15-minutes');
-    };
-
     function startsWith(s, prefix) {
         s = s || '';
         prefix = prefix || '';

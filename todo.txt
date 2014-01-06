@@ -18,6 +18,14 @@ todo
     * ?!?!?! --> Felix
 
 * core
+  * enhance config / startup mechanism
+  * make 'scalars' page readable
+  * add more scalar measurements
+    * /proc/diskstats: Disk I/O
+    * /proc/stat: CPU usage
+    * /proc/net/dev: network usage
+  * add 'environment' measurements
+
   * beautify
     * generally: styling of tooltips - white with gray border?
     * show application ID etc. (with color code)
@@ -28,7 +36,6 @@ todo
     * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
   * lock-free aggregation implementation?
   * thread dump:
-    * keep track (and show) how long each thread has been inside an active measurement
     * option: 'hide stack before first application frame' or 'hide library frames' (except at the top)
   * scalars:
     * beautified presentation of current memory consumption

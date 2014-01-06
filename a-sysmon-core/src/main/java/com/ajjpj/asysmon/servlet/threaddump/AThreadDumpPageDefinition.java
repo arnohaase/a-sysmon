@@ -2,6 +2,7 @@ package com.ajjpj.asysmon.servlet.threaddump;
 
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
@@ -9,12 +10,15 @@ import java.io.IOException;
 import java.lang.management.ThreadInfo;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 /**
  * @author arno
  */
 public class AThreadDumpPageDefinition implements APresentationPageDefinition {
+    private final ARunningThreadTrackingDataSink runningThreadTracker = new ARunningThreadTrackingDataSink();
+
     private final String applicationPackage;
     private final String idSuffix;
     private final String labelSuffix;
@@ -66,22 +70,23 @@ public class AThreadDumpPageDefinition implements APresentationPageDefinition {
         json.writeStringLiteral(applicationPackage);
 
         json.writeKey("threads");
-        dumpThreads(json, AThreadDumper.getThreadInfo(), AThreadDumper.getDeadlockedThreads());
+        dumpThreads(json, AThreadDumper.getThreadInfo(), AThreadDumper.getDeadlockedThreads(), runningThreadTracker.getStartTimestamps());
 
         json.endObject();
     }
 
-    private void dumpThreads(AJsonSerHelper json, Collection<ThreadInfo> threads, Collection<Long> deadlockedThreads) throws IOException {
+    private void dumpThreads(AJsonSerHelper json, Collection<ThreadInfo> threads, Collection<Long> deadlockedThreads, Map<String, Long> startTimestamps) throws IOException {
         json.startArray();
 
+        final long now = System.currentTimeMillis();
         for(ThreadInfo ti: threads) {
-            dumpThread(json, ti, deadlockedThreads.contains(ti.getThreadId()));
+            dumpThread(json, ti, deadlockedThreads.contains(ti.getThreadId()), now, startTimestamps.get(ti.getThreadName()));
         }
 
         json.endArray();
     }
 
-    private void dumpThread(AJsonSerHelper json, ThreadInfo ti, boolean isDeadLocked) throws IOException {
+    private void dumpThread(AJsonSerHelper json, ThreadInfo ti, boolean isDeadLocked, long now, Long startTimestamp) throws IOException {
         json.startObject();
 
         json.writeKey("name");
@@ -89,6 +94,11 @@ public class AThreadDumpPageDefinition implements APresentationPageDefinition {
 
         json.writeKey("id");
         json.writeNumberLiteral(ti.getThreadId(), 0);
+
+        if(startTimestamp != null) {
+            json.writeKey("runningMillis");
+            json.writeNumberLiteral(now - startTimestamp, 0);
+        }
 
         json.writeKey("state");
         json.writeStringLiteral(isDeadLocked ? "DEADLOCKED" : ti.getThreadState().name());
@@ -121,5 +131,6 @@ public class AThreadDumpPageDefinition implements APresentationPageDefinition {
     }
 
     @Override public void init(ASysMon sysMon) {
+        ASysMonConfigurer.addDataSink(sysMon, runningThreadTracker);
     }
 }

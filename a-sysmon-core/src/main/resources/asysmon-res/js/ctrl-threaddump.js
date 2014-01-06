@@ -1,5 +1,5 @@
 
-angular.module('ASysMonApp').controller('CtrlThreadDump', function($scope, $http, $log, Rest) {
+angular.module('ASysMonApp').controller('CtrlThreadDump', function($scope, $http, $log, Rest, formatNumber) {
     $('.btn').tooltip({
         container: 'body',
         html: true
@@ -140,6 +140,13 @@ angular.module('ASysMonApp').controller('CtrlThreadDump', function($scope, $http
             result.push(ste);
         }
         return result;
+    };
+
+    $scope.runningMillis = function(thread) {
+        if(! thread.runningMillis) {
+            return '';
+        }
+        return formatNumber(thread.runningMillis) + ' ms';
     };
 });
 
