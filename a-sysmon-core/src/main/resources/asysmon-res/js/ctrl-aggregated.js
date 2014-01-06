@@ -21,8 +21,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     });
 
 
-    $scope.expansionModel = {}; // bound to the DOM, used for initial rendering
-    $scope.shadowExpansionModel = {}; // continually updated, kept separate to allow for jQuery animations
+    $scope.expansionModel = {};
     $scope.rootLevel = 0;
 
     var nodesByFqn = {};
@@ -50,7 +49,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
             }
         }
 
-        $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
         renderTree();
     }
 
@@ -127,39 +125,26 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         return s.indexOf(prefix) === 0;
     }
 
-    $scope.genericScalarNames = function() {
-
-
-        var result = [];
-        if($scope.scalars) {
-            $.each($scope.scalars, function(n) {
-                if(startsWith(n, 'load-')) {
-                    return;
-                }
-                result.push(n);
-            });
-        }
-        return result;
-    };
-
     $scope.expandAll = function() {
         $('div.children').show(50);
 
         function setExpanded(nodes) {
             if(nodes) {
                 for(var i=0; i<nodes.length; i++) {
-                    $scope.shadowExpansionModel[nodes[i].fqn] = true;
+                    $scope.expansionModel[nodes[i].fqn] = true;
                     setExpanded(nodes[i].children);
                 }
             }
         }
 
         setExpanded($scope.traces);
+        renderTree();
     };
 
     $scope.collapseAll = function() {
         $('div.children').hide(50);
-        $scope.shadowExpansionModel = {};
+        $scope.expansionModel = {};
+        renderTree();
     };
 
 
@@ -186,7 +171,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         }
 
         if(node.children && node.children.length) {
-            return $scope.shadowExpansionModel[node.fqn] ? 'node-icon-expanded' : 'node-icon-collapsed';
+            return $scope.expansionModel[node.fqn] ? 'node-icon-expanded' : 'node-icon-collapsed';
         }
         return 'node-icon-empty';
     };
@@ -211,10 +196,10 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         var childrenDiv = dataRow.next();
         childrenDiv.slideToggle(50, function() {
             $scope.$apply(function() {
-                $scope.shadowExpansionModel[node.fqn] = !$scope.shadowExpansionModel[node.fqn];
+                $scope.expansionModel[node.fqn] = !$scope.expansionModel[node.fqn];
 
                 var nodeIconDiv = dataRow.children('.node-icon');
-                if($scope.shadowExpansionModel[node.fqn]) {
+                if($scope.expansionModel[node.fqn]) {
                     nodeIconDiv.removeClass('node-icon-collapsed').addClass('node-icon-expanded');
                 }
                 else {
@@ -234,7 +219,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         $scope.$apply(function() {
             $scope.pickedTraces = [node];
             $scope.isInPickMode = false;
-            $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
             $scope.rootLevel = node.level;
         });
         renderTree();
@@ -244,7 +228,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     };
     $scope.unpick = function() {
         $scope.pickedTraces = $scope.traces;
-        $scope.expansionModel = angular.copy($scope.shadowExpansionModel);
         $scope.rootLevel = 0;
         renderTree();
     };
@@ -289,7 +272,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     function renderTree() {
         $('#theTree .data-row').tooltip('hide');
 
-        $('#theTree').html(htmlForAllTrees()); // (or .child(...) or whatever)
+        $('#theTree').html(htmlForAllTrees());
 
         $('#theTree .data-row')
             .click(function() {
