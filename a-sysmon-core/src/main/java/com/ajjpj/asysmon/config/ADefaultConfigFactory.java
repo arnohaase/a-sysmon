@@ -1,12 +1,15 @@
 package com.ajjpj.asysmon.config;
 
 
+import com.ajjpj.asysmon.measure.environment.AEnvVarEnvironmentMeasurer;
+import com.ajjpj.asysmon.measure.environment.ASysPropEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
 import com.ajjpj.asysmon.measure.scalar.ASystemLoadMeasurer;
+import com.ajjpj.asysmon.servlet.environment.AEnvVarPageDefinition;
 import com.ajjpj.asysmon.servlet.memgc.AMemGcPageDefinition;
 import com.ajjpj.asysmon.servlet.performance.bottomup.AJdbcPageDefinition;
 import com.ajjpj.asysmon.servlet.performance.drilldown.ADrillDownPageDefinition;
-import com.ajjpj.asysmon.servlet.scalar.AScalarPageDefinition;
+import com.ajjpj.asysmon.servlet.environment.AScalarPageDefinition;
 import com.ajjpj.asysmon.servlet.threaddump.AThreadDumpPageDefinition;
 import com.ajjpj.asysmon.servlet.trace.ATraceFilter;
 import com.ajjpj.asysmon.servlet.trace.ATracePageDefinition;
@@ -21,10 +24,12 @@ public class ADefaultConfigFactory {
         //TODO evaulate config files, make this stuff configurable
         final ASysMonConfigBuilder builder =
                 new ASysMonConfigBuilder("demo", "1.0", "theInstance", "#ff8000")
+                        .addEnvironmentMeasurer(new AEnvVarEnvironmentMeasurer())
+                        .addEnvironmentMeasurer(new ASysPropEnvironmentMeasurer())
                         .addScalarMeasurer(new ASystemLoadMeasurer())
                         .addScalarMeasurer(AConnectionCounter.INSTANCE)
+                        .addPresentationMenuEntry("Context", new AScalarPageDefinition(), new AEnvVarPageDefinition())
                         .addPresentationMenuEntry("Trace", new ATracePageDefinition(ATraceFilter.ALL, 50), new ATracePageDefinition(ATraceFilter.HTTP, 30))
-                        .addPresentationMenuEntry("Environment", new AScalarPageDefinition())
                         .addPresentationMenuEntry("Performance", new ADrillDownPageDefinition(), new AJdbcPageDefinition())
                         .addPresentationMenuEntry("Threads", new AThreadDumpPageDefinition("com.ajjpj")) //TODO make app package configurable
                         .addPresentationMenuEntry("Memory", new AMemGcPageDefinition());

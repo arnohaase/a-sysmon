@@ -18,13 +18,17 @@ todo
     * ?!?!?! --> Felix
 
 * core
+  * bug: click on a 'leaf' node toggles the next sibling
+  * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
   * make 'scalars' page readable
   * add more scalar measurements
     * /proc/diskstats: Disk I/O
     * /proc/stat: CPU usage
     * /proc/net/dev: network usage
+    * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
   * add 'environment' measurements
+    * incl. view
 
   * beautify
     * generally: styling of tooltips - white with gray border?

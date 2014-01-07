@@ -4,14 +4,12 @@ import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
-import com.ajjpj.asysmon.servlet_.threaddump.AThreadDumpServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

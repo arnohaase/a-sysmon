@@ -1,6 +1,5 @@
 package com.ajjpj.asysmon.servlet.performance.drilldown;
 
-
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.servlet.performance.AAbstractAsysmonPerformancePageDef;
@@ -9,6 +8,7 @@ import com.ajjpj.asysmon.servlet.performance.AMinMaxAvgData;
 import java.text.Collator;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
  * @author arno
@@ -25,9 +25,7 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
             new ColDef("max", false, 0, ColWidth.Medium)
     );
 
-
-    private static volatile DrillDownDataSink collector;
-
+    private volatile DrillDownDataSink collector;
 
     @Override public String getId() {
         return "drilldown";
@@ -129,5 +127,4 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
         });
         return result;
     }
-
 }

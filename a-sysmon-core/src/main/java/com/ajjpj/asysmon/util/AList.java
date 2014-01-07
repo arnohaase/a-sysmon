@@ -23,6 +23,10 @@ abstract public class AList<T> implements Iterable<T> {
         return (AList<T>) Nil.INSTANCE;
     }
 
+    public static <T> AList<T> create(T... elements) {
+        return AList.create(Arrays.asList(elements));
+    }
+
     public static <T> AList<T> create(Iterable<T> elements) {
         AList<T> result = nil();
 

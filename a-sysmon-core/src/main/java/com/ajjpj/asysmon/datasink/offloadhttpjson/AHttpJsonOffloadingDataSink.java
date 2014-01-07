@@ -53,7 +53,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
         this.senderInstance = senderInstance;
 
         this.traceQueue = new ASoftlyLimitedQueue<AHierarchicalDataRoot>(traceQueueSize, new DiscardedLogger(config.logger, "trace queue overflow - discarding oldest trace"));
-        this.scalarQueue = new ASoftlyLimitedQueue<AScalarDataPoint>(scalarQueueSize, new DiscardedLogger(config.logger, "scalar queue overflow - discarding oldest data"));
+        this.scalarQueue = new ASoftlyLimitedQueue<AScalarDataPoint>(scalarQueueSize, new DiscardedLogger(config.logger, "environment queue overflow - discarding oldest data"));
 
         offloadingThreadPool = Executors.newFixedThreadPool(numOffloadingThreads);
         for(int i=0; i<numOffloadingThreads; i++) {
@@ -76,7 +76,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
 
     @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
 
-        //TODO make resending of arbitrary data idempotent --> send a unique identifier with every *atom* (trace, scalar measurement, ...)
+        //TODO make resending of arbitrary data idempotent --> send a unique identifier with every *atom* (trace, environment measurement, ...)
         //TODO re-enter the data into the queues when the server returns a non-OK http response code
 
         traceQueue.add(data);

@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @Singleton
 public class ScalarMetaDataDaoImpl implements ScalarMetaDataDao {
-    public static final String COLL_SCALAR_META_DATA = "scalar-metadata";
+    public static final String COLL_SCALAR_META_DATA = "environment-metadata";
     public static final String FIELD_NUM_FRAC_DIGITS = "numFracDigits";
 
     //TODO ttl

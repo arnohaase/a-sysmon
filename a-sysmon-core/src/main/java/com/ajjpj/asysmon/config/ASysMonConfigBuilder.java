@@ -6,6 +6,7 @@ import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.datasink.ADataSink;
+import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.timer.ASystemNanoTimer;
 import com.ajjpj.asysmon.util.timer.ATimer;
@@ -29,6 +30,7 @@ public class ASysMonConfigBuilder {
 
     private boolean implicitlyShutDownWithServlet = true;
 
+    private final List<AEnvironmentMeasurer> environmentMeasurers = new ArrayList<AEnvironmentMeasurer>();
     private final List<AScalarMeasurer> scalarMeasurers = new ArrayList<AScalarMeasurer>();
     private final List<ADataSink> dataSinks = new ArrayList<ADataSink>();
 
@@ -41,18 +43,22 @@ public class ASysMonConfigBuilder {
         this.applicationInstanceHtmlColorCode = applicationInstanceHtmlColorCode;
     }
 
+    @SuppressWarnings("unused")
     public ASysMonConfigBuilder setApplicationId(String applicationId) {
         this.applicationId = applicationId;
         return this;
     }
+    @SuppressWarnings("unused")
     public ASysMonConfigBuilder setApplicationVersionId(String applicationVersionId) {
         this.applicationVersionId = applicationVersionId;
         return this;
     }
+    @SuppressWarnings("unused")
     public ASysMonConfigBuilder setApplicationInstanceId(String applicationInstanceId) {
         this.applicationInstanceId = applicationInstanceId;
         return this;
     }
+    @SuppressWarnings("unused")
     public ASysMonConfigBuilder setApplicationInstanceHtmlColorCode(String applicationInstanceHtmlColorCode) {
         this.applicationInstanceHtmlColorCode = applicationInstanceHtmlColorCode;
         return this;
@@ -67,8 +73,14 @@ public class ASysMonConfigBuilder {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ASysMonConfigBuilder setImplicitlyShutDownWithServlet(boolean implicitlyShutDownWithServlet) {
         this.implicitlyShutDownWithServlet = implicitlyShutDownWithServlet;
+        return this;
+    }
+
+    public ASysMonConfigBuilder addEnvironmentMeasurer(AEnvironmentMeasurer environmentMeasurer) {
+        this.environmentMeasurers.add(environmentMeasurer);
         return this;
     }
 
@@ -96,7 +108,7 @@ public class ASysMonConfigBuilder {
                 applicationId, applicationVersionId, applicationInstanceId, applicationInstanceHtmlColorCode,
                 logger, timer,
                 implicitlyShutDownWithServlet,
-                scalarMeasurers, dataSinks,
+                environmentMeasurers, scalarMeasurers, dataSinks,
                 presentationMenuEntries
                 );
     }

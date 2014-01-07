@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.servlet.scalar;
+package com.ajjpj.asysmon.servlet.environment;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;

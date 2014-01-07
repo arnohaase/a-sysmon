@@ -64,7 +64,7 @@ public class BufferingPersistenceProcessorImpl implements BufferingPersistencePr
                 try {
                     scalarDataDao.storeScalarData(scalarQueue.take());
                 } catch (Exception e) {
-                    log.error("exception storing scalar", e);
+                    log.error("exception storing environment", e);
                 }
             }
         }
@@ -102,7 +102,7 @@ public class BufferingPersistenceProcessorImpl implements BufferingPersistencePr
 
         final ConfigData config = configProvider.getConfigData();
 
-        scalarQueue      = new ASoftlyLimitedBlockingQueue<>(config.getScalarQueueSize(),      new Log4JWarnCallback("scalar queue overflow - discarding data"));
+        scalarQueue      = new ASoftlyLimitedBlockingQueue<>(config.getScalarQueueSize(),      new Log4JWarnCallback("environment queue overflow - discarding data"));
         traceQueue       = new ASoftlyLimitedBlockingQueue<>(config.getTraceQueueSize(),       new Log4JWarnCallback("trace queue overflow - discarding data"));
         environmentQueue = new ASoftlyLimitedBlockingQueue<>(config.getEnvironmentQueueSize(), new Log4JWarnCallback("environment queue overflow - discarding data"));
 

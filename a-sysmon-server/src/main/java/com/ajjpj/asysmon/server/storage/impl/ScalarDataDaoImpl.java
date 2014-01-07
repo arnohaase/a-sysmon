@@ -68,7 +68,7 @@ public class ScalarDataDaoImpl implements ScalarDataDao {
         try {
             getScalarCollection(scalarData.getInstanceIdentifier(), scalarData.getName()).insert(object);
         } catch (MongoException.DuplicateKey e) {
-            log.warn("Attempted to insert scalar data " + scalarData + " twice, ignoring. This is probably due to a client sending the same data twice.");
+            log.warn("Attempted to insert environment data " + scalarData + " twice, ignoring. This is probably due to a client sending the same data twice.");
         }
     }
 

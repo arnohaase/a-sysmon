@@ -6,11 +6,14 @@ import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.*;
+import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
+import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -137,17 +140,31 @@ public class ASysMon implements AShutdownable {
         return getMeasurementHierarchy().startCollectingMeasurement(identifier, serial);
     }
 
-    public Map<String, AScalarDataPoint> getScalarMeasurements() {
-        if(config.isGloballyDisabled()) {
-            return new HashMap<String, AScalarDataPoint>();
-        }
+    public Map<String, AScalarDataPoint> getScalarMeasurements() { //TODO rename to distinguish from 'add' etc.
         final Map<String, AScalarDataPoint> result = new TreeMap<String, AScalarDataPoint>();
+        if(config.isGloballyDisabled()) {
+            return result;
+        }
         final long now = System.currentTimeMillis();
         for(AScalarMeasurer measurer: scalarMeasurers) {
             measurer.contributeMeasurements(result, now);
         }
         //TODO protect against exceptions (per measurer)
         //TODO limit duration per measurer
+        return result;
+    }
+
+    public Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() {
+        final Map<AList<String>, AEnvironmentData> result = new HashMap<AList<String>, AEnvironmentData>();
+        if(config.isGloballyDisabled()) {
+            return result;
+        }
+
+        for(AEnvironmentMeasurer m: config.environmentMeasurers) {
+            m.contributeMeasurements(result);
+            //TODO protect against exceptions (per measurer)
+            //TODO limit duration per measurer
+        }
         return result;
     }
 

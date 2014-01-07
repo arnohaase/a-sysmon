@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * This class cyclically dumps all scalar measurements, e.g. to Log4J.<p />
+ * This class cyclically dumps all environment measurements, e.g. to Log4J.<p />
  *
  * Calling the constructor takes care of registration with ASysMon. <p />
  *

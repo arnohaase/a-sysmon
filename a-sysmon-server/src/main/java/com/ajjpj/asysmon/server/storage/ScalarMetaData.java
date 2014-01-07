@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.server.storage;
 
 
 /**
- * This class represents meta data for a single kind of scalar measurement.
+ * This class represents meta data for a single kind of environment measurement.
  *
  * @author arno
  */

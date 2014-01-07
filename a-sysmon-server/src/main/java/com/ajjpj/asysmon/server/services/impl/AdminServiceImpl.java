@@ -75,14 +75,14 @@ public class AdminServiceImpl implements AdminService {
      *  that time.
      */
     public void initSchema() {
-        //TODO move this code to scalar dao
+        //TODO move this code to environment dao
 
 //        final List<String> monitoredApplications = monitoredApplicationDao.getMonitoredApplicationNames();
 //        final Collection<ScalarMetaData> scalarMetaDatas = scalarMetaDataDao.getAll().values();
 //
-//        for(ScalarMetaData scalar: scalarMetaDatas) {
+//        for(ScalarMetaData environment: scalarMetaDatas) {
 //            for(String appId: monitoredApplications) {
-//                final DBCollection coll = getScalarCollection(appId, scalar.name);
+//                final DBCollection coll = getScalarCollection(appId, environment.name);
 //                if(coll.count() == 0) {
 //                    final BasicDBObject idx = new BasicDBObject("instance", 1);
 //                    idx.append("timestamp", 1);
