@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
  * @author arno
  */
 public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
-    public static final String KEY_FILESYSTEMS = "Mounted File Systems";
+    public static final String KEY_FILESYSTEMS = "file systems";
 
     @Override public void contributeMeasurements(Map<AList<String>, AEnvironmentData> data) throws Exception {
         contributeMtab(data);
@@ -45,6 +45,7 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
             final String used = split[2];
             final String available = split[3];
             final String usedPercent = split[4];
+            final String mountPoint = split[5];
 
             add(data, device, "Size Total (1k Blocks)", size);
             add(data, device, "Size Used (1k Blocks)", used);
@@ -74,9 +75,11 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
                 final String fsType = split[2];
                 final String flags = split[3];
 
-                add(data, device, "Mount Point", mountPoint);
                 add(data, device, "Type", fsType);
                 add(data, device, "Flags", flags);
+
+                final AList<String> keyMountPoint = AList.create(ACpuEnvironmentMeasurer.KEY_HW, KEY_FILESYSTEMS, device);
+                data.put(keyMountPoint, new AEnvironmentData(keyMountPoint, mountPoint));
             }
         }
         finally {

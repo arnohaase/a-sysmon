@@ -28,9 +28,19 @@ public class ACpuEnvironmentMeasurer implements AEnvironmentMeasurer {
                 final String key = line.substring(0, idxColon).trim();
                 final String value = line.substring(idxColon+1).trim();
 
+                if(value.isEmpty()) {
+                    continue;
+                }
+
                 if("processor".equals(key)) {
                     cpuKey = "cpu " + value;
                     numCpus += 1;
+                    continue;
+                }
+
+                if("model name".equals(key)) {
+                    final AList<String> fullKey = AList.create(KEY_HW, KEY_CPUS, cpuKey);
+                    data.put(fullKey, new AEnvironmentData(fullKey, value));
                     continue;
                 }
 
