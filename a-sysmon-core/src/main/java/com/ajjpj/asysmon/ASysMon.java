@@ -12,6 +12,7 @@ import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,7 +155,7 @@ public class ASysMon implements AShutdownable {
         return result;
     }
 
-    public Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() {
+    public Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() throws IOException {
         final Map<AList<String>, AEnvironmentData> result = new HashMap<AList<String>, AEnvironmentData>();
         if(config.isGloballyDisabled()) {
             return result;

@@ -78,7 +78,7 @@ public class AEnvVarPageDefinition implements APresentationPageDefinition {
         json.endArray();
     }
 
-    private Collection<EnvData> getData() {
+    private Collection<EnvData> getData() throws IOException {
         final Map<AList<String>, AEnvironmentData> raw = sysMon.getEnvironmentMeasurements();
         final SortedSet<EnvData> result = new TreeSet<EnvData>();
 

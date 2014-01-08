@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.config;
 
 
+import com.ajjpj.asysmon.measure.environment.ACpuEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.environment.AEnvVarEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.environment.ASysPropEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
@@ -26,6 +27,7 @@ public class ADefaultConfigFactory {
                 new ASysMonConfigBuilder("demo", "1.0", "theInstance", "#ff8000")
                         .addEnvironmentMeasurer(new AEnvVarEnvironmentMeasurer())
                         .addEnvironmentMeasurer(new ASysPropEnvironmentMeasurer())
+                        .addEnvironmentMeasurer(new ACpuEnvironmentMeasurer())
                         .addScalarMeasurer(new ASystemLoadMeasurer())
                         .addScalarMeasurer(AConnectionCounter.INSTANCE)
                         .addPresentationMenuEntry("Context", new AScalarPageDefinition(), new AEnvVarPageDefinition())
