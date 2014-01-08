@@ -22,7 +22,6 @@ todo
 
   * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
-  * make 'scalars' page readable
   * add more scalar measurements
     * /proc/diskstats: Disk I/O
     * /proc/stat: CPU usage
@@ -44,8 +43,6 @@ todo
     * clean up 'aggregated.js', remove superfluous code, move stuff from scope visibility to internal visibility
     * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
   * lock-free aggregation implementation?
-  * scalars:
-    * beautified presentation of current memory consumption
 
 
 * documentation (!!!)

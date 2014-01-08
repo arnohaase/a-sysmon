@@ -7,6 +7,35 @@ h2 {
     margin-bottom: 15px;
 }
 
+fieldset legend {
+    width: auto;
+    padding-left: 3px;
+    padding-right: 7px;
+    margin-bottom: 15px;
+    border-bottom: none;
+}
+.scalar-group {
+    /*width: 300px;*/
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+    padding: 0 20px;
+    border: 1px solid;
+}
+.scalar-group .table {
+    margin-bottom: 10px;
+}
+.scalar-group .scalar-load-progress {
+    position: relative;
+    width: 100px;
+    margin: 0px;
+}
+.scalar-value {
+    text-align: right;
+}
+
+
 table.global-measurements {
   margin-top: 20px;
   margin-bottom: 10px;

@@ -44,7 +44,7 @@
     var decimalSeparator   = 1234.5.toLocaleString().charAt(5);
 
     asysmon.constant('formatNumber', function(number, numFracDigits) {
-        if(!number) {
+        if(!number && number !== 0) {
             return '';
         }
         numFracDigits = numFracDigits || 0;
@@ -67,6 +67,14 @@
             return entityMap[s];
         });
     });
+
+    asysmon.constant('startsWith', function (s, prefix) {
+            s = s || '';
+            prefix = prefix || '';
+
+            return s.indexOf(prefix) === 0;
+        }
+    );
 }());
 
 

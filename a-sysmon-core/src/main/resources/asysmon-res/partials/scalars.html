@@ -5,8 +5,25 @@
     </div>
 </div>
 
-<table class="global-measurements">
-    <tr ng-show="hasLoad()" class='global-measurements'><td class='global-measurements-key'>System Load</td><td class='global-measuremnets-value'>{{load1()}} / {{load5()}} / {{load15()}}</td></tr>
-    <tr ng-repeat="s in genericScalarNames()"><td class="global-measurements-key">{{s}}</td><td class="global-measurements-value">{{formattedScalar(s)}}</td></tr>
-</table>
+<fieldset class="scalar-group">
+    <legend>System Load</legend>
+    <table class="table table-condensed table-striped">
+        <tr><td class="scalar-name">1 Minute</td><td class="scalar-value" id="load1"></td></tr>
+        <tr><td class="scalar-name">5 Minutes</td><td class="scalar-value" id="load5"></td></tr>
+        <tr><td class="scalar-name">15 Minutes</td><td class="scalar-value" id="load15"></td></tr>
+    </table>
+</fieldset>
+
+<fieldset class="scalar-group">
+    <legend>JVM Memory</legend>
+    <div id="mem"></div>
+</fieldset>
+
+<fieldset class="scalar-group">
+    <legend>Other</legend>
+    <table class="table table-condensed table-striped">
+        <tr ng-repeat="s in miscScalars"><td class="scalar-name">{{s.name}}</td><td class="scalar-value">{{s.formattedValue}}</td></tr>
+    </table>
+
+</fieldset>
 
