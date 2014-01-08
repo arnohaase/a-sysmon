@@ -14,7 +14,6 @@ import com.ajjpj.asysmon.util.AShutdownable;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -155,7 +154,7 @@ public class ASysMon implements AShutdownable {
         return result;
     }
 
-    public Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() throws IOException {
+    public Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() throws Exception {
         final Map<AList<String>, AEnvironmentData> result = new HashMap<AList<String>, AEnvironmentData>();
         if(config.isGloballyDisabled()) {
             return result;

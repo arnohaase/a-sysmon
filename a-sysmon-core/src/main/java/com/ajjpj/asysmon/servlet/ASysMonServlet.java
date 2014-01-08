@@ -41,7 +41,7 @@ public class ASysMonServlet extends AbstractASysMonServlet {
         return "asysmon.html";
     }
 
-    @Override protected boolean handleRestCall(List<String> restParams, HttpServletResponse resp) throws IOException {
+    @Override protected boolean handleRestCall(List<String> restParams, HttpServletResponse resp) throws Exception {
         final AJsonSerHelper json = new AJsonSerHelper(resp.getOutputStream());
 
         final String pageId = restParams.remove(0);

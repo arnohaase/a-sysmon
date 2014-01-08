@@ -26,6 +26,8 @@ todo
     * /proc/stat: CPU usage
     * /proc/net/dev: network usage
     * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
+    * /proc/meminfo (the variable parts)
+    * df -P
   * 'environment'
     * JVM details
     * OS details
@@ -33,6 +35,7 @@ todo
     * App Server details (via reflection?)
 
   * beautify
+    * add sort order for environment entries --> esp. for file systems: flags should go after mount point and type
     * generally: styling of tooltips - white with gray border?
     * show application ID etc. (with color code)
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?

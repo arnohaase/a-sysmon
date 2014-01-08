@@ -46,7 +46,7 @@ public interface APresentationPageDefinition {
      *
      * @return true iff the service could be handled
      */
-    boolean handleRestCall(String service, List<String> params, AJsonSerHelper json) throws IOException;
+    boolean handleRestCall(String service, List<String> params, AJsonSerHelper json) throws Exception;
 
     /**
      * called once before any of the other methods is called.

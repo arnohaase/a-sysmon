@@ -24,41 +24,55 @@ public abstract class AbstractASysMonServlet extends HttpServlet {
     public static final String ASYSMON_MARKER_REST = ASYSMON_MARKER_SEGMENT + "rest/";
 
     @Override protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final String uri = req.getRequestURI();
+        try {
+            final String uri = req.getRequestURI();
 
-        if(uri.contains(ASYSMON_MARKER_STATIC)) {
-            serveStaticResource(substringAfter(uri, ASYSMON_MARKER_STATIC), resp);
-            return;
-        }
-
-        if(uri.contains(ASYSMON_MARKER_REST)) {
-            final String[] restPart = substringAfter(uri, ASYSMON_MARKER_REST).split("/");
-            if(!handleRestCall(new ArrayList<String>(Arrays.asList(restPart)), resp)) {
-                throw new IllegalArgumentException("unsupported REST call: " + uri);
+            if(uri.contains(ASYSMON_MARKER_STATIC)) {
+                serveStaticResource(substringAfter(uri, ASYSMON_MARKER_STATIC), resp);
+                return;
             }
-            return;
-        }
 
-        if(uri.contains(ASYSMON_MARKER_SEGMENT)) {
-            final String[] dynamicPart = substringAfter(uri, ASYSMON_MARKER_SEGMENT).split("/");
-            if(! handleDynamic(new ArrayList<String>(Arrays.asList(dynamicPart)), resp)) {
-                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            if(uri.contains(ASYSMON_MARKER_REST)) {
+                final String[] restPart = substringAfter(uri, ASYSMON_MARKER_REST).split("/");
+                if(!handleRestCall(new ArrayList<String>(Arrays.asList(restPart)), resp)) {
+                    throw new IllegalArgumentException("unsupported REST call: " + uri);
+                }
+                return;
             }
-            return;
+
+            if(uri.contains(ASYSMON_MARKER_SEGMENT)) {
+                final String[] dynamicPart = substringAfter(uri, ASYSMON_MARKER_SEGMENT).split("/");
+                if(! handleDynamic(new ArrayList<String>(Arrays.asList(dynamicPart)), resp)) {
+                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
+                return;
+            }
+
+            //TODO handle 'not found'
+
+            if(! uri.endsWith("/")) {
+                resp.sendRedirect(uri + "/");
+                return;
+            }
+
+            serveStaticResource(getDefaultHtmlName(), resp);
         }
-
-        //TODO handle 'not found'
-
-        if(! uri.endsWith("/")) {
-            resp.sendRedirect(uri + "/");
-            return;
+        catch (RuntimeException exc) {
+            throw exc;
         }
-
-        serveStaticResource(getDefaultHtmlName(), resp);
+        catch (IOException exc) {
+            throw exc;
+        }
+        catch (ServletException exc) {
+            throw exc;
+        }
+        catch(Exception exc) {
+            throw new ServletException(exc);
+        }
     }
 
     protected abstract String getDefaultHtmlName();
-    protected abstract boolean handleRestCall(List<String> pathSegments, HttpServletResponse resp) throws IOException;
+    protected abstract boolean handleRestCall(List<String> pathSegments, HttpServletResponse resp) throws Exception;
     protected boolean handleDynamic(List<String> pathSegments, HttpServletResponse resp) throws IOException {
         return false;
     }

@@ -36,7 +36,7 @@ public class AEnvVarPageDefinition implements APresentationPageDefinition {
         return "CtrlEnvVar";
     }
 
-    @Override public boolean handleRestCall(String service, List<String> params, AJsonSerHelper json) throws IOException {
+    @Override public boolean handleRestCall(String service, List<String> params, AJsonSerHelper json) throws Exception {
         if("getData".equals(service)) {
             serveData(json);
             return true;
@@ -44,7 +44,7 @@ public class AEnvVarPageDefinition implements APresentationPageDefinition {
         return false;
     }
 
-    private void serveData(AJsonSerHelper json) throws IOException {
+    private void serveData(AJsonSerHelper json) throws Exception {
         json.startObject();
 
         json.writeKey("envTree");
@@ -78,7 +78,7 @@ public class AEnvVarPageDefinition implements APresentationPageDefinition {
         json.endArray();
     }
 
-    private Collection<EnvData> getData() throws IOException {
+    private Collection<EnvData> getData() throws Exception {
         final Map<AList<String>, AEnvironmentData> raw = sysMon.getEnvironmentMeasurements();
         final SortedSet<EnvData> result = new TreeSet<EnvData>();
 

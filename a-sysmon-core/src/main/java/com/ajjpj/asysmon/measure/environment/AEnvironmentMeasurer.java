@@ -14,5 +14,5 @@ public interface AEnvironmentMeasurer {
     /**
      * @param data is a 'collectiong parameter', i.e. the method adds its own results to the existing collection.
      */
-    void contributeMeasurements(Map<AList<String>, AEnvironmentData> data) throws IOException;
+    void contributeMeasurements(Map<AList<String>, AEnvironmentData> data) throws Exception;
 }
