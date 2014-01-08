@@ -54,6 +54,19 @@
         return parts.join(decimalSeparator);
     });
 
+    var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+    asysmon.constant('escapeHtml', function (string) {
+        return String(string || '').replace(/[&<>"'\/]/g, function (s) {
+            return entityMap[s];
+        });
+    });
 }());
 
 

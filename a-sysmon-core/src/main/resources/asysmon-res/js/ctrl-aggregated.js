@@ -1,5 +1,5 @@
 
-angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log, Rest) {
+angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log, Rest, escapeHtml) {
 
     $('.button-segment').affix({
         offset: {
@@ -358,21 +358,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
             result += '</div>';
         }
         return result;
-    }
-
-    var entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': '&quot;',
-        "'": '&#39;',
-        "/": '&#x2F;'
-    };
-
-    function escapeHtml(string) {
-        return String(string).replace(/[&<>"'\/]/g, function (s) {
-            return entityMap[s];
-        });
     }
 });
 

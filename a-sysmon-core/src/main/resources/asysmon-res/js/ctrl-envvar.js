@@ -1,5 +1,5 @@
 
-angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Rest) {
+angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Rest, escapeHtml) {
     $('.btn').tooltip({
         container: 'body',
         html: true
@@ -102,20 +102,6 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
 //            return expansionModel[node.fqn] ? 'node-icon-expanded' : 'node-icon-collapsed';
         }
         return 'node-icon-empty';
-    }
-
-    var entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': '&quot;',
-        "'": '&#39;',
-        "/": '&#x2F;'
-    };
-    function escapeHtml(string) { //TODO extract to module
-        return String(string || '').replace(/[&<>"'\/]/g, function (s) {
-            return entityMap[s];
-        });
     }
 });
 
