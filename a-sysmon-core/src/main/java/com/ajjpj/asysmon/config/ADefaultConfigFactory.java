@@ -31,7 +31,7 @@ public class ADefaultConfigFactory {
                         .addEnvironmentMeasurer(new AOverviewEnvironmentMeasurer())
                         .addScalarMeasurer(new ASystemLoadMeasurer())
                         .addScalarMeasurer(AConnectionCounter.INSTANCE)
-                        .addPresentationMenuEntry("Context", new AScalarPageDefinition(), new AEnvVarPageDefinition())
+                        .addPresentationMenuEntry("Context", new AEnvVarPageDefinition(), new AScalarPageDefinition())
                         .addPresentationMenuEntry("Trace", new ATracePageDefinition(ATraceFilter.ALL, 50), new ATracePageDefinition(ATraceFilter.HTTP, 30))
                         .addPresentationMenuEntry("Performance", new ADrillDownPageDefinition(), new AJdbcPageDefinition())
                         .addPresentationMenuEntry("Threads", new AThreadDumpPageDefinition("com.ajjpj")) //TODO make app package configurable

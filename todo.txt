@@ -35,9 +35,7 @@ todo
     * App Server details (via reflection?)
 
   * beautify
-    * 'environment': add sort order
-      * for file systems: flags should go after mount point and type
-      * 'Overview' at the top, opened by default
+    * 'environment': start with expanded 'Overview'
     * generally: styling of tooltips - white with gray border?
     * show application ID etc. (with color code)
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?

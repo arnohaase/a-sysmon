@@ -9,6 +9,7 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
     var nodesByFqn = {};
 
     function initFromResponse(data) {
+        reorder(data.envTree);
         $scope.envTree = data.envTree;
         nodesByFqn = {};
         initTreeNodes($scope.envTree, 0, '');
@@ -30,6 +31,15 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
                     }
                 });
             })
+    }
+    function reorder(rootNodes) {
+        for(var i=0; i<rootNodes.length; i++) {
+            var node = rootNodes[i];
+            if(node.name === 'overview') {
+                rootNodes.splice(i, 1);
+                rootNodes.unshift(node);
+            }
+        }
     }
     function initTreeNodes(nodes, level, prefix) {
         if(nodes) {
