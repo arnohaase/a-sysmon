@@ -18,17 +18,16 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
             .click(function() {
                 var fqn = $(this).children('.fqn-holder').text();
                 var childrenDiv = $(this).next();
+                var nodeIconDiv = $(this).children('.node-icon');
+                var isExpanded = nodeIconDiv.hasClass('node-icon-expanded');
+
                 childrenDiv.slideToggle(50, function() {
-                    $scope.$apply(function() {
-//                        var nodeIconDiv = dataRow.children('.node-icon');
-                        //TODO
-//                        if($scope.expansionModel[node.fqn]) {
-//                            nodeIconDiv.removeClass('node-icon-collapsed').addClass('node-icon-expanded');
-//                        }
-//                        else {
-//                            nodeIconDiv.addClass('node-icon-collapsed').removeClass('node-icon-expanded');
-//                        }
-                    });
+                    if(isExpanded) {
+                        nodeIconDiv.addClass('node-icon-collapsed').removeClass('node-icon-expanded');
+                    }
+                    else {
+                        nodeIconDiv.removeClass('node-icon-collapsed').addClass('node-icon-expanded');
+                    }
                 });
             })
     }
