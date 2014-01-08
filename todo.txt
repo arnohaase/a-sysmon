@@ -55,6 +55,10 @@ todo
 * load average from sun.misc.Unsafe --> Windows?!
 
 * global measurements
+  * /proc/self/cmdline
+  * /proc/self/io          http://stackoverflow.com/questions/3633286/understanding-the-counters-in-proc-pid-io
+  * /proc/self/stat       --> man 5 proc
+  * /proc/self/net --> ?!?!?
   * /proc/diskstats
 
           Field 1 -- # of reads issued

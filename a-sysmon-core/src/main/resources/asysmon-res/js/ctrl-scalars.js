@@ -99,7 +99,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
 
             result += '<tr>' +
                 '<td class="scalar-name">' + memKind + '</td>' +
-                '<td class="scalar-value">' + htmlForPercentageBar('100px', 0, 100, percent, 50, 70, 90, formatNumber(percent,1) + '%') + '</td>' +
+                '<td class="scalar-value">' + htmlForPercentageBar('100px', 0, 100, percent, 50, 80, 90, formatNumber(percent,1) + '%') + '</td>' +
                 '<td class="scalar-value">' + used.     formattedValue + '</td>' +
                 '<td class="scalar-value">' + committed.formattedValue + '</td>' +
                 '<td class="scalar-value">' + max.      formattedValue + '</td>' +
