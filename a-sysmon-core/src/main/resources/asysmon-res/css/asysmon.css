@@ -191,6 +191,8 @@ div.data-row {
   line-height: 22px;
   padding-left: 4px;
   padding-right: 7px;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 div:hover.data-row  {
   background: #a0a0a0;
@@ -369,5 +371,13 @@ div.mem-gc-zoom-range-present {
 }
 div.tooltip-inner {
     max-width: 800px;
+}
+
+div.env-name {
+    margin-right: 75%;
+}
+div.env-value {
+    float: right;
+    width: 75%;
 }
 

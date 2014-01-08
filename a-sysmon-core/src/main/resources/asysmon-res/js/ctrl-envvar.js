@@ -34,6 +34,10 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
     function initTreeNodes(nodes, level, prefix) {
         if(nodes) {
             for(var i=0; i<nodes.length; i++) {
+                if(level === 0) {
+                    nodes[i].name = resolveWellKnownTopLevelNames(nodes[i].name);
+                }
+
                 nodes[i].level = level;
                 var fqn = prefix + '\n' + (nodes[i].id || nodes[i].name);
                 nodes[i].fqn = fqn;
@@ -41,6 +45,16 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
                 initTreeNodes(nodes[i].children, level+1, fqn);
             }
         }
+    }
+
+    function resolveWellKnownTopLevelNames(name) {
+        if(name === 'envvar') {
+            return 'Environment Variables';
+        }
+        if(name === 'sysprop') {
+            return 'System Properties';
+        }
+        return name;
     }
 
 
@@ -63,8 +77,8 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
             '<div class="data-row data-row-' + (curNode.level - rootLevel) + '">' +
                 '<div class="fqn-holder">' + curNode.fqn + '</div>' +
                 '<div class="node-icon ' + nodeIconClass(curNode.fqn) + '">&nbsp;</div>' +
-                (curNode.value ? ('<div style="float: right; width: 50%;">' + escapeHtml(curNode.value) + '</div>') : '') +
-                '<div class="node-text" style="margin-right: 50%;">' + escapeHtml(curNode.name) + '</div>' +
+                '<div class="env-value">' + escapeHtml(curNode.value) + '</div>' +
+                '<div class="node-text env-name">' + escapeHtml(curNode.name) + '</div>' +
                 '</div>';
 
         if(curNode.children && curNode.children.length) {
@@ -99,7 +113,7 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
         "/": '&#x2F;'
     };
     function escapeHtml(string) { //TODO extract to module
-        return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return String(string || '').replace(/[&<>"'\/]/g, function (s) {
             return entityMap[s];
         });
     }
