@@ -14,7 +14,7 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
         initTreeNodes($scope.envTree, 0, '');
 
         $('#theTree').html(htmlForAllTrees());
-        $('#theTree .data-row')
+        $('.data-row.with-children')
             .click(function() {
                 var fqn = $(this).children('.fqn-holder').text();
                 var childrenDiv = $(this).next();
@@ -73,8 +73,10 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
     }
 
     function htmlForTreeNode(curNode) {
+        var withChildrenClass = (curNode.children && curNode.children.length) ? ' with-children' : '';
+
         var result =
-            '<div class="data-row data-row-' + (curNode.level - rootLevel) + '">' +
+            '<div class="data-row data-row-' + (curNode.level - rootLevel) + withChildrenClass + '">' +
                 '<div class="fqn-holder">' + curNode.fqn + '</div>' +
                 '<div class="node-icon ' + nodeIconClass(curNode.fqn) + '">&nbsp;</div>' +
                 '<div class="env-value">' + escapeHtml(curNode.value) + '</div>' +

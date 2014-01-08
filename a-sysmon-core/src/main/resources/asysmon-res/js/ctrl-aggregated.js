@@ -257,6 +257,11 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         $('#theTree').html(htmlForAllTrees());
 
         $('#theTree .data-row')
+            .tooltip({
+                container: 'body',
+                html: true
+            });
+        $('.data-row.with-children')
             .click(function() {
                 var fqn = $(this).children('.fqn-holder').text();
                 if($scope.isInPickMode) {
@@ -265,10 +270,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                 else {
                     toggleTreeNode($(this), nodesByFqn[fqn]);
                 }
-            })
-            .tooltip({
-                container: 'body',
-                html: true
             });
     }
 
@@ -342,8 +343,9 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
             tooltip = 'data-toggle="tooltip" title="' + tooltipContent + '" ';
         }
 
+        var withChildrenClass = (curNode.children && curNode.children.length) ? ' with-children' : '';
         var result =
-            '<div class="data-row data-row-' + (curNode.level - $scope.rootLevel) + ' ' + dataRowSubdued + '" ' + tooltip + '>' +
+            '<div class="data-row data-row-' + (curNode.level - $scope.rootLevel) + withChildrenClass + ' ' + dataRowSubdued + '" ' + tooltip + '>' +
                 '<div class="fqn-holder">' + curNode.fqn + '</div>' +
                 '<div class="node-icon ' + $scope.nodeIconClass(curNode.fqn) + '">&nbsp;</div>' + //TODO {{nodeIconClass(curNode.fqn)}}
                 dataCols +

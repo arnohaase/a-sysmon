@@ -18,7 +18,6 @@ todo
     * ?!?!?! --> Felix
 
 * core
-  * bug: click on a 'leaf' node toggles the next sibling
   * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
   * make 'scalars' page readable
