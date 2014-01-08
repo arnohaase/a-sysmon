@@ -28,6 +28,7 @@ public class ADefaultConfigFactory {
                         .addEnvironmentMeasurer(new ACpuEnvironmentMeasurer())
                         .addEnvironmentMeasurer(new AMemInfoEnvironmentMeasurer())
                         .addEnvironmentMeasurer(new AFileSystemsEnvironmentMeasurer())
+                        .addEnvironmentMeasurer(new AOverviewEnvironmentMeasurer())
                         .addScalarMeasurer(new ASystemLoadMeasurer())
                         .addScalarMeasurer(AConnectionCounter.INSTANCE)
                         .addPresentationMenuEntry("Context", new AScalarPageDefinition(), new AEnvVarPageDefinition())

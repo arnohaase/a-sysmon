@@ -18,6 +18,8 @@ todo
     * ?!?!?! --> Felix
 
 * core
+  * test on Windows --> graceful degradation
+
   * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
   * make 'scalars' page readable
@@ -29,12 +31,13 @@ todo
     * /proc/meminfo (the variable parts)
     * df -P
   * 'environment'
-    * JVM details
-    * OS details
+    * JVM details (esp. command line switches)
     * App Server details (via reflection?)
 
   * beautify
-    * add sort order for environment entries --> esp. for file systems: flags should go after mount point and type
+    * 'environment': add sort order
+      * for file systems: flags should go after mount point and type
+      * 'Overview' at the top, opened by default
     * generally: styling of tooltips - white with gray border?
     * show application ID etc. (with color code)
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?

@@ -57,6 +57,9 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
         if(name === 'hw') {
             return 'Hardware';
         }
+        if(name === 'overview') {
+            return 'Overview';
+        }
         return name;
     }
 

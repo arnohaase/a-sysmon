@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 /**
@@ -30,13 +31,19 @@ public class UnixCommand {
     }
 
     public UnixCommand(int maxLinesOfOutput, String... cmd) throws IOException, InterruptedException {
+        this(maxLinesOfOutput, null, cmd);
+    }
+
+    public UnixCommand(int maxLinesOfOutput, Pattern grep, String... cmd) throws IOException, InterruptedException {
         final ProcessBuilder pb = new ProcessBuilder(cmd);
         final Process process = pb.start();
         final BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream())); // platform encoding is intended here!
 
         String line;
         while(stdout.size() < maxLinesOfOutput && (line = in.readLine()) != null) {
-            stdout.add(line);
+            if(grep == null || grep.matcher(line).matches()) {
+                stdout.add(line);
+            }
         }
 
         returnCode = process.waitFor();
