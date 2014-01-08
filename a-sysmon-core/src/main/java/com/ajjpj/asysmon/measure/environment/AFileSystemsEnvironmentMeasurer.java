@@ -1,7 +1,6 @@
 package com.ajjpj.asysmon.measure.environment;
 
 
-import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.UnixCommand;
 
 import java.io.BufferedReader;
@@ -9,9 +8,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * This measurer collects information about mounted file systems from several sources.
@@ -21,25 +17,22 @@ import java.util.StringTokenizer;
 public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
     public static final String KEY_FILESYSTEMS = "file systems";
 
-    @Override public void contributeMeasurements(Map<AList<String>, AEnvironmentData> data) throws Exception {
+    @Override public void contributeMeasurements(EnvironmentCollector data) throws Exception {
         contributeMtab(data);
         contributeDf(data);
     }
 
-    private void contributeDf(Map<AList<String>, AEnvironmentData> data) throws Exception {
+    private void contributeDf(EnvironmentCollector data) throws Exception {
         for(String line: new UnixCommand("df", "-P").getOutput()) {
-            System.out.println(line);
             if(! line.startsWith("/dev/")) {
                 continue;
             }
 
             final String[] split = line.split("\\s+");
-            System.out.println("  --> " + split.length + ": " + Arrays.asList(split));
             if(split.length != 6) {
                 continue;
             }
 
-            System.out.println("  !");
             final String device = split[0];
             final String size = split[1];
             final String used = split[2];
@@ -54,7 +47,7 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
         }
     }
 
-    private void contributeMtab(Map<AList<String>, AEnvironmentData> data) throws IOException {
+    private void contributeMtab(EnvironmentCollector data) throws IOException {
         final BufferedReader br = new BufferedReader(new FileReader(new File("/etc/mtab")));
         try {
             String line;
@@ -78,8 +71,7 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
                 add(data, device, "Type", fsType);
                 add(data, device, "Flags", flags);
 
-                final AList<String> keyMountPoint = AList.create(ACpuEnvironmentMeasurer.KEY_HW, KEY_FILESYSTEMS, device);
-                data.put(keyMountPoint, new AEnvironmentData(keyMountPoint, mountPoint));
+                data.add(mountPoint, ACpuEnvironmentMeasurer.KEY_HW, KEY_FILESYSTEMS, device);
             }
         }
         finally {
@@ -87,12 +79,7 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
         }
     }
 
-    private void add(Map<AList<String>, AEnvironmentData> data, String device, String key, String value) {
-        final AList<String> fullKey = fullKey(device, key);
-        data.put(fullKey, new AEnvironmentData(fullKey, value));
-    }
-
-    private AList<String> fullKey(String device, String key) {
-        return AList.create(ACpuEnvironmentMeasurer.KEY_HW, KEY_FILESYSTEMS, device, key);
+    private void add(EnvironmentCollector data, String device, String key, String value) {
+        data.add(value, ACpuEnvironmentMeasurer.KEY_HW, KEY_FILESYSTEMS, device, key);
     }
 }

@@ -1,12 +1,8 @@
 package com.ajjpj.asysmon.measure.environment;
 
-import com.ajjpj.asysmon.util.AList;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * @author arno
@@ -14,7 +10,7 @@ import java.util.Map;
 public class AMemInfoEnvironmentMeasurer implements AEnvironmentMeasurer {
     public static final String KEY_MEMINFO = "memory";
 
-    @Override public void contributeMeasurements(Map<AList<String>, AEnvironmentData> data) throws IOException {
+    @Override public void contributeMeasurements(EnvironmentCollector data) throws Exception {
         final BufferedReader br = new BufferedReader(new FileReader(new File("/proc/meminfo")));
         try {
             String line;
@@ -27,8 +23,7 @@ public class AMemInfoEnvironmentMeasurer implements AEnvironmentMeasurer {
                 final String key = line.substring(0, idxColon).trim();
                 final String value = line.substring(idxColon+1).trim();
 
-                final AList<String> fullKey = AList.create(ACpuEnvironmentMeasurer.KEY_HW, KEY_MEMINFO, key);
-                data.put(fullKey, new AEnvironmentData(fullKey, value));
+                data.add(value, ACpuEnvironmentMeasurer.KEY_HW, KEY_MEMINFO, key);
             }
         }
         finally {

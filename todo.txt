@@ -31,7 +31,6 @@ todo
   * 'environment'
     * JVM details
     * OS details
-    * Hardware details
     * App Server details (via reflection?)
 
   * beautify

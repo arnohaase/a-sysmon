@@ -12,10 +12,9 @@ import java.util.Map;
 public class ASysPropEnvironmentMeasurer implements AEnvironmentMeasurer {
     public static final String KEY_SYSTEM_PROPERTY = "sysprop";
 
-    @Override public void contributeMeasurements(Map<AList<String>, AEnvironmentData> data) {
+    @Override public void contributeMeasurements(EnvironmentCollector data) throws Exception {
         for(String propName: System.getProperties().stringPropertyNames()) {
-            final AList<String> key = AList.create(KEY_SYSTEM_PROPERTY, propName);
-            data.put(key, new AEnvironmentData(key, System.getProperties().getProperty(propName)));
+            data.add(System.getProperty(propName), KEY_SYSTEM_PROPERTY, propName);
         }
     }
 }

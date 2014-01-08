@@ -13,7 +13,7 @@ public class ACpuEnvironmentMeasurer implements AEnvironmentMeasurer {
     public static final String KEY_HW = "hw";
     public static final String KEY_CPUS = "cpus";
 
-    @Override public void contributeMeasurements(Map<AList<String>, AEnvironmentData> data) throws IOException {
+    @Override public void contributeMeasurements(EnvironmentCollector data) throws Exception {
         final BufferedReader br = new BufferedReader(new FileReader(new File("/proc/cpuinfo")));
         try {
             String line;
@@ -39,17 +39,14 @@ public class ACpuEnvironmentMeasurer implements AEnvironmentMeasurer {
                 }
 
                 if("model name".equals(key)) {
-                    final AList<String> fullKey = AList.create(KEY_HW, KEY_CPUS, cpuKey);
-                    data.put(fullKey, new AEnvironmentData(fullKey, value));
+                    data.add(value, KEY_HW, KEY_CPUS, cpuKey);
                     continue;
                 }
 
-                final AList<String> fullKey = AList.create(KEY_HW, KEY_CPUS, cpuKey, key);
-                data.put(fullKey, new AEnvironmentData(fullKey, value));
+                data.add(value, KEY_HW, KEY_CPUS, cpuKey, key);
             }
 
-            final AList<String> cpuNumKey = AList.create(KEY_HW, KEY_CPUS);
-            data.put(cpuNumKey, new AEnvironmentData(cpuNumKey, String.valueOf(numCpus)));
+            data.add(String.valueOf(numCpus), KEY_HW, KEY_CPUS);
         }
         finally {
             br.close();

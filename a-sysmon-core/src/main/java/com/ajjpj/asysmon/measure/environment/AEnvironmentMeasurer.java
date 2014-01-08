@@ -14,5 +14,18 @@ public interface AEnvironmentMeasurer {
     /**
      * @param data is a 'collectiong parameter', i.e. the method adds its own results to the existing collection.
      */
-    void contributeMeasurements(Map<AList<String>, AEnvironmentData> data) throws Exception;
+    void contributeMeasurements(EnvironmentCollector data) throws Exception;
+
+    class EnvironmentCollector {
+        public final Map<AList<String>, AEnvironmentData> data;
+
+        public EnvironmentCollector(Map<AList<String>, AEnvironmentData> data) {
+            this.data = data;
+        }
+
+        public void add(String value, String... key) {
+            final AList<String> fullKey = AList.create(key);
+            data.put(fullKey, new AEnvironmentData(fullKey, value));
+        }
+    }
 }

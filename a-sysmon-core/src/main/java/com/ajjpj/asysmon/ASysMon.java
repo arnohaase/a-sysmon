@@ -161,7 +161,7 @@ public class ASysMon implements AShutdownable {
         }
 
         for(AEnvironmentMeasurer m: config.environmentMeasurers) {
-            m.contributeMeasurements(result);
+            m.contributeMeasurements(new AEnvironmentMeasurer.EnvironmentCollector(result));
             //TODO protect against exceptions (per measurer)
             //TODO limit duration per measurer
         }
