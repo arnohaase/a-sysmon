@@ -45,7 +45,8 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
     }
 
     function htmlForLoad(loadScalar) {
-        return htmlForPercentageBar('100px', 0, 8/*todo*/, loadScalar.value, 1, 8/2/*todo*/, 8/*todo*/, loadScalar.formattedValue);
+        var numCpus = 8; //TODO
+        return htmlForPercentageBar('100px', 0, numCpus, loadScalar.value, 1, numCpus/2, numCpus, loadScalar.formattedValue);
     }
 
     function htmlForPercentageBar(width, min, max, value, thresholdInfo, thresholdWarning, thresholdDanger, formattedValue) {

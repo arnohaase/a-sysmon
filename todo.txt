@@ -34,6 +34,9 @@ todo
     * App Server details (via reflection?)
 
   * beautify
+    * scalar page:
+      * auto-refresh every 10 seconds (?)
+      * send # CPUs from server
     * 'environment': start with expanded 'Overview'
     * generally: styling of tooltips - white with gray border?
     * show application ID etc. (with color code)
