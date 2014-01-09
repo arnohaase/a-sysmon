@@ -12,7 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AThreadCountMeasurer implements AScalarMeasurer {
     public final AThreadPoolTrackingDataSink counter = new AThreadPoolTrackingDataSink();
 
-    @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp) {
+    @Override public void prepareMeasurements(Map<String, Object> mementos) {
+    }
+
+    @Override
+    public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) {
         for(Map.Entry<String, AtomicInteger> entry: counter.getThreadCounts().entrySet()) {
             final String ident = "Thread Pool " + entry.getKey();
             data.put(ident, new AScalarDataPoint(timestamp, ident, entry.getValue().get(), 0));

@@ -18,7 +18,11 @@ public class ASystemLoadMeasurer implements AScalarMeasurer {
 
     private final File procFile = new File("/proc/loadavg");
 
-    @Override public void contributeMeasurements(Map<String, AScalarDataPoint> result, long timestamp) {
+    @Override public void prepareMeasurements(Map<String, Object> mementos) {
+    }
+
+    @Override
+    public void contributeMeasurements(Map<String, AScalarDataPoint> result, long timestamp, Map<String, Object> mementos) {
         try {
             final BufferedReader in = new BufferedReader(new FileReader(procFile));
             final String[] raw = in.readLine().split(" ");
@@ -31,7 +35,7 @@ public class ASystemLoadMeasurer implements AScalarMeasurer {
             result.put(IDENT_LOAD_5_MIN, new AScalarDataPoint(timestamp, IDENT_LOAD_5_MIN, load5, 2));
             result.put(IDENT_LOAD_15_MIN, new AScalarDataPoint(timestamp, IDENT_LOAD_15_MIN, load15, 2));
         }
-        catch(Exception exc) { // do nothing
+        catch(Exception exc) { // do nothing //TODO move this to the caller
         }
     }
 

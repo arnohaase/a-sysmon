@@ -20,6 +20,8 @@ public class ASysMonConfig {
     public final String applicationInstanceId;
     public final String applicationInstanceHtmlColorCode;
 
+    public final int averagingDelayForScalarsMillis;
+
     public final ASysMonLogger logger;
     public final ATimer timer;
 
@@ -31,12 +33,15 @@ public class ASysMonConfig {
 
     public final List<APresentationMenuEntry> presentationMenuEntries;
 
-    public ASysMonConfig(String applicationId, String applicationVersionId, String instanceId, String instanceHtmlColorCode, ASysMonLogger logger, ATimer timer, boolean implicitlyShutDownWithServlet,
+    public ASysMonConfig(String applicationId, String applicationVersionId, String instanceId, String instanceHtmlColorCode,
+                         int averagingDelayForScalarsMillis,
+                         ASysMonLogger logger, ATimer timer, boolean implicitlyShutDownWithServlet,
                          List<AEnvironmentMeasurer> environmentMeasurers, List<AScalarMeasurer> initialScalarMeasurers, List<ADataSink> initialDataSinks, List<APresentationMenuEntry> presentationMenuEntries) {
         this.applicationId = applicationId;
         this.applicationVersionId = applicationVersionId;
         this.applicationInstanceId = instanceId;
         this.applicationInstanceHtmlColorCode = instanceHtmlColorCode;
+        this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
         this.logger = logger;
         this.timer = timer;
         this.implicitlyShutDownWithServlet = implicitlyShutDownWithServlet;

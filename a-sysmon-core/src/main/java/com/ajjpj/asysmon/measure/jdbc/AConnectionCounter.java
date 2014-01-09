@@ -51,7 +51,12 @@ public class AConnectionCounter implements AScalarMeasurer {
         getCounter(qualifier, activePerConnectionPool).decrementAndGet();
     }
 
-    @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp) {
+    @Override
+    public void prepareMeasurements(Map<String, Object> mementos) {
+    }
+
+    @Override
+    public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) {
         for(String key: openPerConnectionPool.keySet()) {
             final String ident = (DEFAULT_POOL_IDENTIFIER == key) ? "Open JDBC Connections" : ("Open JDBC Connections (" + key + ")");
             data.put(ident, new AScalarDataPoint(timestamp, ident, openPerConnectionPool.get(key).get(), 0));

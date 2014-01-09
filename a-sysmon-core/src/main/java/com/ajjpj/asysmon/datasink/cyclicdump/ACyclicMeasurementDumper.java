@@ -25,11 +25,12 @@ import java.util.concurrent.TimeUnit;
 public abstract class ACyclicMeasurementDumper implements ADataSink {
     private final ScheduledExecutorService ec;
     private final ASysMon sysMon;
+    private final int averagingDelayMillis;
 
     private final Runnable dumper = new Runnable() {
         @Override public void run() {
             try {
-                final Map<String, AScalarDataPoint> m = sysMon.getScalarMeasurements();
+                final Map<String, AScalarDataPoint> m = sysMon.getScalarMeasurements(averagingDelayMillis);
                 for(String key: m.keySet()) {
                     dump("Scalar Measurement: " + key + " = " + m.get(key).getFormattedValue());
                 }
@@ -42,10 +43,11 @@ public abstract class ACyclicMeasurementDumper implements ADataSink {
     };
 
     public ACyclicMeasurementDumper(ASysMon sysMon, int frequencyInSeconds) {
-        this(sysMon, 0, frequencyInSeconds);
+        this(sysMon, 0, frequencyInSeconds, sysMon.getConfig().averagingDelayForScalarsMillis);
     }
 
-    public ACyclicMeasurementDumper(ASysMon sysMon, int initialDelaySeconds, int frequencyInSeconds) {
+    public ACyclicMeasurementDumper(ASysMon sysMon, int initialDelaySeconds, int frequencyInSeconds, int averagingDelayMillis) {
+        this.averagingDelayMillis = averagingDelayMillis;
         ec = Executors.newSingleThreadScheduledExecutor();
         ec.scheduleAtFixedRate(dumper, initialDelaySeconds, frequencyInSeconds, TimeUnit.SECONDS);
 

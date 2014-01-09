@@ -75,7 +75,10 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
         }
     }
 
-    @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp) {
+    @Override public void prepareMeasurements(Map<String, Object> mementos) {
+    }
+
+    @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) {
         for(String key: timeFracInGcPpm.keySet()) {
             data.put(SCALAR_PREFIX_FRAC_PERCENT + key, new AScalarDataPoint(timestamp, SCALAR_PREFIX_FRAC_PERCENT + key, timeFracInGcPpm.get(key), 4));
         }

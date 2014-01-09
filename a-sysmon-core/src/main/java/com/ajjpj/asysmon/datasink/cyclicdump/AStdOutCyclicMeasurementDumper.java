@@ -11,8 +11,8 @@ public class AStdOutCyclicMeasurementDumper extends ACyclicMeasurementDumper {
         super(sysMon, frequencyInSeconds);
     }
 
-    public AStdOutCyclicMeasurementDumper(ASysMon sysMon, int initialDelaySeconds, int frequencyInSeconds) {
-        super(sysMon, initialDelaySeconds, frequencyInSeconds);
+    public AStdOutCyclicMeasurementDumper(ASysMon sysMon, int initialDelaySeconds, int frequencyInSeconds, int averagingDelayMillis) {
+        super(sysMon, initialDelaySeconds, frequencyInSeconds, averagingDelayMillis);
     }
 
     @Override protected void dump(String s) {

@@ -13,8 +13,8 @@ public class ALog4JDebugCyclicMeasurementDumper extends ACyclicMeasurementDumper
         super(sysMon, frequencyInSeconds);
     }
 
-    public ALog4JDebugCyclicMeasurementDumper(ASysMon sysMon, int initialDelaySeconds, int frequencyInSeconds) {
-        super(sysMon, initialDelaySeconds, frequencyInSeconds);
+    public ALog4JDebugCyclicMeasurementDumper(ASysMon sysMon, int initialDelaySeconds, int frequencyInSeconds, int averagingDelayForScalarsMillis) {
+        super(sysMon, initialDelaySeconds, frequencyInSeconds, averagingDelayForScalarsMillis);
     }
 
     @Override protected void dump(String s) {

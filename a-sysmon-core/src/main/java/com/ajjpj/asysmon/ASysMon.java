@@ -12,7 +12,6 @@ import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -140,14 +139,30 @@ public class ASysMon implements AShutdownable {
         return getMeasurementHierarchy().startCollectingMeasurement(identifier, serial);
     }
 
-    public Map<String, AScalarDataPoint> getScalarMeasurements() { //TODO rename to distinguish from 'add' etc.
+    public Map<String, AScalarDataPoint> getScalarMeasurements() {
+        return getScalarMeasurements(config.averagingDelayForScalarsMillis);
+    }
+
+    public Map<String, AScalarDataPoint> getScalarMeasurements(int averagingDelayForScalarsMillis) { //TODO rename to distinguish from 'add' etc.
         final Map<String, AScalarDataPoint> result = new TreeMap<String, AScalarDataPoint>();
         if(config.isGloballyDisabled()) {
             return result;
         }
+
+        final Map<String, Object> mementos = new TreeMap<String, Object>();
+        for(AScalarMeasurer measurer: scalarMeasurers) { //TODO prepare against exceptions (per measurer), limit duration per measurer
+            measurer.prepareMeasurements(mementos);
+        }
+
+        try {
+            Thread.sleep(averagingDelayForScalarsMillis);
+        } catch (InterruptedException e) {
+            e.printStackTrace(); //TODO exception handling
+        }
+
         final long now = System.currentTimeMillis();
         for(AScalarMeasurer measurer: scalarMeasurers) {
-            measurer.contributeMeasurements(result, now);
+            measurer.contributeMeasurements(result, now, mementos);
         }
         //TODO protect against exceptions (per measurer)
         //TODO limit duration per measurer

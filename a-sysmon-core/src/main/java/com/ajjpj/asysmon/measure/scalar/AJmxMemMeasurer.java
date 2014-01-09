@@ -2,10 +2,7 @@ package com.ajjpj.asysmon.measure.scalar;
 
 
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 
-import javax.management.NotificationEmitter;
-import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
 import java.util.Map;
@@ -20,7 +17,10 @@ public class AJmxMemMeasurer implements AScalarMeasurer {
     public static final String SUFFIX_MAX = ":max";
     public static final String SUFFIX_USED = ":used";
 
-    @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp) {
+    @Override public void prepareMeasurements(Map<String, Object> mementos) {
+    }
+
+    @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) {
 //        ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
 //        ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage();
 

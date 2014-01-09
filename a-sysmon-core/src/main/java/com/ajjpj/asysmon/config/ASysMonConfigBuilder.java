@@ -25,6 +25,8 @@ public class ASysMonConfigBuilder {
     private String applicationInstanceId;
     private String applicationInstanceHtmlColorCode;
 
+    private int averagingDelayForScalarsMillis = 1000;
+
     private ASysMonLogger logger = defaultLogger();
     private ATimer timer = new ASystemNanoTimer();
 
@@ -106,6 +108,7 @@ public class ASysMonConfigBuilder {
     public ASysMonConfig build() {
         return new ASysMonConfig(
                 applicationId, applicationVersionId, applicationInstanceId, applicationInstanceHtmlColorCode,
+                averagingDelayForScalarsMillis,
                 logger, timer,
                 implicitlyShutDownWithServlet,
                 environmentMeasurers, scalarMeasurers, dataSinks,
