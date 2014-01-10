@@ -46,6 +46,14 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
         $('#mem').html(htmlForMemory());
     }
 
+    $scope.otherCpuPercent = function() {
+        if(!$scope.scalars) {
+            return '';
+        }
+        var raw = $scope.scalars['cpu:all-used'].value - $scope.scalars['cpu:self-user'].value - $scope.scalars['cpu:self-kernel'].value;
+        return formatNumber(raw, 1);
+    }
+
     function htmlForCpu() {
         function segment(color, value) {
             var max = $scope.scalars['cpu:available'].value;
