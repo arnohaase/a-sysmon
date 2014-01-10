@@ -12,15 +12,15 @@
             <th class="scalar-name"></th>
             <th class="scalar-value"></th>
             <th class="scalar-value" style="width: 80px; vertical-align: middle">available</th>
-            <th class="scalar-value" style="width: 80px; vertical-align:middle">other</th>
-            <th class="scalar-value" style="width: 80px;">app<br>user</th>
             <th class="scalar-value" style="width: 80px;">app<br>kernel</th>
+            <th class="scalar-value" style="width: 80px;">app<br>user</th>
+            <th class="scalar-value" style="width: 80px; vertical-align:middle">other</th>
         </tr>
         <tr><td class="scalar-name">CPU</td><td class="scalar-value" id="cpu"></td>
             <td class="scalar-value"> {{scalars['cpu:available'].formattedValue}}%</td>
-            <td class="scalar-value">{{otherCpuPercent()}}% <div class="inline-color progress-bar-warning"> </div></td>
-            <td class="scalar-value">{{scalars['cpu:self-user'].formattedValue}}% <div class="inline-color progress-bar-success"> </div></td>
             <td class="scalar-value">{{scalars['cpu:self-kernel'].formattedValue}}% <div class="inline-color progress-bar-info"> </div></td>
+            <td class="scalar-value">{{scalars['cpu:self-user'].formattedValue}}% <div class="inline-color progress-bar-success"> </div></td>
+            <td class="scalar-value">{{otherCpuPercent()}}% <div class="inline-color progress-bar-warning"> </div></td>
         </tr>
     </table>
 </fieldset>

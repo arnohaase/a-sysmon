@@ -160,3 +160,5 @@ documentation
 
 * configuration
 * AWithDataSink
+
+* CPU "available": may vary over time --> 'stolen'

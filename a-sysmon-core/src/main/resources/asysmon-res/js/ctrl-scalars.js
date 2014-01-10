@@ -1,5 +1,6 @@
 
 angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Rest, formatNumber, startsWith) {
+    var effectiveNumCpus = 1;
 
     function initFromResponse(data) {
         $scope.scalars = data.scalars;
@@ -18,6 +19,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
                 $scope.miscScalars.push(s)
             }
         });
+        effectiveNumCpus = data.scalars['cpu:available'].value / 100;
         render();
     }
 
@@ -69,7 +71,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
     }
 
     function htmlForLoad(loadScalar) {
-        var numCpus = 8; //TODO
+        var numCpus = effectiveNumCpus;
         return htmlForPercentageBar('100px', 0, numCpus, loadScalar.value, 1, numCpus/2, numCpus, loadScalar.formattedValue);
     }
 
