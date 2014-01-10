@@ -18,6 +18,8 @@ public class ACpuUtilizationMeasurer implements AScalarMeasurer {
 
     public static final String KEY_PREFIX = "cpu-util:";
     public static final String KEY_MEMENTO = KEY_PREFIX;
+    public static final String KEY_AVAILABLE = KEY_PREFIX + "available";
+    public static final String KEY_ALL_USED = KEY_PREFIX + "all-used";
 
     @Override public void prepareMeasurements(Map<String, Object> mementos) throws IOException {
         mementos.put(KEY_MEMENTO, createSnapshot());
@@ -29,35 +31,29 @@ public class ACpuUtilizationMeasurer implements AScalarMeasurer {
         final Map<String, Snapshot> allPrev = (Map<String, Snapshot>) mementos.get(KEY_MEMENTO);
 
         final int numCpus = allCurrent.size() - 1;
-        for(String cpu: allCurrent.keySet()) {
-            final Snapshot current = allCurrent.get(cpu);
-            final Snapshot prev = allPrev.get(cpu);
+        final Snapshot current = allCurrent.get("cpu");
+        final Snapshot prev = allPrev.get("cpu");
 
-            final long diffTime = current.timestamp - prev.timestamp;
-            if(diffTime <= 0) {
-                return;
-            }
-
-            final long idleJiffies   = current.idle   - prev.idle;
-            final long stolenJiffies = current.stolen - prev.stolen;
-
-            // 'baseline' - 100% for a single CPU, <# cpus>*100% for 'total'
-            final long fullJiffies = diffTime * ("cpu".equals(cpu) ? numCpus : 1) / 10;
-
-            // reduce the theoretical 'full' capacity by 'stolen' cycles
-            final long availJiffies = fullJiffies - stolenJiffies;
-
-            final long usedJiffies = availJiffies - idleJiffies;
-
-            final long usedPerMill = usedJiffies * 1000 / availJiffies;
-
-            final String key = getUsedKey(cpu);
-            data.put(key, new AScalarDataPoint(timestamp, key, usedPerMill, 1));
+        final long diffTime = current.timestamp - prev.timestamp;
+        if(diffTime <= 0) {
+            return;
         }
-    }
 
-    public static String getUsedKey(String cpu) {
-        return KEY_PREFIX + cpu + ":used%";
+        final long idleJiffies   = current.idle   - prev.idle;
+        final long stolenJiffies = current.stolen - prev.stolen;
+
+        // 'baseline' - 100% for a single CPU, <# cpus>*100% for 'total'
+        final long fullJiffies = diffTime * numCpus / 10;
+
+        // reduce the theoretical 'full' capacity by 'stolen' cycles
+        final long availJiffies = fullJiffies - stolenJiffies;
+
+        final long usedJiffies = availJiffies - idleJiffies;
+
+        final long usedPerMill = usedJiffies * 10;
+
+        data.put(KEY_AVAILABLE, new AScalarDataPoint(timestamp, KEY_AVAILABLE, availJiffies / (diffTime / 10) * 1000, 1));
+        data.put(KEY_ALL_USED, new AScalarDataPoint(timestamp, KEY_ALL_USED, usedPerMill, 1));
     }
 
     private Map<String, Snapshot> createSnapshot() throws IOException {

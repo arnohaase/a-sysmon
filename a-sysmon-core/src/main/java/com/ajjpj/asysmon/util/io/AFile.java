@@ -6,7 +6,9 @@ import com.ajjpj.asysmon.util.AUnchecker;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author arno
@@ -24,6 +26,22 @@ public class AFile {
 
     public File getFile() {
         return file;
+    }
+
+    public List<String> lines(Charset encoding) throws IOException {
+        final List<String> result = new ArrayList<String>();
+
+        final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
+        try {
+            String line;
+            while((line = r.readLine()) != null) {
+                result.add(line);
+            }
+        }
+        finally {
+            r.close();
+        }
+        return result;
     }
 
     public <R, E extends Exception> R iterate(Charset encoding, AFunction1<Iterator<String>, R, E> callback) throws E, IOException {
