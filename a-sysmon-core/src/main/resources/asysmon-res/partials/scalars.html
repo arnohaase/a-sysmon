@@ -6,6 +6,19 @@
 </div>
 
 <fieldset class="scalar-group">
+    <legend>Resources</legend>
+    <table class="table table-condensed table-striped">
+        <tr><th class="scalar-name"></th><th class="scalar-value"></th><th class="scalar-value" style="vertical-align: middle">available</th><th class="scalar-value" style="vertical-align:middle">non-idle</th><th class="scalar-value">app<br>user</th><th class="scalar-value">app<br>kernel</th></tr>
+        <tr><td class="scalar-name">CPU</td><td class="scalar-value" id="cpu"></td>
+            <td class="scalar-value"> {{scalars['cpu:available'].formattedValue}}%</td>
+            <td class="scalar-value">{{scalars['cpu:all-used'].formattedValue}}% <div class="inline-color progress-bar-warning"> </div></td>
+            <td class="scalar-value">{{scalars['cpu:self-user'].formattedValue}}% <div class="inline-color progress-bar-success"> </div></td>
+            <td class="scalar-value">{{scalars['cpu:self-kernel'].formattedValue}}% <div class="inline-color progress-bar-info"> </div></td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset class="scalar-group">
     <legend>System Load</legend>
     <table class="table table-condensed table-striped">
         <tr><td class="scalar-name">1 Minute</td><td class="scalar-value" id="load1"></td></tr>

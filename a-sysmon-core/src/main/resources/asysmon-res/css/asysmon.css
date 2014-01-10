@@ -35,6 +35,14 @@ fieldset legend {
     text-align: right;
 }
 
+.inline-color {
+    display: inline-block;
+    margin-top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+}
 
 table.global-measurements {
   margin-top: 20px;

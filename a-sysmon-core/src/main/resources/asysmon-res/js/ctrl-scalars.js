@@ -24,6 +24,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
     function isMisc(s) {
         if(startsWith(s.name, 'load-')) return false;
         if(startsWith(s.name, 'mem:')) return false;
+        if(startsWith(s.name, 'cpu:')) return false;
         return true;
     }
 
@@ -38,10 +39,25 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
     $scope.refresh();
 
     function render() {
+        $('#cpu').html(htmlForCpu());
         $('#load1').html(htmlForLoad($scope.scalars['load-1-minute']));
         $('#load5').html(htmlForLoad($scope.scalars['load-5-minutes']));
         $('#load15').html(htmlForLoad($scope.scalars['load-15-minutes']));
         $('#mem').html(htmlForMemory());
+    }
+
+    function htmlForCpu() {
+        function segment(color, value) {
+            var max = $scope.scalars['cpu:available'].value;
+            var width = value * 100 / max;
+            return '<div class="progress-bar ' + color + '" role="progressbar" aria-valuenow="' + value + '" aria-valuemin="0" aria-valuemax="' + max + '" style="width: ' + width + '%"></div>';
+        }
+
+        return '<div class="progress scalar-load-progress">' +
+            segment('progress-bar-info', $scope.scalars['cpu:self-kernel'].value) +
+            segment('progress-bar-success', $scope.scalars['cpu:self-user'].value) +
+            segment('progress-bar-warning', $scope.scalars['cpu:all-used'].value - $scope.scalars['cpu:self-user'].value - $scope.scalars['cpu:self-kernel'].value) +
+            '</div>';
     }
 
     function htmlForLoad(loadScalar) {

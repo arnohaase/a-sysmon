@@ -16,7 +16,7 @@ import java.util.Map;
 public class ACpuUtilizationMeasurer implements AScalarMeasurer {
     public static final AFile PROC_STAT_FILE = new AFile("/proc/stat");
 
-    public static final String KEY_PREFIX = "cpu-util:";
+    public static final String KEY_PREFIX = "cpu:";
     public static final String KEY_MEMENTO = KEY_PREFIX;
     public static final String KEY_AVAILABLE = KEY_PREFIX + "available";
     public static final String KEY_ALL_USED = KEY_PREFIX + "all-used";
