@@ -4,6 +4,7 @@ package com.ajjpj.asysmon.config;
 import com.ajjpj.asysmon.measure.environment.*;
 import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
 import com.ajjpj.asysmon.measure.scalar.ACpuUtilizationMeasurer;
+import com.ajjpj.asysmon.measure.scalar.AProcNetDevMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AProcSelfStatMeasurer;
 import com.ajjpj.asysmon.measure.scalar.ASystemLoadMeasurer;
 import com.ajjpj.asysmon.servlet.environment.AEnvVarPageDefinition;
@@ -35,6 +36,7 @@ public class ADefaultConfigFactory {
                         .addScalarMeasurer(AConnectionCounter.INSTANCE)
                         .addScalarMeasurer(new ACpuUtilizationMeasurer())
                         .addScalarMeasurer(new AProcSelfStatMeasurer())
+                        .addScalarMeasurer(new AProcNetDevMeasurer())
                         .addPresentationMenuEntry("Context", new AEnvVarPageDefinition(), new AScalarPageDefinition())
                         .addPresentationMenuEntry("Trace", new ATracePageDefinition(ATraceFilter.ALL, 50), new ATracePageDefinition(ATraceFilter.HTTP, 30))
                         .addPresentationMenuEntry("Performance", new ADrillDownPageDefinition(), new AJdbcPageDefinition())
