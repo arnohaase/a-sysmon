@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.measure.special;
+package com.ajjpj.asysmon.measure.scalar;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
@@ -6,7 +6,6 @@ import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.sun.management.GarbageCollectionNotificationInfo;
 
 import javax.management.ListenerNotFoundException;

@@ -22,6 +22,6 @@ import java.util.Map;
  *  <code>prepareMeasurements()</code> and the entire memento mechanism.
  */
 public interface AScalarMeasurer extends AShutdownable {
-    void prepareMeasurements(Map<String, Object> mementos);
-    void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos);
+    void prepareMeasurements(Map<String, Object> mementos) throws Exception;
+    void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) throws Exception;
 }

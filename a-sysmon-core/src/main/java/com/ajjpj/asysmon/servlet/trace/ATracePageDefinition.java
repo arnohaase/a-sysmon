@@ -4,7 +4,7 @@ import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
-import com.ajjpj.asysmon.measure.special.AJmxGcMeasurerer;
+import com.ajjpj.asysmon.measure.scalar.AJmxGcMeasurerer;
 import com.ajjpj.asysmon.servlet.performance.AAbstractAsysmonPerformancePageDef;
 
 import java.text.DecimalFormat;

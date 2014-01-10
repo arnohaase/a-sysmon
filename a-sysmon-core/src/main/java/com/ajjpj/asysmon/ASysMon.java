@@ -150,8 +150,12 @@ public class ASysMon implements AShutdownable {
         }
 
         final Map<String, Object> mementos = new TreeMap<String, Object>();
-        for(AScalarMeasurer measurer: scalarMeasurers) { //TODO prepare against exceptions (per measurer), limit duration per measurer
-            measurer.prepareMeasurements(mementos);
+        for(AScalarMeasurer measurer: scalarMeasurers) { //TODO limit duration per measurer
+            try {
+                measurer.prepareMeasurements(mementos);
+            } catch (Exception e) {
+                e.printStackTrace(); //TODO
+            }
         }
 
         try {
@@ -162,9 +166,12 @@ public class ASysMon implements AShutdownable {
 
         final long now = System.currentTimeMillis();
         for(AScalarMeasurer measurer: scalarMeasurers) {
-            measurer.contributeMeasurements(result, now, mementos);
+            try {
+                measurer.contributeMeasurements(result, now, mementos);
+            } catch (Exception e) {
+                e.printStackTrace(); //TODO
+            }
         }
-        //TODO protect against exceptions (per measurer)
         //TODO limit duration per measurer
         return result;
     }

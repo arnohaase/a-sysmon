@@ -18,13 +18,13 @@ todo
     * ?!?!?! --> Felix
 
 * core
+  * AFile --> callback with Iterator over lines
   * test on Windows --> graceful degradation
 
   * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
   * add more scalar measurements
     * /proc/diskstats: Disk I/O
-    * /proc/stat: CPU usage
     * /proc/net/dev: network usage
     * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
     * /proc/meminfo (the variable parts)
@@ -74,24 +74,7 @@ todo
 
           --> read aggregated values, calc 'current' values
 
-  * /proc/stat
-
-        These numbers identify the amount of time the CPU has spent performing different kinds of work. Time units are in USER_HZ or Jiffies (typically hundredths of a second).
-         fields from left to right:
-
-          user: normal processes executing in user mode
-          nice: niced processes executing in user mode
-          system: processes executing in kernel mode
-          idle: twiddling thumbs
-          iowait: waiting for I/O to complete
-          irq: servicing interrupts
-          softirq: servicing softirqs
-
-          --> read aggregated values, calc 'current' values
-
   * /proc/net/dev
-
-  * --> see code in 'meltdown'
 
   * how to differentiate between 'own' and 'foreign' load?!
 

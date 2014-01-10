@@ -3,9 +3,7 @@ package com.ajjpj.asysmon.demo;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.datasink.cyclicdump.ALog4JInfoCyclicMeasurementDumper;
-import com.ajjpj.asysmon.datasink.log.AStdOutDataSink;
-import com.ajjpj.asysmon.measure.special.AJmxGcMeasurerer;
+import com.ajjpj.asysmon.measure.scalar.AJmxGcMeasurerer;
 import com.ajjpj.asysmon.measure.scalar.AJmxMemMeasurer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -15,7 +13,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author arno

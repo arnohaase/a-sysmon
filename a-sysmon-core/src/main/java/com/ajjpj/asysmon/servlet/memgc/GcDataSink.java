@@ -3,7 +3,7 @@ package com.ajjpj.asysmon.servlet.memgc;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.measure.special.AJmxGcMeasurerer;
+import com.ajjpj.asysmon.measure.scalar.AJmxGcMeasurerer;
 import com.ajjpj.asysmon.util.ARingBuffer;
 
 import java.util.Collection;
