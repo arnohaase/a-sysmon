@@ -18,16 +18,14 @@ todo
     * ?!?!?! --> Felix
 
 * core
-  * AFile --> callback with Iterator over lines
   * test on Windows --> graceful degradation
 
   * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
   * add more scalar measurements
     * /proc/diskstats: Disk I/O
-    * /proc/net/dev: network usage
     * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
-    * /proc/meminfo (the variable parts)
+    * /proc/meminfo (the variable parts) (+ swap)
     * df -P
   * 'environment'
     * JVM details (esp. command line switches)
@@ -57,8 +55,7 @@ todo
 * global measurements
   * /proc/self/cmdline
   * /proc/self/io          http://stackoverflow.com/questions/3633286/understanding-the-counters-in-proc-pid-io
-  * /proc/self/stat       --> man 5 proc
-  * /proc/self/net --> ?!?!?
+  * /proc/self/net --> ?!?!? 'nethogs' instead?
   * /proc/diskstats
 
           Field 1 -- # of reads issued
@@ -74,16 +71,13 @@ todo
 
           --> read aggregated values, calc 'current' values
 
-  * /proc/net/dev
-
-  * how to differentiate between 'own' and 'foreign' load?!
+          + pidstat for 'self'
 
   * Felix: cache hit / miss etc.
 
 * cleanup
   * aggregation for built-in servlets: change to lock-free implementation
 
-* acquire environment data
 * limit measurement time for scalars and environment data
 
 * logo in report servlets (?)
@@ -121,6 +115,10 @@ AOP:
 discuss
 -------
 * how to deal with data sources in app server --> outside application scope
+
+* Felix
+  * Disk IO, network per PID?
+  * network traffic: packets or bytes?
 
 documentation
 -------------

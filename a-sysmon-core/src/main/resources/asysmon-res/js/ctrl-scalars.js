@@ -27,6 +27,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
         if(startsWith(s.name, 'load-')) return false;
         if(startsWith(s.name, 'mem:')) return false;
         if(startsWith(s.name, 'cpu:')) return false;
+        if(startsWith(s.name, 'net:')) return false;
         return true;
     }
 
@@ -42,10 +43,11 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
 
     function render() {
         $('#cpu').html(htmlForCpu());
+        $('#network').html(htmlForNetwork());
         $('#load1').html(htmlForLoad($scope.scalars['load-1-minute']));
         $('#load5').html(htmlForLoad($scope.scalars['load-5-minutes']));
         $('#load15').html(htmlForLoad($scope.scalars['load-15-minutes']));
-        $('#mem').html(htmlForMemory());
+        $('#jvm-mem').html(htmlForJvmMemory());
     }
 
     $scope.otherCpuPercent = function() {
@@ -68,6 +70,54 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
             segment('progress-bar-success', $scope.scalars['cpu:self-user'].value) +
             segment('progress-bar-warning', $scope.scalars['cpu:all-used'].value - $scope.scalars['cpu:self-user'].value - $scope.scalars['cpu:self-kernel'].value) +
             '</div>';
+    }
+
+    function networkInterfaces() {
+        var result = [];
+
+        angular.forEach($scope.scalars, function(s) {
+            if(!startsWith(s.name, 'net:')) {
+                return;
+            }
+
+            var iface = s.name.substr(4);
+            iface = iface.substr(0, iface.indexOf(':'));
+
+            for(var i=0; i<result.length; i++) {
+                if(result[i] === iface) {
+                    return;
+                }
+            }
+            result.push(iface);
+        });
+
+        result.sort();
+        return result;
+    }
+
+    function htmlForNetwork() {
+        var result = '<table class="table table-condensed table-striped">' +
+            '<tr><th class="scalar-name">Interface</th><th class="scalar-value-centered">received pkt/s</th><th class="scalar-value-centered">sent pkt/s</th><th class="scalar-value-centered">collisions/s</th></tr>';
+
+        angular.forEach(networkInterfaces(), function(iface) {
+            function effValue(raw) {
+                if(raw === 0) return 0;
+                if(raw < .2) raw = .2;
+                return Math.log(raw) / Math.LN10 + 1; // range from 0 to 7
+            }
+
+            var scalarReceived   = $scope.scalars['net:' + iface + ':received-pkt'];
+            var scalarSent       = $scope.scalars['net:' + iface + ':sent-pkt'];
+            var scalarCollisions = $scope.scalars['net:' + iface + ':collisions'];
+
+            result += '<tr><td class="scalar-name">' + iface +
+                '</td><td class="scalar-value-centered">' + htmlForPercentageBar(100, 0, 7, effValue(scalarReceived.value),    8,  8,  8, scalarReceived.formattedValue) +
+                '</td><td class="scalar-value-centered">' + htmlForPercentageBar(100, 0, 7, effValue(scalarSent.value),       -1,  8,  8, scalarSent.formattedValue) +
+                '</td><td class="scalar-value-centered">' + htmlForPercentageBar(100, 0, 3, effValue(scalarCollisions.value), -1, -1, -1, scalarCollisions.formattedValue) +
+                '</td></tr>';
+        });
+
+        return result + '</table>';
     }
 
     function htmlForLoad(loadScalar) {
@@ -97,7 +147,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
 
         var numberInside='', numberOutside='';
 
-        if(percent > 33) {
+        if(percent > 40) {
             numberInside = '<span>' + formattedValue + '</span>';
         }
         else {
@@ -112,7 +162,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
             '</div>';
     }
 
-    function htmlForMemory() {
+    function htmlForJvmMemory() {
         var result = '<table class="table table-condensed table-striped">';
         result += '<tr><th class="scalar-name">Memory Kind</th><th></th><th class="scalar-value">Used</th><th class="scalar-value">Comm.</th><th class="scalar-value">Max</th></tr>';
 

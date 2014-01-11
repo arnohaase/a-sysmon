@@ -19,8 +19,8 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
 
     public static final String KEY_PREFIX = "net:";
     public static final String KEY_MEMENTO = KEY_PREFIX;
-    public static final String KEY_SUFFIX_RECEIVED = ":received";
-    public static final String KEY_SUFFIX_SENT = ":sent";
+    public static final String KEY_SUFFIX_RECEIVED_PACKETS = ":received-pkt";
+    public static final String KEY_SUFFIX_SENT_PACKETS = ":sent-pkt";
     public static final String KEY_SUFFIX_COLLISIONS = ":collisions";
 
     @Override public void prepareMeasurements(Map<String, Object> mementos) throws Exception {
@@ -39,26 +39,26 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
             final long collisions = cur.collisions.     get(iface) - prev.collisions.     get(iface);
 
             {
-                final String key = getKeyReceived(iface);
-                data.put(key, new AScalarDataPoint(timestamp, key, received * 1000 / diffTime, 0));
+                final String key = getKeyReceivedPackets(iface);
+                data.put(key, new AScalarDataPoint(timestamp, key, received * 10*1000 / diffTime, 1));
             }
             {
-                final String key = getKeySent(iface);
-                data.put(key, new AScalarDataPoint(timestamp, key, sent * 1000 / diffTime, 0));
+                final String key = getKeySentPackets(iface);
+                data.put(key, new AScalarDataPoint(timestamp, key, sent * 10*1000 / diffTime, 1));
             }
             {
                 final String key = getKeyCollisions(iface);
-                data.put(key, new AScalarDataPoint(timestamp, key, collisions * 10 * 1000 / diffTime, 1));
+                data.put(key, new AScalarDataPoint(timestamp, key, collisions * 10*1000 / diffTime, 1));
             }
         }
     }
 
-    public static String getKeyReceived(String iface) {
-        return KEY_PREFIX + iface + KEY_SUFFIX_RECEIVED;
+    public static String getKeyReceivedPackets(String iface) {
+        return KEY_PREFIX + iface + KEY_SUFFIX_RECEIVED_PACKETS;
     }
 
-    public static String getKeySent(String iface) {
-        return KEY_PREFIX + iface + KEY_SUFFIX_SENT;
+    public static String getKeySentPackets(String iface) {
+        return KEY_PREFIX + iface + KEY_SUFFIX_SENT_PACKETS;
     }
 
     public static String getKeyCollisions(String iface) {

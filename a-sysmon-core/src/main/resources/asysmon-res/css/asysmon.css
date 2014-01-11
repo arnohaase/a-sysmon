@@ -34,6 +34,9 @@ fieldset legend {
 .scalar-value {
     text-align: right;
 }
+.scalar-value-centered {
+    text-align: center;
+}
 
 .inline-color {
     display: inline-block;
