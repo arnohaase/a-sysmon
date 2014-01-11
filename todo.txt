@@ -23,7 +23,7 @@ todo
   * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
   * add more scalar measurements
-    * /proc/diskstats: Disk I/O
+    * /proc/diskstats: Disk I/O,                            /sys/block/sdb/queue/physical_block_size
     * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
     * /proc/meminfo (the variable parts) (+ swap)
     * df -P

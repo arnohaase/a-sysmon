@@ -3,10 +3,7 @@ package com.ajjpj.asysmon.config;
 
 import com.ajjpj.asysmon.measure.environment.*;
 import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
-import com.ajjpj.asysmon.measure.scalar.ACpuUtilizationMeasurer;
-import com.ajjpj.asysmon.measure.scalar.AProcNetDevMeasurer;
-import com.ajjpj.asysmon.measure.scalar.AProcSelfStatMeasurer;
-import com.ajjpj.asysmon.measure.scalar.ASystemLoadMeasurer;
+import com.ajjpj.asysmon.measure.scalar.*;
 import com.ajjpj.asysmon.servlet.environment.AEnvVarPageDefinition;
 import com.ajjpj.asysmon.servlet.memgc.AMemGcPageDefinition;
 import com.ajjpj.asysmon.servlet.performance.bottomup.AJdbcPageDefinition;
@@ -37,6 +34,7 @@ public class ADefaultConfigFactory {
                         .addScalarMeasurer(new ACpuUtilizationMeasurer())
                         .addScalarMeasurer(new AProcSelfStatMeasurer())
                         .addScalarMeasurer(new AProcNetDevMeasurer())
+                        .addScalarMeasurer(new AProcDiskstatsMeasurer())
                         .addPresentationMenuEntry("Context", new AEnvVarPageDefinition(), new AScalarPageDefinition())
                         .addPresentationMenuEntry("Trace", new ATracePageDefinition(ATraceFilter.ALL, 50), new ATracePageDefinition(ATraceFilter.HTTP, 30))
                         .addPresentationMenuEntry("Performance", new ADrillDownPageDefinition(), new AJdbcPageDefinition())

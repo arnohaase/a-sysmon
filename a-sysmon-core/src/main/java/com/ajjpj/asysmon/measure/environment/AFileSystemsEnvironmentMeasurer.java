@@ -44,6 +44,7 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
             add(data, device, "Size Used (1k Blocks)", used);
             add(data, device, "Size Available (1k Blocks)", available);
             add(data, device, "Size Used (%)", usedPercent);
+            add(data, device, "Mount Point", mountPoint);
         }
     }
 
