@@ -23,7 +23,6 @@ todo
   * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
   * add more scalar measurements
-    * /proc/diskstats: Disk I/O,                            /sys/block/sdb/queue/physical_block_size
     * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
     * /proc/meminfo (the variable parts) (+ swap)
     * df -P
@@ -34,7 +33,8 @@ todo
   * beautify
     * scalar page:
       * auto-refresh every 10 seconds (?)
-      * send # CPUs from server
+      * progress bars: center value for 'load' and 'JVM mem'
+      * disks: show mount points
     * 'environment': start with expanded 'Overview'
     * generally: styling of tooltips - white with gray border?
     * show application ID etc. (with color code)
@@ -56,22 +56,8 @@ todo
   * /proc/self/cmdline
   * /proc/self/io          http://stackoverflow.com/questions/3633286/understanding-the-counters-in-proc-pid-io
   * /proc/self/net --> ?!?!? 'nethogs' instead?
-  * /proc/diskstats
 
-          Field 1 -- # of reads issued
-          Field 2 -- # of reads merged, field 6 -- # of writes merged
-          Field 3 -- # of sectors read
-          Field 4 -- # of milliseconds spent reading
-          Field 5 -- # of writes completed
-          Field 7 -- # of sectors written
-          Field 8 -- # of milliseconds spent writing
-          Field 9 -- # of I/Os currently in progress
-          Field 10 -- # of milliseconds spent doing I/Os
-          Field 11 -- weighted # of milliseconds spent doing I/Os
-
-          --> read aggregated values, calc 'current' values
-
-          + pidstat for 'self'
+  * pidstat for 'self' disk I/O
 
   * Felix: cache hit / miss etc.
 

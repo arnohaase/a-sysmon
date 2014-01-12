@@ -4,12 +4,14 @@ import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.util.AStatement1;
 import com.ajjpj.asysmon.util.UnixCommand;
 import com.ajjpj.asysmon.util.io.AFile;
-import sun.misc.ASCIICaseInsensitiveComparator;
 
-import java.io.IOError;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author arno
@@ -22,8 +24,11 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
 
     public static final String KEY_SUFFIX_SIZE = ":sizeGB";
     public static final String KEY_SUFFIX_USED = ":usedGB";
+    public static final String KEY_SUFFIX_AVAILABLE = ":availableGB";
     public static final String KEY_SUFFIX_READ_SECTORS = ":read-sectors";
     public static final String KEY_SUFFIX_WRITTEN_SECTORS = ":written-sectors";
+    public static final String KEY_SUFFIX_READ_MBYTES = ":read-mbytes";
+    public static final String KEY_SUFFIX_WRITTEN_MBYTES = ":written-mbytes";
     public static final String KEY_SUFFIX_IOS_IN_PROGRESS = ":ios-in-progress";
 
     @Override public void prepareMeasurements(Map<String, Object> mementos) throws Exception {
@@ -51,6 +56,7 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
             final String dev = split[0].substring(5);
             final long sizeKb = Long.valueOf(split[1]);
             final long usedKb = Long.valueOf(split[2]);
+            final long availableKb = Long.valueOf(split[3]);
 //            final String mountPoint = split[5];
 
             final long sectorsReadRaw = current.sectorsRead.get(dev) - prev.sectorsRead.get(dev);
@@ -59,16 +65,32 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
             final long sectorsRead    = sectorsReadRaw    * 10*1000 / diffTime;
             final long sectorsWritten = sectorsWrittenRaw * 10*1000 / diffTime;
 
-            //TODO byte read / written --> /sys/block/sdb/queue/physical_block_size   for e.g. sda instead of sda1
+            final int blockSize = physicalBlockSize(dev);
+            final long mBytesRead = sectorsReadRaw * blockSize * 100 * 1000 / diffTime / 1024 / 1024;
+            final long mBytesWritten = sectorsWrittenRaw * blockSize * 100 * 1000 / diffTime / 1024 / 1024;
 
             final long iosInProgress = current.iosInProgress.get(dev);
 
             add(data, timestamp, getSizeKey(dev), sizeKb * 100 / (1024*1024), 2);
             add(data, timestamp, getUsedKey(dev), usedKb * 100 / (1024*1024), 2);
+            add(data, timestamp, getAvailableKey(dev), availableKb * 100 / (1024*1024), 2);
             add(data, timestamp, getReadSectorsKey(dev), sectorsRead, 1);
             add(data, timestamp, getWrittenSectorsKey(dev), sectorsWritten, 1);
+            add(data, timestamp, getReadMbytesKey(dev), mBytesRead, 2);
+            add(data, timestamp, getWrittenMbytesKey(dev), mBytesWritten, 2);
             add(data, timestamp, getIosInProgressKey(dev), iosInProgress, 0);
         }
+    }
+
+    private int physicalBlockSize(String dev) throws IOException {
+        while (! dev.isEmpty()) {
+            final File f = new File("/sys/block/" + dev + "/queue/physical_block_size");
+            if(f.exists()) {
+                return Integer.valueOf(new AFile(f).lines(Charset.defaultCharset()).get(0));
+            }
+            dev = dev.substring(0, dev.length()-1);
+        }
+        return 512;
     }
 
     private void add(Map<String, AScalarDataPoint> data, long timestamp, String key, long value, int numFracDigits) {
@@ -83,12 +105,24 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
         return KEY_PREFIX + dev + KEY_SUFFIX_USED;
     }
 
+    public static String getAvailableKey(String dev) {
+        return KEY_PREFIX + dev + KEY_SUFFIX_AVAILABLE;
+    }
+
     public static String getReadSectorsKey(String dev) {
         return KEY_PREFIX + dev + KEY_SUFFIX_READ_SECTORS;
     }
 
     public static String getWrittenSectorsKey(String dev) {
         return KEY_PREFIX + dev + KEY_SUFFIX_WRITTEN_SECTORS;
+    }
+
+    public static String getReadMbytesKey(String dev) {
+        return KEY_PREFIX + dev + KEY_SUFFIX_READ_MBYTES;
+    }
+
+    public static String getWrittenMbytesKey(String dev) {
+        return KEY_PREFIX + dev + KEY_SUFFIX_WRITTEN_MBYTES;
     }
 
     public static String getIosInProgressKey(String dev) {

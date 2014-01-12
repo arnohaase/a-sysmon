@@ -24,9 +24,10 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
     }
 
     function isMisc(s) {
+        if(startsWith(s.name, 'cpu:')) return false;
+        if(startsWith(s.name, 'disk:')) return false;
         if(startsWith(s.name, 'load-')) return false;
         if(startsWith(s.name, 'mem:')) return false;
-        if(startsWith(s.name, 'cpu:')) return false;
         if(startsWith(s.name, 'net:')) return false;
         return true;
     }
@@ -47,6 +48,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
         $('#load1').html(htmlForLoad($scope.scalars['load-1-minute']));
         $('#load5').html(htmlForLoad($scope.scalars['load-5-minutes']));
         $('#load15').html(htmlForLoad($scope.scalars['load-15-minutes']));
+        $('#disk').html(htmlForDisk());
         $('#jvm-mem').html(htmlForJvmMemory());
     }
 
@@ -56,7 +58,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
         }
         var raw = $scope.scalars['cpu:all-used'].value - $scope.scalars['cpu:self-user'].value - $scope.scalars['cpu:self-kernel'].value;
         return formatNumber(raw, 1);
-    }
+    };
 
     function htmlForCpu() {
         function segment(color, value) {
@@ -73,22 +75,26 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
     }
 
     function networkInterfaces() {
+        return secondSegments('net:');
+    }
+
+    function secondSegments(prefix) {
         var result = [];
 
         angular.forEach($scope.scalars, function(s) {
-            if(!startsWith(s.name, 'net:')) {
+            if(!startsWith(s.name, prefix)) {
                 return;
             }
 
-            var iface = s.name.substr(4);
-            iface = iface.substr(0, iface.indexOf(':'));
+            var seg = s.name.substr(prefix.length);
+            seg = seg.substr(0, seg.indexOf(':'));
 
             for(var i=0; i<result.length; i++) {
-                if(result[i] === iface) {
+                if(result[i] === seg) {
                     return;
                 }
             }
-            result.push(iface);
+            result.push(seg);
         });
 
         result.sort();
@@ -151,7 +157,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
             numberInside = '<span>' + formattedValue + '</span>';
         }
         else {
-            numberOutside = '<div style="position: absolute; width: ' + width + '; text-align: center">&nbsp;' + formattedValue + '</div>';
+            numberOutside = '<div style="position: absolute; width: ' + width + 'px; text-align: center">' + formattedValue + '</div>';
         }
 
         return '<div class="progress scalar-load-progress">' +
@@ -160,6 +166,45 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
             numberInside +
             '</div>' +
             '</div>';
+    }
+
+    function htmlForDisk() {
+        var result = '<table class="table table-condensed table-striped">';
+        result += '<tr><th clas="scalar-name">Device</th><th class="scalar-value-centered">Available GB</th><th class="scalar-value-centered">Read MB/s</th><th class="scalar-value-centered">Write MB/s</th><th class="scalar-value-centered">Running</th></tr>';
+
+        angular.forEach(diskDevs(), function(dev) {
+            function asDisplayedRate(raw) {
+                if(raw < .01) {
+                    return 0;
+                }
+                return Math.log(raw) / Math.LN10 + 2;
+            }
+
+            var sizeGB = $scope.scalars['disk:' + dev + ':sizeGB'].value;
+            var availableGB = $scope.scalars['disk:' + dev + ':availableGB'].value;
+
+            var scalarRead = $scope.scalars['disk:' + dev + ':read-mbytes'];
+            var scalarWritten = $scope.scalars['disk:' + dev + ':written-mbytes'];
+
+            var scalarRunning = $scope.scalars['disk:' + dev + ':ios-in-progress'];
+
+            result += '<tr><td class="scalar-name">' + dev + '</td>';
+
+            // while 'usedGB' is available, we calculate 'size-available' because 'used+avaible' can be smaller then 'size'
+            result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 100, (sizeGB - availableGB) * 100 / sizeGB, 50, 80, 95, formatNumber(availableGB, 2)) + '</td>';
+            result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 5, asDisplayedRate(scalarRead.value), 10, 10, 10, scalarRead.formattedValue) + '</td>';
+            result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 5, asDisplayedRate(scalarWritten.value), -1, 10, 10, scalarWritten.formattedValue) + '</td>';
+            result += '<td class="scalar-value">' + scalarRunning.formattedValue + '</td>'
+
+            result += '</tr>';
+        });
+
+        result += '</table>';
+        return result;
+    }
+
+    function diskDevs() {
+        return secondSegments('disk:');
     }
 
     function htmlForJvmMemory() {
