@@ -9,17 +9,20 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author arno
  */
 public class ACpuUtilizationMeasurer implements AScalarMeasurer {
     public static final AFile PROC_STAT_FILE = new AFile("/proc/stat");
+    public static final AFile PROC_CPUINFO_FILE = new AFile("/proc/cpuinfo");
 
     public static final String KEY_PREFIX = "cpu:";
     public static final String KEY_MEMENTO = KEY_PREFIX;
     public static final String KEY_AVAILABLE = KEY_PREFIX + "available";
     public static final String KEY_ALL_USED = KEY_PREFIX + "all-used";
+    public static final String KEY_PREFIX_MHZ = KEY_PREFIX + "freq-mhz:";
 
     @Override public void prepareMeasurements(Map<String, Object> mementos) throws IOException {
         mementos.put(KEY_MEMENTO, createSnapshot());
@@ -54,6 +57,28 @@ public class ACpuUtilizationMeasurer implements AScalarMeasurer {
 
         data.put(KEY_AVAILABLE, new AScalarDataPoint(timestamp, KEY_AVAILABLE, availJiffies / (diffTime / 10) * 1000, 1));
         data.put(KEY_ALL_USED, new AScalarDataPoint(timestamp, KEY_ALL_USED, usedPerMill, 1));
+
+        contributeFreq(data, timestamp);
+    }
+
+    private void contributeFreq(Map<String, AScalarDataPoint> data, long timestamp) throws IOException {
+        final Map<String, AtomicInteger> counter = new HashMap<String, AtomicInteger>();
+
+        for(String line: PROC_CPUINFO_FILE.lines(Charset.defaultCharset())) {
+            if(! line.contains("MHz")) {
+                continue;
+            }
+            final String mhz = line.substring(line.indexOf(':') + 1).trim();
+            if(! counter.containsKey(mhz)) {
+                counter.put(mhz, new AtomicInteger());
+            }
+            counter.get(mhz).incrementAndGet();
+        }
+
+        for(String mhz: counter.keySet()) {
+            final String key = KEY_PREFIX_MHZ + mhz;
+            data.put(key, new AScalarDataPoint(timestamp, key, counter.get(mhz).intValue(), 0));
+        }
     }
 
     private Map<String, Snapshot> createSnapshot() throws IOException {

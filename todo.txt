@@ -25,7 +25,6 @@ todo
   * add more scalar measurements
     * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
     * /proc/meminfo (the variable parts) (+ swap)
-    * df -P
   * 'environment'
     * JVM details (esp. command line switches)
     * App Server details (via reflection?)

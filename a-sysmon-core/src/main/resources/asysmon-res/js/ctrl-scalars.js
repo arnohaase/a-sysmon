@@ -23,11 +23,28 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
             }
         });
         effectiveNumCpus = data.scalars['cpu:available'].value / 100;
+        $scope.cpuFreq = cpuFreq();
         render();
         triggerAutoRefresh();
     }
 
     $scope.$watch('autoRefresh', triggerAutoRefresh);
+
+    function cpuFreq() {
+        var result = [];
+        angular.forEach($scope.scalars, function(s) {
+            if(startsWith(s.name, 'cpu:freq-mhz:')) {
+                var mhz = s.name.substr('cpu:freq-mhz:'.length);
+                var idxDot = mhz.indexOf('.');
+                if(idxDot > 0) {
+                    mhz = mhz.substr(0, idxDot);
+                }
+
+                result.push({mhz: mhz, formattedValue: s.formattedValue});
+            }
+        });
+        return result;
+    }
 
     function triggerAutoRefresh() {
         if(! $scope.autoRefresh) {

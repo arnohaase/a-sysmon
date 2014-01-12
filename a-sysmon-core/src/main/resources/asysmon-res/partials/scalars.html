@@ -24,6 +24,7 @@
             <td class="scalar-value">{{scalars['cpu:self-user'].formattedValue}}% <div class="inline-color progress-bar-success"> </div></td>
             <td class="scalar-value">{{otherCpuPercent()}}% <div class="inline-color progress-bar-warning"> </div></td>
         </tr>
+        <tr ng-repeat="freq in cpuFreq"><td></td><td class="scalar-value">{{freq.mhz}} MHz</td><td class="scalar-value">{{freq.formattedValue}} CPUs</td><td></td><td></td><td></td></tr>
     </table>
 </fieldset>
 
