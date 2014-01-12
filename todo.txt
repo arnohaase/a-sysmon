@@ -32,7 +32,6 @@ todo
 
   * beautify
     * scalar page:
-      * auto-refresh every 10 seconds (?)
       * progress bars: center value for 'load' and 'JVM mem'
       * disks: show mount points
     * 'environment': start with expanded 'Overview'

@@ -2,6 +2,9 @@
 angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Rest, formatNumber, startsWith) {
     var effectiveNumCpus = 1;
 
+    $scope.autoRefresh = false;
+    var autoRefreshCounter = 0; // to invalidate auto-refresh if there was a manual refresh in between
+
     function initFromResponse(data) {
         $scope.scalars = data.scalars;
         $scope.miscScalars = [];
@@ -21,6 +24,24 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
         });
         effectiveNumCpus = data.scalars['cpu:available'].value / 100;
         render();
+        triggerAutoRefresh();
+    }
+
+    $scope.$watch('autoRefresh', triggerAutoRefresh);
+
+    function triggerAutoRefresh() {
+        if(! $scope.autoRefresh) {
+            return;
+        }
+
+        var oldCounter = autoRefreshCounter;
+        setTimeout(function() {
+            if(autoRefreshCounter !== oldCounter+1) {
+                return;
+            }
+            $scope.refresh();
+        }, 10*1000);
+        autoRefreshCounter += 1;
     }
 
     function isMisc(s) {

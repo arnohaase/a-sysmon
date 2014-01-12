@@ -2,6 +2,10 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+div.options-header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 h2 {
     margin-top: 22px;
     margin-bottom: 15px;
@@ -289,10 +293,6 @@ div.data-row-10 {
 
 /* thread dump */
 
-div.threads-header {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
 div.thread-state {
   width: 9em;
   display: inline-block;
@@ -347,11 +347,6 @@ div.thread-state {
 }
 
 /* memgc / GC */
-
-div.mem-header {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
 
 .mem-gc-container {
     box-sizing: border-box;
