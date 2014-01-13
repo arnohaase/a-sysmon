@@ -1,13 +1,12 @@
 package com.ajjpj.asysmon.measure.environment;
 
 
-import com.ajjpj.asysmon.util.UnixCommand;
+import com.ajjpj.asysmon.util.CliCommand;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * This measurer collects information about mounted file systems from several sources.
@@ -23,7 +22,7 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
     }
 
     private void contributeDf(EnvironmentCollector data) throws Exception {
-        for(String line: new UnixCommand("df", "-P").getOutput()) {
+        for(String line: new CliCommand("df", "-P").getOutput()) {
             if(! line.startsWith("/dev/")) {
                 continue;
             }

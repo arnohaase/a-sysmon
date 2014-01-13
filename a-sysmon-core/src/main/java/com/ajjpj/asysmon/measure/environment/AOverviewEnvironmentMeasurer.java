@@ -1,7 +1,6 @@
 package com.ajjpj.asysmon.measure.environment;
 
-import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.util.UnixCommand;
+import com.ajjpj.asysmon.util.CliCommand;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
@@ -44,7 +43,7 @@ public class AOverviewEnvironmentMeasurer implements AEnvironmentMeasurer {
 
     private String kernelVersion() {
         try {
-            return new UnixCommand(1, "uname", "-v").getOutput().get(0);
+            return new CliCommand(1, "uname", "-v").getOutput().get(0);
         } catch (Exception e) {
             return "";
         }
@@ -52,7 +51,7 @@ public class AOverviewEnvironmentMeasurer implements AEnvironmentMeasurer {
 
     private void registerHostName(EnvironmentCollector data) {
         try {
-            data.add(new UnixCommand(1, "uname", "-n").getOutput().get(0), KEY_OVERVIEW, "hostname");
+            data.add(new CliCommand(1, "uname", "-n").getOutput().get(0), KEY_OVERVIEW, "hostname");
         } catch (Exception e) {
         }
     }

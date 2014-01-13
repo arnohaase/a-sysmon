@@ -2,7 +2,6 @@ package com.ajjpj.asysmon.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,21 +19,21 @@ import java.util.regex.Pattern;
  *
  * @author arno
  */
-public class UnixCommand {
+public class CliCommand {
     private final List<String> stdout = new ArrayList<String>();
     private final int returnCode;
 
     //TODO limit number of *bytes* that are stored?
     //TODO stderr?
-    public UnixCommand(String... cmd) throws IOException, InterruptedException {
+    public CliCommand(String... cmd) throws IOException, InterruptedException {
         this(1000, cmd);
     }
 
-    public UnixCommand(int maxLinesOfOutput, String... cmd) throws IOException, InterruptedException {
+    public CliCommand(int maxLinesOfOutput, String... cmd) throws IOException, InterruptedException {
         this(maxLinesOfOutput, null, cmd);
     }
 
-    public UnixCommand(int maxLinesOfOutput, Pattern grep, String... cmd) throws IOException, InterruptedException {
+    public CliCommand(int maxLinesOfOutput, Pattern grep, String... cmd) throws IOException, InterruptedException {
         final ProcessBuilder pb = new ProcessBuilder(cmd);
         final Process process = pb.start();
         final BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream())); // platform encoding is intended here!

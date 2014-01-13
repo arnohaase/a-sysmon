@@ -20,6 +20,7 @@ todo
 * core
   * test on Windows --> graceful degradation
 
+  * read versions from manifests of JAR files (?)
   * separate ASysMon from ASysMonHolder and ASysMonImpl
   * enhance config / startup mechanism
   * add more scalar measurements
@@ -106,6 +107,11 @@ discuss
 
 documentation
 -------------
+* config
+  * asysmon-default.properties < asysmon.properties < System.getProperties (with prefix)
+  * @ABeanFeactory
+  * alias
+
 * "globally disabled" by system property
 
 * terminology

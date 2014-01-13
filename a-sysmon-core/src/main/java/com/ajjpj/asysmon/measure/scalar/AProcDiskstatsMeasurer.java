@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.measure.scalar;
 
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.util.AStatement1;
-import com.ajjpj.asysmon.util.UnixCommand;
+import com.ajjpj.asysmon.util.CliCommand;
 import com.ajjpj.asysmon.util.io.AFile;
 
 import java.io.File;
@@ -42,7 +42,7 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
 
         final long diffTime = current.timestamp - prev.timestamp;
 
-        final List<String> df = new UnixCommand("df", "-P").getOutput();
+        final List<String> df = new CliCommand("df", "-P").getOutput();
         for(String line: df) {
             if(! line.startsWith("/dev/")) {
                 continue;

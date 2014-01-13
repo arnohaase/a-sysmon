@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon;
 
-import com.ajjpj.asysmon.config.ADefaultConfigFactory;
+import com.ajjpj.asysmon.config.wiring.ADefaultConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
@@ -11,6 +11,7 @@ import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
+import com.ajjpj.asysmon.util.AUnchecker;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -215,7 +216,16 @@ public class ASysMon implements AShutdownable {
      * this class has the sole purpose of providing really lazy init of the singleton instance
      */
     private static class ASysMonInstanceHolder {
-        public static final ASysMon INSTANCE = new ASysMon (new ADefaultConfigFactory().getConfig());
+        public static final ASysMon INSTANCE = new ASysMon(getConfig());
+
+        private static ASysMonConfig getConfig() {
+            try {
+                return ADefaultConfigFactory.getConfigFactory().getConfig();
+            } catch (Exception e) {
+                AUnchecker.throwUnchecked(e);
+                return null;
+            }
+        }
     }
 }
 

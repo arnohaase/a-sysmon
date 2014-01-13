@@ -18,7 +18,7 @@ public class ASysMonDataSource implements DataSource {
     private final String poolIdentifier;
     private final ASysMon sysMon;
 
-    private final AConnectionCounter counter = AConnectionCounter.INSTANCE;
+    private final AConnectionCounter counter = AConnectionCounter.INSTANCE; //TODO make this configurable?
 
     public ASysMonDataSource(DataSource inner, String poolIdentifier, ASysMon sysMon) {
         this.inner = inner;

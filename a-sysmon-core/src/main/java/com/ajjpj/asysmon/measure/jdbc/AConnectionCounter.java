@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
 
+import com.ajjpj.asysmon.config.wiring.ABeanFactory;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 
@@ -11,12 +12,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author arno
  */
+@ABeanFactory
 public class AConnectionCounter implements AScalarMeasurer {
     public static final AConnectionCounter INSTANCE = new AConnectionCounter(); //TODO make instance management configurable
 
     private static final String DEFAULT_POOL_IDENTIFIER = " @@##++ ";
     private final Map<String, AtomicInteger> openPerConnectionPool = new ConcurrentHashMap<String, AtomicInteger>();
     private final Map<String, AtomicInteger> activePerConnectionPool = new ConcurrentHashMap<String, AtomicInteger>();
+
+    public static AConnectionCounter getInstance() {
+        return INSTANCE;
+    }
+
+    private AConnectionCounter() {
+    }
 
     public void onOpenConnection(String qualifier) {
         getCounter(qualifier, openPerConnectionPool).incrementAndGet();
