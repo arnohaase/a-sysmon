@@ -25,7 +25,7 @@ public class ASysMonConfigBuilder {
     private String applicationInstanceId;
     private String applicationInstanceHtmlColorCode;
 
-    private int averagingDelayForScalarsMillis = 1000;
+    private int averagingDelayForScalarsMillis = 1000; //TODO
 
     private ASysMonLogger logger = defaultLogger();
     private ATimer timer = new ASystemNanoTimer();
@@ -116,7 +116,7 @@ public class ASysMonConfigBuilder {
                 );
     }
 
-    private static ASysMonLogger defaultLogger() {
+    public static ASysMonLogger defaultLogger() {
         try {
             return ALog4JLogger.INSTANCE; //TODO verify that this works without log4j
         }

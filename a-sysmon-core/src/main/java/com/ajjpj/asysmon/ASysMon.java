@@ -9,6 +9,7 @@ import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
+import com.ajjpj.asysmon.util.AFunction0;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 import com.ajjpj.asysmon.util.AUnchecker;
@@ -219,12 +220,11 @@ public class ASysMon implements AShutdownable {
         public static final ASysMon INSTANCE = new ASysMon(getConfig());
 
         private static ASysMonConfig getConfig() {
-            try {
-                return ADefaultConfigFactory.getConfigFactory().getConfig();
-            } catch (Exception e) {
-                AUnchecker.throwUnchecked(e);
-                return null;
-            }
+            return AUnchecker.executeUnchecked(new AFunction0<ASysMonConfig, Exception>() {
+                @Override public ASysMonConfig apply() throws Exception {
+                    return ADefaultConfigFactory.getConfigFactory().getConfig();
+                }
+            });
         }
     }
 }

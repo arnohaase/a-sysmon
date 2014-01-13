@@ -84,13 +84,32 @@ public class ConfigPropsFile {
 
         final List<Object> params = new ArrayList<Object>();
         for(int i=0; i< 1000; i++) {
-            final String paramKey = instanceKey + "." + i;
-            if(props.containsKey(paramKey)) {
-                params.add(props.getProperty(paramKey).trim());
+            final AOption<String> param = getParamValue(instanceKey + "." + i);
+            if(param.isDefined()) {
+                params.add(param.get());
+            }
+            else {
+                break;
             }
         }
 
         return AOption.some(instantiate(indirectClass.get(), superClass, key, params.toArray()));
+    }
+
+    private AOption<String> getParamValue(String key) {
+        final String alias = props.getProperty(key + ".alias");
+        if(alias != null) {
+            final String aliasValue = props.getProperty(alias);
+            if(aliasValue != null) {
+                return AOption.some(aliasValue);
+            }
+        }
+
+        if(props.containsKey(key)) {
+            return AOption.some(props.getProperty(key).trim());
+        }
+
+        return AOption.none();
     }
 
     @SuppressWarnings("unchecked")

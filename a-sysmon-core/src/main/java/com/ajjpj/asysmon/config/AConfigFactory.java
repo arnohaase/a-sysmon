@@ -1,5 +1,7 @@
 package com.ajjpj.asysmon.config;
 
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
+
 /**
  * @author arno
  */

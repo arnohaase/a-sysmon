@@ -3,7 +3,7 @@ package com.ajjpj.asysmon.config.wiring;
 import com.ajjpj.asysmon.config.AConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.ASysMonConfigBuilder;
-import com.ajjpj.asysmon.config.log.AStdOutLogger;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
@@ -27,21 +27,48 @@ public class ADefaultConfigFactory implements AConfigFactory {
     public static final String SYSPROP_PREFIX = "asysmon.";
 
     public static final String KEY_CONFIG_FACTORY = "config-factory";
+    public static final String KEY_LOGGER = "logger";
     public static final String KEY_ENV_MEASURERS = "env-measurers";
     public static final String KEY_SCALAR_MEASURERS = "scalar-measurers";
     public static final String KEY_PRESENTATION_MENUS = "presentation-menus";
 
-    public static AConfigFactory getConfigFactory() {
+    private static volatile ASysMonLogger configuredLogger;
 
+    public static AConfigFactory getConfigFactory() {
         return AUnchecker.executeUnchecked(new AFunction0<AConfigFactory, Exception>() {
             @Override public AConfigFactory apply() throws Exception {
                 final Properties propsRaw = getProperties();
 
-                final ConfigPropsFile props = new ConfigPropsFile(propsRaw, new AStdOutLogger()); //TODO
+                configuredLogger = getLogger(propsRaw);
+                final ConfigPropsFile props = new ConfigPropsFile(propsRaw, getLogger(propsRaw));
                 final AOption<AConfigFactory> factoryOption = props.createInstance (KEY_CONFIG_FACTORY, props.get(KEY_CONFIG_FACTORY, false), AConfigFactory.class);
                 return factoryOption.getOrElse(new ADefaultConfigFactory());
             }
         });
+    }
+    //TODO data sinks
+
+    public static ASysMonLogger getConfiguredLogger() {
+        if(configuredLogger == null) {
+            getConfigFactory();
+        }
+        return configuredLogger;
+    }
+
+    private static ASysMonLogger getLogger(Properties props) {
+        final String loggerClassName = props.getProperty(KEY_LOGGER);
+        try {
+            if(loggerClassName == null) {
+                return ASysMonConfigBuilder.defaultLogger(); // avoid the warning log entry
+            }
+
+            return (ASysMonLogger) Class.forName(loggerClassName.trim()).newInstance();
+        }
+        catch(Exception exc) {
+            final ASysMonLogger logger = ASysMonConfigBuilder.defaultLogger();
+            logger.warn("exception creating logger based on config file entry '" + loggerClassName + "': " + exc);
+            return logger;
+        }
     }
 
     private static Properties getProperties() {
@@ -70,11 +97,11 @@ public class ADefaultConfigFactory implements AConfigFactory {
         }
     }
 
-    //TODO aliases
     public ASysMonConfig getConfig() {
-        final ConfigPropsFile props = new ConfigPropsFile(getProperties(), new AStdOutLogger()); //TODO logger
+        final ConfigPropsFile props = new ConfigPropsFile(getProperties(), getConfiguredLogger());
 
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder("app", "version", "instance", "#ff8000"); //TODO config
+        builder.setLogger(getConfiguredLogger());
 
         for(AEnvironmentMeasurer m: props.createInstances(KEY_ENV_MEASURERS, AEnvironmentMeasurer.class)) {
             builder.addEnvironmentMeasurer(m);
