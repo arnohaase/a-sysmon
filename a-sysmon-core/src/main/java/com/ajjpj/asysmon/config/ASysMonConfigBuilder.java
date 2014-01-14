@@ -30,8 +30,6 @@ public class ASysMonConfigBuilder {
     private ASysMonLogger logger = defaultLogger();
     private ATimer timer = new ASystemNanoTimer();
 
-    private boolean implicitlyShutDownWithServlet = true;
-
     private final List<AEnvironmentMeasurer> environmentMeasurers = new ArrayList<AEnvironmentMeasurer>();
     private final List<AScalarMeasurer> scalarMeasurers = new ArrayList<AScalarMeasurer>();
     private final List<ADataSink> dataSinks = new ArrayList<ADataSink>();
@@ -75,12 +73,6 @@ public class ASysMonConfigBuilder {
         return this;
     }
 
-    @SuppressWarnings("unused")
-    public ASysMonConfigBuilder setImplicitlyShutDownWithServlet(boolean implicitlyShutDownWithServlet) {
-        this.implicitlyShutDownWithServlet = implicitlyShutDownWithServlet;
-        return this;
-    }
-
     public ASysMonConfigBuilder setAveragingDelayForScalarsMillis(int averagingDelayForScalarsMillis) {
         this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
         return this;
@@ -106,6 +98,7 @@ public class ASysMonConfigBuilder {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ASysMonConfigBuilder addPresentationMenuEntry(String label, APresentationPageDefinition... entries) {
         return addPresentationMenuEntry(label, Arrays.asList(entries));
     }
@@ -115,7 +108,6 @@ public class ASysMonConfigBuilder {
                 applicationId, applicationVersionId, applicationInstanceId, applicationInstanceHtmlColorCode,
                 averagingDelayForScalarsMillis,
                 logger, timer,
-                implicitlyShutDownWithServlet,
                 environmentMeasurers, scalarMeasurers, dataSinks,
                 presentationMenuEntries
                 );

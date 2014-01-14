@@ -21,8 +21,10 @@ todo
   * test on Windows --> graceful degradation
 
   * read versions from manifests of JAR files (?)
+
   * separate ASysMon from ASysMonHolder and ASysMonImpl
-  * enhance config / startup mechanism
+  * exception handling, limit time for single measurement
+
   * add more scalar measurements
     * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
     * /proc/meminfo (the variable parts) (+ swap)

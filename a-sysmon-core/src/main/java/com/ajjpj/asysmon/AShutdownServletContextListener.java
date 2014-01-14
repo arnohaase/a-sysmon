@@ -11,9 +11,7 @@ import javax.servlet.ServletContextListener;
  */
 public class AShutdownServletContextListener implements ServletContextListener {
     @Override public void contextDestroyed(ServletContextEvent sce) {
-        if(ASysMon.get().getConfig().implicitlyShutDownWithServlet) {
-            ASysMon.get().shutdown();
-        }
+        ASysMon.get().shutdown();
     }
 
     @Override public void contextInitialized(ServletContextEvent sce) {
