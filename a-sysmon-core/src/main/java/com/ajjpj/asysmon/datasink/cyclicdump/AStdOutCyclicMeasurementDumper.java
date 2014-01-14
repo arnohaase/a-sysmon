@@ -1,19 +1,11 @@
 package com.ajjpj.asysmon.datasink.cyclicdump;
 
-import com.ajjpj.asysmon.ASysMon;
-import com.ajjpj.asysmon.config.ASysMonAware;
-
-
 /**
  * @author arno
  */
 public class AStdOutCyclicMeasurementDumper extends ACyclicMeasurementDumper {
-    public AStdOutCyclicMeasurementDumper(ASysMon sysMon, int frequencyInSeconds) {
-        super(sysMon, frequencyInSeconds);
-    }
-
-    public AStdOutCyclicMeasurementDumper(ASysMon sysMon, int initialDelaySeconds, int frequencyInSeconds, int averagingDelayMillis) {
-        super(sysMon, initialDelaySeconds, frequencyInSeconds, averagingDelayMillis);
+    public AStdOutCyclicMeasurementDumper(int initialDelaySeconds, int frequencyInSeconds, int averagingDelayMillis) {
+        super(initialDelaySeconds, frequencyInSeconds, averagingDelayMillis);
     }
 
     @Override protected void dump(String s) {

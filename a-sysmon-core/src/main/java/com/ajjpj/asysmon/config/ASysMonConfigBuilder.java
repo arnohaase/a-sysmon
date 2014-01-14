@@ -25,7 +25,7 @@ public class ASysMonConfigBuilder {
     private String applicationInstanceId;
     private String applicationInstanceHtmlColorCode;
 
-    private int averagingDelayForScalarsMillis = 1000; //TODO
+    private int averagingDelayForScalarsMillis = 1000;
 
     private ASysMonLogger logger = defaultLogger();
     private ATimer timer = new ASystemNanoTimer();
@@ -78,6 +78,11 @@ public class ASysMonConfigBuilder {
     @SuppressWarnings("unused")
     public ASysMonConfigBuilder setImplicitlyShutDownWithServlet(boolean implicitlyShutDownWithServlet) {
         this.implicitlyShutDownWithServlet = implicitlyShutDownWithServlet;
+        return this;
+    }
+
+    public ASysMonConfigBuilder setAveragingDelayForScalarsMillis(int averagingDelayForScalarsMillis) {
+        this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
         return this;
     }
 

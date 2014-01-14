@@ -21,6 +21,10 @@ public class ConfigPropsFile {
         this.log = log;
     }
 
+    public <T> T get(String key, Class<T> type, Class<?>... paramTypes) {
+        return get(key, AOption.<T>none(), type, paramTypes);
+    }
+
     public <T> T get(String key, AOption<? extends T> defaultValue, Class<T> type, Class<?>... paramTypes) {
         final ConfigValueResolver r = new ConfigValueResolver(props, log, key, type, paramTypes);
         return (T) r.get(defaultValue);

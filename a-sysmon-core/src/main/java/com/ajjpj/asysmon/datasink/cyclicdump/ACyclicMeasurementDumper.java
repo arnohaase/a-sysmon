@@ -2,6 +2,8 @@ package com.ajjpj.asysmon.datasink.cyclicdump;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.config.ASysMonAware;
+import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
@@ -22,9 +24,11 @@ import java.util.concurrent.TimeUnit;
  *
  * @author arno
  */
-public abstract class ACyclicMeasurementDumper implements ADataSink {
+public abstract class ACyclicMeasurementDumper implements ADataSink, ASysMonAware {
     private final ScheduledExecutorService ec;
-    private final ASysMon sysMon;
+    private volatile ASysMon sysMon;
+    private final int initialDelaySeconds;
+    private final int frequencyInSeconds;
     private final int averagingDelayMillis;
 
     private final Runnable dumper = new Runnable() {
@@ -42,17 +46,16 @@ public abstract class ACyclicMeasurementDumper implements ADataSink {
         }
     };
 
-    public ACyclicMeasurementDumper(ASysMon sysMon, int frequencyInSeconds) {
-        this(sysMon, 0, frequencyInSeconds, sysMon.getConfig().averagingDelayForScalarsMillis);
-    }
-
-    public ACyclicMeasurementDumper(ASysMon sysMon, int initialDelaySeconds, int frequencyInSeconds, int averagingDelayMillis) {
+    public ACyclicMeasurementDumper(int initialDelaySeconds, int frequencyInSeconds, int averagingDelayMillis) {
+        this.initialDelaySeconds = initialDelaySeconds;
+        this.frequencyInSeconds = frequencyInSeconds;
         this.averagingDelayMillis = averagingDelayMillis;
         ec = Executors.newSingleThreadScheduledExecutor();
-        ec.scheduleAtFixedRate(dumper, initialDelaySeconds, frequencyInSeconds, TimeUnit.SECONDS);
+    }
 
+    @Override public void setASysMon(ASysMon sysMon) {
         this.sysMon = sysMon;
-        ASysMonConfigurer.addDataSink(sysMon, this);
+        ec.scheduleAtFixedRate(dumper, initialDelaySeconds, frequencyInSeconds, TimeUnit.SECONDS);
     }
 
     protected abstract void dump(String s);

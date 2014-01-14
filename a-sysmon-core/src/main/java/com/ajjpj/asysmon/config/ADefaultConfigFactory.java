@@ -32,6 +32,8 @@ public class ADefaultConfigFactory implements AConfigFactory {
     public static final String KEY_DATA_SINKS = "data-sinks";
     public static final String KEY_PRESENTATION_MENUS = "presentation-menus";
 
+    public static final String KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS = "averaging-delay-for-scalars-millis";
+
     private static volatile ASysMonLogger configuredLogger;
 
     public static AConfigFactory getConfigFactory() {
@@ -45,7 +47,6 @@ public class ADefaultConfigFactory implements AConfigFactory {
             }
         });
     }
-    //TODO data sinks
 
     public static ASysMonLogger getConfiguredLogger() {
         if(configuredLogger == null) {
@@ -101,6 +102,7 @@ public class ADefaultConfigFactory implements AConfigFactory {
 
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder("app", "version", "instance", "#ff8000"); //TODO config
         builder.setLogger(getConfiguredLogger());
+        builder.setAveragingDelayForScalarsMillis(props.get(KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS, Integer.TYPE));
 
         for(AEnvironmentMeasurer m: props.getList(KEY_ENV_MEASURERS, AEnvironmentMeasurer.class)) {
             builder.addEnvironmentMeasurer(m);
