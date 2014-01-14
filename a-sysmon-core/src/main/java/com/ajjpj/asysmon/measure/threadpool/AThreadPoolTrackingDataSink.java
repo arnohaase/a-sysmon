@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author arno
  */
-public class AThreadPoolTrackingDataSink implements ADataSink {
+class AThreadPoolTrackingDataSink implements ADataSink {
     private final Map<String, AtomicInteger> threadCounts = new ConcurrentHashMap<String, AtomicInteger>();
 
     public static String threadPoolName(String threadName) {
