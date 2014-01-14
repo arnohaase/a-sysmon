@@ -23,10 +23,6 @@ public class AsysmonDemoMain {
 
 //        System.setProperty("com.ajjpj.asysmon.globallydisabled", "true");
 
-//        new ALog4JInfoCyclicMeasurementDumper(ASysMon.get(), 120);
-
-        ASysMonConfigurer.addThreadCountSupport(ASysMon.get()); //TODO unify the mechanism with GC support
-
 //        ASysMonConfigurer.addDataSink(ASysMon.get(), new AHttpJsonOffloadingDataSink(ASysMon.get(), "http://localhost:8899/upload", "demo", "the-instance", 100, 1000, 1, 10*1000));
 
         final Server server = new Server(8080);

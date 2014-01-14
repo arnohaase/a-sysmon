@@ -28,13 +28,4 @@ public class ASysMonConfigurer {
     public static void addDataSink(ASysMon sysMon, ADataSink handler) {
         sysMon.addDataSink(handler);
     }
-
-    /**
-     * This is a convenience method to register thread count in all relevant places.
-     */
-    public static void addThreadCountSupport(ASysMon sysMon) {     //TODO resolve this?
-        final AThreadCountMeasurer threadCountMeasurer = new AThreadCountMeasurer();
-        addScalarMeasurer(sysMon, threadCountMeasurer);
-        addDataSink(sysMon, threadCountMeasurer.counter);
-    }
 }

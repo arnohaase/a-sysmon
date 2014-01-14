@@ -1,5 +1,8 @@
 package com.ajjpj.asysmon.measure.threadpool;
 
+import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 
@@ -9,8 +12,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author arno
  */
-public class AThreadCountMeasurer implements AScalarMeasurer {
-    public final AThreadPoolTrackingDataSink counter = new AThreadPoolTrackingDataSink();
+public class AThreadCountMeasurer implements AScalarMeasurer, ASysMonAware {
+    private final AThreadPoolTrackingDataSink counter = new AThreadPoolTrackingDataSink();
+
+    @Override public void setASysMon(ASysMon sysMon) {
+        ASysMonConfigurer.addDataSink(sysMon, counter);
+    }
 
     @Override public void prepareMeasurements(Map<String, Object> mementos) {
     }
