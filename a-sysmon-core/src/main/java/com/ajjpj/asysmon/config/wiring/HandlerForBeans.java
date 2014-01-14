@@ -55,7 +55,7 @@ public class HandlerForBeans implements ConfigTypeHandler {
 
         final Object[] params = new Object[numParams];
         for(int i=0; i<numParams; i++) {
-            params[i] = childResolver.child(creator.getParameterTypes()[i], new Class<?>[0], String.valueOf(i)).get(AOption.none()); //TODO deal with aliases in ConfigValueResolver
+            params[i] = childResolver.child(creator.getParameterTypes()[i], new Class<?>[0], String.valueOf(i)).get(AOption.none());
         }
         return creator.create(params);
     }
