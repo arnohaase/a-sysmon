@@ -27,6 +27,9 @@ public class ASysMonConfigBuilder {
 
     private int averagingDelayForScalarsMillis = 1000;
 
+    private long measurementTimeoutNanos = 100*1000;
+    private int maxNumMeasurementTimeouts = 3;
+
     private ASysMonLogger logger = defaultLogger();
     private ATimer timer = new ASystemNanoTimer();
 
@@ -78,6 +81,16 @@ public class ASysMonConfigBuilder {
         return this;
     }
 
+    public ASysMonConfigBuilder setMeasurementTimeoutNanos(long measurementTimeoutNanos) {
+        this.measurementTimeoutNanos = measurementTimeoutNanos;
+        return this;
+    }
+
+    public ASysMonConfigBuilder setMaxNumMeasurementTimeouts(int maxNumMeasurementTimeouts) {
+        this.maxNumMeasurementTimeouts = maxNumMeasurementTimeouts;
+        return this;
+    }
+
     public ASysMonConfigBuilder addEnvironmentMeasurer(AEnvironmentMeasurer environmentMeasurer) {
         this.environmentMeasurers.add(environmentMeasurer);
         return this;
@@ -106,7 +119,7 @@ public class ASysMonConfigBuilder {
     public ASysMonConfig build() {
         return new ASysMonConfig(
                 applicationId, applicationVersionId, applicationInstanceId, applicationInstanceHtmlColorCode,
-                averagingDelayForScalarsMillis,
+                averagingDelayForScalarsMillis, measurementTimeoutNanos, maxNumMeasurementTimeouts,
                 logger, timer,
                 environmentMeasurers, scalarMeasurers, dataSinks,
                 presentationMenuEntries

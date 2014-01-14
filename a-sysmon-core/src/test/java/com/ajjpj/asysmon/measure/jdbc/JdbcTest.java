@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
 import com.ajjpj.asysmon.ASysMon;
-import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.impl.ASysMonConfigurer;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.measure.AMeasurementHierarchy;
 import com.ajjpj.asysmon.testutil.CollectingDataSink;

@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.servlet.threaddump;
 
 
 import com.ajjpj.asysmon.ASysMonApi;
-import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.impl.ASysMonConfigurer;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 

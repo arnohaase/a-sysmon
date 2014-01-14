@@ -9,5 +9,7 @@ import com.ajjpj.asysmon.util.AStringFunction;
 public interface ASysMonLogger {
     void debug(AStringFunction msg);
     void warn(String msg);
-    void error(String s);
+    void warn(String msg, Exception exc);
+    void error(String msg);
+    void error(String msg, Exception exc);
 }

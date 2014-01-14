@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.servlet.trace;
 
 import com.ajjpj.asysmon.ASysMonApi;
-import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.impl.ASysMonConfigurer;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.measure.scalar.AJmxGcMeasurerer;

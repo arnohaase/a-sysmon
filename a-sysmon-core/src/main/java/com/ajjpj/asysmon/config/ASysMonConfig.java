@@ -22,6 +22,9 @@ public class ASysMonConfig {
 
     public final int averagingDelayForScalarsMillis;
 
+    public final long measurementTimeoutNanos;
+    public final int maxNumMeasurementTimeouts;
+
     public final ASysMonLogger logger;
     public final ATimer timer; //TODO make configurable
 
@@ -32,7 +35,7 @@ public class ASysMonConfig {
     public final List<APresentationMenuEntry> presentationMenuEntries;
 
     public ASysMonConfig(String applicationId, String applicationVersionId, String instanceId, String instanceHtmlColorCode,
-                         int averagingDelayForScalarsMillis,
+                         int averagingDelayForScalarsMillis, long measurementTimeoutNanos, int maxNumTimeouts,
                          ASysMonLogger logger, ATimer timer,
                          List<AEnvironmentMeasurer> environmentMeasurers, List<AScalarMeasurer> initialScalarMeasurers, List<ADataSink> initialDataSinks, List<APresentationMenuEntry> presentationMenuEntries) {
         this.applicationId = applicationId;
@@ -40,6 +43,8 @@ public class ASysMonConfig {
         this.applicationInstanceId = instanceId;
         this.applicationInstanceHtmlColorCode = instanceHtmlColorCode;
         this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
+        this.measurementTimeoutNanos = measurementTimeoutNanos;
+        this.maxNumMeasurementTimeouts = maxNumTimeouts;
         this.logger = logger;
         this.timer = timer;
         this.initialEnvironmentMeasurers = Collections.unmodifiableList(environmentMeasurers);

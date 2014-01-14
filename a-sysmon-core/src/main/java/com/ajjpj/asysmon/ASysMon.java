@@ -2,6 +2,7 @@ package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.ADefaultConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.impl.ASysMonImpl;
 import com.ajjpj.asysmon.util.AFunction0;
 import com.ajjpj.asysmon.util.AUnchecker;
 

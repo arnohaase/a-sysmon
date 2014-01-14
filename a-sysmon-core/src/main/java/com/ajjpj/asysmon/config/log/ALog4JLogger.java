@@ -19,7 +19,15 @@ public class ALog4JLogger implements ASysMonLogger {
         log.warn(msg);
     }
 
+    @Override public void warn(String msg, Exception exc) {
+        log.warn(msg, exc);
+    }
+
     @Override public void error(String msg) {
         log.error(msg);
+    }
+
+    @Override public void error(String msg, Exception exc) {
+        log.error(msg, exc);
     }
 }

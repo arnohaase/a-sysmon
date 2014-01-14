@@ -1,6 +1,7 @@
-package com.ajjpj.asysmon;
+package com.ajjpj.asysmon.impl;
 
 
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;

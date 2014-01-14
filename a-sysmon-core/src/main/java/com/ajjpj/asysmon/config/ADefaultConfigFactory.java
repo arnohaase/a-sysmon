@@ -33,6 +33,8 @@ public class ADefaultConfigFactory implements AConfigFactory {
     public static final String KEY_PRESENTATION_MENUS = "presentation-menus";
 
     public static final String KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS = "averaging-delay-for-scalars-millis";
+    public static final String KEY_MEASUREMENT_TIMEOUT_NANOS = "measurement-timeout-nanos";
+    public static final String KEY_MAX_NUM_MEASUREMENT_TIMEOUTS = "max-num-measurement-timeouts";
 
     private static volatile ASysMonLogger configuredLogger;
 
@@ -103,6 +105,8 @@ public class ADefaultConfigFactory implements AConfigFactory {
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder("app", "version", "instance", "#ff8000"); //TODO config
         builder.setLogger(getConfiguredLogger());
         builder.setAveragingDelayForScalarsMillis(props.get(KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS, Integer.TYPE));
+        builder.setMeasurementTimeoutNanos(props.get(KEY_MEASUREMENT_TIMEOUT_NANOS, Long.TYPE));
+        builder.setMaxNumMeasurementTimeouts(props.get(KEY_MAX_NUM_MEASUREMENT_TIMEOUTS, Integer.TYPE));
 
         for(AEnvironmentMeasurer m: props.getList(KEY_ENV_MEASURERS, AEnvironmentMeasurer.class)) {
             builder.addEnvironmentMeasurer(m);

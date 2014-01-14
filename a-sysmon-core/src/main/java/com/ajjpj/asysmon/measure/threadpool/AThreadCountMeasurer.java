@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure.threadpool;
 
 import com.ajjpj.asysmon.ASysMonApi;
-import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.impl.ASysMonConfigurer;
 import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;

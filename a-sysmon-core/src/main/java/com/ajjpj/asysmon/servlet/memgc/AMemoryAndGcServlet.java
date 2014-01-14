@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.servlet.memgc;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonApi;
-import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.impl.ASysMonConfigurer;
 import com.ajjpj.asysmon.servlet.AbstractASysMonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 

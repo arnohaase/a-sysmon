@@ -24,7 +24,17 @@ public class AStdOutLogger implements ASysMonLogger {
         log("WARN ", msg);
     }
 
+    @Override public void warn(String msg, Exception exc) {
+        warn(msg);
+        exc.printStackTrace(System.out);
+    }
+
     @Override public void error(String msg) {
         log("ERROR", msg);
+    }
+
+    @Override public void error(String msg, Exception exc) {
+        error(msg);
+        exc.printStackTrace(System.out);
     }
 }

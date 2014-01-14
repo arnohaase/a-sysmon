@@ -1,6 +1,6 @@
-package com.ajjpj.asysmon;
+package com.ajjpj.asysmon.impl;
 
-import com.ajjpj.asysmon.config.ADefaultConfigFactory;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
@@ -10,10 +10,8 @@ import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
-import com.ajjpj.asysmon.util.AFunction0;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
-import com.ajjpj.asysmon.util.AUnchecker;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +34,7 @@ import java.util.TreeMap;
 public class ASysMonImpl implements AShutdownable, ASysMonApi {
     private final ASysMonConfig config;
     private volatile AList<ADataSink> handlers = AList.nil();
-    private volatile AList<AScalarMeasurer> scalarMeasurers = AList.nil();
+    private volatile AList<RobustScalarMeasurementWrapper> scalarMeasurers = AList.nil();
     private volatile AList<AEnvironmentMeasurer> environmentMeasurers = AList.nil();
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
@@ -69,7 +67,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
 
     void addScalarMeasurer(AScalarMeasurer m) {
         injectSysMon(m);
-        scalarMeasurers = scalarMeasurers.cons(m);
+        scalarMeasurers = scalarMeasurers.cons(new RobustScalarMeasurementWrapper(m, config.logger, config.measurementTimeoutNanos, config.maxNumMeasurementTimeouts));
     }
 
     void addEnvironmentMeasurer(AEnvironmentMeasurer m) {
@@ -159,34 +157,25 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         return getScalarMeasurements(config.averagingDelayForScalarsMillis);
     }
 
-    @Override public Map<String, AScalarDataPoint> getScalarMeasurements(int averagingDelayForScalarsMillis) { //TODO rename to distinguish from 'add' etc.
+    @Override public Map<String, AScalarDataPoint> getScalarMeasurements(int averagingDelayForScalarsMillis) {
         final Map<String, AScalarDataPoint> result = new TreeMap<String, AScalarDataPoint>();
         if(config.isGloballyDisabled()) {
             return result;
         }
 
         final Map<String, Object> mementos = new TreeMap<String, Object>();
-        for(AScalarMeasurer measurer: scalarMeasurers) { //TODO limit duration per measurer
-            try {
-                measurer.prepareMeasurements(mementos);
-            } catch (Exception e) {
-                e.printStackTrace(); //TODO
-            }
+        for(RobustScalarMeasurementWrapper measurer: scalarMeasurers) { //TODO limit duration per measurer
+            measurer.prepareMeasurements(mementos);
         }
 
         try {
             Thread.sleep(averagingDelayForScalarsMillis);
-        } catch (InterruptedException e) {
-            e.printStackTrace(); //TODO exception handling
+        } catch (InterruptedException e) { //
         }
 
         final long now = System.currentTimeMillis();
-        for(AScalarMeasurer measurer: scalarMeasurers) {
-            try {
-                measurer.contributeMeasurements(result, now, mementos);
-            } catch (Exception e) {
-                e.printStackTrace(); //TODO
-            }
+        for(RobustScalarMeasurementWrapper measurer: scalarMeasurers) {
+            measurer.contributeMeasurements(result, now, mementos);
         }
         //TODO limit duration per measurer
         return result;
@@ -216,7 +205,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
                 e.printStackTrace(); //TODO log
             }
         }
-        for(AScalarMeasurer m: scalarMeasurers) {
+        for (RobustScalarMeasurementWrapper m: scalarMeasurers) {
             try {
                 m.shutdown();
             } catch (Exception e) {

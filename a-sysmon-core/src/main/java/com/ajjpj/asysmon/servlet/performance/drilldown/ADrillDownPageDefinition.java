@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.servlet.performance.drilldown;
 
 import com.ajjpj.asysmon.ASysMonApi;
-import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.impl.ASysMonConfigurer;
 import com.ajjpj.asysmon.servlet.performance.AAbstractAsysmonPerformancePageDef;
 import com.ajjpj.asysmon.servlet.performance.AMinMaxAvgData;
 

@@ -1,10 +1,6 @@
 package com.ajjpj.asysmon.demo;
 
 
-import com.ajjpj.asysmon.ASysMon;
-import com.ajjpj.asysmon.ASysMonConfigurer;
-import com.ajjpj.asysmon.measure.scalar.AJmxGcMeasurerer;
-import com.ajjpj.asysmon.measure.scalar.AJmxMemMeasurer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
