@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author arno
  */
-class RobustScalarMeasurerWrapper implements AShutdownable {
+class RobustScalarMeasurerWrapper {
     private final AScalarMeasurer inner;
     private final ASysMonLogger log;
 
@@ -121,8 +121,11 @@ class RobustScalarMeasurerWrapper implements AShutdownable {
         strategy.contributeMeasurements(data, timestamp, mementos);
     }
 
-    @Override
-    public void shutdown() throws Exception {
-        inner.shutdown();
+    public void shutdown() {
+        try {
+            inner.shutdown();
+        } catch (Exception exc) {
+            log.error("failed to shut down scalar measurer " + inner.getClass().getName() + ".", exc);
+        }
     }
 }

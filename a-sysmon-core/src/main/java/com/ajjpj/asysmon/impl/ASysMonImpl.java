@@ -193,33 +193,20 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
     }
 
     @Override public void shutdown() {
-        //TODO log
+        config.logger.info("shutting down A-SysMon");
 
         for(RobustDataSinkWrapper handler: handlers) {
-            try {
-                handler.shutdown();
-            } catch (Exception e) {
-                e.printStackTrace(); //TODO log
-            }
+            handler.shutdown();
         }
         for (RobustScalarMeasurerWrapper m: scalarMeasurers) {
-            try {
-                m.shutdown();
-            } catch (Exception e) {
-                e.printStackTrace(); //TODO log
-            }
+            m.shutdown();
         }
 
         for(RobustEnvironmentMeasurerWrapper m: environmentMeasurers) {
-            try {
-                m.shutdown();
-            }
-            catch(Exception exc) {
-                exc.printStackTrace();
-            }
+            m.shutdown();
         }
 
-        //TODO log
+        config.logger.info("finished shutting down A-SysMon");
     }
 }
 

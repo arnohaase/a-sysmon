@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author arno
  */
-class RobustDataSinkWrapper implements AShutdownable { //TODO provide a means for a data sink to specify its own timeout? --> cyclic scalar dumping...
+class RobustDataSinkWrapper { //TODO provide a means for a data sink to specify its own timeout? --> cyclic scalar dumping...
     private final ADataSink inner;
     private final ASysMonLogger log;
 
@@ -120,8 +120,11 @@ class RobustDataSinkWrapper implements AShutdownable { //TODO provide a means fo
         strategy.onFinishedHierarchicalMeasurement(data);
     }
 
-    @Override
-    public void shutdown() throws Exception {
-        inner.shutdown();
+    public void shutdown() {
+        try {
+            inner.shutdown();
+        } catch (Exception exc) {
+            log.error("failed to shut down data sink " + inner.getClass().getName() + ".", exc);
+        }
     }
 }

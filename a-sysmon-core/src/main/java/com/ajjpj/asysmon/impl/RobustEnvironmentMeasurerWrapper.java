@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author arno
  */
-class RobustEnvironmentMeasurerWrapper implements AShutdownable {
+class RobustEnvironmentMeasurerWrapper {
     private final AEnvironmentMeasurer inner;
     private final ASysMonLogger log;
 
@@ -89,8 +89,11 @@ class RobustEnvironmentMeasurerWrapper implements AShutdownable {
         strategy.contributeMeasurements(data);
     }
 
-    @Override
-    public void shutdown() throws Exception {
-        inner.shutdown();
+    public void shutdown() {
+        try {
+            inner.shutdown();
+        } catch (Exception exc) {
+            log.error("failed to shut down environment measurer " + inner.getClass().getName() + ".", exc);
+        }
     }
 }
