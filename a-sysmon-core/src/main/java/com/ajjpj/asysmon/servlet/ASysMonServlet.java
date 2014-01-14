@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.servlet;
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
@@ -70,7 +71,7 @@ public class ASysMonServlet extends AbstractASysMonServlet {
     /**
      * override to customize
      */
-    protected ASysMon getSysMon() {
+    protected ASysMonApi getSysMon() {
         return ASysMon.get();
     }
 

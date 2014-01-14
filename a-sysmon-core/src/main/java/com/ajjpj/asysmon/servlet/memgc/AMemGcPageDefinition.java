@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.memgc;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
@@ -34,7 +34,7 @@ public class AMemGcPageDefinition implements APresentationPageDefinition {
         return "CtrlMemGc";
     }
 
-    @Override public void init(ASysMon sysMon) {
+    @Override public void init(ASysMonApi sysMon) {
         gcDataSink = new GcDataSink(1000); //TODO make this configurable
         ASysMonConfigurer.addDataSink(sysMon, gcDataSink);
     }

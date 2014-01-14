@@ -1,11 +1,9 @@
 package com.ajjpj.asysmon.datasink.cyclicdump;
 
-import com.ajjpj.asysmon.ASysMon;
-import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
-import com.ajjpj.asysmon.config.ASysMonConfig;
-import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.datasink.ADataSink;
 
 import java.util.Map;
@@ -26,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class ACyclicMeasurementDumper implements ADataSink, ASysMonAware {
     private final ScheduledExecutorService ec;
-    private volatile ASysMon sysMon;
+    private volatile ASysMonApi sysMon;
     private final int initialDelaySeconds;
     private final int frequencyInSeconds;
     private final int averagingDelayMillis;
@@ -53,7 +51,7 @@ public abstract class ACyclicMeasurementDumper implements ADataSink, ASysMonAwar
         ec = Executors.newSingleThreadScheduledExecutor();
     }
 
-    @Override public void setASysMon(ASysMon sysMon) {
+    @Override public void setASysMon(ASysMonApi sysMon) {
         this.sysMon = sysMon;
         ec.scheduleAtFixedRate(dumper, initialDelaySeconds, frequencyInSeconds, TimeUnit.SECONDS);
     }

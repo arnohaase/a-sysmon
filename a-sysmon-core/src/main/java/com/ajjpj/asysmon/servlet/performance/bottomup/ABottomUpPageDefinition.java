@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.performance.bottomup;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.servlet.performance.AAbstractAsysmonPerformancePageDef;
 import com.ajjpj.asysmon.servlet.performance.AMinMaxAvgData;
@@ -27,7 +27,7 @@ public abstract class ABottomUpPageDefinition extends AAbstractAsysmonPerformanc
 
     protected abstract ABottomUpLeafFilter createLeafFilter();
 
-    @Override public void init(ASysMon sysMon) {
+    @Override public void init(ASysMonApi sysMon) {
         super.init(sysMon);
         collector = new ABottomUpDataSink(createLeafFilter());
         ASysMonConfigurer.addDataSink(sysMon, collector);

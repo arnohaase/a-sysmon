@@ -16,9 +16,9 @@ public class AUnchecker {
         throw (T) th;
     }
 
-    public static void executeUnchecked(Runnable callback) {
+    public static void executeUnchecked(AStatement0<? extends Exception> callback) {
         try {
-            callback.run();
+            callback.apply();
         }
         catch(Exception exc) {
             throwUnchecked (exc);

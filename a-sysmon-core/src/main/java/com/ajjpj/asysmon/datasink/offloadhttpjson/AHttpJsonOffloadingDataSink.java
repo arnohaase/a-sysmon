@@ -1,10 +1,10 @@
 package com.ajjpj.asysmon.datasink.offloadhttpjson;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
-import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
+import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.util.ASoftlyLimitedQueue;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -45,7 +45,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
 
     private volatile boolean isShutDown = false;
 
-    public AHttpJsonOffloadingDataSink(final ASysMon sysMon, String uri, String sender, String senderInstance, int traceQueueSize, int scalarQueueSize, int numOffloadingThreads, int scalarMeasurementFrequencyMillis) {
+    public AHttpJsonOffloadingDataSink(final ASysMonApi sysMon, String uri, String sender, String senderInstance, int traceQueueSize, int scalarQueueSize, int numOffloadingThreads, int scalarMeasurementFrequencyMillis) {
         this.config = sysMon.getConfig();
 
         this.uri = URI.create(uri);

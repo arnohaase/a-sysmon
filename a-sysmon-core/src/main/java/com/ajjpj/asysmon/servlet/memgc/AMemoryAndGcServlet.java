@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.servlet.memgc;
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.servlet.AbstractASysMonServlet;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
@@ -20,7 +21,7 @@ public class AMemoryAndGcServlet extends AbstractASysMonServlet {
     /**
      * Default implementations returns the singleton instance. Override to customize.
      */
-    protected ASysMon getSysMon() {
+    protected ASysMonApi getSysMon() {
         return ASysMon.get();
     }
 

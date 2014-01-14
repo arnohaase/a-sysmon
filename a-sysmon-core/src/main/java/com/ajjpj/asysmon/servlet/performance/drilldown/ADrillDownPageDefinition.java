@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.performance.drilldown;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.servlet.performance.AAbstractAsysmonPerformancePageDef;
 import com.ajjpj.asysmon.servlet.performance.AMinMaxAvgData;
@@ -39,7 +39,7 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
         return "Hierarchical Performance Statistics";
     }
 
-    @Override public void init(ASysMon sysMon) {
+    @Override public void init(ASysMonApi sysMon) {
         super.init(sysMon);
 
         collector = new DrillDownDataSink();

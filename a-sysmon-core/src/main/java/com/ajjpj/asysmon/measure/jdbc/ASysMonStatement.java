@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.measure.ACollectingMeasurement;
 import com.ajjpj.asysmon.measure.AMeasureCallback;
 import com.ajjpj.asysmon.measure.AWithParameters;
@@ -16,11 +16,11 @@ public class ASysMonStatement implements Statement {
 
     private final Connection conn;
     private final Statement inner;
-    private final ASysMon sysMon;
+    private final ASysMonApi sysMon;
 
     private boolean closeOnCompletion = false;
 
-    public ASysMonStatement(Connection conn, Statement inner, ASysMon sysMon) {
+    public ASysMonStatement(Connection conn, Statement inner, ASysMonApi sysMon) {
         this.conn = conn;
         this.inner = inner;
         this.sysMon = sysMon;

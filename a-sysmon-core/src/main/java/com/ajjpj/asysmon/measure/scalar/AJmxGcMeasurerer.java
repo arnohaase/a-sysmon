@@ -1,7 +1,6 @@
 package com.ajjpj.asysmon.measure.scalar;
 
-import com.ajjpj.asysmon.ASysMon;
-import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
@@ -17,7 +16,10 @@ import javax.management.openmbean.CompositeData;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -44,7 +46,7 @@ public class AJmxGcMeasurerer implements AScalarMeasurer, ASysMonAware {
     private static final int MILLIS_PER_MINUTE = 60 * 1000;
     private static final int MILLION = 1000*1000;
 
-    private volatile ASysMon sysMon;
+    private volatile ASysMonApi sysMon;
 
     private final GcNotificationListener listener = new GcNotificationListener();
 
@@ -52,7 +54,7 @@ public class AJmxGcMeasurerer implements AScalarMeasurer, ASysMonAware {
     private final Map<String, Long> timeFracInGcPpm = new ConcurrentHashMap<String, Long>();
     private final Map<String, Long> gcFrequencyPerMinuteTimes100 = new ConcurrentHashMap<String, Long>();
 
-    @Override public void setASysMon(ASysMon sysMon) {
+    @Override public void setASysMon(ASysMonApi sysMon) {
         this.sysMon = sysMon;
 
         for (GarbageCollectorMXBean gcbean : ManagementFactory.getGarbageCollectorMXBeans()) {

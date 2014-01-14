@@ -2,6 +2,7 @@ package com.ajjpj.asysmon.measure.jdbc;
 
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.measure.ASysMonSource;
 
 import java.sql.*;
@@ -50,7 +51,7 @@ public class ASysMonJdbcDriver implements Driver {
         final String innerUrl = withoutPrefix.substring(idxColon+1);
         final Connection inner = DriverManager.getConnection(innerUrl, info);
 
-        final ASysMon sysMon = getSysMon(params);
+        final ASysMonApi sysMon = getSysMon(params);
 
         if(sysMon.getConfig().isGloballyDisabled()) {
             return inner;
@@ -63,7 +64,7 @@ public class ASysMonJdbcDriver implements Driver {
         return params.get(PARAM_CONNECTIONPOOL_IDENTIFIER);
     }
 
-    private ASysMon getSysMon(Map<String, String> params) throws SQLException {
+    private ASysMonApi getSysMon(Map<String, String> params) throws SQLException {
         final String sysmonSourceName = params.get(PARAM_SYSMON_SOURCE);
         if(sysmonSourceName == null) {
             return ASysMon.get();

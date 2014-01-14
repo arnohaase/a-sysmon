@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.trace;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
@@ -31,7 +31,7 @@ public class ATracePageDefinition extends AAbstractAsysmonPerformancePageDef {
         this.collector = new ATraceCollectingDataSink(traceFilter, bufferSize);
     }
 
-    @Override public void init(ASysMon sysMon) {
+    @Override public void init(ASysMonApi sysMon) {
         super.init(sysMon);
         ASysMonConfigurer.addDataSink(sysMon, collector);
     }

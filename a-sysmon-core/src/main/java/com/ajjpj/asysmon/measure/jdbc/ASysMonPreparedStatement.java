@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.measure.ACollectingMeasurement;
 import com.ajjpj.asysmon.measure.AMeasureCallback;
 import com.ajjpj.asysmon.measure.AWithParameters;
@@ -32,7 +32,7 @@ public class ASysMonPreparedStatement extends ASysMonStatement implements Prepar
 
     protected int batchCount = 0;
 
-    public ASysMonPreparedStatement(Connection conn, PreparedStatement inner, ASysMon sysMon, String sql) {
+    public ASysMonPreparedStatement(Connection conn, PreparedStatement inner, ASysMonApi sysMon, String sql) {
         super(conn, inner, sysMon);
         this.inner = inner;
         this.m = sysMon.startCollectingMeasurement(ident(sql));

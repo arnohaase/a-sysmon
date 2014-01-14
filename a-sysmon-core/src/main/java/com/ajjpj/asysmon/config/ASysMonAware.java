@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.config;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 
 /**
  * If a measurers or data sink implements this interface and is registered with an A-SysMon instance, it will be
@@ -9,5 +9,5 @@ import com.ajjpj.asysmon.ASysMon;
  * @author arno
  */
 public interface ASysMonAware {
-    void setASysMon(ASysMon sysMon);
+    void setASysMon(ASysMonApi sysMon);
 }

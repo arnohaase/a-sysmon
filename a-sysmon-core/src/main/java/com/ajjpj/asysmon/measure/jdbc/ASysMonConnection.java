@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 
 import java.sql.*;
@@ -13,13 +13,13 @@ import java.util.concurrent.Executor;
  */
 public class ASysMonConnection implements Connection {
     private final Connection inner;
-    private final ASysMon sysMon;
+    private final ASysMonApi sysMon;
 
     private final String poolIdentifier;
     private volatile boolean isActive = false;
     private final AConnectionCounter connectionCounter;
 
-    public ASysMonConnection(Connection inner, ASysMon sysMon, String poolIdentifier, AConnectionCounter connectionCounter) {
+    public ASysMonConnection(Connection inner, ASysMonApi sysMon, String poolIdentifier, AConnectionCounter connectionCounter) {
         this.inner = inner;
         this.sysMon = sysMon;
         this.poolIdentifier = poolIdentifier;

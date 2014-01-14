@@ -22,7 +22,6 @@ todo
 
   * read versions from manifests of JAR files (?)
 
-  * separate ASysMon from ASysMonHolder and ASysMonImpl
   * exception handling, limit time for single measurement
 
   * add more scalar measurements
@@ -34,6 +33,7 @@ todo
 
   * beautify
     * scalar page:
+      * separate section for GC
       * progress bars: center value for 'load' and 'JVM mem'
       * disks: show mount points
     * 'environment': start with expanded 'Overview'
@@ -85,8 +85,6 @@ AOP:
 
 * global measurements
   * JMX - tomcat, JVM, ...
-
-* 'environment': OS version, RAM, processor, software version ...
 
 * management server
   * rolling average for scalars

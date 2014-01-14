@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.measure.http;
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 
 import javax.servlet.*;
@@ -40,7 +41,7 @@ public class AHttpRequestMeasuringFilter implements Filter {
     /**
      * override to customize
      */
-    protected ASysMon getSysMon() {
+    protected ASysMonApi getSysMon() {
         return ASysMon.get();
     }
 

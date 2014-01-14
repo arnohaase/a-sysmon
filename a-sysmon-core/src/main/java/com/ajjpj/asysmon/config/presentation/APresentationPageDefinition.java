@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.config.presentation;
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 import com.ajjpj.asysmon.util.APair;
 
@@ -51,5 +52,5 @@ public interface APresentationPageDefinition {
     /**
      * called once before any of the other methods is called.
      */
-    void init(ASysMon sysMon);
+    void init(ASysMonApi sysMon);
 }

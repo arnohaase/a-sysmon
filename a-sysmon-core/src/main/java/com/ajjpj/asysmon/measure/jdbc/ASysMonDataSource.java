@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -16,11 +16,11 @@ public class ASysMonDataSource implements DataSource {
     private final DataSource inner;
 
     private final String poolIdentifier;
-    private final ASysMon sysMon;
+    private final ASysMonApi sysMon;
 
     private final AConnectionCounter counter = AConnectionCounter.INSTANCE; //TODO make this configurable?
 
-    public ASysMonDataSource(DataSource inner, String poolIdentifier, ASysMon sysMon) {
+    public ASysMonDataSource(DataSource inner, String poolIdentifier, ASysMonApi sysMon) {
         this.inner = inner;
         this.poolIdentifier = poolIdentifier;
         this.sysMon = sysMon;

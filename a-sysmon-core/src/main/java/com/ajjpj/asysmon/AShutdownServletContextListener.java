@@ -1,5 +1,9 @@
 package com.ajjpj.asysmon;
 
+import com.ajjpj.asysmon.util.AShutdownable;
+import com.ajjpj.asysmon.util.AStatement0;
+import com.ajjpj.asysmon.util.AUnchecker;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -11,7 +15,11 @@ import javax.servlet.ServletContextListener;
  */
 public class AShutdownServletContextListener implements ServletContextListener {
     @Override public void contextDestroyed(ServletContextEvent sce) {
-        ASysMon.get().shutdown();
+        AUnchecker.executeUnchecked(new AStatement0<Exception>() {
+            @Override public void apply() throws Exception {
+                ((AShutdownable) ASysMon.get()).shutdown();
+            }
+        });
     }
 
     @Override public void contextInitialized(ServletContextEvent sce) {

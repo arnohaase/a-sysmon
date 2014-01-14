@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.servlet.threaddump;
 
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.ASysMonConfigurer;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
@@ -130,7 +130,7 @@ public class AThreadDumpPageDefinition implements APresentationPageDefinition {
         json.endArray();
     }
 
-    @Override public void init(ASysMon sysMon) {
+    @Override public void init(ASysMonApi sysMon) {
         ASysMonConfigurer.addDataSink(sysMon, runningThreadTracker);
     }
 }

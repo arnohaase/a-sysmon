@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class ASysMonCallableStatement extends ASysMonPreparedStatement implements CallableStatement {
     private final CallableStatement inner;
 
-    public ASysMonCallableStatement(Connection conn, CallableStatement inner, ASysMon sysMon, String sql) {
+    public ASysMonCallableStatement(Connection conn, CallableStatement inner, ASysMonApi sysMon, String sql) {
         super(conn, inner, sysMon, sql);
         this.inner = inner;
     }

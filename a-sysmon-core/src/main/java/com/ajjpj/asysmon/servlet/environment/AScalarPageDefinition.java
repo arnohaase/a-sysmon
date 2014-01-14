@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.servlet.environment;
 
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
@@ -13,7 +14,7 @@ import java.util.Map;
  * @author arno
  */
 public class AScalarPageDefinition implements APresentationPageDefinition {
-    private volatile ASysMon sysMon;
+    private volatile ASysMonApi sysMon;
 
     @Override public String getId() {
         return "scalars";
@@ -35,7 +36,7 @@ public class AScalarPageDefinition implements APresentationPageDefinition {
         return "CtrlScalars";
     }
 
-    @Override public void init(ASysMon sysMon) {
+    @Override public void init(ASysMonApi sysMon) {
         this.sysMon = sysMon;
     }
 

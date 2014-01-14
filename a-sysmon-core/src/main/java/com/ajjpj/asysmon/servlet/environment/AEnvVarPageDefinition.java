@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.environment;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
@@ -14,7 +14,7 @@ import java.util.*;
  * @author arno
  */
 public class AEnvVarPageDefinition implements APresentationPageDefinition {
-    private volatile ASysMon sysMon;
+    private volatile ASysMonApi sysMon;
 
     @Override public String getId() {
         return "env";
@@ -110,7 +110,7 @@ public class AEnvVarPageDefinition implements APresentationPageDefinition {
     }
 
 
-    @Override public void init(ASysMon sysMon) {
+    @Override public void init(ASysMonApi sysMon) {
         this.sysMon = sysMon;
     }
 

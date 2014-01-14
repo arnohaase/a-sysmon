@@ -4,7 +4,6 @@ package com.ajjpj.asysmon;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
-import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
 
 /**
  * This class can change the configuration of an existing ASysMon instance. This is done to avoid race conditions
@@ -17,15 +16,15 @@ import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
  * @author arno
  */
 public class ASysMonConfigurer {
-    public static void addScalarMeasurer(ASysMon sysMon, AScalarMeasurer m) {
-        sysMon.addScalarMeasurer(m);
+    public static void addScalarMeasurer(ASysMonApi sysMon, AScalarMeasurer m) {
+        ((ASysMonImpl) sysMon).addScalarMeasurer(m);
     }
 
-    public static void addEnvironmentMeasurer(ASysMon sysMon, AEnvironmentMeasurer m) {
-        sysMon.addEnvironmentMeasurer(m);
+    public static void addEnvironmentMeasurer(ASysMonApi sysMon, AEnvironmentMeasurer m) {
+        ((ASysMonImpl) sysMon).addEnvironmentMeasurer(m);
     }
 
-    public static void addDataSink(ASysMon sysMon, ADataSink handler) {
-        sysMon.addDataSink(handler);
+    public static void addDataSink(ASysMonApi sysMon, ADataSink handler) {
+        ((ASysMonImpl) sysMon).addDataSink(handler);
     }
 }

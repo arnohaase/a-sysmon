@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.performance;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.util.AJsonSerHelper;
 
@@ -19,7 +19,7 @@ public abstract class AAbstractAsysmonPerformancePageDef implements APresentatio
         return "CtrlAggregated";
     }
 
-    @Override public void init(ASysMon sysMon) {
+    @Override public void init(ASysMonApi sysMon) {
     }
 
     @Override public boolean handleRestCall(String service, List<String> params, AJsonSerHelper json) throws IOException {
