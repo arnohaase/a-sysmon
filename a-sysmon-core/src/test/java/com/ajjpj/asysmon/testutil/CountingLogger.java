@@ -10,9 +10,15 @@ public class CountingLogger implements ASysMonLogger {
     public int numDebug = 0;
     public int numWarn = 0;
     public int numError = 0;
+    public int numInfo = 0; // TODO does it make sense to count INFO?
 
     @Override public void debug(AStringFunction msg) {
         numDebug += 1;
+    }
+
+    @Override
+    public void info(String msg) {
+        numInfo += 1;
     }
 
     @Override public void warn(String msg) {
