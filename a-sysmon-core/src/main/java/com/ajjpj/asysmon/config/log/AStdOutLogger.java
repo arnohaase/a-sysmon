@@ -16,6 +16,11 @@ public class AStdOutLogger implements ASysMonLogger {
         }
     }
 
+    @Override
+    public void info(String msg) {
+        log("INFO ", msg);
+    }
+
     private void log(String level, String msg) {
         System.out.println(level + ": " + msg); //TODO log timestamp etc.
     }
