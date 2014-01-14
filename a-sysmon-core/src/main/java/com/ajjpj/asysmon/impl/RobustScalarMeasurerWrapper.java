@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author arno
  */
-class RobustScalarMeasurementWrapper implements AShutdownable {
+class RobustScalarMeasurerWrapper implements AShutdownable {
     private final AScalarMeasurer inner;
     private final ASysMonLogger log;
 
@@ -106,7 +106,7 @@ class RobustScalarMeasurementWrapper implements AShutdownable {
 
     private volatile Strategy strategy = ENABLED;
 
-    RobustScalarMeasurementWrapper(AScalarMeasurer inner, ASysMonLogger log, long timeoutNanos, int maxNumTimeouts) {
+    RobustScalarMeasurerWrapper(AScalarMeasurer inner, ASysMonLogger log, long timeoutNanos, int maxNumTimeouts) {
         this.inner = inner;
         this.log = log;
         this.timeoutNanos = timeoutNanos;

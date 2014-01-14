@@ -82,4 +82,8 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
     private void add(EnvironmentCollector data, String device, String key, String value) {
         data.add(value, ACpuEnvironmentMeasurer.KEY_HW, KEY_FILESYSTEMS, device, key);
     }
+
+    @Override
+    public void shutdown() throws Exception {
+    }
 }

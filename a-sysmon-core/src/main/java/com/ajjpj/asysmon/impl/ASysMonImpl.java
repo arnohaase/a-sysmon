@@ -34,8 +34,8 @@ import java.util.TreeMap;
 public class ASysMonImpl implements AShutdownable, ASysMonApi {
     private final ASysMonConfig config;
     private volatile AList<RobustDataSinkWrapper> handlers = AList.nil();
-    private volatile AList<RobustScalarMeasurementWrapper> scalarMeasurers = AList.nil();
-    private volatile AList<AEnvironmentMeasurer> environmentMeasurers = AList.nil();
+    private volatile AList<RobustScalarMeasurerWrapper> scalarMeasurers = AList.nil();
+    private volatile AList<RobustEnvironmentMeasurerWrapper> environmentMeasurers = AList.nil();
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
@@ -67,12 +67,12 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
 
     void addScalarMeasurer(AScalarMeasurer m) {
         injectSysMon(m);
-        scalarMeasurers = scalarMeasurers.cons(new RobustScalarMeasurementWrapper(m, config.logger, config.measurementTimeoutNanos, config.maxNumMeasurementTimeouts));
+        scalarMeasurers = scalarMeasurers.cons(new RobustScalarMeasurerWrapper(m, config.logger, config.measurementTimeoutNanos, config.maxNumMeasurementTimeouts));
     }
 
     void addEnvironmentMeasurer(AEnvironmentMeasurer m) {
         injectSysMon(m);
-        environmentMeasurers = environmentMeasurers.cons(m);
+        environmentMeasurers = environmentMeasurers.cons(new RobustEnvironmentMeasurerWrapper(m, config.logger, config.measurementTimeoutNanos, config.maxNumMeasurementTimeouts));
     }
 
     void addDataSink(ADataSink handler) {
@@ -164,7 +164,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         }
 
         final Map<String, Object> mementos = new TreeMap<String, Object>();
-        for(RobustScalarMeasurementWrapper measurer: scalarMeasurers) {
+        for(RobustScalarMeasurerWrapper measurer: scalarMeasurers) {
             measurer.prepareMeasurements(mementos);
         }
 
@@ -174,22 +174,20 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         }
 
         final long now = System.currentTimeMillis();
-        for(RobustScalarMeasurementWrapper measurer: scalarMeasurers) {
+        for(RobustScalarMeasurerWrapper measurer: scalarMeasurers) {
             measurer.contributeMeasurements(result, now, mementos);
         }
         return result;
     }
 
-    @Override public Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() throws Exception {
+    @Override public Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() {
         final Map<AList<String>, AEnvironmentData> result = new HashMap<AList<String>, AEnvironmentData>();
         if(config.isGloballyDisabled()) {
             return result;
         }
 
-        for(AEnvironmentMeasurer m: environmentMeasurers) {
+        for(RobustEnvironmentMeasurerWrapper m: environmentMeasurers) {
             m.contributeMeasurements(new AEnvironmentMeasurer.EnvironmentCollector(result));
-            //TODO protect against exceptions (per measurer)
-            //TODO limit duration per measurer
         }
         return result;
     }
@@ -204,11 +202,20 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
                 e.printStackTrace(); //TODO log
             }
         }
-        for (RobustScalarMeasurementWrapper m: scalarMeasurers) {
+        for (RobustScalarMeasurerWrapper m: scalarMeasurers) {
             try {
                 m.shutdown();
             } catch (Exception e) {
                 e.printStackTrace(); //TODO log
+            }
+        }
+
+        for(RobustEnvironmentMeasurerWrapper m: environmentMeasurers) {
+            try {
+                m.shutdown();
+            }
+            catch(Exception exc) {
+                exc.printStackTrace();
             }
         }
 

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author arno
  */
-public interface AEnvironmentMeasurer {
+public interface AEnvironmentMeasurer extends AShutdownable {
     /**
      * @param data is a 'collectiong parameter', i.e. the method adds its own results to the existing collection.
      */

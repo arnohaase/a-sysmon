@@ -55,4 +55,8 @@ public class AOverviewEnvironmentMeasurer implements AEnvironmentMeasurer {
         } catch (Exception e) {
         }
     }
+
+    @Override
+    public void shutdown() throws Exception {
+    }
 }

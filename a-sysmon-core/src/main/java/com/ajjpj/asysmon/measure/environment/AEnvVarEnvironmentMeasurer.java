@@ -15,4 +15,8 @@ public class AEnvVarEnvironmentMeasurer implements AEnvironmentMeasurer {
             data.add(env.get(envName), KEY_ENV_VAR, envName);
         }
     }
+
+    @Override
+    public void shutdown() throws Exception {
+    }
 }

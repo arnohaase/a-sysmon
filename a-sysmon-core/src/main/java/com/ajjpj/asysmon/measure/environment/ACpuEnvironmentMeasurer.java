@@ -52,5 +52,9 @@ public class ACpuEnvironmentMeasurer implements AEnvironmentMeasurer {
             br.close();
         }
     }
+
+    @Override
+    public void shutdown() throws Exception {
+    }
 }
 

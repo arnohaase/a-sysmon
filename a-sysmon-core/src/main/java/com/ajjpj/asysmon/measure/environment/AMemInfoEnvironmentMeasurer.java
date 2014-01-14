@@ -41,4 +41,8 @@ public class AMemInfoEnvironmentMeasurer implements AEnvironmentMeasurer {
         }
         return result;
     }
+
+    @Override
+    public void shutdown() throws Exception {
+    }
 }

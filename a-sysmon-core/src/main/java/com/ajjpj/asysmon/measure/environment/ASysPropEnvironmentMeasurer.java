@@ -17,4 +17,8 @@ public class ASysPropEnvironmentMeasurer implements AEnvironmentMeasurer {
             data.add(System.getProperty(propName), KEY_SYSTEM_PROPERTY, propName);
         }
     }
+
+    @Override
+    public void shutdown() throws Exception {
+    }
 }
