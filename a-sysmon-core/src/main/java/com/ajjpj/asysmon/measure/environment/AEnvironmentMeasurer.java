@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.measure.environment;
 
 import com.ajjpj.asysmon.util.AList;
+import com.ajjpj.asysmon.util.AShutdownable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

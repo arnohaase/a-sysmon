@@ -25,6 +25,9 @@ public class ASysMonConfig {
     public final long measurementTimeoutNanos;
     public final int maxNumMeasurementTimeouts;
 
+    public final long dataSinkTimeoutNanos;
+    public final int maxNumDataSinkTimeouts;
+
     public final ASysMonLogger logger;
     public final ATimer timer; //TODO make configurable
 
@@ -35,7 +38,7 @@ public class ASysMonConfig {
     public final List<APresentationMenuEntry> presentationMenuEntries;
 
     public ASysMonConfig(String applicationId, String applicationVersionId, String instanceId, String instanceHtmlColorCode,
-                         int averagingDelayForScalarsMillis, long measurementTimeoutNanos, int maxNumTimeouts,
+                         int averagingDelayForScalarsMillis, long measurementTimeoutNanos, int maxNumMeasurementTimeouts, long dataSinkTimeoutNanos, int maxNumDataSinkTimeouts,
                          ASysMonLogger logger, ATimer timer,
                          List<AEnvironmentMeasurer> environmentMeasurers, List<AScalarMeasurer> initialScalarMeasurers, List<ADataSink> initialDataSinks, List<APresentationMenuEntry> presentationMenuEntries) {
         this.applicationId = applicationId;
@@ -44,7 +47,9 @@ public class ASysMonConfig {
         this.applicationInstanceHtmlColorCode = instanceHtmlColorCode;
         this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
         this.measurementTimeoutNanos = measurementTimeoutNanos;
-        this.maxNumMeasurementTimeouts = maxNumTimeouts;
+        this.maxNumMeasurementTimeouts = maxNumMeasurementTimeouts;
+        this.dataSinkTimeoutNanos = dataSinkTimeoutNanos;
+        this.maxNumDataSinkTimeouts = maxNumDataSinkTimeouts;
         this.logger = logger;
         this.timer = timer;
         this.initialEnvironmentMeasurers = Collections.unmodifiableList(environmentMeasurers);

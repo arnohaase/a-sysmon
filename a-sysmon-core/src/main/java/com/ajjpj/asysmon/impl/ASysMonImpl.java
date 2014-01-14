@@ -33,7 +33,7 @@ import java.util.TreeMap;
  */
 public class ASysMonImpl implements AShutdownable, ASysMonApi {
     private final ASysMonConfig config;
-    private volatile AList<ADataSink> handlers = AList.nil();
+    private volatile AList<RobustDataSinkWrapper> handlers = AList.nil();
     private volatile AList<RobustScalarMeasurementWrapper> scalarMeasurers = AList.nil();
     private volatile AList<AEnvironmentMeasurer> environmentMeasurers = AList.nil();
 
@@ -77,13 +77,13 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
 
     void addDataSink(ADataSink handler) {
         injectSysMon(handler);
-        handlers = handlers.cons(handler);
+        handlers = handlers.cons(new RobustDataSinkWrapper(handler, config.logger, config.dataSinkTimeoutNanos, config.maxNumDataSinkTimeouts));
     }
 
     private ADataSink getCompositeDataSink() {
         return new ADataSink() {
             @Override public void onStartedHierarchicalMeasurement(String identifier) {
-                for(ADataSink handler: handlers) {
+                for(RobustDataSinkWrapper handler: handlers) {
                     handler.onStartedHierarchicalMeasurement(identifier);
                 }
             }
@@ -91,7 +91,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
             @Override public void onFinishedHierarchicalMeasurement(AHierarchicalDataRoot data) {
                 hierarchyPerThread.remove();
 
-                for(ADataSink handler: handlers) {
+                for(RobustDataSinkWrapper handler: handlers) {
                     handler.onFinishedHierarchicalMeasurement(data);
                 }
             }
@@ -164,7 +164,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         }
 
         final Map<String, Object> mementos = new TreeMap<String, Object>();
-        for(RobustScalarMeasurementWrapper measurer: scalarMeasurers) { //TODO limit duration per measurer
+        for(RobustScalarMeasurementWrapper measurer: scalarMeasurers) {
             measurer.prepareMeasurements(mementos);
         }
 
@@ -177,7 +177,6 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         for(RobustScalarMeasurementWrapper measurer: scalarMeasurers) {
             measurer.contributeMeasurements(result, now, mementos);
         }
-        //TODO limit duration per measurer
         return result;
     }
 
@@ -198,7 +197,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
     @Override public void shutdown() {
         //TODO log
 
-        for(ADataSink handler: handlers) {
+        for(RobustDataSinkWrapper handler: handlers) {
             try {
                 handler.shutdown();
             } catch (Exception e) {

@@ -27,8 +27,11 @@ public class ASysMonConfigBuilder {
 
     private int averagingDelayForScalarsMillis = 1000;
 
-    private long measurementTimeoutNanos = 100*1000;
+    private long measurementTimeoutNanos = 20*1000*1000;
     private int maxNumMeasurementTimeouts = 3;
+
+    private long dataSinkTimeoutNanos = 100*1000;
+    private int maxNumDataSinkTimeouts = 3;
 
     private ASysMonLogger logger = defaultLogger();
     private ATimer timer = new ASystemNanoTimer();
@@ -91,6 +94,16 @@ public class ASysMonConfigBuilder {
         return this;
     }
 
+    public ASysMonConfigBuilder setDataSinkTimeoutNanos(long dataSinkTimeoutNanos) {
+        this.dataSinkTimeoutNanos = dataSinkTimeoutNanos;
+        return this;
+    }
+
+    public ASysMonConfigBuilder setMaxNumDataSinkTimeouts(int maxNumDataSinkTimeouts) {
+        this.maxNumDataSinkTimeouts = maxNumDataSinkTimeouts;
+        return this;
+    }
+
     public ASysMonConfigBuilder addEnvironmentMeasurer(AEnvironmentMeasurer environmentMeasurer) {
         this.environmentMeasurers.add(environmentMeasurer);
         return this;
@@ -119,7 +132,9 @@ public class ASysMonConfigBuilder {
     public ASysMonConfig build() {
         return new ASysMonConfig(
                 applicationId, applicationVersionId, applicationInstanceId, applicationInstanceHtmlColorCode,
-                averagingDelayForScalarsMillis, measurementTimeoutNanos, maxNumMeasurementTimeouts,
+                averagingDelayForScalarsMillis,
+                measurementTimeoutNanos, maxNumMeasurementTimeouts,
+                dataSinkTimeoutNanos, maxNumDataSinkTimeouts,
                 logger, timer,
                 environmentMeasurers, scalarMeasurers, dataSinks,
                 presentationMenuEntries

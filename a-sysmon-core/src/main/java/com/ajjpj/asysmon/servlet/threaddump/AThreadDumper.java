@@ -1,7 +1,5 @@
 package com.ajjpj.asysmon.servlet.threaddump;
 
-import com.ajjpj.asysmon.measure.threadpool.AThreadPoolTrackingDataSink;
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
@@ -40,24 +38,6 @@ class AThreadDumper {
             result.add(threadId);
         }
 
-        return result;
-    }
-
-    public Map<String, Collection<ThreadInfo>> dumpThreadsByGroup() {
-        final ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
-
-        final Map<String, Collection<ThreadInfo>> result = new TreeMap<String, Collection<ThreadInfo>>();
-
-        for(ThreadInfo ti: mxBean.dumpAllThreads(mxBean.isObjectMonitorUsageSupported(), mxBean.isSynchronizerUsageSupported())) {
-            final String threadPoolName = AThreadPoolTrackingDataSink.threadPoolName(ti.getThreadName());
-
-            Collection<ThreadInfo> coll = result.get(threadPoolName);
-            if(coll == null) {
-                coll = new TreeSet<ThreadInfo>(threadNameComparator);
-                result.put(threadPoolName, coll);
-            }
-            coll.add(ti);
-        }
         return result;
     }
 }
