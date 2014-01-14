@@ -1,10 +1,9 @@
-package com.ajjpj.asysmon.config.wiring;
+package com.ajjpj.asysmon.config;
 
-import com.ajjpj.asysmon.config.AConfigFactory;
-import com.ajjpj.asysmon.config.ASysMonConfig;
-import com.ajjpj.asysmon.config.ASysMonConfigBuilder;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
+import com.ajjpj.asysmon.config.wiring.ConfigPropsFile;
+import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AFunction0;
@@ -30,6 +29,7 @@ public class ADefaultConfigFactory implements AConfigFactory {
     public static final String KEY_LOGGER = "logger";
     public static final String KEY_ENV_MEASURERS = "env-measurers";
     public static final String KEY_SCALAR_MEASURERS = "scalar-measurers";
+    public static final String KEY_DATA_SINKS = "data-sinks";
     public static final String KEY_PRESENTATION_MENUS = "presentation-menus";
 
     private static volatile ASysMonLogger configuredLogger;
@@ -108,6 +108,10 @@ public class ADefaultConfigFactory implements AConfigFactory {
 
         for(AScalarMeasurer m: props.getList(KEY_SCALAR_MEASURERS, AScalarMeasurer.class)) {
             builder.addScalarMeasurer(m);
+        }
+
+        for(ADataSink h: props.getList(KEY_DATA_SINKS, ADataSink.class)) {
+            builder.addDataSink(h);
         }
 
         for(String menuEntryRaw: props.getListRaw(KEY_PRESENTATION_MENUS)) {

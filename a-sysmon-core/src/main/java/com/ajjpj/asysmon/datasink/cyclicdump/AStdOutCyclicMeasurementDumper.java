@@ -1,7 +1,8 @@
 package com.ajjpj.asysmon.datasink.cyclicdump;
 
-
 import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.asysmon.config.ASysMonAware;
+
 
 /**
  * @author arno

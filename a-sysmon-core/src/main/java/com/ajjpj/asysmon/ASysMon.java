@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.ASysMonAware;
-import com.ajjpj.asysmon.config.wiring.ADefaultConfigFactory;
+import com.ajjpj.asysmon.config.ADefaultConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
