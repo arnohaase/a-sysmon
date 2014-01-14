@@ -2,6 +2,7 @@ package com.ajjpj.asysmon;
 
 
 import com.ajjpj.asysmon.datasink.ADataSink;
+import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.measure.threadpool.AThreadCountMeasurer;
 
@@ -20,6 +21,10 @@ public class ASysMonConfigurer {
         sysMon.addScalarMeasurer(m);
     }
 
+    public static void addEnvironmentMeasurer(ASysMon sysMon, AEnvironmentMeasurer m) {
+        sysMon.addEnvironmentMeasurer(m);
+    }
+
     public static void addDataSink(ASysMon sysMon, ADataSink handler) {
         sysMon.addDataSink(handler);
     }
@@ -27,7 +32,7 @@ public class ASysMonConfigurer {
     /**
      * This is a convenience method to register thread count in all relevant places.
      */
-    public static void addThreadCountSupport(ASysMon sysMon) {
+    public static void addThreadCountSupport(ASysMon sysMon) {     //TODO resolve this?
         final AThreadCountMeasurer threadCountMeasurer = new AThreadCountMeasurer();
         addScalarMeasurer(sysMon, threadCountMeasurer);
         addDataSink(sysMon, threadCountMeasurer.counter);

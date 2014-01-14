@@ -2,6 +2,7 @@ package com.ajjpj.asysmon.measure.scalar;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonConfigurer;
+import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author arno
  */
-public class AJmxGcMeasurerer implements AScalarMeasurer {
+public class AJmxGcMeasurerer implements AScalarMeasurer, ASysMonAware {
     public static final String IDENT_GC_TRACE_ROOT = "Garbage Collection";
 
     public static final String KEY_ID = "gc-id";
@@ -43,7 +44,7 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
     private static final int MILLIS_PER_MINUTE = 60 * 1000;
     private static final int MILLION = 1000*1000;
 
-    private final ASysMon sysMon;
+    private volatile ASysMon sysMon;
 
     private final GcNotificationListener listener = new GcNotificationListener();
 
@@ -51,21 +52,7 @@ public class AJmxGcMeasurerer implements AScalarMeasurer {
     private final Map<String, Long> timeFracInGcPpm = new ConcurrentHashMap<String, Long>();
     private final Map<String, Long> gcFrequencyPerMinuteTimes100 = new ConcurrentHashMap<String, Long>();
 
-    /**
-     * This method encapsulates registration logic for JMX based GC measurements. It also registers callbacks for
-     *  orderly deregistration during shutdown.
-     */
-    public static void init(ASysMon sysMon) {
-        if(sysMon.getConfig().isGloballyDisabled()) {
-            return;
-        }
-
-        final AJmxGcMeasurerer jmxGcMeasurerer = new AJmxGcMeasurerer(sysMon);
-        ASysMonConfigurer.addScalarMeasurer(sysMon, jmxGcMeasurerer);
-    }
-
-
-    AJmxGcMeasurerer(ASysMon sysMon) {
+    @Override public void setASysMon(ASysMon sysMon) {
         this.sysMon = sysMon;
 
         for (GarbageCollectorMXBean gcbean : ManagementFactory.getGarbageCollectorMXBeans()) {

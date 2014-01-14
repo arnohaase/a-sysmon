@@ -41,8 +41,7 @@ public class ADefaultConfigFactory implements AConfigFactory {
 
                 configuredLogger = getLogger(propsRaw);
                 final ConfigPropsFile props = new ConfigPropsFile(propsRaw, getLogger(propsRaw));
-                final AOption<AConfigFactory> factoryOption = props.createInstance (KEY_CONFIG_FACTORY, props.get(KEY_CONFIG_FACTORY, false), AConfigFactory.class);
-                return factoryOption.getOrElse(new ADefaultConfigFactory());
+                return props.get(KEY_CONFIG_FACTORY, AOption.some(new ADefaultConfigFactory()), AConfigFactory.class);
             }
         });
     }
@@ -103,18 +102,18 @@ public class ADefaultConfigFactory implements AConfigFactory {
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder("app", "version", "instance", "#ff8000"); //TODO config
         builder.setLogger(getConfiguredLogger());
 
-        for(AEnvironmentMeasurer m: props.createInstances(KEY_ENV_MEASURERS, AEnvironmentMeasurer.class)) {
+        for(AEnvironmentMeasurer m: props.getList(KEY_ENV_MEASURERS, AEnvironmentMeasurer.class)) {
             builder.addEnvironmentMeasurer(m);
         }
 
-        for(AScalarMeasurer m: props.createInstances(KEY_SCALAR_MEASURERS, AScalarMeasurer.class)) {
+        for(AScalarMeasurer m: props.getList(KEY_SCALAR_MEASURERS, AScalarMeasurer.class)) {
             builder.addScalarMeasurer(m);
         }
 
-        for(String menuEntryRaw: props.getAndSplit(KEY_PRESENTATION_MENUS, true)) {
+        for(String menuEntryRaw: props.getListRaw(KEY_PRESENTATION_MENUS)) {
             final String menuEntry = menuEntryRaw.trim();
 
-            final List<APresentationPageDefinition> pageDefs = props.createInstances(KEY_PRESENTATION_MENUS + "." + menuEntry, APresentationPageDefinition.class);
+            final List<APresentationPageDefinition> pageDefs = props.getList(KEY_PRESENTATION_MENUS + "." + menuEntry, APresentationPageDefinition.class);
             builder.addPresentationMenuEntry(menuEntry, pageDefs);
         }
 

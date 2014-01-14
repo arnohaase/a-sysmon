@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon;
 
+import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.config.wiring.ADefaultConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
@@ -36,6 +37,7 @@ public class ASysMon implements AShutdownable {
     private final ASysMonConfig config;
     private volatile AList<ADataSink> handlers = AList.nil();
     private volatile AList<AScalarMeasurer> scalarMeasurers = AList.nil();
+    private volatile AList<AEnvironmentMeasurer> environmentMeasurers = AList.nil();
 
     private final ThreadLocal<AMeasurementHierarchy> hierarchyPerThread = new ThreadLocal<AMeasurementHierarchy>();
 
@@ -48,11 +50,15 @@ public class ASysMon implements AShutdownable {
         this.config = config;
 
         for(AScalarMeasurer m: config.initialScalarMeasurers) {
-            scalarMeasurers = scalarMeasurers.cons(m);
+            addScalarMeasurer(m);
         }
 
         for(ADataSink h: config.initialDataSinks) {
-            this.handlers = this.handlers.cons(h);
+            addDataSink(h);
+        }
+
+        for(AEnvironmentMeasurer m: config.initialEnvironmentMeasurers) {
+            addEnvironmentMeasurer(m);
         }
     }
 
@@ -60,11 +66,24 @@ public class ASysMon implements AShutdownable {
         return config;
     }
 
-    synchronized void addScalarMeasurer(AScalarMeasurer m) {
+    private void injectSysMon(Object o) {
+        if(o instanceof ASysMonAware) {
+            ((ASysMonAware) o).setASysMon(this);
+        }
+    }
+
+    void addScalarMeasurer(AScalarMeasurer m) {
+        injectSysMon(m);
         scalarMeasurers = scalarMeasurers.cons(m);
     }
 
-    synchronized void addDataSink(ADataSink handler) {
+    void addEnvironmentMeasurer(AEnvironmentMeasurer m) {
+        injectSysMon(m);
+        environmentMeasurers = environmentMeasurers.cons(m);
+    }
+
+    void addDataSink(ADataSink handler) {
+        injectSysMon(handler);
         handlers = handlers.cons(handler);
     }
 
@@ -184,7 +203,7 @@ public class ASysMon implements AShutdownable {
             return result;
         }
 
-        for(AEnvironmentMeasurer m: config.environmentMeasurers) {
+        for(AEnvironmentMeasurer m: environmentMeasurers) {
             m.contributeMeasurements(new AEnvironmentMeasurer.EnvironmentCollector(result));
             //TODO protect against exceptions (per measurer)
             //TODO limit duration per measurer

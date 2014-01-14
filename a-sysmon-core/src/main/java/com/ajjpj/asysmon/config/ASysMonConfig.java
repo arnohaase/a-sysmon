@@ -27,7 +27,7 @@ public class ASysMonConfig {
 
     public final boolean implicitlyShutDownWithServlet;
 
-    public final List<AEnvironmentMeasurer> environmentMeasurers;
+    public final List<AEnvironmentMeasurer> initialEnvironmentMeasurers;
     public final List<AScalarMeasurer> initialScalarMeasurers;
     public final List<ADataSink> initialDataSinks;
 
@@ -45,7 +45,7 @@ public class ASysMonConfig {
         this.logger = logger;
         this.timer = timer;
         this.implicitlyShutDownWithServlet = implicitlyShutDownWithServlet;
-        this.environmentMeasurers = Collections.unmodifiableList(environmentMeasurers);
+        this.initialEnvironmentMeasurers = Collections.unmodifiableList(environmentMeasurers);
         this.initialScalarMeasurers = Collections.unmodifiableList(initialScalarMeasurers);
         this.initialDataSinks = Collections.unmodifiableList(initialDataSinks);
         this.presentationMenuEntries = Collections.unmodifiableList(presentationMenuEntries);
