@@ -11,6 +11,7 @@ import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AFunction0;
 import com.ajjpj.asysmon.util.AOption;
 import com.ajjpj.asysmon.util.AUnchecker;
+import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.io.InputStream;
 import java.util.List;
@@ -29,6 +30,7 @@ public class ADefaultConfigFactory implements AConfigFactory {
 
     public static final String KEY_CONFIG_FACTORY = "config-factory";
     public static final String KEY_LOGGER = "logger";
+    public static final String KEY_TIMER = "timer";
     public static final String KEY_ENV_MEASURERS = "env-measurers";
     public static final String KEY_SCALAR_MEASURERS = "scalar-measurers";
     public static final String KEY_DATA_SINKS = "data-sinks";
@@ -111,6 +113,8 @@ public class ADefaultConfigFactory implements AConfigFactory {
         final AApplicationInfoProvider appInfo = props.get("application-info", AApplicationInfoProvider.class);
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder(appInfo);
         builder.setLogger(getConfiguredLogger());
+        builder.setTimer(props.get(KEY_TIMER, ATimer.class));
+
         builder.setAveragingDelayForScalarsMillis(props.get(KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS, Integer.TYPE));
 
         builder.setMeasurementTimeoutNanos(props.get(KEY_MEASUREMENT_TIMEOUT_NANOS, Long.TYPE));

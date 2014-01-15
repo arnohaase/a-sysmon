@@ -27,7 +27,7 @@ public class ASysMonConfig {
     public final int maxNumDataSinkTimeouts;
 
     public final ASysMonLogger logger;
-    public final ATimer timer; //TODO make configurable
+    public final ATimer timer;
 
     public final List<AEnvironmentMeasurer> initialEnvironmentMeasurers;
     public final List<AScalarMeasurer> initialScalarMeasurers;
