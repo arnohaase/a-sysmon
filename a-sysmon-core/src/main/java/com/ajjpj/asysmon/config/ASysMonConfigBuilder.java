@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.config;
 
+import com.ajjpj.asysmon.appinfo.AApplicationInfoProvider;
 import com.ajjpj.asysmon.config.log.ALog4JLogger;
 import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
@@ -20,10 +21,7 @@ import java.util.List;
  * @author arno
  */
 public class ASysMonConfigBuilder {
-    private String applicationId;
-    private String applicationVersionId;
-    private String applicationInstanceId;
-    private String applicationInstanceHtmlColorCode;
+    private AApplicationInfoProvider appInfo;
 
     private int averagingDelayForScalarsMillis = 1000;
 
@@ -42,31 +40,13 @@ public class ASysMonConfigBuilder {
 
     private final List<APresentationMenuEntry> presentationMenuEntries = new ArrayList<APresentationMenuEntry>();
 
-    public ASysMonConfigBuilder(String applicationId, String applicationVersionId, String applicationInstanceId, String applicationInstanceHtmlColorCode) {
-        this.applicationId = applicationId;
-        this.applicationVersionId = applicationVersionId;
-        this.applicationInstanceId = applicationInstanceId;
-        this.applicationInstanceHtmlColorCode = applicationInstanceHtmlColorCode;
+    public ASysMonConfigBuilder(AApplicationInfoProvider appInfo) {
+        this.appInfo = appInfo;
     }
 
     @SuppressWarnings("unused")
-    public ASysMonConfigBuilder setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
-        return this;
-    }
-    @SuppressWarnings("unused")
-    public ASysMonConfigBuilder setApplicationVersionId(String applicationVersionId) {
-        this.applicationVersionId = applicationVersionId;
-        return this;
-    }
-    @SuppressWarnings("unused")
-    public ASysMonConfigBuilder setApplicationInstanceId(String applicationInstanceId) {
-        this.applicationInstanceId = applicationInstanceId;
-        return this;
-    }
-    @SuppressWarnings("unused")
-    public ASysMonConfigBuilder setApplicationInstanceHtmlColorCode(String applicationInstanceHtmlColorCode) {
-        this.applicationInstanceHtmlColorCode = applicationInstanceHtmlColorCode;
+    public ASysMonConfigBuilder setApplicationInfo(AApplicationInfoProvider appInfo) {
+        this.appInfo = appInfo;
         return this;
     }
 
@@ -131,7 +111,7 @@ public class ASysMonConfigBuilder {
 
     public ASysMonConfig build() {
         return new ASysMonConfig(
-                applicationId, applicationVersionId, applicationInstanceId, applicationInstanceHtmlColorCode,
+                appInfo,
                 averagingDelayForScalarsMillis,
                 measurementTimeoutNanos, maxNumMeasurementTimeouts,
                 dataSinkTimeoutNanos, maxNumDataSinkTimeouts,

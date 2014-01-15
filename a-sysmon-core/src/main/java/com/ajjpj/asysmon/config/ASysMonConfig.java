@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.config;
 
+import com.ajjpj.asysmon.appinfo.AApplicationInfoProvider;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
 import com.ajjpj.asysmon.datasink.ADataSink;
@@ -15,10 +16,7 @@ import java.util.List;
  * @author arno
  */
 public class ASysMonConfig {
-    public final String applicationId;
-    public final String applicationVersionId;
-    public final String applicationInstanceId;
-    public final String applicationInstanceHtmlColorCode;
+    public final AApplicationInfoProvider appInfo;
 
     public final int averagingDelayForScalarsMillis;
 
@@ -37,14 +35,11 @@ public class ASysMonConfig {
 
     public final List<APresentationMenuEntry> presentationMenuEntries;
 
-    public ASysMonConfig(String applicationId, String applicationVersionId, String instanceId, String instanceHtmlColorCode,
+    public ASysMonConfig(AApplicationInfoProvider appInfo,
                          int averagingDelayForScalarsMillis, long measurementTimeoutNanos, int maxNumMeasurementTimeouts, long dataSinkTimeoutNanos, int maxNumDataSinkTimeouts,
                          ASysMonLogger logger, ATimer timer,
                          List<AEnvironmentMeasurer> environmentMeasurers, List<AScalarMeasurer> initialScalarMeasurers, List<ADataSink> initialDataSinks, List<APresentationMenuEntry> presentationMenuEntries) {
-        this.applicationId = applicationId;
-        this.applicationVersionId = applicationVersionId;
-        this.applicationInstanceId = instanceId;
-        this.applicationInstanceHtmlColorCode = instanceHtmlColorCode;
+        this.appInfo = appInfo;
         this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
         this.measurementTimeoutNanos = measurementTimeoutNanos;
         this.maxNumMeasurementTimeouts = maxNumMeasurementTimeouts;

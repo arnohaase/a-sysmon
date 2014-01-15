@@ -15,6 +15,10 @@ public class ALog4JLogger implements ASysMonLogger {
         log.debug(msg.apply());
     }
 
+    @Override public void info(String msg) {
+        log.info(msg);
+    }
+
     @Override public void warn(String msg) {
         log.warn(msg);
     }

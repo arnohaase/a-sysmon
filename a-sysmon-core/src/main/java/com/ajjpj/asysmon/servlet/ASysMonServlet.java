@@ -87,13 +87,19 @@ public class ASysMonServlet extends AbstractASysMonServlet {
         json.startObject();
 
         json.writeKey("applicationId");
-        json.writeStringLiteral(config.applicationId);
+        json.writeStringLiteral(config.appInfo.getApplicationName());
 
-        json.writeKey("applicationInstanceId");
-        json.writeStringLiteral(config.applicationInstanceId);
+        json.writeKey("applicationDeployment");
+        json.writeStringLiteral(config.appInfo.getDeployment());
+
+        json.writeKey("applicationNode");
+        json.writeStringLiteral(config.appInfo.getNodeId());
+
+        json.writeKey("applicationVersion");
+        json.writeStringLiteral(config.appInfo.getVersion());
 
         json.writeKey("applicationInstanceHtmlColorCode");
-        json.writeStringLiteral(config.applicationInstanceHtmlColorCode);
+        json.writeStringLiteral(config.appInfo.getHtmlColorCode());
 
         json.writeKey("menuEntries");
         json.startArray();

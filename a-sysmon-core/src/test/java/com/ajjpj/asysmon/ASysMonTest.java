@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon;
 
 
+import com.ajjpj.asysmon.appinfo.ADefaultApplicationInfoProvider;
 import com.ajjpj.asysmon.config.ASysMonConfigBuilder;
 import com.ajjpj.asysmon.config.log.AStdOutLogger;
 import com.ajjpj.asysmon.data.AHierarchicalData;
@@ -18,6 +19,8 @@ import com.ajjpj.asysmon.testutil.ExplicitTimer;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.UnknownHostException;
+
 import static org.junit.Assert.*;
 
 
@@ -28,8 +31,8 @@ public class ASysMonTest {
     private ASysMonConfigBuilder configBuilder;
 
     @Before
-    public void before() {
-        configBuilder = new ASysMonConfigBuilder("dummy", "version", "instance", "#ff8000");
+    public void before() throws UnknownHostException {
+        configBuilder = new ASysMonConfigBuilder(new ADefaultApplicationInfoProvider("dummy", "version"));
         configBuilder.setLogger(AStdOutLogger.INSTANCE);
     }
 

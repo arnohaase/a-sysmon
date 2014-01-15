@@ -22,7 +22,11 @@ todo
 
   * read versions from manifests of JAR files (?)
 
-  * exception handling, limit time for single measurement
+  * network: display bytes instead of packets
+  * make timer configurable
+  * make app, instance and version configurable
+
+  * tune timeouts
 
   * add more scalar measurements
     * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
@@ -62,9 +66,6 @@ todo
 
   * Felix: cache hit / miss etc.
 
-* cleanup
-  * aggregation for built-in servlets: change to lock-free implementation
-
 * limit measurement time for scalars and environment data
 
 * logo in report servlets (?)
@@ -100,10 +101,6 @@ AOP:
 discuss
 -------
 * how to deal with data sources in app server --> outside application scope
-
-* Felix
-  * Disk IO, network per PID?
-  * network traffic: packets or bytes?
 
 documentation
 -------------
