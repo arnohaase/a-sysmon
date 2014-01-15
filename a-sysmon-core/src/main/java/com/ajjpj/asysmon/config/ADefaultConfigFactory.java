@@ -108,12 +108,7 @@ public class ADefaultConfigFactory implements AConfigFactory {
     public ASysMonConfig getConfig() {
         final ConfigPropsFile props = new ConfigPropsFile(getProperties(), getConfiguredLogger());
 
-        final AApplicationInfoProvider appInfo = AUnchecker.executeUnchecked(new AFunction0<AApplicationInfoProvider, Exception>() {
-            @Override public AApplicationInfoProvider apply() throws Exception {
-                return new ADefaultApplicationInfoProvider("demo", "version"); //TODO props.get("application-info", AApplicationInfoProvider.class);
-            }
-        });
-//        final AApplicationInfoProvider appInfo = new ADefaultApplicationInfoProvider("demo", "version"); //TODO props.get("application-info", AApplicationInfoProvider.class);
+        final AApplicationInfoProvider appInfo = props.get("application-info", AApplicationInfoProvider.class);
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder(appInfo);
         builder.setLogger(getConfiguredLogger());
         builder.setAveragingDelayForScalarsMillis(props.get(KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS, Integer.TYPE));

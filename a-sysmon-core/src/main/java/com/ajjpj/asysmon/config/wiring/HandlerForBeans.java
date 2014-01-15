@@ -17,7 +17,7 @@ public class HandlerForBeans implements ConfigTypeHandler {
     @Override public Object handle(ConfigValueResolver r, String key, String value, Class<?> type, Class<?>[] paramTypes) throws Exception {
         final AOption<Class> explicitClass = classForName(value);
         if(explicitClass.isDefined()) {
-            return getCreator(explicitClass.get(), 0, type, r).create();
+            return getAndInvokeCreator(explicitClass.get(), type, r);
         }
 
         return createFromChildRef(value, type, r);
@@ -28,19 +28,30 @@ public class HandlerForBeans implements ConfigTypeHandler {
         if(beanFactory.isDefined()) {
             return creatorFromBeanFactory(cls, beanFactory.get().factoryMethod(), numParams, expectedType, r);
         }
-        return creatorFromExplicitClass(cls, numParams, r);
+        return creatorFromExplicitClass(cls, numParams, expectedType, r);
 
+    }
+
+    private Object getAndInvokeCreator(Class cls, Class expectedType, ConfigValueResolver r) throws Exception {
+        final int numParams = getNumParams(r);
+        final InstanceCreator creator = getCreator(cls, numParams, expectedType, r);
+
+        final Object[] params = new Object[numParams];
+        for(int i=0; i<numParams; i++) {
+            params[i] = r.child(creator.getParameterTypes()[i], new Class<?>[0], String.valueOf(i)).get(AOption.none());
+        }
+        return creator.create(params);
     }
 
     //TODO list instead of placeholder or fqn: expected type, list elements as ctor params
 
-    private Object createFromChildRef(String value, Class type, ConfigValueResolver r) throws Exception {
+    private Object createFromChildRef(String value, Class expectedType, ConfigValueResolver r) throws Exception {
         if(value.contains(".")) {
             r.throwConfigError("value is not a fully qualified class name: " + value);
         }
 
         // retrieve child element to get the class name
-        final ConfigValueResolver childResolver = r.child(type, new Class<?>[0], value);
+        final ConfigValueResolver childResolver = r.child(expectedType, new Class<?>[0], value);
         final AOption<String> classNameRaw = childResolver.getRaw();
         if(classNameRaw.isEmpty()) {
             r.throwConfigError("no class name specified");
@@ -50,14 +61,7 @@ public class HandlerForBeans implements ConfigTypeHandler {
             r.throwConfigError(classNameRaw + " is not a valid class name");
         }
 
-        final int numParams = getNumParams(childResolver);
-        final InstanceCreator creator = getCreator(optChildClass.get(), numParams, type, childResolver);
-
-        final Object[] params = new Object[numParams];
-        for(int i=0; i<numParams; i++) {
-            params[i] = childResolver.child(creator.getParameterTypes()[i], new Class<?>[0], String.valueOf(i)).get(AOption.none());
-        }
-        return creator.create(params);
+        return getAndInvokeCreator(optChildClass.get(), expectedType, childResolver);
     }
 
     private int getNumParams(ConfigValueResolver r) {
@@ -71,14 +75,17 @@ public class HandlerForBeans implements ConfigTypeHandler {
         return 1000;
     }
 
-    private InstanceCreator creatorFromExplicitClass(Class cls, int numParams, ConfigValueResolver r) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
+    private InstanceCreator creatorFromExplicitClass(Class cls, int numParams, Class expectedType, ConfigValueResolver r) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
+        if(!expectedType.isAssignableFrom(cls)) {
+            throw new IllegalArgumentException("Configured type " + cls.getName() + " is not assignable to expected type " + expectedType.getName() + ".");
+        }
         for(Constructor ctor: cls.getConstructors()) {
             if(ctor.getParameterTypes().length == numParams) {
                 return new CtorInstanceCreator(ctor);
             }
         }
 
-        r.throwConfigError("no constructor with " + numParams + " parameters");
+        r.throwConfigError("no constructor for class " + cls.getName() + " with " + numParams + " parameters");
         return null; // for the compiler
     }
 
