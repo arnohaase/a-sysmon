@@ -3,6 +3,7 @@ package com.ajjpj.asysmon.impl;
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.datasink.ADataSink;
@@ -101,9 +102,9 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         };
     }
 
-    private AMeasurementHierarchy getMeasurementHierarchy() {
+    private AMeasurementHierarchy getMeasurementHierarchy(boolean create) {
         final AMeasurementHierarchy candidate = hierarchyPerThread.get();
-        if(candidate != null) {
+        if(candidate != null || ! create) {
             return candidate;
         }
 
@@ -134,7 +135,25 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         return start(identifier, true);
     }
     @Override public ASimpleMeasurement start(String identifier, boolean serial) {
-        return getMeasurementHierarchy().start(identifier, serial);
+        return getMeasurementHierarchy(true).start(identifier, serial);
+    }
+
+    @Override
+    public void startFlow(ACorrelationId flowId) { //TODO test this
+        final AMeasurementHierarchy h = getMeasurementHierarchy(false);
+        if(h == null) {
+            throw new IllegalStateException("flow handling only while a measurement is running");
+        }
+        h.onStartFlow(flowId);
+    }
+
+    @Override
+    public void joinFlow(ACorrelationId flowId) {
+        final AMeasurementHierarchy h = getMeasurementHierarchy(false);
+        if(h == null) {
+            throw new IllegalStateException("flow handling only while a measurement is running");
+        }
+        h.onJoinFlow(flowId);
     }
 
     /**
@@ -150,7 +169,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         return startCollectingMeasurement(identifier, true);
     }
     @Override public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean serial) {
-        return getMeasurementHierarchy().startCollectingMeasurement(identifier, serial);
+        return getMeasurementHierarchy(true).startCollectingMeasurement(identifier, serial);
     }
 
     @Override public Map<String, AScalarDataPoint> getScalarMeasurements() {

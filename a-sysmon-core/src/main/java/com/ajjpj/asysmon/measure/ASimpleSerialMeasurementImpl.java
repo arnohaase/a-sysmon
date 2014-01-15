@@ -1,5 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
+import com.ajjpj.asysmon.config.ADefaultConfigFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,7 +27,9 @@ class ASimpleSerialMeasurementImpl implements ASimpleMeasurement {
     }
 
     @Override public void addParameter(String identifier, String value) {
-        parameters.put(identifier, value); //TODO warn of duplicates?
+        if(parameters.put(identifier, value) != null) {
+            ADefaultConfigFactory.getConfiguredLogger().warn("duplicate parameter " + identifier + " for a measurement");
+        }
     }
 
     public void finish() {

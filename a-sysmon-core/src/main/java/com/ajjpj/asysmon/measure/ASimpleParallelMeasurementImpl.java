@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.measure;
 
+import com.ajjpj.asysmon.config.ADefaultConfigFactory;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.util.AObjectHolder;
 
@@ -31,7 +32,9 @@ class ASimpleParallelMeasurementImpl implements ASimpleMeasurement {
     }
 
     @Override public void addParameter(String identifier, String value) {
-        parameters.put(identifier, value); //TODO warn of duplicates?
+        if(parameters.put(identifier, value) != null) {
+            ADefaultConfigFactory.getConfiguredLogger().warn("duplicate parameter " + identifier + " for a measurement");
+        }
     }
 
     public void finish() {

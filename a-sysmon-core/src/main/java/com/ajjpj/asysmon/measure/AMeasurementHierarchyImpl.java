@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.measure;
 
+import com.ajjpj.asysmon.config.ADefaultConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
@@ -224,18 +225,20 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
      * notifies that this measurements contains the start of a new 'flow', i.e. it is the first point in a (potential) chain
      *  of measurements that are somehow correlated.
      */
-    public void onStartFlow(ACorrelationId correlationId) {
-        //TODO warn duplicates - in both collections
-        startedFlows.add(correlationId);
+    @Override public void onStartFlow(ACorrelationId correlationId) {
+        if(!startedFlows.add(correlationId)) {
+            ADefaultConfigFactory.getConfiguredLogger().warn("called 'startFlow' for flow " + correlationId + " twice");
+        }
     }
 
     /**
      * notifies that this measurements is part of an existing 'flow', i.e. there is another measurement that 'started' a
      *  set of measurements that are somehow correlated.
      */
-    public void onJoinFlow(ACorrelationId correlationId) {
-        //TODO warn duplicates - in both collections
-        joinedFlows.add(correlationId);
+    @Override public void onJoinFlow(ACorrelationId correlationId) {
+        if(!joinedFlows.add(correlationId)) {
+            ADefaultConfigFactory.getConfiguredLogger().warn("called 'joinFlow' for flow " + correlationId + " twice");
+        }
     }
 }
 
