@@ -36,11 +36,6 @@ angular.module('ASysMonApp').controller('CtrlThreadDump', function($scope, $http
 
     function sendCommand(cmd) {
         Rest.call(cmd, initFromResponse);
-//
-//        //TODO extract to asysmon module; add error handling
-//        $http.get('_$_asysmon_$_/rest/threaddump/' + cmd).success(function(data) {
-//            initFromResponse(data);
-//        });
     }
 
     $scope.activeThreads = function() {

@@ -20,6 +20,11 @@ todo
 * core
   * test on Windows --> graceful degradation
 
+  * cleanup
+    * default page from config in asysmon-app.js
+    * error handling for Rest calls in asysmon-module.js
+    * AHttpRequestMeasuringFilter: default HTTP analyzer class fqn --> config file
+
   * read versions from manifests of JAR files (?)
 
   * network: display bytes instead of packets

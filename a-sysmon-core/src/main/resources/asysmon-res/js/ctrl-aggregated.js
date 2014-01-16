@@ -191,9 +191,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         });
     }
 
-    $scope.pickClass = function() {
-        return $scope.isInPickMode ? 'btn-danger' : 'btn-default';
-    };
     $scope.$watch('traces === pickedTraces', function() {
         $('#unpick').attr('disabled', $scope.traces === $scope.pickedTraces);
     });
@@ -300,8 +297,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         return result;
     }
 
-    //TODO remove most function from $scope
-    //TODO move 'formatNumber' to asysmon module
     function htmlForTreeNode(curNode) {
         var dataRowSubdued = curNode.isSerial ? '' : 'data-row-subdued';
 
@@ -347,7 +342,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         var result =
             '<div class="data-row data-row-' + (curNode.level - $scope.rootLevel) + withChildrenClass + ' ' + dataRowSubdued + '" ' + tooltip + '>' +
                 '<div class="fqn-holder">' + curNode.fqn + '</div>' +
-                '<div class="node-icon ' + $scope.nodeIconClass(curNode.fqn) + '">&nbsp;</div>' + //TODO {{nodeIconClass(curNode.fqn)}}
+                '<div class="node-icon ' + $scope.nodeIconClass(curNode.fqn) + '">&nbsp;</div>' +
                 dataCols +
                 '<div class="node-text" style="margin-right: ' + $scope.totalDataWidth + 'px;">' + escapeHtml(curNode.name) + '</div>' +
                 '</div>';
