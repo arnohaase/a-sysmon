@@ -6,11 +6,18 @@ import com.ajjpj.asysmon.util.AStringFunction;
 /**
  * @author arno
  */
-public class CountingLogger implements ASysMonLogger {
+public class CountingLogger extends ASysMonLogger {
     public int numDebug = 0;
     public int numInfo = 0;
     public int numWarn = 0;
     public int numError = 0;
+
+    public void reset() {
+        numDebug = 0;
+        numInfo = 0;
+        numWarn = 0;
+        numError = 0;
+    }
 
     @Override public void debug(AStringFunction msg) {
         numDebug += 1;

@@ -3,6 +3,7 @@ package com.ajjpj.asysmon.impl;
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
@@ -33,6 +34,8 @@ import java.util.TreeMap;
  * @author arno
  */
 public class ASysMonImpl implements AShutdownable, ASysMonApi {
+    private static final ASysMonLogger log = ASysMonLogger.get(ASysMonImpl.class);
+
     private final ASysMonConfig config;
     private volatile AList<RobustDataSinkWrapper> handlers = AList.nil();
     private volatile AList<RobustScalarMeasurerWrapper> scalarMeasurers = AList.nil();
@@ -68,17 +71,17 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
 
     void addScalarMeasurer(AScalarMeasurer m) {
         injectSysMon(m);
-        scalarMeasurers = scalarMeasurers.cons(new RobustScalarMeasurerWrapper(m, config.logger, config.measurementTimeoutNanos, config.maxNumMeasurementTimeouts));
+        scalarMeasurers = scalarMeasurers.cons(new RobustScalarMeasurerWrapper(m, config.measurementTimeoutNanos, config.maxNumMeasurementTimeouts));
     }
 
     void addEnvironmentMeasurer(AEnvironmentMeasurer m) {
         injectSysMon(m);
-        environmentMeasurers = environmentMeasurers.cons(new RobustEnvironmentMeasurerWrapper(m, config.logger, config.measurementTimeoutNanos, config.maxNumMeasurementTimeouts));
+        environmentMeasurers = environmentMeasurers.cons(new RobustEnvironmentMeasurerWrapper(m, config.measurementTimeoutNanos, config.maxNumMeasurementTimeouts));
     }
 
     void addDataSink(ADataSink handler) {
         injectSysMon(handler);
-        handlers = handlers.cons(new RobustDataSinkWrapper(handler, config.logger, config.dataSinkTimeoutNanos, config.maxNumDataSinkTimeouts));
+        handlers = handlers.cons(new RobustDataSinkWrapper(handler, config.dataSinkTimeoutNanos, config.maxNumDataSinkTimeouts));
     }
 
     private ADataSink getCompositeDataSink() {
@@ -212,7 +215,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
     }
 
     @Override public void shutdown() {
-        config.logger.info("shutting down A-SysMon");
+        log.info("shutting down A-SysMon");
 
         for(RobustDataSinkWrapper handler: handlers) {
             handler.shutdown();
@@ -225,7 +228,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
             m.shutdown();
         }
 
-        config.logger.info("finished shutting down A-SysMon");
+        log.info("finished shutting down A-SysMon");
     }
 }
 

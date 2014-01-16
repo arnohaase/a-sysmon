@@ -1,8 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.asysmon.config.ADefaultConfigFactory;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -10,6 +9,8 @@ import java.util.TreeMap;
  * @author arno
  */
 class ASimpleSerialMeasurementImpl implements ASimpleMeasurement {
+    private static final ASysMonLogger log = ASysMonLogger.get(ASimpleSerialMeasurementImpl.class);
+
     private final AMeasurementHierarchy hierarchy;
 
     private final long startTimeMillis = System.currentTimeMillis();
@@ -28,7 +29,7 @@ class ASimpleSerialMeasurementImpl implements ASimpleMeasurement {
 
     @Override public void addParameter(String identifier, String value) {
         if(parameters.put(identifier, value) != null) {
-            ADefaultConfigFactory.getConfiguredLogger().warn("duplicate parameter " + identifier + " for a measurement");
+            log.warn("duplicate parameter " + identifier + " for a measurement");
         }
     }
 

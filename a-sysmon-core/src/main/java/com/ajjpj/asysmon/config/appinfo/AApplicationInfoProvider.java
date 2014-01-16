@@ -1,4 +1,4 @@
-package com.ajjpj.asysmon.appinfo;
+package com.ajjpj.asysmon.config.appinfo;
 
 
 /**

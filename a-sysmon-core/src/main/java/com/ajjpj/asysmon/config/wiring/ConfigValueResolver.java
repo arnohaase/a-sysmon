@@ -16,16 +16,16 @@ class ConfigValueResolver {
             new HandlerForBeans() // catch-all --> must be last
     };
 
+    private static final ASysMonLogger log = ASysMonLogger.get(ConfigValueResolver.class);
+
     private final Properties props;
-    private final ASysMonLogger log;
 
     private final String key;
     private final Class<?> type;
     private final Class<?>[] paramTypes;
 
-    ConfigValueResolver(Properties props, ASysMonLogger log, String key, Class<?> type, Class<?>[] paramTypes) {
+    ConfigValueResolver(Properties props, String key, Class<?> type, Class<?>[] paramTypes) {
         this.props = props;
-        this.log = log;
 
         this.key = key;
         this.type = type;
@@ -64,7 +64,7 @@ class ConfigValueResolver {
     AOption<String> getRaw() {
         final AOption<String> aliasKey = child(null, null, "alias").getRawWithoutAlias();
         if(aliasKey.isDefined() && props.containsKey(aliasKey.get())) {
-            return new ConfigValueResolver(props, log, aliasKey.get(), type, paramTypes).getRawWithoutAlias();
+            return new ConfigValueResolver(props, aliasKey.get(), type, paramTypes).getRawWithoutAlias();
         }
 
         return getRawWithoutAlias();
@@ -83,7 +83,7 @@ class ConfigValueResolver {
         for(String s: keySegments) {
             childKey += "." + s;
         }
-        return new ConfigValueResolver(props, log, childKey, type, paramTypes);
+        return new ConfigValueResolver(props, childKey, type, paramTypes);
     }
 
     void throwConfigError(String msg) {

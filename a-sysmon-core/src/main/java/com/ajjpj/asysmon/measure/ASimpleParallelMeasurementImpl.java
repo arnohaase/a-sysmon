@@ -1,10 +1,8 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.asysmon.config.ADefaultConfigFactory;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.AHierarchicalData;
-import com.ajjpj.asysmon.util.AObjectHolder;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,6 +11,8 @@ import java.util.TreeMap;
  * @author arno
  */
 class ASimpleParallelMeasurementImpl implements ASimpleMeasurement {
+    private static final ASysMonLogger log = ASysMonLogger.get(ASimpleParallelMeasurementImpl.class);
+
     private final long startTimeMillis = System.currentTimeMillis();
     private final long startTimeNanos; // this number has no absolute meaning and is useful only for measuring differences
     private final String identifier;
@@ -33,7 +33,7 @@ class ASimpleParallelMeasurementImpl implements ASimpleMeasurement {
 
     @Override public void addParameter(String identifier, String value) {
         if(parameters.put(identifier, value) != null) {
-            ADefaultConfigFactory.getConfiguredLogger().warn("duplicate parameter " + identifier + " for a measurement");
+            log.warn("duplicate parameter " + identifier + " for a measurement");
         }
     }
 

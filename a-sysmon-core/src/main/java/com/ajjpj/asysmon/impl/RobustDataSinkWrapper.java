@@ -3,7 +3,6 @@ package com.ajjpj.asysmon.impl;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.util.AShutdownable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,8 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author arno
  */
 class RobustDataSinkWrapper { //TODO provide a means for a data sink to specify its own timeout? --> cyclic scalar dumping...
+    private static final ASysMonLogger log = ASysMonLogger.get(RobustDataSinkWrapper.class);
+
     private final ADataSink inner;
-    private final ASysMonLogger log;
 
     private final long timeoutNanos;
     private final int maxNumTimeouts;
@@ -105,9 +105,8 @@ class RobustDataSinkWrapper { //TODO provide a means for a data sink to specify 
 
     private volatile Strategy strategy = ENABLED;
 
-    RobustDataSinkWrapper(ADataSink inner, ASysMonLogger log, long timeoutNanos, int maxNumTimeouts) {
+    RobustDataSinkWrapper(ADataSink inner, long timeoutNanos, int maxNumTimeouts) {
         this.inner = inner;
-        this.log = log;
         this.timeoutNanos = timeoutNanos;
         this.maxNumTimeouts = maxNumTimeouts;
     }

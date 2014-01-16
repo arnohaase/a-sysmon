@@ -1,8 +1,9 @@
 package com.ajjpj.asysmon.config;
 
-import com.ajjpj.asysmon.appinfo.AApplicationInfoProvider;
-import com.ajjpj.asysmon.appinfo.ADefaultApplicationInfoProvider;
-import com.ajjpj.asysmon.config.log.ASysMonLogger;
+import com.ajjpj.asysmon.config.appinfo.AApplicationInfoProvider;
+import com.ajjpj.asysmon.config.log.ALog4JLoggerFactory;
+import com.ajjpj.asysmon.config.log.AStdOutLoggerFactory;
+import com.ajjpj.asysmon.config.log.ASysMonLoggerFactory;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.config.wiring.ConfigPropsFile;
 import com.ajjpj.asysmon.datasink.ADataSink;
@@ -44,42 +45,63 @@ public class ADefaultConfigFactory implements AConfigFactory {
     public static final String KEY_DATA_SINK_TIMEOUT_NANOS = "data-sink-timeout-nanos";
     public static final String KEY_MAX_NUM_DATA_SINK_TIMEOUTS = "max-num-data-sink-timeouts";
 
-    private static volatile ASysMonLogger configuredLogger;
+    private static volatile ASysMonLoggerFactory configuredLogger;
 
     public static AConfigFactory getConfigFactory() {
         return AUnchecker.executeUnchecked(new AFunction0<AConfigFactory, Exception>() {
             @Override public AConfigFactory apply() throws Exception {
                 final Properties propsRaw = getProperties();
 
-                configuredLogger = getLogger(propsRaw);
-                final ConfigPropsFile props = new ConfigPropsFile(propsRaw, getLogger(propsRaw));
+                if(configuredLogger == null) {
+                    // allow API override for config file settings
+                    configuredLogger = extractLogger(propsRaw);
+                }
+                final ConfigPropsFile props = new ConfigPropsFile(propsRaw, extractLogger(propsRaw));
                 return props.get(KEY_CONFIG_FACTORY, AOption.some(new ADefaultConfigFactory()), AConfigFactory.class);
             }
         });
     }
 
-    public static ASysMonLogger getConfiguredLogger() {
+    /**
+     * This method allows 'manual' override for settings in the config files. The only known use of this is testability.
+     *  This method must be called before A-SysMon itself is initialized in order to be effective.
+     */
+    public static void setConfiguredLogger(ASysMonLoggerFactory logger) {
+        configuredLogger = logger;
+    }
+
+    public static ASysMonLoggerFactory getConfiguredLogger() {
         if(configuredLogger == null) {
             getConfigFactory();
         }
         return configuredLogger;
     }
 
-    private static ASysMonLogger getLogger(Properties props) {
+    private static ASysMonLoggerFactory extractLogger(Properties props) {
         final String loggerClassName = props.getProperty(KEY_LOGGER);
         try {
             if(loggerClassName == null) {
-                return ASysMonConfigBuilder.defaultLogger(); // avoid the warning log entry
+                return defaultLogger(); // avoid the warning log entry
             }
 
-            return (ASysMonLogger) Class.forName(loggerClassName.trim()).newInstance();
+            return (ASysMonLoggerFactory) Class.forName(loggerClassName.trim()).newInstance();
         }
-        catch(Exception exc) {
-            final ASysMonLogger logger = ASysMonConfigBuilder.defaultLogger();
-            logger.warn("exception creating logger based on config file entry '" + loggerClassName + "': " + exc);
+        catch (Exception exc) {
+            final ASysMonLoggerFactory logger = defaultLogger();
+            logger.getLogger(ADefaultConfigFactory.class).warn("exception creating logger based on config file entry '" + loggerClassName + "': " + exc);
             return logger;
         }
     }
+
+    private static ASysMonLoggerFactory defaultLogger() {
+        try {
+            return ALog4JLoggerFactory.INSTANCE; //TODO verify that this works without log4j
+        }
+        catch (Throwable th) {
+            return AStdOutLoggerFactory.INSTANCE;
+        }
+    }
+
 
     private static Properties getProperties() {
         try {
@@ -112,7 +134,6 @@ public class ADefaultConfigFactory implements AConfigFactory {
 
         final AApplicationInfoProvider appInfo = props.get("application-info", AApplicationInfoProvider.class);
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder(appInfo);
-        builder.setLogger(getConfiguredLogger());
         builder.setTimer(props.get(KEY_TIMER, ATimer.class));
 
         builder.setAveragingDelayForScalarsMillis(props.get(KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS, Integer.TYPE));

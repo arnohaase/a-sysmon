@@ -28,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 public class AHttpJsonOffloadingDataSink implements ADataSink {
     public static final int NO_DATA_SLEEP_MILLIS = 10;
 
+    private static final ASysMonLogger log = ASysMonLogger.get(AHttpJsonOffloadingDataSink.class);
+
     private final ASysMonConfig config;
 
     //TODO how many concurrent HTTP connections does this provide? --> configure!
@@ -52,8 +54,8 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
         this.sender = sender;
         this.senderInstance = senderInstance;
 
-        this.traceQueue = new ASoftlyLimitedQueue<AHierarchicalDataRoot>(traceQueueSize, new DiscardedLogger(config.logger, "trace queue overflow - discarding oldest trace"));
-        this.scalarQueue = new ASoftlyLimitedQueue<AScalarDataPoint>(scalarQueueSize, new DiscardedLogger(config.logger, "environment queue overflow - discarding oldest data"));
+        this.traceQueue = new ASoftlyLimitedQueue<AHierarchicalDataRoot>(traceQueueSize, new DiscardedLogger("trace queue overflow - discarding oldest trace"));
+        this.scalarQueue = new ASoftlyLimitedQueue<AScalarDataPoint>(scalarQueueSize, new DiscardedLogger("environment queue overflow - discarding oldest data"));
 
         offloadingThreadPool = Executors.newFixedThreadPool(numOffloadingThreads);
         for(int i=0; i<numOffloadingThreads; i++) {
@@ -135,16 +137,14 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
     }
 
     private static class DiscardedLogger implements Runnable {
-        private final ASysMonLogger logger;
         private final String msg;
 
-        private DiscardedLogger(ASysMonLogger logger, String msg) {
-            this.logger = logger;
+        private DiscardedLogger(String msg) {
             this.msg = msg;
         }
 
         @Override public void run() {
-            logger.warn(msg);
+            log.warn(msg);
         }
     }
 

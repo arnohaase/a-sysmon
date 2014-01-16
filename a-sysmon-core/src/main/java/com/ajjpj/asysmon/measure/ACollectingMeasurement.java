@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.asysmon.config.ADefaultConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 
 import java.util.List;
@@ -19,6 +19,8 @@ import java.util.TreeMap;
  * @author arno
  */
 public class ACollectingMeasurement implements AWithParameters {
+    private static final ASysMonLogger log = ASysMonLogger.get(ACollectingMeasurement.class);
+
     private final ASysMonConfig config;
     private final AMeasurementHierarchy hierarchy;
     private final boolean isSerial;
@@ -64,7 +66,7 @@ public class ACollectingMeasurement implements AWithParameters {
 
     @Override public void addParameter(String identifier, String value) {
         if(parameters.put(identifier, value) != null) {
-            ADefaultConfigFactory.getConfiguredLogger().warn("duplicate parameter " + identifier);
+            log.warn("duplicate parameter " + identifier);
         }
     }
 
@@ -145,7 +147,7 @@ public class ACollectingMeasurement implements AWithParameters {
             return; // TODO the statement may have been implicitly closed by now - how to handle this best? --> was 'throw new IllegalStateException("a measurement can be finished only once.");'
         }
         if(detailIdentifier != null) {
-            ADefaultConfigFactory.getConfiguredLogger().warn("unfinished detail - finishing implicitly");
+            log.warn("unfinished detail - finishing implicitly");
             // finish the last detail implicitly
             finishDetail();
         }

@@ -1,9 +1,7 @@
 package com.ajjpj.asysmon.config;
 
-import com.ajjpj.asysmon.appinfo.AApplicationInfoProvider;
-import com.ajjpj.asysmon.config.log.ALog4JLogger;
-import com.ajjpj.asysmon.config.log.AStdOutLogger;
-import com.ajjpj.asysmon.config.log.ASysMonLogger;
+import com.ajjpj.asysmon.config.appinfo.AApplicationInfoProvider;
+import com.ajjpj.asysmon.config.log.*;
 import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.datasink.ADataSink;
@@ -31,7 +29,6 @@ public class ASysMonConfigBuilder {
     private long dataSinkTimeoutNanos = 100*1000;
     private int maxNumDataSinkTimeouts = 3;
 
-    private ASysMonLogger logger = defaultLogger();
     private ATimer timer = new ASystemNanoTimer();
 
     private final List<AEnvironmentMeasurer> environmentMeasurers = new ArrayList<AEnvironmentMeasurer>();
@@ -50,10 +47,6 @@ public class ASysMonConfigBuilder {
         return this;
     }
 
-    public ASysMonConfigBuilder setLogger(ASysMonLogger logger) {
-        this.logger = logger;
-        return this;
-    }
     public ASysMonConfigBuilder setTimer(ATimer timer) {
         this.timer = timer;
         return this;
@@ -115,18 +108,9 @@ public class ASysMonConfigBuilder {
                 averagingDelayForScalarsMillis,
                 measurementTimeoutNanos, maxNumMeasurementTimeouts,
                 dataSinkTimeoutNanos, maxNumDataSinkTimeouts,
-                logger, timer,
+                timer,
                 environmentMeasurers, scalarMeasurers, dataSinks,
                 presentationMenuEntries
                 );
-    }
-
-    public static ASysMonLogger defaultLogger() {
-        try {
-            return ALog4JLogger.INSTANCE; //TODO verify that this works without log4j
-        }
-        catch (Throwable th) {
-            return AStdOutLogger.INSTANCE;
-        }
     }
 }

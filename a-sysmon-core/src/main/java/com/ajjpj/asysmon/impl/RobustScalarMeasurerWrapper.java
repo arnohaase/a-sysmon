@@ -3,7 +3,6 @@ package com.ajjpj.asysmon.impl;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
-import com.ajjpj.asysmon.util.AShutdownable;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,8 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author arno
  */
 class RobustScalarMeasurerWrapper {
+    private static final ASysMonLogger log = ASysMonLogger.get(RobustScalarMeasurerWrapper.class);
+
     private final AScalarMeasurer inner;
-    private final ASysMonLogger log;
 
     private final long timeoutNanos;
     private final int maxNumTimeouts;
@@ -106,9 +106,8 @@ class RobustScalarMeasurerWrapper {
 
     private volatile Strategy strategy = ENABLED;
 
-    RobustScalarMeasurerWrapper(AScalarMeasurer inner, ASysMonLogger log, long timeoutNanos, int maxNumTimeouts) {
+    RobustScalarMeasurerWrapper(AScalarMeasurer inner, long timeoutNanos, int maxNumTimeouts) {
         this.inner = inner;
-        this.log = log;
         this.timeoutNanos = timeoutNanos;
         this.maxNumTimeouts = maxNumTimeouts;
     }

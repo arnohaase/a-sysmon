@@ -1,9 +1,8 @@
 package com.ajjpj.asysmon;
 
 
-import com.ajjpj.asysmon.appinfo.ADefaultApplicationInfoProvider;
 import com.ajjpj.asysmon.config.ASysMonConfigBuilder;
-import com.ajjpj.asysmon.config.log.AStdOutLogger;
+import com.ajjpj.asysmon.config.appinfo.ADefaultApplicationInfoProvider;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.impl.ASysMonConfigurer;
@@ -14,7 +13,7 @@ import com.ajjpj.asysmon.measure.AMeasurementHierarchyImpl;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.testutil.CollectingDataSink;
 import com.ajjpj.asysmon.testutil.CountingDataSink;
-import com.ajjpj.asysmon.testutil.CountingLogger;
+import com.ajjpj.asysmon.testutil.CountingLoggerFactory;
 import com.ajjpj.asysmon.testutil.ExplicitTimer;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +32,6 @@ public class ASysMonTest {
     @Before
     public void before() throws UnknownHostException {
         configBuilder = new ASysMonConfigBuilder(new ADefaultApplicationInfoProvider("dummy", "version"));
-        configBuilder.setLogger(AStdOutLogger.INSTANCE);
     }
 
     private ASysMonApi createSysMon(ADataSink dataSink) {
@@ -410,8 +408,6 @@ public class ASysMonTest {
 
     @Test
     public void testMemoryLeak() {
-        final CountingLogger log = new CountingLogger();
-        configBuilder.setLogger(log);
         final CountingDataSink dataSink = new CountingDataSink();
         final ASysMonApi sysMon = createSysMon(dataSink);
 
@@ -421,7 +417,7 @@ public class ASysMonTest {
 
         assertEquals(100, dataSink.started);
         assertEquals(99, dataSink.finished);
-        assertEquals(99, log.numError);
+        assertEquals(99, CountingLoggerFactory.logger.numError);
     }
 }
 

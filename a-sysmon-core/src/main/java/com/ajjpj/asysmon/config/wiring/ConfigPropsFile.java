@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.config.wiring;
 
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
+import com.ajjpj.asysmon.config.log.ASysMonLoggerFactory;
 import com.ajjpj.asysmon.util.AOption;
 
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ public class ConfigPropsFile {
     private final Properties props;
     private final ASysMonLogger log;
 
-    public ConfigPropsFile(Properties props, ASysMonLogger log) {
+    public ConfigPropsFile(Properties props, ASysMonLoggerFactory log) {
         this.props = props;
-        this.log = log;
+        this.log = log.getLogger(ConfigPropsFile.class);
     }
 
     public <T> T get(String key, Class<T> type, Class<?>... paramTypes) {
@@ -26,12 +27,12 @@ public class ConfigPropsFile {
     }
 
     public <T> T get(String key, AOption<? extends T> defaultValue, Class<T> type, Class<?>... paramTypes) {
-        final ConfigValueResolver r = new ConfigValueResolver(props, log, key, type, paramTypes);
+        final ConfigValueResolver r = new ConfigValueResolver(props, key, type, paramTypes);
         return (T) r.get(defaultValue);
     }
 
     public <T> List<T> getList(String key, Class<T> type) {
-        final ConfigValueResolver r = new ConfigValueResolver(props, log, key, List.class, new Class[] {type});
+        final ConfigValueResolver r = new ConfigValueResolver(props, key, List.class, new Class[] {type});
         return (List<T>) r.get(AOption.some(Collections.emptyList()));
     }
 

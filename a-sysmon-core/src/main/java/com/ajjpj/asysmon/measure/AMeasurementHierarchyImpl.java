@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.asysmon.config.ADefaultConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
@@ -23,6 +23,8 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
      *  measurement hierarchy.
      */
     public static final int MAX_CALL_DEPTH = 1000;
+
+    private static final ASysMonLogger log = ASysMonLogger.get(AMeasurementHierarchyImpl.class);
 
     private final ASysMonConfig config;
     private final ADataSink dataSink;
@@ -98,12 +100,12 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             finish(unfinished.peek());
         }
 
-        config.logger.error("Detected probably memory leak, forcefully cleaning measurement stack. Root measurement was " + rootMeasurement.getIdentifier() + " with parameters " + rootMeasurement.getParameters() + ", started at " + new Date(rootMeasurement.getStartTimeMillis()));
+        log.error("Detected probably memory leak, forcefully cleaning measurement stack. Root measurement was " + rootMeasurement.getIdentifier() + " with parameters " + rootMeasurement.getParameters() + ", started at " + new Date(rootMeasurement.getStartTimeMillis()));
         wasKilled = true;
     }
 
     private void logWasKilled() {
-        config.logger.warn("Interacting with a forcefully killed measurement. This is a consequence of A-SysMon cleaning up a (suspected) memory leak. It has no consequences aside from potentially weird measurements being reported.");
+        log.warn("Interacting with a forcefully killed measurement. This is a consequence of A-SysMon cleaning up a (suspected) memory leak. It has no consequences aside from potentially weird measurements being reported.");
     }
 
     @Override public void finish(ASimpleSerialMeasurementImpl measurement) {
@@ -124,10 +126,10 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
 
             if(unfinished.contains(measurement)) {
-                config.logger.warn("Calling 'finish' on a measurement " + measurement + " that is not innermost on the stack.");
+                log.warn("Calling 'finish' on a measurement " + measurement + " that is not innermost on the stack.");
 
                 while(unfinished.peek() != measurement) {
-                    config.logger.warn("-> Implicitly unrolling the stack of open measurements: " + unfinished.peek());
+                    log.warn("-> Implicitly unrolling the stack of open measurements: " + unfinished.peek());
                     finish(unfinished.peek());
                 }
             }
@@ -226,7 +228,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
      */
     @Override public void onStartFlow(ACorrelationId correlationId) {
         if(!startedFlows.add(correlationId)) {
-            ADefaultConfigFactory.getConfiguredLogger().warn("called 'startFlow' for flow " + correlationId + " twice");
+            log.warn("called 'startFlow' for flow " + correlationId + " twice");
         }
     }
 
@@ -236,7 +238,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
      */
     @Override public void onJoinFlow(ACorrelationId correlationId) {
         if(!joinedFlows.add(correlationId)) {
-            ADefaultConfigFactory.getConfiguredLogger().warn("called 'joinFlow' for flow " + correlationId + " twice");
+            log.warn("called 'joinFlow' for flow " + correlationId + " twice");
         }
     }
 }

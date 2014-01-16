@@ -2,7 +2,6 @@ package com.ajjpj.asysmon.impl;
 
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
-import com.ajjpj.asysmon.util.AShutdownable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 class RobustEnvironmentMeasurerWrapper {
     private final AEnvironmentMeasurer inner;
-    private final ASysMonLogger log;
+    private static final ASysMonLogger log = ASysMonLogger.get(RobustEnvironmentMeasurerWrapper.class);
 
     private final long timeoutNanos;
     private final int maxNumTimeouts;
@@ -78,9 +77,8 @@ class RobustEnvironmentMeasurerWrapper {
 
     private volatile Strategy strategy = ENABLED;
 
-    RobustEnvironmentMeasurerWrapper(AEnvironmentMeasurer inner, ASysMonLogger log, long timeoutNanos, int maxNumTimeouts) {
+    RobustEnvironmentMeasurerWrapper(AEnvironmentMeasurer inner, long timeoutNanos, int maxNumTimeouts) {
         this.inner = inner;
-        this.log = log;
         this.timeoutNanos = timeoutNanos;
         this.maxNumTimeouts = maxNumTimeouts;
     }

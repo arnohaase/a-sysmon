@@ -8,9 +8,19 @@ import java.util.Date;
 /**
  * @author arno
  */
-public class AStdOutLogger implements ASysMonLogger {
-    public static AStdOutLogger INSTANCE = new AStdOutLogger();
+public class AStdOutLogger extends ASysMonLogger {
     public volatile boolean isDebugEnabled = false;
+
+    private final String context;
+
+    public AStdOutLogger(Class<?> context) {
+        String ctx = context.getName();
+        if(ctx.length() > 40) {
+            ctx = ctx.substring(ctx.length() - 40);
+        }
+
+        this.context = ctx + " ";
+    }
 
     @Override public void debug(AStringFunction msg) {
         if(isDebugEnabled) {
@@ -19,7 +29,7 @@ public class AStdOutLogger implements ASysMonLogger {
     }
 
     private void log(String level, String msg) {
-        System.out.println(Thread.currentThread().getName() + " " + new Date() + "  " + level + ": " + msg);
+        System.out.println(Thread.currentThread().getName() + " " + new Date() + "  " + level + ": " + context + msg);
     }
 
     @Override public void info(String msg) {
