@@ -90,7 +90,7 @@ class ConfigValueResolver {
         throwConfigError(msg, null);
     }
 
-    void throwConfigError(String msg, Exception cause) { //TODO log the entire type hierarchy
+    void throwConfigError(String msg, Exception cause) {
         final StringBuilder paramT = new StringBuilder();
         if(paramTypes.length > 0) {
             paramT.append(" <");

@@ -72,7 +72,7 @@ public class ADefaultConfigFactory implements AConfigFactory {
 
     public static ASysMonLoggerFactory getConfiguredLogger() {
         if(configuredLogger == null) {
-            getConfigFactory();
+            configuredLogger = extractLogger(getProperties());
         }
         return configuredLogger;
     }
@@ -95,7 +95,7 @@ public class ADefaultConfigFactory implements AConfigFactory {
 
     private static ASysMonLoggerFactory defaultLogger() {
         try {
-            return ALog4JLoggerFactory.INSTANCE; //TODO verify that this works without log4j
+            return ALog4JLoggerFactory.INSTANCE;
         }
         catch (Throwable th) {
             return AStdOutLoggerFactory.INSTANCE;

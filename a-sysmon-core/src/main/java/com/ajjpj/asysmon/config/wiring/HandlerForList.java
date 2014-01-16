@@ -20,7 +20,7 @@ class HandlerForList implements ConfigTypeHandler {
         }
 
         final String[] elementsRaw = value.split(",");
-        final ConfigValueResolver childResolver = r.child(paramTypes[0], new Class<?>[0]); //TODO verify that there is exactly one parameter type
+        final ConfigValueResolver childResolver = r.child(paramTypes[0], new Class<?>[0]);
         for(String elRaw: elementsRaw) {
             result.add(childResolver.get(elRaw));
         }
