@@ -10,6 +10,7 @@
     <servlet>
         <servlet-name>asysmon</servlet-name>
         <servlet-class>com.ajjpj.asysmon.servlet.ASysMonServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>asysmon</servlet-name>

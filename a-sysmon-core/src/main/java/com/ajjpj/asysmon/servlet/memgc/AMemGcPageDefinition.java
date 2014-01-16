@@ -12,6 +12,12 @@ import java.util.List;
  * @author arno
  */
 public class AMemGcPageDefinition implements APresentationPageDefinition {
+    private final int bufferSize;
+
+    public AMemGcPageDefinition(int bufferSize) {
+        this.bufferSize = bufferSize;
+    }
+
     private volatile GcDataSink gcDataSink;
 
     @Override public String getId() {
@@ -35,7 +41,7 @@ public class AMemGcPageDefinition implements APresentationPageDefinition {
     }
 
     @Override public void init(ASysMonApi sysMon) {
-        gcDataSink = new GcDataSink(1000); //TODO make this configurable
+        gcDataSink = new GcDataSink(bufferSize);
         ASysMonConfigurer.addDataSink(sysMon, gcDataSink);
     }
 

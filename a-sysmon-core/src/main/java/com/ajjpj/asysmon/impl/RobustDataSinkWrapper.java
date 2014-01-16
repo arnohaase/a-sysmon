@@ -56,7 +56,6 @@ class RobustDataSinkWrapper { //TODO provide a means for a data sink to specify 
                 numTimeouts.incrementAndGet();
                 strategy = TIMED_OUT;
             }
-            System.out.println("duration: " + durationNanos);
         }
     };
 
