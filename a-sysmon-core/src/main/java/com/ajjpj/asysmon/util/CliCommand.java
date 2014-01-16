@@ -23,8 +23,6 @@ public class CliCommand {
     private final List<String> stdout = new ArrayList<String>();
     private final int returnCode;
 
-    //TODO limit number of *bytes* that are stored?
-    //TODO stderr?
     public CliCommand(String... cmd) throws IOException, InterruptedException {
         this(1000, cmd);
     }
