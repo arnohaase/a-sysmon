@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author arno
  */
-class RobustDataSinkWrapper { //TODO provide a means for a data sink to specify its own timeout? --> dumping...
+class RobustDataSinkWrapper { //TO_CONSIDER provide a means for a data sink to specify its own timeout? --> dumping...
     private static final ASysMonLogger log = ASysMonLogger.get(RobustDataSinkWrapper.class);
 
     private final ADataSink inner;

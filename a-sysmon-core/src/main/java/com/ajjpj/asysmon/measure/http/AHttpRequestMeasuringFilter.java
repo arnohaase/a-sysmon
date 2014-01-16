@@ -13,7 +13,7 @@ import java.util.Map;
  * @author arno
  */
 public class AHttpRequestMeasuringFilter implements Filter {
-    public static final String PARAM_ANALYZER_CLASS_FQN = "asysmon.http.analyzer"; //TODO move to configuration
+    public static final String PARAM_ANALYZER_CLASS_FQN = "asysmon.http-analyzer";
 
     private AHttpRequestAnalyzer analyzer;
 
@@ -35,7 +35,7 @@ public class AHttpRequestMeasuringFilter implements Filter {
             return (AHttpRequestAnalyzer) Thread.currentThread().getContextClassLoader().loadClass(analyzerFqn).newInstance();
         }
 
-        return new ASimpleHttpRequestAnalyzer();
+        return new ASimpleHttpRequestAnalyzer(); //TODO move default to configuration (and document the hierarchy: default config < config < init-param in web.xml)
     }
 
     /**
