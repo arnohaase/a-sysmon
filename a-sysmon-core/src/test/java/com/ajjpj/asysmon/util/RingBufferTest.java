@@ -1,6 +1,5 @@
 package com.ajjpj.asysmon.util;
 
-import com.ajjpj.asysmon.util.ARingBuffer;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -34,6 +33,27 @@ public class RingBufferTest {
             }
             assertFalse(iter.hasNext());
         }
+    }
+
+    @Test
+    public void testClear() {
+        final ARingBuffer<Long> rb = new ARingBuffer<Long>(Long.class, 100);
+        assertFalse(rb.iterator().hasNext());
+
+        rb.clear();
+        assertFalse(rb.iterator().hasNext());
+
+        rb.put(1L);
+        assertTrue(rb.iterator().hasNext());
+        rb.clear();
+        assertFalse(rb.iterator().hasNext());
+
+        for(long i=0; i<12345; i++) {
+            rb.put(i);
+        }
+        assertTrue(rb.iterator().hasNext());
+        rb.clear();
+        assertFalse(rb.iterator().hasNext());
     }
 
     @Test

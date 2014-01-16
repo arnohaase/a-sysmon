@@ -1,8 +1,6 @@
 package com.ajjpj.asysmon.util;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -57,6 +55,20 @@ public class ArrayStack<T> implements Iterable<T> {
         return data[size-1];
     }
 
+    public AOption<T> tryPop() {
+        if(isEmpty()) {
+            return AOption.none();
+        }
+        return AOption.some(pop());
+    }
+
+    public AOption<T> tryPeek() {
+        if(isEmpty()) {
+            return AOption.none();
+        }
+        return AOption.some(data[size-1]);
+    }
+
     public boolean contains(T el) {
         for(int i=0; i<size; i++) {
             if(nullSafeEq(el, data[i])) {
@@ -74,8 +86,6 @@ public class ArrayStack<T> implements Iterable<T> {
             return o1.equals(o2);
         }
     }
-
-    //TODO tryPop, tryPeek
 
     /**
      * iterates through the stack's elements in pop() order without modifying the stack

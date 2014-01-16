@@ -142,7 +142,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
     }
 
     @Override
-    public void startFlow(ACorrelationId flowId) { //TODO test this
+    public void startFlow(ACorrelationId flowId) {
         final AMeasurementHierarchy h = getMeasurementHierarchy(false);
         if(h == null) {
             throw new IllegalStateException("flow handling only while a measurement is running");

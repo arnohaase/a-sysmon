@@ -40,7 +40,7 @@ public class ARingBuffer<T> implements Iterable<T> {
         }
     }
 
-    public synchronized void clear() { //TODO test this
+    public synchronized void clear() {
         next = 0;
         isFull = false;
         Arrays.fill(buffer, null);

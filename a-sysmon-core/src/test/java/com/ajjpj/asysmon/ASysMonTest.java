@@ -3,7 +3,9 @@ package com.ajjpj.asysmon;
 
 import com.ajjpj.asysmon.config.ASysMonConfigBuilder;
 import com.ajjpj.asysmon.config.appinfo.ADefaultApplicationInfoProvider;
+import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
+import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.impl.ASysMonConfigurer;
 import com.ajjpj.asysmon.impl.ASysMonImpl;
@@ -418,6 +420,48 @@ public class ASysMonTest {
         assertEquals(100, dataSink.started);
         assertEquals(99, dataSink.finished);
         assertEquals(99, CountingLoggerFactory.logger.numError);
+    }
+
+    @Test
+    public void testFlow() {
+        final CollectingDataSink dataSink = new CollectingDataSink();
+        final ASysMonApi sysMon = createSysMon(dataSink);
+
+        try {
+            sysMon.startFlow(new ACorrelationId("a", "a"));
+            fail("exception expected");
+        } catch (IllegalStateException e) {
+        }
+
+        try {
+            sysMon.joinFlow(new ACorrelationId("a", "a"));
+            fail("exception expected");
+        } catch (IllegalStateException e) {
+        }
+
+        final ASimpleMeasurement m = sysMon.start("m");
+
+        sysMon.startFlow(new ACorrelationId("a", "a"));
+        sysMon.startFlow(new ACorrelationId("b", "b"));
+        sysMon.startFlow(new ACorrelationId("a", "a"));
+
+        sysMon.joinFlow(new ACorrelationId("c", "c"));
+        sysMon.joinFlow(new ACorrelationId("d", "d"));
+        sysMon.joinFlow(new ACorrelationId("c", "c"));
+
+        m.finish();
+
+        assertEquals(1, dataSink.data.size());
+
+        final AHierarchicalDataRoot root = dataSink.data.get(0);
+        assertEquals(2, root.getStartedFlows().size());
+        assertEquals(2, root.getJoinedFlows().size());
+
+        assertTrue(root.getStartedFlows().contains(new ACorrelationId("a", "a")));
+        assertTrue(root.getStartedFlows().contains(new ACorrelationId("b", "b")));
+
+        assertTrue(root.getJoinedFlows().contains(new ACorrelationId("c", "c")));
+        assertTrue(root.getJoinedFlows().contains(new ACorrelationId("d", "d")));
     }
 }
 
