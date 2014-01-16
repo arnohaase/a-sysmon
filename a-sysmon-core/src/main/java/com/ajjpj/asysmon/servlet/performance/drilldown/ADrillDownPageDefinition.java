@@ -104,7 +104,6 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
         return result;
     }
 
-    //TODO move sorting to browser?
     private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw, long selfNanos, int numParent) {
         final List<Map.Entry<String, AMinMaxAvgData>> result = new ArrayList<Map.Entry<String, AMinMaxAvgData>>(raw.entrySet());
 

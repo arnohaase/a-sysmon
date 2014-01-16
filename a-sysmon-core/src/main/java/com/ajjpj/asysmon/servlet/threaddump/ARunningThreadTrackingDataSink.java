@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.servlet.threaddump;
 
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 
@@ -18,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author arno
  */
 class ARunningThreadTrackingDataSink implements ADataSink {
+    private static final ASysMonLogger log = ASysMonLogger.get(ARunningThreadTrackingDataSink.class);
+
     private static final int MAX_NUM_THREADS = 100*1000;
     private final Map<String, Long> startTimestamps = new ConcurrentHashMap<String, Long>();
 
@@ -26,7 +29,7 @@ class ARunningThreadTrackingDataSink implements ADataSink {
         //  against that. Using a WeakHashMap plus synchronization might appear more elegant, would however introduce
         //  a global lock for which application code would have to wait.
         if(startTimestamps.size() > MAX_NUM_THREADS) {
-            //TODO log this as a warning
+            log.warn("timestamps more than " + MAX_NUM_THREADS + " were cached - assuming resource leak (i.e. measurements that never get closed) and discarding them");
             startTimestamps.clear();
         }
     }

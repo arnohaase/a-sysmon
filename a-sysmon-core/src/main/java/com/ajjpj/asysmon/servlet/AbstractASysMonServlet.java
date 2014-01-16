@@ -48,8 +48,6 @@ public abstract class AbstractASysMonServlet extends HttpServlet {
                 return;
             }
 
-            //TODO handle 'not found'
-
             if(! uri.endsWith("/")) {
                 resp.sendRedirect(uri + "/");
                 return;

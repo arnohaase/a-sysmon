@@ -65,9 +65,6 @@ public class ASysMonServlet extends AbstractASysMonServlet {
         return false;
     }
 
-
-    //TODO code to shut down ASysMon instance on servlet shutdown
-
     /**
      * override to customize
      */
