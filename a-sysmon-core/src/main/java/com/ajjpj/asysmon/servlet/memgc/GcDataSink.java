@@ -40,7 +40,7 @@ class GcDataSink implements ADataSink {
             final GcDetails gcDetails = new GcDetails(startMillis, durationNanos, gcType, cause, algorithm);
 
             for(String memKind: memKinds(params.keySet())) {
-                //TODO create a cache with the keys, here and in AJmxGcMeasurer?
+                //TO_CONSIDER create a cache with the keys, here and in AJmxGcMeasurer?
                 final long usedAfter = Long.valueOf(params.get(AJmxGcMeasurerer.KEY_PREFIX_MEM + memKind + AJmxGcMeasurerer.KEY_SUFFIX_USED));
                 final long committedAfter = Long.valueOf(params.get(AJmxGcMeasurerer.KEY_PREFIX_MEM + memKind + AJmxGcMeasurerer.KEY_SUFFIX_COMMITTED));
 

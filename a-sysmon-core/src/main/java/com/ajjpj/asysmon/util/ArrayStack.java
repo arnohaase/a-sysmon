@@ -62,7 +62,7 @@ public class ArrayStack<T> implements Iterable<T> {
         return AOption.some(pop());
     }
 
-    public AOption<T> tryPeek() { ⁴
+    public AOption<T> tryPeek() {
         if(isEmpty()) {
             return AOption.none();
         }
