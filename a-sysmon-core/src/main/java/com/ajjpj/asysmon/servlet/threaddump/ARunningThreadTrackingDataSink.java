@@ -35,6 +35,7 @@ class ARunningThreadTrackingDataSink implements ADataSink {
     }
 
     @Override public void onStartedHierarchicalMeasurement(String identifier) {
+        ensureAgainstMemoryLeaks();
         startTimestamps.put(Thread.currentThread().getName(), System.currentTimeMillis());
     }
 
