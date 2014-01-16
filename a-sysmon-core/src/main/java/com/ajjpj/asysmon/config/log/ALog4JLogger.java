@@ -35,6 +35,10 @@ public class ALog4JLogger extends ASysMonLogger {
         log.error(msg);
     }
 
+    @Override public void error(Exception exc) {
+        log.error(exc);
+    }
+
     @Override public void error(String msg, Exception exc) {
         log.error(msg, exc);
     }

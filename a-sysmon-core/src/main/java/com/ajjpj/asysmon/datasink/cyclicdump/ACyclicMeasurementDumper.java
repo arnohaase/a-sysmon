@@ -2,6 +2,7 @@ package com.ajjpj.asysmon.datasink.cyclicdump;
 
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.datasink.ADataSink;
@@ -23,6 +24,8 @@ import java.util.concurrent.TimeUnit;
  * @author arno
  */
 public abstract class ACyclicMeasurementDumper implements ADataSink, ASysMonAware {
+    private static final ASysMonLogger log = ASysMonLogger.get(ACyclicMeasurementDumper.class);
+
     private final ScheduledExecutorService ec;
     private volatile ASysMonApi sysMon;
     private final int initialDelaySeconds;
@@ -38,7 +41,7 @@ public abstract class ACyclicMeasurementDumper implements ADataSink, ASysMonAwar
                 }
             }
             catch(Exception exc) {
-                exc.printStackTrace();
+                log.error(exc);
                 dump(exc.toString());
             }
         }

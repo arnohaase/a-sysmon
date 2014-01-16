@@ -31,12 +31,16 @@ public class CountingLogger extends ASysMonLogger {
         numWarn += 1;
     }
 
+    @Override public void warn(String msg, Exception exc) {
+        warn(msg);
+    }
+
     @Override public void error(String s) {
         numError += 1;
     }
 
-    @Override public void warn(String msg, Exception exc) {
-        warn(msg);
+    @Override public void error(Exception exc) {
+        numError += 1;
     }
 
     @Override public void error(String msg, Exception exc) {

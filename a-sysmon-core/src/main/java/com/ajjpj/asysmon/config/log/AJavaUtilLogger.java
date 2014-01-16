@@ -38,6 +38,10 @@ public class AJavaUtilLogger extends ASysMonLogger {
         log.severe(msg);
     }
 
+    @Override public void error(Exception exc) {
+        log.log(Level.SEVERE, "", exc);
+    }
+
     @Override public void error(String msg, Exception exc) {
         log.log(Level.SEVERE, msg, exc);
     }

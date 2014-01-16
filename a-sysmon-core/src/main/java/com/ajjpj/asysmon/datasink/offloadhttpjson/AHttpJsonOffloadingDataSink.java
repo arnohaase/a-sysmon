@@ -115,8 +115,7 @@ public class AHttpJsonOffloadingDataSink implements ADataSink {
                 }
             }
             catch(Exception exc) {
-                //TODO log the exception
-                exc.printStackTrace();
+                log.error(exc);
 
                 // add the data to the queue again for later retry
                 scalarQueue.addAll(scalars);

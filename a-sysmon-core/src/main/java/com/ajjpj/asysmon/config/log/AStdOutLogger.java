@@ -49,6 +49,10 @@ public class AStdOutLogger extends ASysMonLogger {
         log("ERROR", msg);
     }
 
+    @Override public void error(Exception exc) {
+        error("an exception occurred", exc);
+    }
+
     @Override public void error(String msg, Exception exc) {
         error(msg);
         exc.printStackTrace(System.out);

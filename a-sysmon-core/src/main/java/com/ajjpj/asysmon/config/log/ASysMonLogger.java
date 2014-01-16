@@ -13,6 +13,7 @@ public abstract class ASysMonLogger {
     public abstract void warn(String msg);
     public abstract void warn(String msg, Exception exc);
     public abstract void error(String msg);
+    public abstract void error(Exception exc);
     public abstract void error(String msg, Exception exc);
 
     /**
