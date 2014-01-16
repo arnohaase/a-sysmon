@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.measure;
 
+import com.ajjpj.asysmon.config.ADefaultConfigFactory;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 
@@ -62,7 +63,9 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     @Override public void addParameter(String identifier, String value) {
-        parameters.put(identifier, value); //TODO warn of duplicates?
+        if(parameters.put(identifier, value) != null) {
+            ADefaultConfigFactory.getConfiguredLogger().warn("duplicate parameter " + identifier);
+        }
     }
 
     public Map<String, String> getParameters() {
@@ -142,7 +145,7 @@ public class ACollectingMeasurement implements AWithParameters {
             return; // TODO the statement may have been implicitly closed by now - how to handle this best? --> was 'throw new IllegalStateException("a measurement can be finished only once.");'
         }
         if(detailIdentifier != null) {
-            //TODO log a warning
+            ADefaultConfigFactory.getConfiguredLogger().warn("unfinished detail - finishing implicitly");
             // finish the last detail implicitly
             finishDetail();
         }

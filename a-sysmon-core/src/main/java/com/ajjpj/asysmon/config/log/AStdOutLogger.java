@@ -2,6 +2,8 @@ package com.ajjpj.asysmon.config.log;
 
 import com.ajjpj.asysmon.util.AStringFunction;
 
+import java.util.Date;
+
 
 /**
  * @author arno
@@ -17,7 +19,7 @@ public class AStdOutLogger implements ASysMonLogger {
     }
 
     private void log(String level, String msg) {
-        System.out.println(level + ": " + msg); //TODO log timestamp etc.
+        System.out.println(Thread.currentThread().getName() + " " + new Date() + "  " + level + ": " + msg);
     }
 
     @Override public void info(String msg) {

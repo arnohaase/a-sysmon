@@ -43,7 +43,7 @@ public class HandlerForBeans implements ConfigTypeHandler {
         return creator.create(params);
     }
 
-    //TODO list instead of placeholder or fqn: expected type, list elements as ctor params
+    //TO_CONSIDER list instead of placeholder or fqn: expected type, list elements as ctor params
 
     private Object createFromChildRef(String value, Class expectedType, ConfigValueResolver r) throws Exception {
         if(value.contains(".")) {
