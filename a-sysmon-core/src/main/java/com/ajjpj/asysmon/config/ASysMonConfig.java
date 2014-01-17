@@ -33,12 +33,14 @@ public class ASysMonConfig {
     public final List<AScalarMeasurer> initialScalarMeasurers;
     public final List<ADataSink> initialDataSinks;
 
+    public final String defaultPage;
     public final List<APresentationMenuEntry> presentationMenuEntries;
 
     public ASysMonConfig(AApplicationInfoProvider appInfo,
                          int averagingDelayForScalarsMillis, long measurementTimeoutNanos, int maxNumMeasurementTimeouts, long dataSinkTimeoutNanos, int maxNumDataSinkTimeouts,
                          ATimer timer, AHttpRequestAnalyzer httpRequestAnalyzer,
-                         List<AEnvironmentMeasurer> environmentMeasurers, List<AScalarMeasurer> initialScalarMeasurers, List<ADataSink> initialDataSinks, List<APresentationMenuEntry> presentationMenuEntries) {
+                         List<AEnvironmentMeasurer> environmentMeasurers, List<AScalarMeasurer> initialScalarMeasurers, List<ADataSink> initialDataSinks,
+                         String defaultPage, List<APresentationMenuEntry> presentationMenuEntries) {
         this.appInfo = appInfo;
         this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
         this.measurementTimeoutNanos = measurementTimeoutNanos;
@@ -50,6 +52,7 @@ public class ASysMonConfig {
         this.initialEnvironmentMeasurers = Collections.unmodifiableList(environmentMeasurers);
         this.initialScalarMeasurers = Collections.unmodifiableList(initialScalarMeasurers);
         this.initialDataSinks = Collections.unmodifiableList(initialDataSinks);
+        this.defaultPage = defaultPage;
         this.presentationMenuEntries = Collections.unmodifiableList(presentationMenuEntries);
     }
 

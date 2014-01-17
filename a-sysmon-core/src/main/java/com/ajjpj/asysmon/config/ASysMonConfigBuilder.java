@@ -39,6 +39,7 @@ public class ASysMonConfigBuilder {
     private final List<ADataSink> dataSinks = new ArrayList<ADataSink>();
 
     private final List<APresentationMenuEntry> presentationMenuEntries = new ArrayList<APresentationMenuEntry>();
+    private String defaultPage;
 
     public ASysMonConfigBuilder(AApplicationInfoProvider appInfo) {
         this.appInfo = appInfo;
@@ -100,6 +101,11 @@ public class ASysMonConfigBuilder {
         return this;
     }
 
+    public ASysMonConfigBuilder setDefaultPage(String defaultPage) {
+        this.defaultPage = defaultPage;
+        return this;
+    }
+
     public ASysMonConfigBuilder addPresentationMenuEntry(String label, List<APresentationPageDefinition> entries) {
         presentationMenuEntries.add(new APresentationMenuEntry(label, entries));
         return this;
@@ -118,7 +124,7 @@ public class ASysMonConfigBuilder {
                 dataSinkTimeoutNanos, maxNumDataSinkTimeouts,
                 timer, httpRequestAnalyzer,
                 environmentMeasurers, scalarMeasurers, dataSinks,
-                presentationMenuEntries
+                defaultPage, presentationMenuEntries
                 );
     }
 }

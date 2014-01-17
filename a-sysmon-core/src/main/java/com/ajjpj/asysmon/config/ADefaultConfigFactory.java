@@ -35,6 +35,8 @@ public class ADefaultConfigFactory implements AConfigFactory {
     public static final String KEY_TIMER = "timer";
     public static final String KEY_HTTP_REQUEST_ANALYZER = "http-request-analyzer";
 
+    public static final String KEY_DEFAULT_PAGE = "default-page";
+
     public static final String KEY_ENV_MEASURERS = "env-measurers";
     public static final String KEY_SCALAR_MEASURERS = "scalar-measurers";
     public static final String KEY_DATA_SINKS = "data-sinks";
@@ -139,6 +141,8 @@ public class ADefaultConfigFactory implements AConfigFactory {
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder(appInfo);
         builder.setTimer(props.get(KEY_TIMER, ATimer.class));
         builder.setHttpRequestAnalyzer(props.get(KEY_HTTP_REQUEST_ANALYZER, AHttpRequestAnalyzer.class));
+
+        builder.setDefaultPage(props.get(KEY_DEFAULT_PAGE, String.class));
 
         builder.setAveragingDelayForScalarsMillis(props.get(KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS, Integer.TYPE));
 

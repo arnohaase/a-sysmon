@@ -6,7 +6,7 @@ angular.module('ASysMonApp', ['ngRoute', 'asysmon'], function($routeProvider, co
         });
     });
 
-    $routeProvider.otherwise({ redirectTo: '/threaddump' }); //TODO get default page into config
+    $routeProvider.otherwise({ redirectTo: '/' + configRaw.defaultPage });
 });
 
 angular.module('ASysMonApp').controller('ASysMonCtrl', function($scope, $route, $location, config) {

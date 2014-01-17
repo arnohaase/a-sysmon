@@ -98,6 +98,9 @@ public class ASysMonServlet extends AbstractASysMonServlet {
         json.writeKey("applicationInstanceHtmlColorCode");
         json.writeStringLiteral(config.appInfo.getHtmlColorCode());
 
+        json.writeKey("defaultPage");
+        json.writeStringLiteral(config.defaultPage);
+
         json.writeKey("menuEntries");
         json.startArray();
         for(APresentationMenuEntry menuEntry: config.presentationMenuEntries) {
