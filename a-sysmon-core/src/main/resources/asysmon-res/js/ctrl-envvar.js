@@ -80,6 +80,9 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
         if(name === 'overview') {
             return 'Overview';
         }
+        if(name === 'jar-version') {
+            return 'JAR Files';
+        }
         return name;
     }
 
