@@ -14,4 +14,12 @@ angular.module('ASysMonApp').controller('ASysMonCtrl', function($scope, $route, 
     $scope.curTitle = function() {
         return config.forCurrentPage().fullLabel;
     };
+
+    $scope.applicationIdentifier = function() {
+        return config.raw().applicationId + " [" + config.raw().applicationNode + '] on ' + config.raw().applicationDeployment + ", " + config.raw().applicationVersion;
+    };
+
+    $scope.applicationColor = function() {
+        return config.raw().applicationInstanceHtmlColorCode;
+    };
 });

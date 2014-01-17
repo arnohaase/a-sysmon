@@ -82,6 +82,10 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         sendCommand('doStop');
     };
 
+    $scope.pickClass = function() {
+        return $scope.isInPickMode ? 'btn-danger' : 'btn-default';
+    };
+
     $scope.refresh();
 
     function revIdx(idx) {

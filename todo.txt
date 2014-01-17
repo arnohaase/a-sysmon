@@ -16,21 +16,18 @@ todo
     * collection with users / MD5 of password
     * admin flag, arrays of applications with read / write permissions
 
-* core
+* core for release
   * test on Windows --> graceful degradation
-
-  * read versions from manifests of JAR files (?)
-
   * network: display bytes instead of packets
-  * make timer configurable
-  * make app, instance and version configurable
-
-  * tune timeouts
+  * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
+  * lock-free aggregation implementation?
+  * more scalar and environment measurements
+  * documentation
 
   * add more scalar measurements
-    * /proc/cpuinfo: mostly 'environment', but frequency is 'scalar'
     * /proc/meminfo (the variable parts) (+ swap)
-  * 'environment'
+  * add more 'environment'
+    * read versions from manifests of JAR files (?)
     * JVM details (esp. command line switches)
     * App Server details (via reflection?)
 
@@ -41,16 +38,14 @@ todo
       * disks: show mount points
     * 'environment': start with expanded 'Overview'
     * generally: styling of tooltips - white with gray border?
-    * show application ID etc. (with color code)
     * aggregated: somehow show what is currently 'picked' --> bread crumbs?
     * beautify memgc gc tooltips
-  * clean up
-    * clean up 'aggregated.js', remove superfluous code, move stuff from scope visibility to internal visibility
-    * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
-  * lock-free aggregation implementation?
 
+* core (later)
+  * handling of time limitations
+    * before / after warm-up?
+    * limit per implementation?
 
-* documentation (!!!)
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
 
