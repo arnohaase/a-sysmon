@@ -33,15 +33,14 @@ todo
     * scalar page:
       * separate section for GC
       * disks: show mount points
-    * 'environment': start with expanded 'Overview'
     * generally: styling of tooltips - white with gray border?
-    * aggregated: somehow show what is currently 'picked' --> bread crumbs?
     * beautify memgc gc tooltips
 
 * core (later)
   * handling of time limitations
     * before / after warm-up?
     * limit per implementation?
+  * aggregated: somehow show what is currently 'picked' --> bread crumbs?
 
 
 * presentation of active / open connections per pool: special treatment <active> / <open>

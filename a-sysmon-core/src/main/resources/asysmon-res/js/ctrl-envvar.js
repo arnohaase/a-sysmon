@@ -30,8 +30,18 @@ angular.module('ASysMonApp').controller('CtrlEnvVar', function($scope, $log, Res
                         nodeIconDiv.removeClass('node-icon-collapsed').addClass('node-icon-expanded');
                     }
                 });
-            })
+            });
+        expandFirstNode();
     }
+    function expandFirstNode() {
+        var dataRow = $('.data-row-0').first();
+        var childrenDiv = dataRow.next();
+        var nodeIconDiv = dataRow.children('.node-icon');
+
+        childrenDiv.show();
+        nodeIconDiv.addClass('node-icon-expanded').removeClass('node-icon-collapsed');
+    }
+
     function reorder(rootNodes) {
         for(var i=0; i<rootNodes.length; i++) {
             var node = rootNodes[i];
