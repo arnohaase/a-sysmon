@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -18,9 +20,24 @@ public class AJarFileEnvironmentMeasurer implements AEnvironmentMeasurer {
     public static final String KEY_PREFIX_JAR_VERSION = "jar-version";
 
     @Override public void contributeMeasurements(EnvironmentCollector data) throws Exception {
-        final Enumeration<URL> enumeration = Thread.currentThread().getContextClassLoader().getResources(JarFile.MANIFEST_NAME);
+        collectJars(Thread.currentThread().getContextClassLoader(), new HashSet<URL>(), data);
+    }
+
+    private void collectJars(ClassLoader cl, Set<URL> alreadyVisited, EnvironmentCollector data) throws Exception {
+        if(cl.getParent() != null) {
+            collectJars(cl.getParent(), alreadyVisited, data);
+        }
+
+        int numJars = 0;
+        final Enumeration<URL> enumeration = cl.getResources(JarFile.MANIFEST_NAME);
         while(enumeration.hasMoreElements()) {
             final URL manifestUrl = enumeration.nextElement();
+            if(alreadyVisited.contains(manifestUrl)) {
+                continue;
+            }
+            alreadyVisited.add(manifestUrl);
+            numJars += 1;
+
             final AOption<String> jarName = extractJarName(manifestUrl);
             if(jarName.isEmpty()) {
                 // MANIFEST.MF outside a JAR file
@@ -29,8 +46,9 @@ public class AJarFileEnvironmentMeasurer implements AEnvironmentMeasurer {
 
             final String version = extractVersion(manifestUrl);
 
-            data.add(version, KEY_PREFIX_JAR_VERSION, jarName.get());
+            data.add(version, KEY_PREFIX_JAR_VERSION, cl.getClass().getName(), jarName.get());
         }
+        data.add(numJars + " JARs", KEY_PREFIX_JAR_VERSION, cl.getClass().getName());
     }
 
     private String extractVersion(URL manifestUrl) throws IOException {

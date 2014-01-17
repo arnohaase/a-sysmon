@@ -22,10 +22,10 @@ todo
   * lock-free aggregation implementation?
   * documentation
 
+  * env measurers should be able to specify that their values are exempt from sorting (e.g. classloaders for JAR Files)
   * add more scalar measurements
     * /proc/meminfo (the variable parts) (+ swap)
   * add more 'environment'
-    * read versions from manifests of JAR files (?)
     * JVM details (esp. command line switches)
     * App Server details (via reflection?)
 
