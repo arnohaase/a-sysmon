@@ -19,9 +19,6 @@ todo
 * core
   * test on Windows --> graceful degradation
 
-  * cleanup
-    * error handling for Rest calls in asysmon-module.js
-
   * read versions from manifests of JAR files (?)
 
   * network: display bytes instead of packets

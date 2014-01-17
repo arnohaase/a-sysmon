@@ -6,10 +6,11 @@ div.options-header {
     margin-top: 20px;
     margin-bottom: 20px;
 }
-h2 {
+h2 { //TODO
     margin-top: 22px;
     margin-bottom: 15px;
 }
+
 
 fieldset legend {
     width: auto;

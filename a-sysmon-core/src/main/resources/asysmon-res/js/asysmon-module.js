@@ -13,13 +13,45 @@
         return raw;
     }
 
-    asysmon.service('Rest', ['$log', '$http', '$location', function($log, $http, $location) {
-        this.call = function(service, success) {
+    asysmon.service('Rest', ['$log', '$http', '$location', 'Modal', function($log, $http, $location, Modal) {
+        this.call = function(service, onSuccess, onError) {
             $http
                 .get('_$_asysmon_$_/rest/' + curPage($location) + '/' + service)
-                .success(success); //TODO error handling
+                .success(onSuccess)
+                .error(function(data, status, headers, config) {
+                    Modal.error('Server or Network Error', htmlForErrorDialog(data, status, headers, config));
+
+                    if(onError) {
+                        onError(data, status, headers, config);
+                    }
+                });
         };
     }]);
+
+    function htmlForErrorDialog(data, status, headers, config) {
+        var result = '<table width="100%" class="table table-condensed table-striped">' +
+            '<tr><td>URL</td><td>' + config.url + '</td></tr>';
+
+        if(status !== 599) {
+            result += '<tr><td>Status</td><td>' + status + '</td></tr>';
+        }
+        else {
+            if(data && data.msg) {
+                result += '<tr><td>Error</td><td>' + data.msg + '</td></tr>';
+            }
+            if(data && data.details && data.details.length) {
+                result += '<tr><td>Details</td><td>';
+                angular.forEach(data.details, function(d) {
+                    result += escapeHtml(d) + '<br>';
+                });
+                result += '</td></tr>';
+            }
+        }
+
+        result += '</table>';
+
+        return result;
+    }
 
     asysmon.service('config', ['$location', 'configRaw', function($location, configRaw) {
         var byPageId = {};
@@ -62,19 +94,47 @@
         "'": '&#39;',
         "/": '&#x2F;'
     };
-    asysmon.constant('escapeHtml', function (string) {
+    function escapeHtml(string) {
         return String(string || '').replace(/[&<>"'\/]/g, function (s) {
             return entityMap[s];
         });
-    });
+    }
+    asysmon.constant('escapeHtml', escapeHtml);
+
 
     asysmon.constant('startsWith', function (s, prefix) {
-            s = s || '';
-            prefix = prefix || '';
+        s = s || '';
+        prefix = prefix || '';
 
-            return s.indexOf(prefix) === 0;
+        return s.indexOf(prefix) === 0;
+    });
+
+    asysmon.service('Modal', function() {
+        function doShow(title, body) {
+            $('#modal-title').text(title);
+            $('#modal-body').html(body);
+            $('#the-modal').modal('show');
+
+            var height = $(window).height() - 200;
+            $("#modal-body").css("max-height", height);
         }
-    );
+
+        this.error = function(title, body) {
+            $('#modal-icon').html('<span class="glyphicon glyphicon-warning-sign" style="color: red; padding-right: 25px;"></span>');
+            doShow(title, body);
+        };
+        this.warning = function(title, body) {
+            $('#modal-icon').html('<span class="glyphicon glyphicon-warning-sign" style="color: orange; padding-right: 25px;"></span>');
+            doShow(title, body);
+        };
+        this.info = function(title, body) {
+            $('#modal-icon').html('<span class="glyphicon glyphicon-ok" style="color: green; padding-right: 25px;"></span>');
+            doShow(title, body);
+        };
+        this.hide = function() {
+            $('#the-modal').modal('hide');
+        }
+    });
 }());
 
 

@@ -1,16 +1,17 @@
 package com.ajjpj.asysmon.servlet;
 
 
+import com.ajjpj.asysmon.util.AJsonSerHelper;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -33,11 +34,24 @@ public abstract class AbstractASysMonServlet extends HttpServlet {
             }
 
             if(uri.contains(ASYSMON_MARKER_REST)) {
-                final String[] restPart = substringAfter(uri, ASYSMON_MARKER_REST).split("/");
-                if(!handleRestCall(new ArrayList<String>(Arrays.asList(restPart)), resp)) {
-                    throw new IllegalArgumentException("unsupported REST call: " + uri);
+                try {
+                    final String[] restPart = substringAfter(uri, ASYSMON_MARKER_REST).split("/");
+                    if(!handleRestCall(new ArrayList<String>(Arrays.asList(restPart)), resp)) {
+                        throw new IllegalArgumentException("unsupported REST call: " + uri);
+                    }
+                    return;
                 }
-                return;
+                catch(Exception exc) {
+                    try {
+                        // special status code to indicate an exception that is reported as a JSON message
+                        resp.setStatus(599);
+                        writeExceptionToJson(new AJsonSerHelper(resp.getOutputStream()), exc);
+                    }
+                    catch(Exception e2) {
+                        // throw the original exception if there is a problem in the special handling code
+                        throw new ServletException(exc);
+                    }
+                }
             }
 
             if(uri.contains(ASYSMON_MARKER_SEGMENT)) {
@@ -67,6 +81,33 @@ public abstract class AbstractASysMonServlet extends HttpServlet {
         catch(Exception exc) {
             throw new ServletException(exc);
         }
+    }
+
+    private void writeExceptionToJson(AJsonSerHelper json, Exception exc) throws IOException {
+        json.startObject();
+
+        if(exc.getMessage() != null) {
+            json.writeKey("msg");
+            json.writeStringLiteral(exc.getMessage());
+        }
+
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw);
+        exc.printStackTrace(pw);
+        pw.close();
+
+        json.writeKey("details");
+        json.startArray();
+
+        final BufferedReader br = new BufferedReader(new StringReader(sw.toString()));
+        String line;
+        while ((line = br.readLine()) != null) {
+            json.writeStringLiteral(line);
+        }
+
+        json.endArray();
+
+        json.endObject();
     }
 
     protected abstract String getDefaultHtmlName();
