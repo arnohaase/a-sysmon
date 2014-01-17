@@ -141,22 +141,31 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
 
     function htmlForNetwork() {
         var result = '<table class="table table-condensed table-striped">' +
-            '<tr><th class="scalar-name">Interface</th><th class="scalar-value-centered">received pkt/s</th><th class="scalar-value-centered">sent pkt/s</th><th class="scalar-value-centered">collisions/s</th></tr>';
+            '<tr><th class="scalar-name">Interface</th><th class="scalar-value-centered">received</th><th class="scalar-value-centered">sent</th><th class="scalar-value-centered">collisions/s</th></tr>';
 
         angular.forEach(networkInterfaces(), function(iface) {
             function effValue(raw) {
                 if(raw === 0) return 0;
-                if(raw < .2) raw = .2;
-                return Math.log(raw) / Math.LN10 + 1; // range from 0 to 7
+                if(raw < 400) return .5;
+                return Math.log(raw) / Math.LN10 - 2; // raw in kB/s --> 10 Gbit/s returns 7
+            }
+            function formatted(raw) { // raw is 'bytes per second'
+                if(raw < 1000) return raw + ' bytes/s';
+                raw /= 1000;
+                if(raw < 1000) return formatNumber(raw, 1) + ' KB/s';
+                raw /= 1000;
+                if(raw < 1000) return formatNumber(raw, 1) + ' MB/s';
+                raw /= 1000;
+                return formatNumber(raw, 1) + ' GB/s';
             }
 
-            var scalarReceived   = $scope.scalars['net:' + iface + ':received-pkt'];
-            var scalarSent       = $scope.scalars['net:' + iface + ':sent-pkt'];
+            var scalarReceived   = $scope.scalars['net:' + iface + ':received-bytes'];
+            var scalarSent       = $scope.scalars['net:' + iface + ':sent-bytes'];
             var scalarCollisions = $scope.scalars['net:' + iface + ':collisions'];
 
             result += '<tr><td class="scalar-name">' + iface +
-                '</td><td class="scalar-value-centered">' + htmlForPercentageBar(100, 0, 7, effValue(scalarReceived.value),    8,  8,  8, scalarReceived.formattedValue) +
-                '</td><td class="scalar-value-centered">' + htmlForPercentageBar(100, 0, 7, effValue(scalarSent.value),       -1,  8,  8, scalarSent.formattedValue) +
+                '</td><td class="scalar-value-centered">' + htmlForPercentageBar(130, 0, 7, effValue(scalarReceived.value / 1000), 18, 18, 18, formatted(scalarReceived.value)) +
+                '</td><td class="scalar-value-centered">' + htmlForPercentageBar(130, 0, 7, effValue(scalarSent.    value / 1000), -1, 18, 18, formatted(scalarSent.    value)) +
                 '</td><td class="scalar-value-centered">' + htmlForPercentageBar(100, 0, 3, effValue(scalarCollisions.value), -1, -1, -1, scalarCollisions.formattedValue) +
                 '</td></tr>';
         });
@@ -166,7 +175,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
 
     function htmlForLoad(loadScalar) {
         var numCpus = effectiveNumCpus;
-        return htmlForPercentageBar('100px', 0, numCpus, loadScalar.value, 1, numCpus/2, numCpus, loadScalar.formattedValue);
+        return htmlForPercentageBar(100, 0, numCpus, loadScalar.value, 1, numCpus/2, numCpus, loadScalar.formattedValue);
     }
 
     function htmlForPercentageBar(width, min, max, value, thresholdInfo, thresholdWarning, thresholdDanger, formattedValue) {
@@ -198,7 +207,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
             numberOutside = '<div style="position: absolute; width: ' + width + 'px; text-align: center">' + formattedValue + '</div>';
         }
 
-        return '<div class="progress scalar-load-progress">' +
+        return '<div class="progress scalar-load-progress" style="width: ' + width + 'px">' +
             numberOutside +
             '<div class="progress-bar ' + progressColor + '" role="progressbar" aria-valuenow="' + percent + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percent + '%">' +
             numberInside +
@@ -258,7 +267,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
 
             result += '<tr>' +
                 '<td class="scalar-name">' + memKind + '</td>' +
-                '<td class="scalar-value">' + htmlForPercentageBar('100px', 0, 100, percent, 50, 80, 90, formatNumber(percent,1) + '%') + '</td>' +
+                '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 100, percent, 50, 80, 90, formatNumber(percent,1) + '%') + '</td>' +
                 '<td class="scalar-value">' + used.     formattedValue + '</td>' +
                 '<td class="scalar-value">' + committed.formattedValue + '</td>' +
                 '<td class="scalar-value">' + max.      formattedValue + '</td>' +

@@ -18,10 +18,8 @@ todo
 
 * core for release
   * test on Windows --> graceful degradation
-  * network: display bytes instead of packets
   * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
   * lock-free aggregation implementation?
-  * more scalar and environment measurements
   * documentation
 
   * add more scalar measurements
@@ -34,7 +32,6 @@ todo
   * beautify
     * scalar page:
       * separate section for GC
-      * progress bars: center value for 'load' and 'JVM mem'
       * disks: show mount points
     * 'environment': start with expanded 'Overview'
     * generally: styling of tooltips - white with gray border?

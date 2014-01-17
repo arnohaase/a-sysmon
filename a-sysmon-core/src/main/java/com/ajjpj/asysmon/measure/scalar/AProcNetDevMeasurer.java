@@ -19,7 +19,9 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
 
     public static final String KEY_PREFIX = "net:";
     public static final String KEY_MEMENTO = KEY_PREFIX;
+    public static final String KEY_SUFFIX_RECEIVED_BYTES = ":received-bytes";
     public static final String KEY_SUFFIX_RECEIVED_PACKETS = ":received-pkt";
+    public static final String KEY_SUFFIX_SENT_BYTES = ":sent-bytes";
     public static final String KEY_SUFFIX_SENT_PACKETS = ":sent-pkt";
     public static final String KEY_SUFFIX_COLLISIONS = ":collisions";
 
@@ -34,17 +36,27 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
         final long diffTime = cur.timestamp - prev.timestamp;
 
         for(String iface: new TreeSet<String>(cur.packetsReceived.keySet())) {
-            final long received   = cur.packetsReceived.get(iface) - prev.packetsReceived.get(iface);
-            final long sent       = cur.packetsSent.    get(iface) - prev.packetsSent.    get(iface);
-            final long collisions = cur.collisions.     get(iface) - prev.collisions.     get(iface);
+            final long receivedBytes   = cur.bytesReceived  .get(iface) - prev.bytesReceived.  get(iface);
+            final long receivedPackets = cur.packetsReceived.get(iface) - prev.packetsReceived.get(iface);
+            final long sentBytes       = cur.bytesSent.      get(iface) - prev.bytesSent.      get(iface);
+            final long sentPackets     = cur.packetsSent.    get(iface) - prev.packetsSent.    get(iface);
+            final long collisions      = cur.collisions.     get(iface) - prev.collisions.     get(iface);
 
             {
+                final String key = getKeyReceivedBytes(iface);
+                data.put(key, new AScalarDataPoint(timestamp, key, receivedBytes * 10*1000 / diffTime, 1));
+            }
+            {
                 final String key = getKeyReceivedPackets(iface);
-                data.put(key, new AScalarDataPoint(timestamp, key, received * 10*1000 / diffTime, 1));
+                data.put(key, new AScalarDataPoint(timestamp, key, receivedPackets * 10*1000 / diffTime, 1));
+            }
+            {
+                final String key = getKeySentBytes(iface);
+                data.put(key, new AScalarDataPoint(timestamp, key, sentBytes * 10*1000 / diffTime, 1));
             }
             {
                 final String key = getKeySentPackets(iface);
-                data.put(key, new AScalarDataPoint(timestamp, key, sent * 10*1000 / diffTime, 1));
+                data.put(key, new AScalarDataPoint(timestamp, key, sentPackets * 10*1000 / diffTime, 1));
             }
             {
                 final String key = getKeyCollisions(iface);
@@ -53,10 +65,16 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
         }
     }
 
+    public static String getKeyReceivedBytes(String iface) {
+        return KEY_PREFIX + iface + KEY_SUFFIX_RECEIVED_BYTES;
+    }
     public static String getKeyReceivedPackets(String iface) {
         return KEY_PREFIX + iface + KEY_SUFFIX_RECEIVED_PACKETS;
     }
 
+    public static String getKeySentBytes(String iface) {
+        return KEY_PREFIX + iface + KEY_SUFFIX_SENT_BYTES;
+    }
     public static String getKeySentPackets(String iface) {
         return KEY_PREFIX + iface + KEY_SUFFIX_SENT_PACKETS;
     }
@@ -81,11 +99,13 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
                     }
                     final String iface = split[0].substring(0, split[0].length() - 1).trim();
 
-                    final long received = Long.valueOf(split[2]);
-                    final long sent = Long.valueOf(split[10]);
-                    final long collisions = Long.valueOf(split[14]);
+                    final long bytesReceived   = Long.valueOf(split[1]);
+                    final long packetsReceived = Long.valueOf(split[2]);
+                    final long bytesSent       = Long.valueOf(split[9]);
+                    final long packetsSent     = Long.valueOf(split[10]);
+                    final long collisions      = Long.valueOf(split[14]);
 
-                    result.add(iface, received, sent, collisions);
+                    result.add(iface, bytesReceived, packetsReceived, bytesSent, packetsSent, collisions);
                 }
             }
         });
@@ -98,14 +118,18 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
 
     private static class Snapshot {
         final long timestamp = System.currentTimeMillis();
+        final Map<String, Long> bytesReceived = new HashMap<String, Long>();
         final Map<String, Long> packetsReceived = new HashMap<String, Long>();
+        final Map<String, Long> bytesSent = new HashMap<String, Long>();
         final Map<String, Long> packetsSent = new HashMap<String, Long>();
         final Map<String, Long> collisions = new HashMap<String, Long>();
 
-        void add(String iface, long received, long sent, long collisons) {
-            packetsReceived.put(iface, received);
-            packetsSent.put(iface, sent);
-            this.collisions.put(iface, collisons);
+        void add(String iface, long bytesReceived, long packetsReceived, long bytesSent, long packetsSent, long collisons) {
+            this.bytesReceived.  put(iface, bytesReceived);
+            this.packetsReceived.put(iface, packetsReceived);
+            this.bytesSent.      put(iface, bytesSent);
+            this.packetsSent.    put(iface, packetsSent);
+            this.collisions.     put(iface, collisons);
         }
     }
 }
