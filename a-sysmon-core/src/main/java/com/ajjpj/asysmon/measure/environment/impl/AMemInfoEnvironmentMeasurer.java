@@ -1,4 +1,7 @@
-package com.ajjpj.asysmon.measure.environment;
+package com.ajjpj.asysmon.measure.environment.impl;
+
+import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
+import com.ajjpj.asysmon.measure.environment.impl.ACpuEnvironmentMeasurer;
 
 import java.io.*;
 import java.util.HashMap;

@@ -1,4 +1,6 @@
-package com.ajjpj.asysmon.measure.environment;
+package com.ajjpj.asysmon.measure.environment.impl;
+
+import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 
 import java.util.Map;
 
