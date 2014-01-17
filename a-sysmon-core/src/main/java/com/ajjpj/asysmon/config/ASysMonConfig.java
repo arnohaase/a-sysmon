@@ -4,6 +4,7 @@ import com.ajjpj.asysmon.config.appinfo.AApplicationInfoProvider;
 import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
+import com.ajjpj.asysmon.measure.http.AHttpRequestAnalyzer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
@@ -26,6 +27,7 @@ public class ASysMonConfig {
     public final int maxNumDataSinkTimeouts;
 
     public final ATimer timer;
+    public final AHttpRequestAnalyzer httpRequestAnalyzer;
 
     public final List<AEnvironmentMeasurer> initialEnvironmentMeasurers;
     public final List<AScalarMeasurer> initialScalarMeasurers;
@@ -35,7 +37,7 @@ public class ASysMonConfig {
 
     public ASysMonConfig(AApplicationInfoProvider appInfo,
                          int averagingDelayForScalarsMillis, long measurementTimeoutNanos, int maxNumMeasurementTimeouts, long dataSinkTimeoutNanos, int maxNumDataSinkTimeouts,
-                         ATimer timer,
+                         ATimer timer, AHttpRequestAnalyzer httpRequestAnalyzer,
                          List<AEnvironmentMeasurer> environmentMeasurers, List<AScalarMeasurer> initialScalarMeasurers, List<ADataSink> initialDataSinks, List<APresentationMenuEntry> presentationMenuEntries) {
         this.appInfo = appInfo;
         this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
@@ -44,6 +46,7 @@ public class ASysMonConfig {
         this.dataSinkTimeoutNanos = dataSinkTimeoutNanos;
         this.maxNumDataSinkTimeouts = maxNumDataSinkTimeouts;
         this.timer = timer;
+        this.httpRequestAnalyzer = httpRequestAnalyzer;
         this.initialEnvironmentMeasurers = Collections.unmodifiableList(environmentMeasurers);
         this.initialScalarMeasurers = Collections.unmodifiableList(initialScalarMeasurers);
         this.initialDataSinks = Collections.unmodifiableList(initialDataSinks);

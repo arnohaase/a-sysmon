@@ -8,6 +8,7 @@ import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.config.wiring.ConfigPropsFile;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
+import com.ajjpj.asysmon.measure.http.AHttpRequestAnalyzer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AFunction0;
 import com.ajjpj.asysmon.util.AOption;
@@ -32,6 +33,8 @@ public class ADefaultConfigFactory implements AConfigFactory {
     public static final String KEY_CONFIG_FACTORY = "config-factory";
     public static final String KEY_LOGGER = "logger";
     public static final String KEY_TIMER = "timer";
+    public static final String KEY_HTTP_REQUEST_ANALYZER = "http-request-analyzer";
+
     public static final String KEY_ENV_MEASURERS = "env-measurers";
     public static final String KEY_SCALAR_MEASURERS = "scalar-measurers";
     public static final String KEY_DATA_SINKS = "data-sinks";
@@ -135,6 +138,7 @@ public class ADefaultConfigFactory implements AConfigFactory {
         final AApplicationInfoProvider appInfo = props.get("application-info", AApplicationInfoProvider.class);
         final ASysMonConfigBuilder builder = new ASysMonConfigBuilder(appInfo);
         builder.setTimer(props.get(KEY_TIMER, ATimer.class));
+        builder.setHttpRequestAnalyzer(props.get(KEY_HTTP_REQUEST_ANALYZER, AHttpRequestAnalyzer.class));
 
         builder.setAveragingDelayForScalarsMillis(props.get(KEY_AVERAGING_DELAY_FOR_SCALARS_MILLIS, Integer.TYPE));
 

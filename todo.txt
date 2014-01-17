@@ -15,7 +15,6 @@ todo
   * permission checks
     * collection with users / MD5 of password
     * admin flag, arrays of applications with read / write permissions
-    * ?!?!?! --> Felix
 
 * core
   * test on Windows --> graceful degradation
@@ -23,7 +22,6 @@ todo
   * cleanup
     * default page from config in asysmon-app.js
     * error handling for Rest calls in asysmon-module.js
-    * AHttpRequestMeasuringFilter: default HTTP analyzer class fqn --> config file
 
   * read versions from manifests of JAR files (?)
 

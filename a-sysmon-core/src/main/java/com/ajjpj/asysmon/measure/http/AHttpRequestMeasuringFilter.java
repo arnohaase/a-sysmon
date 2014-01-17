@@ -35,7 +35,7 @@ public class AHttpRequestMeasuringFilter implements Filter {
             return (AHttpRequestAnalyzer) Thread.currentThread().getContextClassLoader().loadClass(analyzerFqn).newInstance();
         }
 
-        return new ASimpleHttpRequestAnalyzer(); //TODO move default to configuration (and document the hierarchy: default config < config < init-param in web.xml)
+        return getSysMon().getConfig().httpRequestAnalyzer;
     }
 
     /**

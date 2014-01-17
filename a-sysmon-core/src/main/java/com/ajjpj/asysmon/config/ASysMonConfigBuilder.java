@@ -6,6 +6,8 @@ import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
+import com.ajjpj.asysmon.measure.http.AHttpRequestAnalyzer;
+import com.ajjpj.asysmon.measure.http.ASimpleHttpRequestAnalyzer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.timer.ASystemNanoTimer;
 import com.ajjpj.asysmon.util.timer.ATimer;
@@ -30,6 +32,7 @@ public class ASysMonConfigBuilder {
     private int maxNumDataSinkTimeouts = 3;
 
     private ATimer timer = new ASystemNanoTimer();
+    private AHttpRequestAnalyzer httpRequestAnalyzer = new ASimpleHttpRequestAnalyzer();
 
     private final List<AEnvironmentMeasurer> environmentMeasurers = new ArrayList<AEnvironmentMeasurer>();
     private final List<AScalarMeasurer> scalarMeasurers = new ArrayList<AScalarMeasurer>();
@@ -59,6 +62,11 @@ public class ASysMonConfigBuilder {
 
     public ASysMonConfigBuilder setMeasurementTimeoutNanos(long measurementTimeoutNanos) {
         this.measurementTimeoutNanos = measurementTimeoutNanos;
+        return this;
+    }
+
+    public ASysMonConfigBuilder setHttpRequestAnalyzer(AHttpRequestAnalyzer httpRequestAnalyzer) {
+        this.httpRequestAnalyzer = httpRequestAnalyzer;
         return this;
     }
 
@@ -108,7 +116,7 @@ public class ASysMonConfigBuilder {
                 averagingDelayForScalarsMillis,
                 measurementTimeoutNanos, maxNumMeasurementTimeouts,
                 dataSinkTimeoutNanos, maxNumDataSinkTimeouts,
-                timer,
+                timer, httpRequestAnalyzer,
                 environmentMeasurers, scalarMeasurers, dataSinks,
                 presentationMenuEntries
                 );
