@@ -112,8 +112,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     }
 
     $scope.expandAll = function() {
-        $('div.children').show(50);
-
         function setExpanded(nodes) {
             if(nodes) {
                 for(var i=0; i<nodes.length; i++) {
@@ -128,7 +126,6 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     };
 
     $scope.collapseAll = function() {
-        $('div.children').hide(50);
         $scope.expansionModel = {};
         renderTree();
     };
