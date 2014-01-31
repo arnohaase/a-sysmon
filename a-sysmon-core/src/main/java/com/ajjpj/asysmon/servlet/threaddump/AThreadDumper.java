@@ -30,12 +30,14 @@ class AThreadDumper {
     public static Collection<Long> getDeadlockedThreads() {
         final Collection<Long> result = new HashSet<Long>();
 
-        for(long threadId: mxBean.findDeadlockedThreads()) {
-            result.add(threadId);
-        }
+        if(mxBean != null) { // may happen, depending on JVM version
+            for(long threadId: mxBean.findDeadlockedThreads()) {
+                result.add(threadId);
+            }
 
-        for(long threadId: mxBean.findMonitorDeadlockedThreads()) {
-            result.add(threadId);
+            for(long threadId: mxBean.findMonitorDeadlockedThreads()) {
+                result.add(threadId);
+            }
         }
 
         return result;
