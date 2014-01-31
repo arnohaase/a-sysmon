@@ -27,15 +27,20 @@ class AThreadDumper {
         return result;
     }
 
+    private static final long[] NO_LONGS = new long[0];
+    private static long[] nullToEmpty(long[] longs) {
+        return longs != null ? longs : NO_LONGS;
+    }
+
     public static Collection<Long> getDeadlockedThreads() {
         final Collection<Long> result = new HashSet<Long>();
 
         if(mxBean != null) { // may happen, depending on JVM version
-            for(long threadId: mxBean.findDeadlockedThreads()) {
+            for(long threadId: nullToEmpty(mxBean.findDeadlockedThreads())) {
                 result.add(threadId);
             }
 
-            for(long threadId: mxBean.findMonitorDeadlockedThreads()) {
+            for(long threadId: nullToEmpty(mxBean.findMonitorDeadlockedThreads())) {
                 result.add(threadId);
             }
         }
