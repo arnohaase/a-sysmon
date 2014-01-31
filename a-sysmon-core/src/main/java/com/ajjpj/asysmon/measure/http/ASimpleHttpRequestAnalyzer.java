@@ -1,5 +1,7 @@
 package com.ajjpj.asysmon.measure.http;
 
+import com.ajjpj.asysmon.util.AOption;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -15,11 +17,11 @@ public class ASimpleHttpRequestAnalyzer implements AHttpRequestAnalyzer {
     public static final String PARAM_PREFIX_COOKIE = "http-cookie-";
 
     @Override public AHttpRequestDetails analyze(HttpServletRequest request) {
-        final String identifier = extractIdentifier(request.getRequestURL().toString());
+        final AOption<String> identifier = extractIdentifier(request.getRequestURL().toString());
         final Map<String, String> parameters = extractParameters(request);
 
         return new AHttpRequestDetails() {
-            @Override public String getIdentifier() {
+            @Override public AOption<String> getIdentifier() {
                 return identifier;
             }
             @Override public Map<String, String> getParameters() {
@@ -43,7 +45,7 @@ public class ASimpleHttpRequestAnalyzer implements AHttpRequestAnalyzer {
         return result;
     }
 
-    protected String extractIdentifier(String url) {
-        return "<http request>";
+    protected AOption<String> extractIdentifier(String url) {
+        return AOption.some("<http request>");
     }
 }

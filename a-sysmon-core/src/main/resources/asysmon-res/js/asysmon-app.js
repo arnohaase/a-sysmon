@@ -16,7 +16,7 @@ angular.module('ASysMonApp').controller('ASysMonCtrl', function($scope, $route, 
     };
 
     $scope.applicationIdentifier = function() {
-        return config.raw().applicationId + " [" + config.raw().applicationNode + '] on ' + config.raw().applicationDeployment + ", " + config.raw().applicationVersion;
+        return config.raw().applicationId + " " + config.raw().applicationVersion + " [" + config.raw().applicationNode + '] on ' + config.raw().applicationDeployment;
     };
 
     $scope.applicationColor = function() {
