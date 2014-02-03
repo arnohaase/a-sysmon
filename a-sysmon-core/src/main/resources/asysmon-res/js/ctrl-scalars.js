@@ -217,7 +217,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
 
     function htmlForDisk() {
         var result = '<table class="table table-condensed table-striped">';
-        result += '<tr><th clas="scalar-name">Device</th><th class="scalar-name">Mount Point</th><th class="scalar-value-centered">Available GB</th><th class="scalar-value-centered">Read MB/s</th><th class="scalar-value-centered">Write MB/s</th><th class="scalar-value-centered">Running</th></tr>';
+        result += '<tr><th clas="scalar-name">Device</th><th class="scalar-name">Mounted</th><th class="scalar-value-centered">Available GB</th><th class="scalar-value-centered">Read MB/s</th><th class="scalar-value-centered">Write MB/s</th><th class="scalar-value-centered">Running</th></tr>';
 
         angular.forEach(diskDevs(), function(dev) {
             function asDisplayedRate(raw) {
