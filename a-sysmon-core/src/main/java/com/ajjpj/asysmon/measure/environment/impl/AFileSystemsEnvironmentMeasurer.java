@@ -1,14 +1,18 @@
 package com.ajjpj.asysmon.measure.environment.impl;
 
 
+import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.environment.impl.ACpuEnvironmentMeasurer;
+import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.CliCommand;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This measurer collects information about mounted file systems from several sources.
@@ -23,7 +27,7 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
         contributeDf(data);
     }
 
-    private void contributeDf(EnvironmentCollector data) throws Exception {
+    private static void contributeDf(EnvironmentCollector data) throws Exception {
         for(String line: new CliCommand("df", "-P").getOutput()) {
             if(! line.startsWith("/dev/")) {
                 continue;
@@ -49,8 +53,27 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
         }
     }
 
+    public static Map<String, String> getMountPoints() throws Exception {
+        final Map<String, String> result = new HashMap<String, String>();
+
+        for(String line: new CliCommand("df", "-P").getOutput()) {
+            if(! line.startsWith("/dev/")) {
+                continue;
+            }
+
+            final String[] split = line.split("\\s+");
+            if(split.length != 6) {
+                continue;
+            }
+
+            result.put(split[0].substring("/dev/".length()), split[5]);
+        }
+
+        return result;
+    }
+
     private void contributeMtab(EnvironmentCollector data) throws IOException {
-        final BufferedReader br = new BufferedReader(new FileReader(new File("/etc/mtab")));
+        final BufferedReader br = new BufferedReader(new FileReader(new File("/etc/mtab"))); //TODO refactor to use AFile
         try {
             String line;
             while ((line = br.readLine()) != null) {
@@ -81,7 +104,7 @@ public class AFileSystemsEnvironmentMeasurer implements AEnvironmentMeasurer {
         }
     }
 
-    private void add(EnvironmentCollector data, String device, String key, String value) {
+    private static void add(EnvironmentCollector data, String device, String key, String value) {
         data.add(value, ACpuEnvironmentMeasurer.KEY_HW, KEY_FILESYSTEMS, device, key);
     }
 

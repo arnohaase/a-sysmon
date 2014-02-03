@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.measure.scalar;
 
 import com.ajjpj.asysmon.data.AScalarDataPoint;
+import com.ajjpj.asysmon.measure.environment.impl.AFileSystemsEnvironmentMeasurer;
 import com.ajjpj.asysmon.util.CliCommand;
 import com.ajjpj.asysmon.util.io.AFile;
 
@@ -29,6 +30,8 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
     public static final String KEY_SUFFIX_WRITTEN_MBYTES = ":written-mbytes";
     public static final String KEY_SUFFIX_IOS_IN_PROGRESS = ":ios-in-progress";
 
+    public static final String KEY_MOUNTPOINT = ":mountpoint:";
+
     @Override public void prepareMeasurements(Map<String, Object> mementos) throws Exception {
         mementos.put(KEY_MEMENTO, createSnapshot());
     }
@@ -36,6 +39,13 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
     @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) throws Exception {
         contributeDiskSize(data, timestamp);
         contributeTraffic(data, timestamp, mementos);
+        contributeMountPoints(data, timestamp);
+    }
+
+    static void contributeMountPoints(Map<String, AScalarDataPoint> data, long timestamp) throws Exception {
+        for(Map.Entry<String, String> entry: AFileSystemsEnvironmentMeasurer.getMountPoints().entrySet()) {
+            add(data, timestamp, getMountPointKey(entry.getKey(), entry.getValue()), 1, 0);
+        }
     }
 
     static void contributeTraffic(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) throws Exception {
@@ -111,6 +121,10 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
 
     private static void add(Map<String, AScalarDataPoint> data, long timestamp, String key, long value, int numFracDigits) {
         data.put(key, new AScalarDataPoint(timestamp, key, value, numFracDigits));
+    }
+
+    public static String getMountPointKey(String dev, String mountPoint) {
+        return KEY_PREFIX + dev + KEY_MOUNTPOINT + mountPoint;
     }
 
     public static String getSizeKey(String dev) {

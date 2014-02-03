@@ -217,7 +217,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
 
     function htmlForDisk() {
         var result = '<table class="table table-condensed table-striped">';
-        result += '<tr><th clas="scalar-name">Device</th><th class="scalar-value-centered">Available GB</th><th class="scalar-value-centered">Read MB/s</th><th class="scalar-value-centered">Write MB/s</th><th class="scalar-value-centered">Running</th></tr>';
+        result += '<tr><th clas="scalar-name">Device</th><th class="scalar-name">Mount Point</th><th class="scalar-value-centered">Available GB</th><th class="scalar-value-centered">Read MB/s</th><th class="scalar-value-centered">Write MB/s</th><th class="scalar-value-centered">Running</th></tr>';
 
         angular.forEach(diskDevs(), function(dev) {
             function asDisplayedRate(raw) {
@@ -231,6 +231,14 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
             var hasTraffic = $scope.scalars['disk:' + dev + ':read-mbytes'];
 
             result += '<tr><td class="scalar-name">' + dev + '</td>';
+
+            var mp = mountPoint(dev);
+            if(mp) {
+                result += '<td class="scalar-name">' + mp + '</td>';
+            }
+            else {
+                result += '<td class="scalar-name"></td>';
+            }
 
             if(hasSize) {
                 var sizeGB = $scope.scalars['disk:' + dev + ':sizeGB'].value;
@@ -262,6 +270,21 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
         });
 
         result += '</table>';
+        return result;
+    }
+
+    function mountPoint(dev) {
+        var result = undefined;
+
+        angular.forEach($scope.scalars, function(s) {
+            if(startsWith(s.name, 'disk:' + dev + ':mountpoint:')) {
+                result = s.name;
+                result = result.substring(result.indexOf(':') + 1);
+                result = result.substring(result.indexOf(':') + 1);
+                result = result.substring(result.indexOf(':') + 1);
+            }
+        });
+
         return result;
     }
 

@@ -22,17 +22,13 @@ todo
   * lock-free aggregation implementation?
   * documentation
 
+  * extract a-base
+
   * env measurers should be able to specify that their values are exempt from sorting (e.g. classloaders for JAR Files)
-  * add more scalar measurements
-    * /proc/meminfo (the variable parts) (+ swap)
-  * add more 'environment'
-    * JVM details (esp. command line switches)
-    * App Server details (via reflection?)
 
   * beautify
     * scalar page:
       * separate section for GC
-      * disks: show mount points
     * generally: styling of tooltips - white with gray border?
     * beautify memgc gc tooltips
 
@@ -43,6 +39,12 @@ todo
   * aggregated: somehow show what is currently 'picked' --> bread crumbs?
 
   * configured selection of measurements in a prominent place (e.g. env. variable "environment" or sys prop "db conn type")
+
+  * add more scalar measurements
+    * /proc/meminfo (the variable parts) (+ swap)
+  * add more 'environment'
+    * JVM details (esp. command line switches)
+    * App Server details (via reflection?)
 
 
 * presentation of active / open connections per pool: special treatment <active> / <open>
