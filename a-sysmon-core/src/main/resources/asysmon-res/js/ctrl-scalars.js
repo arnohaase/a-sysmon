@@ -227,21 +227,36 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
                 return Math.log(raw) / Math.LN10 + 2;
             }
 
-            var sizeGB = $scope.scalars['disk:' + dev + ':sizeGB'].value;
-            var availableGB = $scope.scalars['disk:' + dev + ':availableGB'].value;
-
-            var scalarRead = $scope.scalars['disk:' + dev + ':read-mbytes'];
-            var scalarWritten = $scope.scalars['disk:' + dev + ':written-mbytes'];
-
-            var scalarRunning = $scope.scalars['disk:' + dev + ':ios-in-progress'];
+            var hasSize = $scope.scalars['disk:' + dev + ':sizeGB'];
+            var hasTraffic = $scope.scalars['disk:' + dev + ':read-mbytes'];
 
             result += '<tr><td class="scalar-name">' + dev + '</td>';
 
-            // while 'usedGB' is available, we calculate 'size-available' because 'used+avaible' can be smaller then 'size'
-            result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 100, (sizeGB - availableGB) * 100 / sizeGB, 50, 80, 95, formatNumber(availableGB, 2)) + '</td>';
-            result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 5, asDisplayedRate(scalarRead.value), 10, 10, 10, scalarRead.formattedValue) + '</td>';
-            result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 5, asDisplayedRate(scalarWritten.value), -1, 10, 10, scalarWritten.formattedValue) + '</td>';
-            result += '<td class="scalar-value">' + scalarRunning.formattedValue + '</td>'
+            if(hasSize) {
+                var sizeGB = $scope.scalars['disk:' + dev + ':sizeGB'].value;
+                var availableGB = $scope.scalars['disk:' + dev + ':availableGB'].value;
+
+                // while 'usedGB' is available, we calculate 'size-available' because 'used+avaible' can be smaller then 'size'
+                result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 100, (sizeGB - availableGB) * 100 / sizeGB, 50, 80, 95, formatNumber(availableGB, 2)) + '</td>';
+            }
+            else {
+                result += '<td class="scalar-value"></td>';
+            }
+
+            if(hasTraffic) {
+                var scalarRead = $scope.scalars['disk:' + dev + ':read-mbytes'];
+                var scalarWritten = $scope.scalars['disk:' + dev + ':written-mbytes'];
+                var scalarRunning = $scope.scalars['disk:' + dev + ':ios-in-progress'];
+
+                result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 5, asDisplayedRate(scalarRead.value), 10, 10, 10, scalarRead.formattedValue) + '</td>';
+                result += '<td class="scalar-value">' + htmlForPercentageBar(100, 0, 5, asDisplayedRate(scalarWritten.value), -1, 10, 10, scalarWritten.formattedValue) + '</td>';
+                result += '<td class="scalar-value">' + scalarRunning.formattedValue + '</td>'
+            }
+            else {
+                result += '<td class="scalar-value"></td>';
+                result += '<td class="scalar-value"></td>';
+                result += '<td class="scalar-value"></td>';
+            }
 
             result += '</tr>';
         });

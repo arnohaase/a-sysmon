@@ -1,7 +1,6 @@
 package com.ajjpj.asysmon.measure.scalar;
 
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.util.AStatement1;
 import com.ajjpj.asysmon.util.CliCommand;
 import com.ajjpj.asysmon.util.io.AFile;
 
@@ -9,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,12 +34,46 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
     }
 
     @Override public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) throws Exception {
-        @SuppressWarnings("unchecked")
+        contributeDiskSize(data, timestamp);
+        contributeTraffic(data, timestamp, mementos);
+    }
+
+    static void contributeTraffic(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) throws Exception {
         final Snapshot prev = (Snapshot) mementos.get(KEY_MEMENTO);
         final Snapshot current = createSnapshot();
 
         final long diffTime = current.timestamp - prev.timestamp;
 
+        for(String dev: current.sectorsRead.keySet()) {
+            if(! prev.sectorsRead.containsKey(dev)) {
+                continue; // deal with dynamically added or removed devices
+            }
+
+            if(current.sectorsRead.get(dev) == 0 & current.sectorsWritten.get(dev) == 0) {
+                continue; // filter out 'unused' devices, e.g. RAM disks
+            }
+
+            final long sectorsReadRaw = current.sectorsRead.get(dev) - prev.sectorsRead.get(dev);
+            final long sectorsWrittenRaw = current.sectorsWritten.get(dev) - prev.sectorsWritten.get(dev);
+
+            final long sectorsRead    = sectorsReadRaw    * 10*1000 / diffTime;
+            final long sectorsWritten = sectorsWrittenRaw * 10*1000 / diffTime;
+
+            final int blockSize = physicalBlockSize(dev);
+            final long mBytesRead = sectorsReadRaw * blockSize * 100 * 1000 / diffTime / 1024 / 1024;
+            final long mBytesWritten = sectorsWrittenRaw * blockSize * 100 * 1000 / diffTime / 1024 / 1024;
+
+            final long iosInProgress = current.iosInProgress.get(dev);
+
+            add(data, timestamp, getReadSectorsKey(dev), sectorsRead, 1);
+            add(data, timestamp, getWrittenSectorsKey(dev), sectorsWritten, 1);
+            add(data, timestamp, getReadMbytesKey(dev), mBytesRead, 2);
+            add(data, timestamp, getWrittenMbytesKey(dev), mBytesWritten, 2);
+            add(data, timestamp, getIosInProgressKey(dev), iosInProgress, 0);
+        }
+    }
+
+    static void contributeDiskSize(Map<String, AScalarDataPoint> data, long timestamp) throws Exception {
         final List<String> df = new CliCommand("df", "-P").getOutput();
         for(String line: df) {
             if(! line.startsWith("/dev/")) {
@@ -59,30 +91,14 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
             final long availableKb = Long.valueOf(split[3]);
 //            final String mountPoint = split[5];
 
-            final long sectorsReadRaw = current.sectorsRead.get(dev) - prev.sectorsRead.get(dev);
-            final long sectorsWrittenRaw = current.sectorsWritten.get(dev) - prev.sectorsWritten.get(dev);
-
-            final long sectorsRead    = sectorsReadRaw    * 10*1000 / diffTime;
-            final long sectorsWritten = sectorsWrittenRaw * 10*1000 / diffTime;
-
-            final int blockSize = physicalBlockSize(dev);
-            final long mBytesRead = sectorsReadRaw * blockSize * 100 * 1000 / diffTime / 1024 / 1024;
-            final long mBytesWritten = sectorsWrittenRaw * blockSize * 100 * 1000 / diffTime / 1024 / 1024;
-
-            final long iosInProgress = current.iosInProgress.get(dev);
-
             add(data, timestamp, getSizeKey(dev), sizeKb * 100 / (1024*1024), 2);
             add(data, timestamp, getUsedKey(dev), usedKb * 100 / (1024*1024), 2);
             add(data, timestamp, getAvailableKey(dev), availableKb * 100 / (1024*1024), 2);
-            add(data, timestamp, getReadSectorsKey(dev), sectorsRead, 1);
-            add(data, timestamp, getWrittenSectorsKey(dev), sectorsWritten, 1);
-            add(data, timestamp, getReadMbytesKey(dev), mBytesRead, 2);
-            add(data, timestamp, getWrittenMbytesKey(dev), mBytesWritten, 2);
-            add(data, timestamp, getIosInProgressKey(dev), iosInProgress, 0);
         }
     }
 
-    private int physicalBlockSize(String dev) throws IOException {
+
+    static int physicalBlockSize(String dev) throws IOException {
         while (! dev.isEmpty()) {
             final File f = new File("/sys/block/" + dev + "/queue/physical_block_size");
             if(f.exists()) {
@@ -93,7 +109,7 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
         return 512;
     }
 
-    private void add(Map<String, AScalarDataPoint> data, long timestamp, String key, long value, int numFracDigits) {
+    private static void add(Map<String, AScalarDataPoint> data, long timestamp, String key, long value, int numFracDigits) {
         data.put(key, new AScalarDataPoint(timestamp, key, value, numFracDigits));
     }
 
@@ -129,26 +145,25 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
         return KEY_PREFIX + dev + KEY_SUFFIX_IOS_IN_PROGRESS;
     }
 
-    private Snapshot createSnapshot() throws IOException {
+    private static Snapshot createSnapshot() throws IOException {
+        return createSnapshot(PROC_DISKSTATS.lines(Charset.defaultCharset()));
+    }
+
+    static Snapshot createSnapshot(Iterable<String> source) throws IOException {
         final Snapshot result = new Snapshot();
 
-        PROC_DISKSTATS.iterate(Charset.defaultCharset(), new AStatement1<Iterator <String>, IOException>() {
-            @Override public void apply(Iterator<String> iter) throws IOException {
-                while(iter.hasNext()) {
-                    final String line = iter.next();
-                    final String[] split = line.trim().split("\\s+");
+        for(String line: source) {
+            final String[] split = line.trim().split("\\s+");
 
-                    final String dev = split[2];
-                    final long sectorsRead = Long.valueOf(split[2+3]);
-                    final long sectorsWritten = Long.valueOf(split[2+7]);
-                    final int iosInProgress = Integer.valueOf(split[2+9]);
+            final String dev = split[2];
+            final long sectorsRead = Long.valueOf(split[2+3]);
+            final long sectorsWritten = Long.valueOf(split[2+7]);
+            final int iosInProgress = Integer.valueOf(split[2+9]);
 
-                    result.sectorsRead.put(dev, sectorsRead);
-                    result.sectorsWritten.put(dev, sectorsWritten);
-                    result.iosInProgress.put(dev, iosInProgress);
-                }
-            }
-        });
+            result.sectorsRead.put(dev, sectorsRead);
+            result.sectorsWritten.put(dev, sectorsWritten);
+            result.iosInProgress.put(dev, iosInProgress);
+        }
 
         return result;
     }
@@ -156,7 +171,7 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
     @Override public void shutdown() throws Exception {
     }
 
-    private static class Snapshot {
+    static class Snapshot {
         final long timestamp = System.currentTimeMillis();
         final Map<String, Long> sectorsRead = new HashMap<String, Long>();
         final Map<String, Long> sectorsWritten = new HashMap<String, Long>();

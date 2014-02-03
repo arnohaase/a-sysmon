@@ -1,13 +1,11 @@
 package com.ajjpj.asysmon.measure.scalar;
 
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.util.AStatement1;
 import com.ajjpj.asysmon.util.io.AFile;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 
@@ -83,32 +81,33 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
         return KEY_PREFIX + iface + KEY_SUFFIX_COLLISIONS;
     }
 
-    private Snapshot createSnapshot() throws IOException {
+    private static Snapshot createSnapshot() throws IOException {
+        return createSnapshot(PROC_NET_DEV.lines(Charset.defaultCharset()));
+    }
+
+    static Snapshot createSnapshot(Iterable<String> source) throws IOException {
         final Snapshot result = new Snapshot();
 
-        PROC_NET_DEV.iterate(Charset.defaultCharset(), new AStatement1<Iterator<String>, IOException>() {
-            @Override public void apply(Iterator<String> iter) throws IOException {
-                while(iter.hasNext()) {
-                    final String line = iter.next();
-                    final String[] split = line.trim().split("\\s+");
-                    if(split.length < 15) {
-                        continue;
-                    }
-                    if(! split[0].endsWith(":")) {
-                        continue;
-                    }
-                    final String iface = split[0].substring(0, split[0].length() - 1).trim();
-
-                    final long bytesReceived   = Long.valueOf(split[1]);
-                    final long packetsReceived = Long.valueOf(split[2]);
-                    final long bytesSent       = Long.valueOf(split[9]);
-                    final long packetsSent     = Long.valueOf(split[10]);
-                    final long collisions      = Long.valueOf(split[14]);
-
-                    result.add(iface, bytesReceived, packetsReceived, bytesSent, packetsSent, collisions);
-                }
+        for(String line: source) {
+            final String[] ifaceSplit = line.split(":");
+            if(ifaceSplit.length != 2) {
+                continue;
             }
-        });
+            final String iface = ifaceSplit[0].trim();
+
+            final String[] split = ifaceSplit[1].trim().split("\\s+");
+            if(split.length < 14) {
+                continue;
+            }
+
+            final long bytesReceived   = Long.valueOf(split[0]);
+            final long packetsReceived = Long.valueOf(split[1]);
+            final long bytesSent       = Long.valueOf(split[8]);
+            final long packetsSent     = Long.valueOf(split[9]);
+            final long collisions      = Long.valueOf(split[13]);
+
+            result.add(iface, bytesReceived, packetsReceived, bytesSent, packetsSent, collisions);
+        }
 
         return result;
     }
@@ -116,7 +115,7 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
     @Override public void shutdown() throws Exception {
     }
 
-    private static class Snapshot {
+    static class Snapshot {
         final long timestamp = System.currentTimeMillis();
         final Map<String, Long> bytesReceived = new HashMap<String, Long>();
         final Map<String, Long> packetsReceived = new HashMap<String, Long>();
