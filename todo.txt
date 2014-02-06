@@ -24,8 +24,6 @@ todo
 
   * extract a-base
 
-  * env measurers should be able to specify that their values are exempt from sorting (e.g. classloaders for JAR Files)
-
   * beautify
     * scalar page:
       * separate section for GC

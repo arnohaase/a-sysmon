@@ -11,6 +11,7 @@ import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
 import com.ajjpj.asysmon.util.AList;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -51,5 +52,5 @@ public interface ASysMonApi {
 
     Map<String, AScalarDataPoint> getScalarMeasurements(int averagingDelayForScalarsMillis);
 
-    Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() throws Exception;
+    List<AEnvironmentData> getEnvironmentMeasurements() throws Exception;
 }

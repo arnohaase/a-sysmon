@@ -15,9 +15,7 @@ import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
 import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 
 /**
@@ -181,7 +179,7 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
 
     @Override public Map<String, AScalarDataPoint> getScalarMeasurements(int averagingDelayForScalarsMillis) {
         final Map<String, AScalarDataPoint> result = new TreeMap<String, AScalarDataPoint>();
-        if(config.isGloballyDisabled()) {
+        if(ASysMonConfig.isGloballyDisabled()) {
             return result;
         }
 
@@ -202,9 +200,9 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         return result;
     }
 
-    @Override public Map<AList<String>, AEnvironmentData> getEnvironmentMeasurements() {
-        final Map<AList<String>, AEnvironmentData> result = new HashMap<AList<String>, AEnvironmentData>();
-        if(config.isGloballyDisabled()) {
+    @Override public List<AEnvironmentData> getEnvironmentMeasurements() {
+        final List<AEnvironmentData> result = new ArrayList<AEnvironmentData>();
+        if(ASysMonConfig.isGloballyDisabled()) {
             return result;
         }
 

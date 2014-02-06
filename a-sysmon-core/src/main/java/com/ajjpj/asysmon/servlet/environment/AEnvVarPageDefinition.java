@@ -14,7 +14,12 @@ import java.util.*;
  * @author arno
  */
 public class AEnvVarPageDefinition implements APresentationPageDefinition {
+    private final List<PathMatcher> unsortedPathMatchers;
     private volatile ASysMonApi sysMon;
+
+    public AEnvVarPageDefinition(String unsortedPaths) {
+        unsortedPathMatchers = PathMatcher.create(unsortedPaths);
+    }
 
     @Override public String getId() {
         return "env";
@@ -79,34 +84,45 @@ public class AEnvVarPageDefinition implements APresentationPageDefinition {
     }
 
     private Collection<EnvData> getData() throws Exception {
-        final Map<AList<String>, AEnvironmentData> raw = sysMon.getEnvironmentMeasurements();
+        final List<AEnvironmentData> raw = sysMon.getEnvironmentMeasurements();
         final SortedSet<EnvData> result = new TreeSet<EnvData>();
 
-        for(AEnvironmentData data: raw.values()) {
-            mergeIntoExisting(result, data.getName(), data.getValue());
+        for(AEnvironmentData data: raw) {
+            mergeIntoExisting(result, data.getName(), data.getValue(), AList.<String>nil());
         }
 
         return result;
     }
 
-    private void mergeIntoExisting(SortedSet<EnvData> existing, AList<String> key, String value) {
+    private void mergeIntoExisting(Collection<EnvData> existing, AList<String> key, String value, AList<String> keyPrefix) {
         if(key.tail().isEmpty()) {
-            findOrCreateMatch(existing, key.head()).value = value;
+            findOrCreateMatch(existing, key.head(), keyPrefix).value = value;
         }
         else {
-            mergeIntoExisting(findOrCreateMatch(existing, key.head()).children, key.tail(), value);
+            mergeIntoExisting(findOrCreateMatch(existing, key.head(), keyPrefix).children, key.tail(), value, keyPrefix.cons(key.head()));
         }
     }
 
-    private EnvData findOrCreateMatch(SortedSet<EnvData> existing, String name) {
+    private EnvData findOrCreateMatch(Collection<EnvData> existing, String name, AList<String> keyPrefix) {
         for(EnvData candidate: existing) {
             if(name.equals(candidate.segment)) {
                 return candidate;
             }
         }
-        final EnvData result = new EnvData(name);
+        final EnvData result = new EnvData(name, isSorted(keyPrefix, name));
         existing.add(result);
         return result;
+    }
+
+    private boolean isSorted(AList<String> keyPrefix, String name) {
+        final AList<String> effectiveKey = keyPrefix.cons(name).reverse();
+
+        for(PathMatcher m: unsortedPathMatchers) {
+            if(m.matches(effectiveKey)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -117,9 +133,10 @@ public class AEnvVarPageDefinition implements APresentationPageDefinition {
     private static class EnvData implements Comparable<EnvData> {
         public final String segment;
         public String value; // may be null
-        public final SortedSet<EnvData> children = new TreeSet<EnvData>();
+        public final Collection<EnvData> children;
 
-        private EnvData(String segment) {
+        private EnvData(String segment, boolean sorted) {
+            children = sorted ? new TreeSet<EnvData>() : new ArrayList<EnvData>();
             this.segment = segment;
         }
 
