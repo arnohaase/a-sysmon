@@ -1,8 +1,5 @@
 todo
 ----
-* kurios
-  * UUID.randomUUID() --> performance, blocking behavior
-
 * architecture
   * resend data after failure --> just add to the queue again --> idempotence on the server
 
@@ -17,6 +14,9 @@ todo
     * admin flag, arrays of applications with read / write permissions
 
 * core for release
+  * hierarchical (and everywhere): progress indicator while loading
+  * performance view: warn if the data set is very big, and allow discarding (or truncating)
+
   * test on Windows --> graceful degradation
   * rename 'aggregated' to 'hierarchical', make 'start' / 'stop' optional; rename '...PerformancePageDef' to '...HierarchicalPageDef'
   * lock-free aggregation implementation?

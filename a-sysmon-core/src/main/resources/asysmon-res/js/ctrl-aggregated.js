@@ -253,12 +253,12 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
 
     function renderTree() {
-        $log.log('begin render');
+//        $log.log('begin render');
 //        $('#theTree .data-row').tooltip('hide');
 //        $log.log('after tooltip hide');
 
         var hhttmmll = htmlForAllTrees();
-        $log.log('after html generation');
+//        $log.log('after html generation');
 
         // it is an important performance optimization to explicitly unregister event listeners and remove old child
         //  elements from the DOM instead of implicitly removing them in the call to $(...).html(...) - the difference
@@ -269,10 +269,10 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
             myNode.removeChild(myNode.firstChild);
         }
 
-        $log.log('after un-rendering');
+//        $log.log('after un-rendering');
 
         $('#theTree').html(hhttmmll);
-        $log.log('after rendering');
+//        $log.log('after rendering');
 
 //        $('#theTree .data-row')
 //            .tooltip({
@@ -292,7 +292,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                 }
             });
 
-        $log.log('after click listener');
+//        $log.log('after click listener');
     }
 
     function htmlForAllTrees() {
