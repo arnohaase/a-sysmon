@@ -2,9 +2,9 @@ package com.ajjpj.asysmon.demo;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.measure.AMeasureCallback;
+import com.ajjpj.asysmon.measure.AMeasureCallbackVoidNoThrow;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.measure.AWithParameters;
-import com.ajjpj.asysmon.measure.jdbc.AConnectionCounter;
 import com.ajjpj.asysmon.measure.jdbc.ASysMonDataSource;
 
 import javax.servlet.ServletException;
@@ -15,8 +15,6 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -47,6 +45,7 @@ public class AppServlet extends HttpServlet {
         out.println ("<html><head><title>A-SysMon demo content</title></head><body><h1>A-SysMon demo content</h1></body></html>");
 
         final ASimpleMeasurement parMeasurement = ASysMon.get().start("parallel", false);
+
 
         sleep();
 
@@ -123,6 +122,20 @@ public class AppServlet extends HttpServlet {
                 return sleep();
             }
         });
+
+        hugeTree(7, 5);
+    }
+
+    private void hugeTree(final int width, final int depth) {
+        for(int i=0; i<width; i++) {
+            if(depth > 0) {
+                ASysMon.get().measure("Q-" + depth + "-" + i, new AMeasureCallbackVoidNoThrow() {
+                    @Override public void call(AWithParameters m) {
+                        hugeTree(width, depth-1);
+                    }
+                });
+            }
+        }
     }
 
     private Object sleep() {

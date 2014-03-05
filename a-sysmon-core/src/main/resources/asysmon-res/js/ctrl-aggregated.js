@@ -27,6 +27,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     var nodesByFqn = {};
 
     function initFromResponse(data) {
+        $log.log('init from response');
         $scope.isStarted = data.isStarted;
         $scope.columnDefs = data.columnDefs.reverse();
         $scope.traces = data.traces;
@@ -34,6 +35,8 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
         nodesByFqn = {};
         initTraceNodes($scope.traces, 0, '');
+
+        $log.log('after init trace nodes');
 
         $scope.totalDataWidth = 0;
         for(var i=0; i<data.columnDefs.length; i++) {
@@ -250,15 +253,34 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
 
     function renderTree() {
-        $('#theTree .data-row').tooltip('hide');
+        $log.log('begin render');
+//        $('#theTree .data-row').tooltip('hide');
+//        $log.log('after tooltip hide');
 
-        $('#theTree').html(htmlForAllTrees());
+        var hhttmmll = htmlForAllTrees();
+        $log.log('after html generation');
 
-        $('#theTree .data-row')
-            .tooltip({
-                container: 'body',
-                html: true
-            });
+        // it is an important performance optimization to explicitly unregister event listeners and remove old child
+        //  elements from the DOM instead of implicitly removing them in the call to $(...).html(...) - the difference
+        //  is seconds vs. minutes for large trees!
+        $('.data-row.with-children').off();
+        var myNode = document.getElementById("theTree");
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild);
+        }
+
+        $log.log('after un-rendering');
+
+        $('#theTree').html(hhttmmll);
+        $log.log('after rendering');
+
+//        $('#theTree .data-row')
+//            .tooltip({
+//                container: 'body',
+//                html: true
+//            });
+//        $log.log('after tooltip');
+
         $('.data-row.with-children')
             .click(function() {
                 var fqn = $(this).children('.fqn-holder').text();
@@ -269,6 +291,8 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                     toggleTreeNode($(this), nodesByFqn[fqn]);
                 }
             });
+
+        $log.log('after click listener');
     }
 
     function htmlForAllTrees() {
