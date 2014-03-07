@@ -22,7 +22,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
      *  there is a memory leak (i.e. there are measurements that are started but never finished) and kills the
      *  measurement hierarchy.
      */
-    public static final int MAX_CALL_DEPTH = 1000;
+    public static final int MAX_CALL_DEPTH = 100;
 
     private static final ASysMonLogger log = ASysMonLogger.get(AMeasurementHierarchyImpl.class);
 
@@ -30,8 +30,6 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     private final ADataSink dataSink;
 
     private Set<ACollectingMeasurement> collectingMeasurements = new HashSet<ACollectingMeasurement>();
-
-    private boolean hasSyntheticRoot = false;
 
     private final ArrayStack<ASimpleSerialMeasurementImpl> unfinished = new ArrayStack<ASimpleSerialMeasurementImpl>();
     private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<List<AHierarchicalData>>();
@@ -124,7 +122,6 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             //  of this hierarchy. The most typical reason for this - and the only one we can recover from - is that
             //  using code skipped finishing an inner measurement and is now finishing something further outside.
 
-
             if(unfinished.contains(measurement)) {
                 log.warn("Calling 'finish' on a measurement " + measurement + " that is not innermost on the stack.");
 
@@ -155,7 +152,6 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         else {
             childrenStack.peek().add(newData);
         }
-        checkFinishSyntheticRoot();
     }
 
     @Override public void finish(ASimpleParallelMeasurementImpl m) {
@@ -171,7 +167,6 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         final long finishedTimestamp = config.timer.getCurrentNanos();
         m.getChildrenOfParent().add(new AHierarchicalData(false, m.getStartTimeMillis(), finishedTimestamp - m.getStartTimeNanos(), m.getIdentifier(), m.getParameters(), Collections.<AHierarchicalData>emptyList()));
-        checkFinishSyntheticRoot();
     }
 
     @Override
@@ -181,14 +176,27 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         }
 
         checkNotFinished();
-        if(unfinished.isEmpty()) {
-            start(IDENT_SYNTHETIC_ROOT, true);
-            hasSyntheticRoot = true;
-        }
 
-        final ACollectingMeasurement result = new ACollectingMeasurement(config, this, isSerial, identifier, childrenStack.peek());
-        collectingMeasurements.add(result);
-        return result;
+        if(unfinished.isEmpty()) {
+            // A collection measurement can never be top-level. So we wrap a SimpleMeasurement around it, finishing it immediately
+            //  to be on the safe side with regard to memory leaks
+            final ASimpleMeasurement m = start(IDENT_SYNTHETIC_ROOT, true);
+            try {
+                log.warn("starting a top-level collecting measurement - creating synthetic SimpleMeasurement and finishing immediately");
+                final ACollectingMeasurement result = new ACollectingMeasurement(config, this, isSerial, identifier, childrenStack.peek());
+                collectingMeasurements.add(result);
+                result.finish();
+                return result;
+            }
+            finally {
+                m.finish();
+            }
+        }
+        else {
+            final ACollectingMeasurement result = new ACollectingMeasurement(config, this, isSerial, identifier, childrenStack.peek());
+            collectingMeasurements.add(result);
+            return result;
+        }
     }
 
     @Override public void finish(ACollectingMeasurement m) {
@@ -211,15 +219,6 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         final AHierarchicalData newData = new AHierarchicalData(m.isSerial(), m.getStartTimeMillis(), m.getTotalDurationNanos(), m.getIdentifier(), m.getParameters(), children);
         m.getChildrenOfParent().add(newData);
         collectingMeasurements.remove(m);
-        checkFinishSyntheticRoot();
-    }
-
-    private void checkFinishSyntheticRoot() {
-        if(hasSyntheticRoot &&
-                collectingMeasurements.isEmpty() &&
-                unfinished.size() == 1) {
-            finish(unfinished.peek());
-        }
     }
 
     /**

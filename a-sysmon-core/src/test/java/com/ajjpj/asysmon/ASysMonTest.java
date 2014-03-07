@@ -352,17 +352,16 @@ public class ASysMonTest {
 
         final ACollectingMeasurement a = sysMon.startCollectingMeasurement("a");
         final ACollectingMeasurement b = sysMon.startCollectingMeasurement("b");
+        assertEquals(2, dataSink.data.size());
         a.finish();
-        assertEquals(0, dataSink.data.size());
+        assertEquals(2, dataSink.data.size());
         b.finish();
-        assertEquals(1, dataSink.data.size());
+        assertEquals(2, dataSink.data.size());
 
-        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
-        assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, root.getIdentifier());
-
-        assertEquals(2, root.getChildren().size());
-        assertEquals("a", root.getChildren().get(0).getIdentifier());
-        assertEquals("b", root.getChildren().get(1).getIdentifier());
+        assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, dataSink.data.get(0).getRootNode().getIdentifier());
+        assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, dataSink.data.get(1).getRootNode().getIdentifier());
+        assertEquals("a", dataSink.data.get(0).getRootNode().getChildren().get(0).getIdentifier());
+        assertEquals("b", dataSink.data.get(1).getRootNode().getChildren().get(0).getIdentifier());
     }
 
     @Test
@@ -370,25 +369,23 @@ public class ASysMonTest {
         final CollectingDataSink dataSink = new CollectingDataSink();
         final ASysMonApi sysMon = createSysMon(dataSink);
 
-        // If a top-level collecting measurement is started, and then a simple measurement is started before
-        //  that collecting measurement is finished, the implicitly created synthetic root measurement is finished
-        //  only after both measurements are finished.
-        // That is pretty pathological behavior (and triggers a warning), but it is better than throwing an exception
-        //  and interfering with regular functionality of an instrumented application.
+        // If a top-level collecting measurement is started, a synthetic SimpleMeasurement is wrapped around it,
+        //  and both are closed immediately to avoid memory leaks.
 
         final ACollectingMeasurement coll = sysMon.startCollectingMeasurement("a");
-        final ASimpleMeasurement m = sysMon.start("m");
-        coll.finish();
-        m.finish();
-
         assertEquals(1, dataSink.data.size());
 
         final AHierarchicalData root = dataSink.data.get(0).getRootNode();
         assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, root.getIdentifier());
 
-        assertEquals(2, root.getChildren().size());
-        assertEquals("a", root.getChildren().get(0).getIdentifier());
-        assertEquals("m", root.getChildren().get(1).getIdentifier());
+        final ASimpleMeasurement m = sysMon.start("m");
+        m.finish();
+
+        assertEquals(2, dataSink.data.size());
+        assertEquals("a", dataSink.data.get(0).getRootNode().getChildren().get(0).getIdentifier());
+        assertEquals("m", dataSink.data.get(1).getRootNode().getIdentifier());
+
+        coll.finish();
     }
 
     @Test
