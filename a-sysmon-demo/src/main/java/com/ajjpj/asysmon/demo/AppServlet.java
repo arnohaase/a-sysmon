@@ -123,7 +123,7 @@ public class AppServlet extends HttpServlet {
             }
         });
 
-        hugeTree(8, 5);
+        hugeTree(8, 6);
     }
 
     private void hugeTree(final int width, final int depth) {

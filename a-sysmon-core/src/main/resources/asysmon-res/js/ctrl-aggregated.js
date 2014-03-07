@@ -157,7 +157,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         }
 
         if(node.children && node.children.length) {
-            return $scope.expansionModel[node.fqn] ? 'node-icon-expanded' : 'node-icon-collapsed';
+            return $scope.isExpanded(node) ? 'node-icon-expanded' : 'node-icon-collapsed';
         }
         return 'node-icon-empty';
     };
@@ -180,12 +180,19 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
     function toggleTreeNode(dataRow, node) {
         var childrenDiv = dataRow.next();
+
+        if(childrenDiv.hasClass('unrendered')) {
+            childrenDiv.replaceWith(htmlForChildrenDiv(node, true));
+            childrenDiv = dataRow.next();
+            childrenDiv.find('.data-row.with-children').click(onClickNode);
+        }
+
         childrenDiv.slideToggle(50, function() {
             $scope.$apply(function() {
                 $scope.expansionModel[node.fqn] = !$scope.expansionModel[node.fqn];
 
                 var nodeIconDiv = dataRow.children('.node-icon');
-                if($scope.expansionModel[node.fqn]) {
+                if($scope.isExpanded(node)) {
                     nodeIconDiv.removeClass('node-icon-collapsed').addClass('node-icon-expanded');
                 }
                 else {
@@ -253,12 +260,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
 
     function renderTree() {
-//        $log.log('begin render');
-//        $('#theTree .data-row').tooltip('hide');
-//        $log.log('after tooltip hide');
-
         var hhttmmll = htmlForAllTrees();
-//        $log.log('after html generation');
 
         // it is an important performance optimization to explicitly unregister event listeners and remove old child
         //  elements from the DOM instead of implicitly removing them in the call to $(...).html(...) - the difference
@@ -269,30 +271,19 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
             myNode.removeChild(myNode.firstChild);
         }
 
-//        $log.log('after un-rendering');
-
         $('#theTree').html(hhttmmll);
-//        $log.log('after rendering');
 
-//        $('#theTree .data-row')
-//            .tooltip({
-//                container: 'body',
-//                html: true
-//            });
-//        $log.log('after tooltip');
+        $('.data-row.with-children').click(onClickNode);
+    }
 
-        $('.data-row.with-children')
-            .click(function() {
-                var fqn = $(this).children('.fqn-holder').text();
-                if($scope.isInPickMode) {
-                    pickTreeNode(nodesByFqn[fqn]);
-                }
-                else {
-                    toggleTreeNode($(this), nodesByFqn[fqn]);
-                }
-            });
-
-//        $log.log('after click listener');
+    function onClickNode() {
+        var fqn = $(this).children('.fqn-holder').text();
+        if($scope.isInPickMode) {
+            pickTreeNode(nodesByFqn[fqn]);
+        }
+        else {
+            toggleTreeNode($(this), nodesByFqn[fqn]);
+        }
     }
 
     function htmlForAllTrees() {
@@ -309,7 +300,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                 '</div></div>';
         }());
 
-        var result = '<div style="display: block">&nbsp;<div style="float: right;">All times are in milliseconds</div></div>';
+        var result = '';
 
         angular.forEach($scope.pickedTraces, function(rootNode) {
             result +=
@@ -321,6 +312,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
         return result;
     }
+
 
     function htmlForTreeNode(curNode) {
         var dataRowSubdued = curNode.isSerial ? '' : 'data-row-subdued';
@@ -344,42 +336,69 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
             dataCols += '</div>';
         });
 
-        var tooltip = '';
-        if(curNode.tooltip) {
-            var tooltipContent = '<table>';
-            angular.forEach(curNode.tooltip, function(row) {
-                tooltipContent += '<tr>';
-
-                angular.forEach(row, function(cell, idx) {
-                    tooltipContent += '<td class=\'tooltip-column-' + idx + '\'>' + escapeHtml(cell) + '</td>'
-                });
-
-                tooltipContent += '</tr>';
-            });
-
-            tooltipContent += '</table>';
-
-
-            tooltip = 'data-toggle="tooltip" title="' + tooltipContent + '" ';
-        }
-
         var withChildrenClass = (curNode.children && curNode.children.length) ? ' with-children' : '';
         var result =
-            '<div class="data-row data-row-' + (curNode.level - $scope.rootLevel) + withChildrenClass + ' ' + dataRowSubdued + '" ' + tooltip + '>' +
+            '<div class="data-row data-row-' + (curNode.level - $scope.rootLevel) + withChildrenClass + ' ' + dataRowSubdued + '">' +
                 '<div class="fqn-holder">' + curNode.fqn + '</div>' +
                 '<div class="node-icon ' + $scope.nodeIconClass(curNode.fqn) + '">&nbsp;</div>' +
                 dataCols +
                 '<div class="node-text" style="margin-right: ' + $scope.totalDataWidth + 'px;">' + escapeHtml(curNode.name) + '</div>' +
                 '</div>';
 
-        if(curNode.children && curNode.children.length) {
+        result += htmlForChildrenDiv(curNode);
+
+        return result;
+    }
+
+    function htmlForChildrenDiv(curNode, shouldRender) {
+        if(! curNode.children || curNode.children.length === 0) {
+            return '';
+        }
+
+        if(shouldRender || $scope.isExpanded(curNode)) {
+            var result = '';
             result += '<div class="children" style="display: ' + $scope.expansionStyle(curNode) + ';">';
             angular.forEach(curNode.children, function(child) {
                 result += htmlForTreeNode(child, $scope.rootLevel);
             });
             result += '</div>';
+            return result;
         }
-        return result;
+        else {
+            return '<div class="children unrendered"></div>';
+        }
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

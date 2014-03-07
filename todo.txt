@@ -14,6 +14,7 @@ todo
     * admin flag, arrays of applications with read / write permissions
 
 * core for release
+  * tooltips: HTML5 instead of jQuery plugin
   * hierarchical (and everywhere): progress indicator while loading
   * performance view: warn if the data set is very big, and allow discarding (or truncating)
 

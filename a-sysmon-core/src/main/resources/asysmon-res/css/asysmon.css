@@ -64,11 +64,13 @@ td.global-measurements-key {
 }
 
 div.button-segment {
-  height: 60px;
+    height: 60px;
+    pointer-events: none;
 }
 div.button-box {
-  float: right;
-  margin-top: 8px;
+    float: right;
+    margin-top: 8px;
+    pointer-events: auto;
 }
 
 .button-segment.affix {
@@ -225,6 +227,10 @@ div.subdued-progress-background {
 }
 
 .fqn-holder {
+    display: none;
+}
+
+.unrendered {
     display: none;
 }
 

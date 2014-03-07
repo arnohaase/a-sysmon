@@ -18,9 +18,9 @@ public abstract class ABottomUpPageDefinition extends AAbstractAsysmonPerformanc
             new ColDef("%", true, 1, ColWidth.Medium),
             new ColDef("%local", false, 1, ColWidth.Medium),
             new ColDef("#calls", false, 0, ColWidth.Medium),
-            new ColDef("avg", false, 0, ColWidth.Medium),
-            new ColDef("min", false, 0, ColWidth.Medium),
-            new ColDef("max", false, 0, ColWidth.Medium)
+            new ColDef("avg ms", false, 0, ColWidth.Medium),
+            new ColDef("min ms", false, 0, ColWidth.Medium),
+            new ColDef("max ms", false, 0, ColWidth.Medium)
     );
 
     public static final int MILLION = 1000*1000;
