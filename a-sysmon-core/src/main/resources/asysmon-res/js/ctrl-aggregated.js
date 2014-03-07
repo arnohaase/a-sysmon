@@ -309,7 +309,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                 '</div></div>';
         }());
 
-        var result = '';
+        var result = '<div style="display: block">&nbsp;<div style="float: right;">All times are in milliseconds</div></div>';
 
         angular.forEach($scope.pickedTraces, function(rootNode) {
             result +=
