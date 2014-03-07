@@ -27,7 +27,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     var nodesByFqn = {};
 
     function initFromResponse(data) {
-        $log.log('init from response');
+//        $log.log('init from response');
         $scope.isStarted = data.isStarted;
         $scope.columnDefs = data.columnDefs.reverse();
         $scope.traces = data.traces;
@@ -36,7 +36,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         nodesByFqn = {};
         initTraceNodes($scope.traces, 0, '');
 
-        $log.log('after init trace nodes');
+//        $log.log('after init trace nodes');
 
         $scope.totalDataWidth = 0;
         for(var i=0; i<data.columnDefs.length; i++) {

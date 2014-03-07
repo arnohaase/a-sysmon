@@ -51,10 +51,6 @@ todo
 
 * global measurements
   * /proc/self/cmdline
-  * /proc/self/io          http://stackoverflow.com/questions/3633286/understanding-the-counters-in-proc-pid-io
-  * /proc/self/net --> ?!?!? 'nethogs' instead?
-
-  * pidstat for 'self' disk I/O
 
   * Felix: cache hit / miss etc.
 
