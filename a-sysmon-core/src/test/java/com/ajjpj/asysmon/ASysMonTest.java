@@ -17,10 +17,13 @@ import com.ajjpj.asysmon.testutil.CollectingDataSink;
 import com.ajjpj.asysmon.testutil.CountingDataSink;
 import com.ajjpj.asysmon.testutil.CountingLoggerFactory;
 import com.ajjpj.asysmon.testutil.ExplicitTimer;
+import com.sun.xml.internal.stream.util.ThreadLocalBufferAllocator;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.UnknownHostException;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.*;
 
@@ -459,6 +462,45 @@ public class ASysMonTest {
 
         assertTrue(root.getJoinedFlows().contains(new ACorrelationId("c", "c")));
         assertTrue(root.getJoinedFlows().contains(new ACorrelationId("d", "d")));
+    }
+
+    @Test
+    @Ignore
+    public void testLoadCleanup() throws InterruptedException {
+        final long start = System.currentTimeMillis();
+        final int NUM_THREADS = 10;
+        final CountDownLatch latch = new CountDownLatch(2* NUM_THREADS);
+        for(int t = 0; t<NUM_THREADS; t++) {
+            new Thread() {
+                @Override public void run() {
+                    for(int i=0; i<100_000; i++) {
+                        createHierarchy(5, 5);
+                    }
+                    System.out.println("s: " + (System.currentTimeMillis() - start) + "ms");
+                    latch.countDown();
+                }
+            }.start();
+
+            new Thread() {
+                @Override public void run() {
+                    for(int i=0; i<100_000_000; i++) {
+                        ASysMon.get().startCollectingMeasurement("xyz");
+                    }
+                    System.out.println("c: "+ (System.currentTimeMillis() - start) + "ms");
+                    latch.countDown();
+                }
+            }.start();
+        }
+        latch.await();
+    }
+
+    private void createHierarchy(int width, int depth) {
+        for(int i=0; i<width; i++) {
+            ASysMon.get().start("a-" + i + "-" + depth);
+            if(depth > 0) {
+                createHierarchy(width, depth-1);
+            }
+        }
     }
 }
 
