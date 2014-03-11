@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 /**
  * @author arno
  */
-public class ASysMonTest {
+class ASysMonTest {
     private ASysMonConfigBuilder configBuilder;
 
     @Before
