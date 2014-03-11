@@ -3,6 +3,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
     var effectiveNumCpus = 1;
 
     $scope.autoRefresh = false;
+    $scope.autoRefreshSeconds = 10;
     var autoRefreshCounter = 0; // to invalidate auto-refresh if there was a manual refresh in between
 
     function initFromResponse(data) {
@@ -29,6 +30,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
     }
 
     $scope.$watch('autoRefresh', triggerAutoRefresh);
+    $scope.$watch('autoRefreshSeconds', triggerAutoRefresh);
 
     function cpuFreq() {
         var result = [];
@@ -57,7 +59,7 @@ angular.module('ASysMonApp').controller('CtrlScalars', function($scope, $log, Re
                 return;
             }
             $scope.refresh();
-        }, 10*1000);
+        }, $scope.autoRefreshSeconds * 1000);
         autoRefreshCounter += 1;
     }
 

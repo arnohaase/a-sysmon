@@ -3,8 +3,11 @@
     <div class="button-box">
         <a class="btn btn-default" ng-click="refresh()" data-toggle="tooltip" title="Fetch fresh data from the server">Refresh</a>
     </div>
-
-    <input type="checkbox" ng-model="autoRefresh"> Automatically refresh after 10 seconds
+    <div class="input-group">
+        <span class="input-group-addon"><input type="checkbox" ng-model="autoRefresh"></span>
+        <input type="text" class="form-control" ng-model="autoRefreshSeconds" style="width:50px"> Automatically refresh after {{autoRefreshSeconds}} seconds
+    </div>
+    <!--<input type="checkbox" ng-model="autoRefresh"> Automatically refresh after 10 seconds -->
 </div>
 
 <fieldset class="scalar-group">
