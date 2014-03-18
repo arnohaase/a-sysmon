@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure.environment.impl;
 
+import com.ajjpj.abase.proc.CliCommand;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
-import com.ajjpj.asysmon.util.CliCommand;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;

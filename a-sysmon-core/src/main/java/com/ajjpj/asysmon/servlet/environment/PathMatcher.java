@@ -1,10 +1,10 @@
 package com.ajjpj.asysmon.servlet.environment;
 
-
-import com.ajjpj.asysmon.util.AList;
+import com.ajjpj.abase.collection.immutable.AList;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * @author arno

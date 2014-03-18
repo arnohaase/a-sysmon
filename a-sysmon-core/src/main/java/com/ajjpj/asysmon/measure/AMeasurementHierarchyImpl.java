@@ -1,12 +1,12 @@
 package com.ajjpj.asysmon.measure;
 
+import com.ajjpj.abase.collection.mutable.ArrayStack;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
-import com.ajjpj.asysmon.util.ArrayStack;
 
 import java.util.*;
 
@@ -29,13 +29,13 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     private final ASysMonConfig config;
     private final ADataSink dataSink;
 
-    private Set<ACollectingMeasurement> collectingMeasurements = new HashSet<ACollectingMeasurement>();
+    private Set<ACollectingMeasurement> collectingMeasurements = new HashSet<>();
 
-    private final ArrayStack<ASimpleSerialMeasurementImpl> unfinished = new ArrayStack<ASimpleSerialMeasurementImpl>();
-    private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<List<AHierarchicalData>>();
+    private final ArrayStack<ASimpleSerialMeasurementImpl> unfinished = new ArrayStack<>();
+    private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<>();
 
-    private final Collection<ACorrelationId> startedFlows = new HashSet<ACorrelationId>();
-    private final Collection<ACorrelationId> joinedFlows = new HashSet<ACorrelationId>();
+    private final Collection<ACorrelationId> startedFlows = new HashSet<>();
+    private final Collection<ACorrelationId> joinedFlows = new HashSet<>();
 
     /**
      * shows if this measurement was finished in an orderly fashion
@@ -107,7 +107,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ASimpleSerialMeasurementImpl measurement) {
-        if(config.isGloballyDisabled()) {
+        if(ASysMonConfig.isGloballyDisabled()) {
             return;
         }
 
@@ -143,7 +143,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
         if(unfinished.isEmpty()) {
             // copy into a separate collection because the collection is modified in the loop
-            for(ACollectingMeasurement m: new ArrayList<ACollectingMeasurement>(collectingMeasurements)) {
+            for(ACollectingMeasurement m: new ArrayList<>(collectingMeasurements)) {
                 finish(m);
             }
             isFinished = true;
@@ -155,7 +155,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ASimpleParallelMeasurementImpl m) {
-        if(config.isGloballyDisabled()) {
+        if(ASysMonConfig.isGloballyDisabled()) {
             return;
         }
 
@@ -171,7 +171,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
     @Override
     public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean isSerial) {
-        if(config.isGloballyDisabled()) {
+        if(ASysMonConfig.isGloballyDisabled()) {
             return new ACollectingMeasurement(null, null, true, null, null);
         }
 
@@ -200,7 +200,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override public void finish(ACollectingMeasurement m) {
-        if(config.isGloballyDisabled()) {
+        if(ASysMonConfig.isGloballyDisabled()) {
             return;
         }
 

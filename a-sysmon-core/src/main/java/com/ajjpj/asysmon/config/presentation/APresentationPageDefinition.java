@@ -1,12 +1,10 @@
 package com.ajjpj.asysmon.config.presentation;
 
-import com.ajjpj.asysmon.ASysMon;
+import com.ajjpj.abase.io.AJsonSerHelper;
 import com.ajjpj.asysmon.ASysMonApi;
-import com.ajjpj.asysmon.util.AJsonSerHelper;
-import com.ajjpj.asysmon.util.APair;
 
-import java.io.IOException;
 import java.util.List;
+
 
 /**
  * This interface represents the entire definition of one "view" in ASysMon's HTML interface. Everything else is

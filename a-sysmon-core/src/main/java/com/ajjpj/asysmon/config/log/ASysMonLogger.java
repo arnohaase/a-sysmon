@@ -1,14 +1,14 @@
 package com.ajjpj.asysmon.config.log;
 
+import com.ajjpj.abase.function.AFunction0NoThrow;
 import com.ajjpj.asysmon.config.ADefaultConfigFactory;
-import com.ajjpj.asysmon.util.AStringFunction;
 
 
 /**
  * @author arno
  */
 public abstract class ASysMonLogger {
-    public abstract void debug(AStringFunction msg);
+    public abstract void debug(AFunction0NoThrow<String> msg);
     public abstract void info(String msg);
     public abstract void warn(String msg);
     public abstract void warn(String msg, Exception exc);

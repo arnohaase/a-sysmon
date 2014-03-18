@@ -49,6 +49,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.ajjpj.a-base</groupId>
+            <artifactId>a-base</artifactId>
+            <version>1.0-pre2</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

@@ -1,5 +1,7 @@
 package com.ajjpj.asysmon.config;
 
+import com.ajjpj.abase.function.AFunction0;
+import com.ajjpj.abase.util.AUnchecker;
 import com.ajjpj.asysmon.config.appinfo.AApplicationInfoProvider;
 import com.ajjpj.asysmon.config.log.ALog4JLoggerFactory;
 import com.ajjpj.asysmon.config.log.AStdOutLoggerFactory;
@@ -10,9 +12,8 @@ import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.http.AHttpRequestAnalyzer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
-import com.ajjpj.asysmon.util.AFunction0;
-import com.ajjpj.asysmon.util.AOption;
-import com.ajjpj.asysmon.util.AUnchecker;
+import com.ajjpj.abase.collection.immutable.AOption;
+//import com.ajjpj.abase.util.AUnchecker;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.io.InputStream;
@@ -54,10 +55,11 @@ public class ADefaultConfigFactory implements AConfigFactory {
 
     public static AConfigFactory getConfigFactory() {
         return AUnchecker.executeUnchecked(new AFunction0<AConfigFactory, Exception>() {
-            @Override public AConfigFactory apply() throws Exception {
+            @Override
+            public AConfigFactory apply() throws Exception {
                 final Properties propsRaw = getProperties();
 
-                if(configuredLogger == null) {
+                if (configuredLogger == null) {
                     // allow API override for config file settings
                     configuredLogger = extractLogger(propsRaw);
                 }

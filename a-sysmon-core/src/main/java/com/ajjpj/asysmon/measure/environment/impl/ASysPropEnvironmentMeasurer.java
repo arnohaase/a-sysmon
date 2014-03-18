@@ -1,11 +1,7 @@
 package com.ajjpj.asysmon.measure.environment.impl;
 
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
-import com.ajjpj.asysmon.util.AList;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author arno

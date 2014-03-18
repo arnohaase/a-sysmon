@@ -1,15 +1,16 @@
 package com.ajjpj.asysmon.servlet.memgc;
 
+import com.ajjpj.abase.collection.mutable.ARingBuffer;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.scalar.AJmxGcMeasurerer;
-import com.ajjpj.asysmon.util.ARingBuffer;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 
 /**
  * This class remembers the most recent GC details, discarding older data to make room for newer data.

@@ -1,8 +1,8 @@
 package com.ajjpj.asysmon.measure.scalar;
 
+import com.ajjpj.abase.function.AFunction1;
+import com.ajjpj.abase.io.AFile;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.util.AFunction1;
-import com.ajjpj.asysmon.util.io.AFile;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -11,12 +11,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 /**
  * @author arno
  */
 public class ACpuUtilizationMeasurer implements AScalarMeasurer {
-    public static final AFile PROC_STAT_FILE = new AFile("/proc/stat");
-    public static final AFile PROC_CPUINFO_FILE = new AFile("/proc/cpuinfo");
+    public static final AFile PROC_STAT_FILE = new AFile("/proc/stat", Charset.defaultCharset());
+    public static final AFile PROC_CPUINFO_FILE = new AFile("/proc/cpuinfo", Charset.defaultCharset());
 
     public static final String KEY_PREFIX = "cpu:";
     public static final String KEY_MEMENTO = KEY_PREFIX;
@@ -64,7 +65,7 @@ public class ACpuUtilizationMeasurer implements AScalarMeasurer {
     private void contributeFreq(Map<String, AScalarDataPoint> data, long timestamp) throws IOException {
         final Map<String, AtomicInteger> counter = new HashMap<String, AtomicInteger>();
 
-        for(String line: PROC_CPUINFO_FILE.lines(Charset.defaultCharset())) {
+        for(String line: PROC_CPUINFO_FILE.lines()) {
             if(! line.contains("MHz")) {
                 continue;
             }
@@ -82,7 +83,7 @@ public class ACpuUtilizationMeasurer implements AScalarMeasurer {
     }
 
     private Map<String, Snapshot> createSnapshot() throws IOException {
-        return PROC_STAT_FILE.iterate(Charset.defaultCharset(), new AFunction1<Iterator<String>, Map<String, Snapshot>, RuntimeException>() {
+        return PROC_STAT_FILE.iterate(new AFunction1<Iterator<String>, Map<String, Snapshot>, RuntimeException>() { //TODO nothrow
             @Override public Map<String, Snapshot> apply(Iterator<String> iter) {
                 final Map<String, Snapshot> result = new HashMap<String, Snapshot>();
 

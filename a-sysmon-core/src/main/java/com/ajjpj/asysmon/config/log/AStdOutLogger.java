@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.config.log;
 
-import com.ajjpj.asysmon.util.AStringFunction;
+import com.ajjpj.abase.function.AFunction0NoThrow;
 
 import java.util.Date;
 
@@ -22,7 +22,7 @@ public class AStdOutLogger extends ASysMonLogger {
         this.context = ctx + " ";
     }
 
-    @Override public void debug(AStringFunction msg) {
+    @Override public void debug(AFunction0NoThrow<String> msg) {
         if(isDebugEnabled) {
             log("DEBUG", msg.apply());
         }

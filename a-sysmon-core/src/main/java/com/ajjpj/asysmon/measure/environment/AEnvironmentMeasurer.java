@@ -1,9 +1,10 @@
 package com.ajjpj.asysmon.measure.environment;
 
-import com.ajjpj.asysmon.util.AList;
+import com.ajjpj.abase.collection.immutable.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 
 import java.util.List;
+
 
 /**
  * @author arno

@@ -1,7 +1,8 @@
 package com.ajjpj.asysmon.testutil;
 
+import com.ajjpj.abase.function.AFunction0NoThrow;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
-import com.ajjpj.asysmon.util.AStringFunction;
+
 
 /**
  * @author arno
@@ -19,7 +20,7 @@ public class CountingLogger extends ASysMonLogger {
         numError = 0;
     }
 
-    @Override public void debug(AStringFunction msg) {
+    @Override public void debug(AFunction0NoThrow<String> msg) {
         numDebug += 1;
     }
 

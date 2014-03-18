@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.http;
 
-import com.ajjpj.asysmon.util.AOption;
+import com.ajjpj.abase.collection.immutable.AOption;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

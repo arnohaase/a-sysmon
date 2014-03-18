@@ -1,7 +1,8 @@
 package com.ajjpj.asysmon.config.log;
 
-import com.ajjpj.asysmon.util.AStringFunction;
+import com.ajjpj.abase.function.AFunction0NoThrow;
 import org.apache.log4j.Logger;
+
 
 /**
  * @author arno
@@ -13,7 +14,7 @@ public class ALog4JLogger extends ASysMonLogger {
         log = Logger.getLogger(context);
     }
 
-    @Override public void debug(AStringFunction msg) {
+    @Override public void debug(AFunction0NoThrow<String> msg) {
         if(log.isDebugEnabled()) {
             log.debug(msg.apply());
         }

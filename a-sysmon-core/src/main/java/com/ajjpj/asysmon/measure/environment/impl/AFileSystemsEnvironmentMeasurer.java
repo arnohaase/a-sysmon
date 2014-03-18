@@ -1,11 +1,7 @@
 package com.ajjpj.asysmon.measure.environment.impl;
 
-
-import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
+import com.ajjpj.abase.proc.CliCommand;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
-import com.ajjpj.asysmon.measure.environment.impl.ACpuEnvironmentMeasurer;
-import com.ajjpj.asysmon.util.AList;
-import com.ajjpj.asysmon.util.CliCommand;
 
 import java.io.BufferedReader;
 import java.io.File;

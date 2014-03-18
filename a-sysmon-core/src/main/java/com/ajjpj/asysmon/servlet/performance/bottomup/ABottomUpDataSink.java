@@ -1,14 +1,15 @@
 package com.ajjpj.asysmon.servlet.performance.bottomup;
 
+import com.ajjpj.abase.collection.mutable.ArrayStack;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.servlet.performance.AMinMaxAvgData;
-import com.ajjpj.asysmon.util.ArrayStack;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
  * @author arno

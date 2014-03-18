@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure.environment.impl;
 
+import com.ajjpj.abase.collection.immutable.AOption;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
-import com.ajjpj.asysmon.util.AOption;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -9,7 +9,6 @@ import com.ajjpj.asysmon.measure.AMeasureCallback;
 import com.ajjpj.asysmon.measure.AMeasureCallbackVoid;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
-import com.ajjpj.asysmon.util.AList;
 
 import java.util.List;
 import java.util.Map;

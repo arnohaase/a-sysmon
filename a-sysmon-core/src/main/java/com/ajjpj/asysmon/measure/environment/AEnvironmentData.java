@@ -1,7 +1,8 @@
 package com.ajjpj.asysmon.measure.environment;
 
-import com.ajjpj.asysmon.util.AList;
-import com.ajjpj.asysmon.util.AUUID;
+import com.ajjpj.abase.collection.immutable.AList;
+import com.ajjpj.abase.util.AUUID;
+
 
 /**
  * 'Environment' data describes things that potentially change, but rarely do so - more precisely, the assumption is

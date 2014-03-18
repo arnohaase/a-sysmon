@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.config.wiring;
 
-import com.ajjpj.asysmon.util.AOption;
+import com.ajjpj.abase.collection.immutable.AOption;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

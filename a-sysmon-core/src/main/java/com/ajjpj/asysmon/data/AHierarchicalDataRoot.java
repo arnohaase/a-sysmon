@@ -1,9 +1,10 @@
 package com.ajjpj.asysmon.data;
 
-import com.ajjpj.asysmon.util.AUUID;
+import com.ajjpj.abase.util.AUUID;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 
 /**
  * @author arno

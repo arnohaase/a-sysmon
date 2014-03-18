@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.config.log;
 
-import com.ajjpj.asysmon.util.AStringFunction;
+import com.ajjpj.abase.function.AFunction0NoThrow;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +16,7 @@ public class AJavaUtilLogger extends ASysMonLogger {
         this.log = Logger.getLogger(context.getName());
     }
 
-    @Override public void debug(AStringFunction msg) {
+    @Override public void debug(AFunction0NoThrow<String> msg) {
         if(log.isLoggable(Level.FINE)) {
             log.fine(msg.apply());
         }

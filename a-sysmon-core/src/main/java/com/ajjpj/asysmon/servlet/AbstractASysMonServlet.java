@@ -1,7 +1,6 @@
 package com.ajjpj.asysmon.servlet;
 
-
-import com.ajjpj.asysmon.util.AJsonSerHelper;
+import com.ajjpj.abase.io.AJsonSerHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

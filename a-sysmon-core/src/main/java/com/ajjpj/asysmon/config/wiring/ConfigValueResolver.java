@@ -1,8 +1,8 @@
 package com.ajjpj.asysmon.config.wiring;
 
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
-import com.ajjpj.asysmon.util.AOption;
-import com.ajjpj.asysmon.util.AUnchecker;
+import com.ajjpj.abase.collection.immutable.AOption;
+import com.ajjpj.abase.util.AUnchecker;
 
 import java.util.Properties;
 

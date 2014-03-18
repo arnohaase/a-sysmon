@@ -1,5 +1,6 @@
 package com.ajjpj.asysmon.impl;
 
+import com.ajjpj.abase.collection.immutable.AList;
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.config.ASysMonConfig;
@@ -12,7 +13,6 @@ import com.ajjpj.asysmon.measure.*;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentData;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
-import com.ajjpj.asysmon.util.AList;
 import com.ajjpj.asysmon.util.AShutdownable;
 
 import java.util.*;

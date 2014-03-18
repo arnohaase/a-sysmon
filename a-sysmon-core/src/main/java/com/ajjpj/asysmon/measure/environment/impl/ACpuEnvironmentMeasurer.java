@@ -1,10 +1,10 @@
 package com.ajjpj.asysmon.measure.environment.impl;
 
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
-import com.ajjpj.asysmon.util.AList;
 
-import java.io.*;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 
 
 /**

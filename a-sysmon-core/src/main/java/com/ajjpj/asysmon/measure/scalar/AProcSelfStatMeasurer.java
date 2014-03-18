@@ -1,17 +1,18 @@
 package com.ajjpj.asysmon.measure.scalar;
 
+import com.ajjpj.abase.io.AFile;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.util.io.AFile;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
+
 /**
  * @author arno
  */
 public class AProcSelfStatMeasurer implements AScalarMeasurer {
-    public static final AFile PROC_SELF_STAT_FILE = new AFile("/proc/self/stat");
+    public static final AFile PROC_SELF_STAT_FILE = new AFile("/proc/self/stat", Charset.defaultCharset());
     public static final String KEY_MEMENTO = "proc:self:stat";
 
     public static final String KEY_SELF_USER = ACpuUtilizationMeasurer.KEY_PREFIX + "self-user";
@@ -41,7 +42,7 @@ public class AProcSelfStatMeasurer implements AScalarMeasurer {
     }
 
     private Snapshot createSnapshot() throws IOException {
-        final String raw = PROC_SELF_STAT_FILE.lines(Charset.defaultCharset()).get(0);
+        final String raw = PROC_SELF_STAT_FILE.lines().get(0);
         final String[] split = raw.split("\\s+");
 
         final long userJiffies = Long.valueOf(split[13]);

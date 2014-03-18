@@ -1,9 +1,9 @@
 package com.ajjpj.asysmon.measure.scalar;
 
+import com.ajjpj.abase.io.AFile;
+import com.ajjpj.abase.proc.CliCommand;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.measure.environment.impl.AFileSystemsEnvironmentMeasurer;
-import com.ajjpj.asysmon.util.CliCommand;
-import com.ajjpj.asysmon.util.io.AFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.Map;
  * @author arno
  */
 public class AProcDiskstatsMeasurer implements AScalarMeasurer {
-    public static final AFile PROC_DISKSTATS = new AFile("/proc/diskstats");
+    public static final AFile PROC_DISKSTATS = new AFile("/proc/diskstats", Charset.defaultCharset());
 
     public static final String KEY_PREFIX = "disk:";
     public static final String KEY_MEMENTO = KEY_PREFIX;
@@ -112,7 +112,7 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
         while (! dev.isEmpty()) {
             final File f = new File("/sys/block/" + dev + "/queue/physical_block_size");
             if(f.exists()) {
-                return Integer.valueOf(new AFile(f).lines(Charset.defaultCharset()).get(0));
+                return Integer.valueOf(new AFile(f, Charset.defaultCharset()).lines().get(0));
             }
             dev = dev.substring(0, dev.length()-1);
         }
@@ -160,7 +160,7 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
     }
 
     private static Snapshot createSnapshot() throws IOException {
-        return createSnapshot(PROC_DISKSTATS.lines(Charset.defaultCharset()));
+        return createSnapshot(PROC_DISKSTATS.lines());
     }
 
     static Snapshot createSnapshot(Iterable<String> source) throws IOException {

@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure.scalar;
 
+import com.ajjpj.abase.io.AFile;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
-import com.ajjpj.asysmon.util.io.AFile;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -9,11 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+
 /**
  * @author arno
  */
 public class AProcNetDevMeasurer implements AScalarMeasurer {
-    public static final AFile PROC_NET_DEV = new AFile("/proc/net/dev");
+    public static final AFile PROC_NET_DEV = new AFile("/proc/net/dev", Charset.defaultCharset());
 
     public static final String KEY_PREFIX = "net:";
     public static final String KEY_MEMENTO = KEY_PREFIX;
@@ -82,7 +83,7 @@ public class AProcNetDevMeasurer implements AScalarMeasurer {
     }
 
     private static Snapshot createSnapshot() throws IOException {
-        return createSnapshot(PROC_NET_DEV.lines(Charset.defaultCharset()));
+        return createSnapshot(PROC_NET_DEV.lines());
     }
 
     static Snapshot createSnapshot(Iterable<String> source) throws IOException {
