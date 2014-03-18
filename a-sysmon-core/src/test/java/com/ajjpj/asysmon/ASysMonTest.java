@@ -17,7 +17,6 @@ import com.ajjpj.asysmon.testutil.CollectingDataSink;
 import com.ajjpj.asysmon.testutil.CountingDataSink;
 import com.ajjpj.asysmon.testutil.CountingLoggerFactory;
 import com.ajjpj.asysmon.testutil.ExplicitTimer;
-import com.sun.xml.internal.stream.util.ThreadLocalBufferAllocator;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
