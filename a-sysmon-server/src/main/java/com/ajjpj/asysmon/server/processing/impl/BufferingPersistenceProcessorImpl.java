@@ -10,7 +10,7 @@ import com.ajjpj.asysmon.server.services.ConfigData;
 import com.ajjpj.asysmon.server.services.ConfigProvider;
 import com.ajjpj.asysmon.server.storage.ScalarDataDao;
 import com.ajjpj.asysmon.util.AShutdownable;
-import com.ajjpj.asysmon.util.ASoftlyLimitedBlockingQueue;
+import com.ajjpj.abase.collection.mutable.ASoftlyLimitedBlockingQueue;
 import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
