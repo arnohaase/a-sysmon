@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.demo;
 
-import com.ajjpj.asysmon.measure.http.ASimpleHttpRequestAnalyzer;
 import com.ajjpj.abase.collection.immutable.AOption;
+import com.ajjpj.asysmon.measure.http.ASimpleHttpRequestAnalyzer;
 
 /**
  * This class removes the default behavior of aggregating HTTP request. It is
