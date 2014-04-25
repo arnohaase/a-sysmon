@@ -39,6 +39,11 @@ public interface ASysMonApi {
     ASimpleMeasurement start(String identifier, boolean serial);
 
     /**
+     * returns true iff a simple measurement is currently running for this thread
+     */
+    boolean hasRunningMeasurement();
+
+    /**
      * This is for the rare case that measurement data was collected by other means and should be 'injected'
      *  into A-SysMon. If you do not understand this, this method is probably not for you.
      */

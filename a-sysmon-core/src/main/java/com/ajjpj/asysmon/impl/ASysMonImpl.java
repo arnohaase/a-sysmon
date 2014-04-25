@@ -139,6 +139,10 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
         return getMeasurementHierarchy(true).start(identifier, serial);
     }
 
+    @Override public boolean hasRunningMeasurement() {
+        return getMeasurementHierarchy(false) != null;
+    }
+
     @Override
     public void startFlow(ACorrelationId flowId) {
         final AMeasurementHierarchy h = getMeasurementHierarchy(false);
