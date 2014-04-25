@@ -16,6 +16,8 @@ import java.util.List;
  * @author arno
  */
 public class ASysMonConfig {
+    public static final String PROPNAME_GLOBALLY_DISABLED = "com.ajjpj.asysmon.globallydisabled";
+
     public final AApplicationInfoProvider appInfo;
 
     public final int averagingDelayForScalarsMillis;
@@ -61,7 +63,7 @@ public class ASysMonConfig {
      *  A-SysMon has a bug that impacts an application.
      */
     public static boolean isGloballyDisabled() {
-        final String s = System.getProperty("com.ajjpj.asysmon.globallydisabled");
+        final String s = System.getProperty(PROPNAME_GLOBALLY_DISABLED);
         return "true".equals(s);
     }
 }
