@@ -125,6 +125,10 @@ public abstract class AbstractASysMonServlet extends HttpServlet {
             throw new IllegalArgumentException("rejected resource request '"  + resName + "' for security reasons");
         }
 
+        if(getContentType(resName) != null) {
+            resp.setContentType(getContentType(resName));
+        }
+
         final InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("asysmon-res/" + resName);
         if(in == null) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -140,5 +144,13 @@ public abstract class AbstractASysMonServlet extends HttpServlet {
         while((numRead = in.read(buf)) > 0) {
             out.write(buf, 0, numRead);
         }
+    }
+
+    protected String getContentType(String resName) {
+        if(resName.contains(".html")) {
+            return "text/html";
+        }
+
+        return null;
     }
 }
