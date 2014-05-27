@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This data sink tracks how long measurements have been running for each thread, providing an approximation for
- *  how long the thread has been 'doing its current work'.<p />
+ *  how long the thread has been 'doing its current work'.<p>
  *
  * Its collaboration with the thread dumper relies on uniqueness of thread names. While not guaranteed, it is usually
  *  a given in practical applications.

@@ -27,7 +27,7 @@ public interface ASysMonApi {
      * This tells A-SysMon that the currently running measurement starts a new 'flow'. Other measurements (in this
      *  or in another JVM) may 'join' that flow, so that these measurements can be evaluated at a later time. Typical
      *  examples of this is processing done in a spawned thread, batch processing that uses several worker threads,
-     *  or asynchronous web service calls.<p />
+     *  or asynchronous web service calls.<p>
      *
      * It is an invalid to call this method without a surrounding measurement, and doing so throws an exception.
      */

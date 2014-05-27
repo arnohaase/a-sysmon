@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * 'Trace' data refers to execution traces, i.e. a hierarchy of measurements performed in an application. This is the
- *  root node of such a trace, containing the actual trace as well as lists of started and joined flows.<p />
+ *  root node of such a trace, containing the actual trace as well as lists of started and joined flows.<p>
  *
  * A 'flow' is basically an ID that links several traces to each other. This is typically used for asynchronous
  *  execution or messaging. The identifiers are often called 'correlation IDs'.

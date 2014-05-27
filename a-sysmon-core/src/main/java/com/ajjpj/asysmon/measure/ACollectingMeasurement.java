@@ -11,7 +11,7 @@ import java.util.TreeMap;
 
 /**
  * This is a measurement that aggregates several - potentially many - measurements in a single object. It is intended
- *  for situations that have interesting details but do not warrant full-blown child measurements.<p />
+ *  for situations that have interesting details but do not warrant full-blown child measurements.<p>
  * A typical example of this is iterating over a JDBC ResultSet: calling 'next()' on the ResultSet may take
  *  significant time, and measuring that time can be of interest. It is however often sufficient to measure the
  *  total time used up by iterating over the ResultSet.

@@ -5,7 +5,7 @@ import com.ajjpj.asysmon.server.data.InstanceIdentifier;
 /**
  * A 'environment measurement' or 'environment' for short is a numeric measurement of some quantity in an application. This includes
  *  a wide range of kinds of numbers, e.g. system and CPU load, current heap size, or the number of threaddump or database
- *  connections currently in use. <p />
+ *  connections currently in use. <p>
  *
  * In order for such data to be presented in a non-generic, meaningful way, environment measurement types must be
  *  registered in the server. TODO how?

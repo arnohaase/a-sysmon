@@ -101,7 +101,7 @@ public class ScalarDataDaoImpl implements ScalarDataDao {
     /**
      * Calling this method is not obligatory since MongoDB creates collections when they are first accessed. This method
      *  however creates some useful indices for collections that do not yet exist, and logs warnings about missing
-     *  indices and stuff for collections that already exist.<p />
+     *  indices and stuff for collections that already exist.<p>
      *
      * This method does *not* itself create indices for pre-existing collections. This is a conscious trade-off because
      *  creating indices can take significant time and, worse, significantly impact read and write performance during

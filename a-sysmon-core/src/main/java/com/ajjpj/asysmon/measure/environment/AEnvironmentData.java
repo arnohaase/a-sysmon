@@ -6,7 +6,7 @@ import com.ajjpj.abase.util.AUUID;
 
 /**
  * 'Environment' data describes things that potentially change, but rarely do so - more precisely, the assumption is
- *  that they (typically) do not change while an application is running.<p />
+ *  that they (typically) do not change while an application is running.<p>
  *
  * They are structured hierarchically. The 'name' property serves as an identifier, and all elements of the list together
  *  serve are unique. The head of the list should contain the most generic segment of the name.

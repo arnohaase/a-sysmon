@@ -22,7 +22,7 @@ public class AHierarchicalData {
     /**
      * @param isSerial <code>true</code> designates the intuitive situation that a parent 'contains' several non-overlapping measurements,
      *                     with the sum of the children's durations being less than or equals to the parent's duration and the difference
-     *                     being spent in the parent itself.<p />
+     *                     being spent in the parent itself.<p>
      *                     <code>false</code> designates more exotic measurements that may 'overlap' other measurements etc., providing
      *                     additional data but not being an additive part of the parent's duration. This could e.g. be the delay between
      *                     sending an asynchronous request and receiving the response.
