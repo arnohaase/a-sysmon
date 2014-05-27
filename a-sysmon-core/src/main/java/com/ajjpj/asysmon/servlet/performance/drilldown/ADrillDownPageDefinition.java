@@ -25,7 +25,16 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
             new ColDef("max ms", false, 0, ColWidth.Medium)
     );
 
+    private final boolean initiallyStarted;
     private volatile DrillDownDataSink collector;
+
+    public ADrillDownPageDefinition() {
+        this(false);
+    }
+
+    public ADrillDownPageDefinition(boolean initiallyStarted) {
+        this.initiallyStarted = initiallyStarted;
+    }
 
     @Override public String getId() {
         return "drilldown";
@@ -44,6 +53,9 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
 
         collector = new DrillDownDataSink();
         ASysMonConfigurer.addDataSink(sysMon, collector);
+        if(initiallyStarted) {
+            doStartMeasurements();
+        }
     }
 
 
