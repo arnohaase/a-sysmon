@@ -29,7 +29,6 @@ public class ASysMonServlet extends AbstractASysMonServlet {
         super.init();
         for(APresentationMenuEntry menuEntry: getSysMon().getConfig().presentationMenuEntries) {
             for(APresentationPageDefinition pageDef: menuEntry.pageDefinitions) {
-                pageDef.init(getSysMon());
                 final Object prev = pageDefs.put(pageDef.getId(), pageDef);
                 if(prev != null) {
                     throw new IllegalStateException("more than one page definitions with id '" + pageDef.getId() + "'");

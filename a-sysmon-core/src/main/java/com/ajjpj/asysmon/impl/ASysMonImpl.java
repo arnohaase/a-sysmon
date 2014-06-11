@@ -5,6 +5,8 @@ import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
+import com.ajjpj.asysmon.config.presentation.APresentationMenuEntry;
+import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
@@ -54,6 +56,12 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
 
         for(AEnvironmentMeasurer m: config.initialEnvironmentMeasurers) {
             addEnvironmentMeasurer(m);
+        }
+
+        for(APresentationMenuEntry menuEntry: config.presentationMenuEntries) {
+            for(APresentationPageDefinition pageDef: menuEntry.pageDefinitions) {
+                pageDef.init(this);
+            }
         }
     }
 
