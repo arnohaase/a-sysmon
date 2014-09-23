@@ -255,7 +255,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         }
 
         var blob = new Blob([data], {type: "application/excel;charset=utf-8"});
-        saveAs(blob, "asysmon-export-" + formattedNow + '.csv');
+        saveAs(blob, "asysmon-export-" + formattedNow + '.tsv');
     };
 
 
