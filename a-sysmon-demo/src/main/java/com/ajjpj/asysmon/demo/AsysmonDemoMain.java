@@ -30,6 +30,10 @@ public class AsysmonDemoMain {
 
         generateArtificialGcs();
 
+        System.out.println ("access http://localhost:8080/asysmon for a-sysmon");
+        System.out.println ("access any url starting with http://localhost:8080/content/ to simulate 'regular' system access");
+        System.out.println ();
+
         server.start();
         server.join();
     }
