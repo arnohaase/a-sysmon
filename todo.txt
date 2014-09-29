@@ -1,3 +1,10 @@
+Driton
+------
+* Search/Filter values in hierarchical views.
+* Performance tuning
+* HTML5 Tooltips and extension in other pages.
+
+
 todo
 ----
 * architecture

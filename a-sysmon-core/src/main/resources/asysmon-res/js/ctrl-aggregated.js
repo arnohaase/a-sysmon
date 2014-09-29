@@ -1,4 +1,3 @@
-
 angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log, Rest, escapeHtml) {
 
     $('.button-segment').affix({
@@ -56,6 +55,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     }
 
     function initTraceNodes(nodes, level, prefix) {
+    // TODO : Analyse this why it computes so long. Firefox causes an Script error.
         if(nodes) {
             for(var i=0; i<nodes.length; i++) {
                 nodes[i].level = level;
@@ -255,7 +255,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         }
 
         var blob = new Blob([data], {type: "application/excel;charset=utf-8"});
-        saveAs(blob, "asysmon-export-" + formattedNow + '.tsv');
+        saveAs(blob, "asysmon-export-" + formattedNow + '.xls');
     };
 
 
@@ -344,7 +344,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                 dataCols +
                 '<div class="node-text" style="margin-right: ' + $scope.totalDataWidth + 'px;">' + escapeHtml(curNode.name) + '</div>' +
                 '</div>';
-
+        $log.log($scope.pickedTraces); // The Tooltips has to be sent from the server. See ABottomUpPageDefinition and ATracePageDefinition
         result += htmlForChildrenDiv(curNode);
 
         return result;
