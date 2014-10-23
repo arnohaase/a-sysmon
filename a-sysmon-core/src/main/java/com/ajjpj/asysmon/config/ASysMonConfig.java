@@ -22,6 +22,9 @@ public class ASysMonConfig {
 
     public final int averagingDelayForScalarsMillis;
 
+    public final int maxNestedMeasurements;
+    public final int maxNumMeasurementsPerHierarchy;
+
     public final long measurementTimeoutNanos;
     public final int maxNumMeasurementTimeouts;
 
@@ -39,12 +42,16 @@ public class ASysMonConfig {
     public final List<APresentationMenuEntry> presentationMenuEntries;
 
     public ASysMonConfig(AApplicationInfoProvider appInfo,
-                         int averagingDelayForScalarsMillis, long measurementTimeoutNanos, int maxNumMeasurementTimeouts, long dataSinkTimeoutNanos, int maxNumDataSinkTimeouts,
+                         int averagingDelayForScalarsMillis,
+                         int maxNestedMeasurements, int maxNumMeasurementsPerHierarchy,
+                         long measurementTimeoutNanos, int maxNumMeasurementTimeouts, long dataSinkTimeoutNanos, int maxNumDataSinkTimeouts,
                          ATimer timer, AHttpRequestAnalyzer httpRequestAnalyzer,
                          List<AEnvironmentMeasurer> environmentMeasurers, List<AScalarMeasurer> initialScalarMeasurers, List<ADataSink> initialDataSinks,
                          String defaultPage, List<APresentationMenuEntry> presentationMenuEntries) {
         this.appInfo = appInfo;
         this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
+        this.maxNestedMeasurements = maxNestedMeasurements;
+        this.maxNumMeasurementsPerHierarchy = maxNumMeasurementsPerHierarchy;
         this.measurementTimeoutNanos = measurementTimeoutNanos;
         this.maxNumMeasurementTimeouts = maxNumMeasurementTimeouts;
         this.dataSinkTimeoutNanos = dataSinkTimeoutNanos;

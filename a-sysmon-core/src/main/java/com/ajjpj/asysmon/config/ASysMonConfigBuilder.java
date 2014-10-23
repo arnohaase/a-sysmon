@@ -25,10 +25,13 @@ public class ASysMonConfigBuilder {
 
     private int averagingDelayForScalarsMillis = 1000;
 
-    private long measurementTimeoutNanos = 20*1000*1000;
+    private int maxNestedMeasurements = 100;
+    private int maxNumMeasurementsPerHierarchy = 100_000;
+
+    private long measurementTimeoutNanos = 20_000_000;
     private int maxNumMeasurementTimeouts = 3;
 
-    private long dataSinkTimeoutNanos = 100*1000;
+    private long dataSinkTimeoutNanos = 100_000;
     private int maxNumDataSinkTimeouts = 3;
 
     private ATimer timer = new ASystemNanoTimer();
@@ -58,6 +61,16 @@ public class ASysMonConfigBuilder {
 
     public ASysMonConfigBuilder setAveragingDelayForScalarsMillis(int averagingDelayForScalarsMillis) {
         this.averagingDelayForScalarsMillis = averagingDelayForScalarsMillis;
+        return this;
+    }
+
+    public ASysMonConfigBuilder setMaxNestedMeasurements (int maxNestedMeasurements) {
+        this.maxNestedMeasurements = maxNestedMeasurements;
+        return this;
+    }
+
+    public ASysMonConfigBuilder setMaxNumMeasurementsPerHierarchy (int maxNum) {
+        this.maxNumMeasurementsPerHierarchy = maxNum;
         return this;
     }
 
@@ -120,6 +133,7 @@ public class ASysMonConfigBuilder {
         return new ASysMonConfig(
                 appInfo,
                 averagingDelayForScalarsMillis,
+                maxNestedMeasurements, maxNumMeasurementsPerHierarchy,
                 measurementTimeoutNanos, maxNumMeasurementTimeouts,
                 dataSinkTimeoutNanos, maxNumDataSinkTimeouts,
                 timer, httpRequestAnalyzer,

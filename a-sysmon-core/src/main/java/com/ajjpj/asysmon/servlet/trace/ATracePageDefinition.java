@@ -69,7 +69,7 @@ public class ATracePageDefinition extends AAbstractAsysmonPerformancePageDef {
     }
 
     @Override protected List<TreeNode> getData() {
-        final List<TreeNode> result = new ArrayList<TreeNode>();
+        final List<TreeNode> result = new ArrayList<>();
 
         for(AHierarchicalDataRoot root: collector.getData()) {
             result.add(asTreeNode(root.getRootNode(), root.getUuid().toString(), System.currentTimeMillis(), root.getRootNode().getDurationNanos(), 0));
@@ -85,7 +85,7 @@ public class ATracePageDefinition extends AAbstractAsysmonPerformancePageDef {
     }
 
     private TreeNode asTreeNode(AHierarchicalData node, String id, long now, long parentNanos, int level) {
-        final List<TreeNode> children = new ArrayList<TreeNode>();
+        final List<TreeNode> children = new ArrayList<>();
         long selfNanos = node.getDurationNanos();
 
         final long childNow = level > 0 ? now : node.getStartTimeMillis();
@@ -128,7 +128,7 @@ public class ATracePageDefinition extends AAbstractAsysmonPerformancePageDef {
             return gcTooltipFor(node);
         }
 
-        final List<List<String>> result = new ArrayList<List<String>>();
+        final List<List<String>> result = new ArrayList<>();
 
         for(String key: new TreeSet<String>(node.getParameters().keySet())) {
             result.add(Arrays.asList(key, node.getParameters().get(key)));
@@ -138,9 +138,9 @@ public class ATracePageDefinition extends AAbstractAsysmonPerformancePageDef {
     }
 
     private List<List<String>> gcTooltipFor(AHierarchicalData node) {
-        final List<List<String>> result = new ArrayList<List<String>>();
+        final List<List<String>> result = new ArrayList<>();
 
-        final SortedSet<String> memKinds = new TreeSet<String>();
+        final SortedSet<String> memKinds = new TreeSet<>();
 
         for(String key: new TreeSet<String>(node.getParameters().keySet())) {
             if(key.startsWith(AJmxGcMeasurerer.KEY_PREFIX_MEM)) {
@@ -158,7 +158,7 @@ public class ATracePageDefinition extends AAbstractAsysmonPerformancePageDef {
             final String committedAfter = nf.   format(Long.valueOf(node.getParameters().get(AJmxGcMeasurerer.getCommittedAfterKey(memKind))) / 1024.0 / 1024.0);
             final String usedDelta      = nfPos.format(Long.valueOf(node.getParameters().get(AJmxGcMeasurerer.getUsedDeltaKey(memKind))) / 1024.0 / 1024.0);
             final String committedDelta = nfPos.format(Long.valueOf(node.getParameters().get(AJmxGcMeasurerer.getCommittedDeltaKey(memKind))) / 1024.0 / 1024.0);
-             final String memValue = usedAfter + "MB (" + usedDelta + ") / " + committedAfter + "MB (" + committedDelta + ")";
+            final String memValue = usedAfter + "MB (" + usedDelta + ") / " + committedAfter + "MB (" + committedDelta + ")";
             result.add(Arrays.asList(memKind, memValue));
         }
 

@@ -28,8 +28,8 @@ public class ACollectingMeasurement implements AWithParameters {
     private final long startTimeMillis = System.currentTimeMillis();
     private final String identifier;
 
-    private final Map<String, String> parameters = new TreeMap<String, String>();
-    private final Map<String, Detail> details = new TreeMap<String, Detail>();
+    private final Map<String, String> parameters = new TreeMap<>();
+    private final Map<String, Detail> details = new TreeMap<>();
 
     private final List<AHierarchicalData> childrenOfParent;
 
@@ -40,12 +40,23 @@ public class ACollectingMeasurement implements AWithParameters {
 
     private boolean isFinished = false;
 
-    public ACollectingMeasurement(ASysMonConfig config, AMeasurementHierarchy hierarchy, boolean isSerial, String identifier, List<AHierarchicalData> childrenOfParent) {
+    private final boolean isDisabled;
+
+    private ACollectingMeasurement (ASysMonConfig config, AMeasurementHierarchy hierarchy, boolean isSerial, String identifier, List<AHierarchicalData> childrenOfParent, boolean isDisabled) {
         this.config = config;
         this.hierarchy = hierarchy;
         this.isSerial = isSerial;
         this.identifier = identifier;
         this.childrenOfParent = childrenOfParent;
+        this.isDisabled = isDisabled;
+    }
+
+    static ACollectingMeasurement createRegular(ASysMonConfig config, AMeasurementHierarchy hierarchy, boolean isSerial, String identifier, List<AHierarchicalData> childrenOfParent) {
+        return new ACollectingMeasurement (config, hierarchy, isSerial, identifier, childrenOfParent, false);
+    }
+
+    static ACollectingMeasurement createDisabled() {
+        return new ACollectingMeasurement (null, null, true, null, null, true);
     }
 
     List<AHierarchicalData> getChildrenOfParent() {
@@ -92,7 +103,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void startDetail(String detailIdentifier) {
-        if(config.isGloballyDisabled()) {
+        if(isDisabled) {
             return;
         }
 
@@ -105,7 +116,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void finishDetail() {
-        if(config.isGloballyDisabled()) {
+        if(isDisabled) {
             return;
         }
 
@@ -119,7 +130,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void addDetailMeasurement(String detailIdentifier, long durationNanos) {
-        if(config.isGloballyDisabled()) {
+        if(isDisabled) {
             return;
         }
 
@@ -139,7 +150,7 @@ public class ACollectingMeasurement implements AWithParameters {
     }
 
     public void finish() {
-        if(config.isGloballyDisabled()) {
+        if(isDisabled) {
             return;
         }
 

@@ -13,12 +13,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author arno
  */
 @ABeanFactory
-public class AConnectionCounter implements AScalarMeasurer {
+public class AConnectionCounter implements AScalarMeasurer, AIConnectionCounter {
     public static final AConnectionCounter INSTANCE = new AConnectionCounter(); //TODO make instance management configurable
 
     private static final String DEFAULT_POOL_IDENTIFIER = " @@##++ ";
-    private final Map<String, AtomicInteger> openPerConnectionPool = new ConcurrentHashMap<String, AtomicInteger>();
-    private final Map<String, AtomicInteger> activePerConnectionPool = new ConcurrentHashMap<String, AtomicInteger>();
+    private final Map<String, AtomicInteger> openPerConnectionPool = new ConcurrentHashMap<>();
+    private final Map<String, AtomicInteger> activePerConnectionPool = new ConcurrentHashMap<>();
 
     public static AConnectionCounter getInstance() {
         return INSTANCE;
@@ -67,11 +67,11 @@ public class AConnectionCounter implements AScalarMeasurer {
     @Override
     public void contributeMeasurements(Map<String, AScalarDataPoint> data, long timestamp, Map<String, Object> mementos) {
         for(String key: openPerConnectionPool.keySet()) {
-            final String ident = (DEFAULT_POOL_IDENTIFIER == key) ? "Open JDBC Connections" : ("Open JDBC Connections (" + key + ")");
+            final String ident = (DEFAULT_POOL_IDENTIFIER.equals (key)) ? "Open JDBC Connections" : ("Open JDBC Connections (" + key + ")");
             data.put(ident, new AScalarDataPoint(timestamp, ident, openPerConnectionPool.get(key).get(), 0));
         }
         for(String key: activePerConnectionPool.keySet()) {
-            final String ident = (DEFAULT_POOL_IDENTIFIER == key) ? "Active JDBC Connections" : ("Active JDBC Connections (" + key + ")");
+            final String ident = (DEFAULT_POOL_IDENTIFIER.equals (key)) ? "Active JDBC Connections" : ("Active JDBC Connections (" + key + ")");
             data.put(ident, new AScalarDataPoint(timestamp, ident, activePerConnectionPool.get(key).get(), 0));
         }
     }

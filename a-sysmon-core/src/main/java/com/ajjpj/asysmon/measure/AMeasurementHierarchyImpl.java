@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
 import com.ajjpj.abase.collection.mutable.ArrayStack;
+import com.ajjpj.abase.function.AFunction0NoThrow;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.ACorrelationId;
@@ -17,19 +18,14 @@ import java.util.*;
  * @author arno
  */
 public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
-    /**
-     * This is the number of nested measurements currently supported - when this level is reached, A-SysMon assumes
-     *  there is a memory leak (i.e. there are measurements that are started but never finished) and kills the
-     *  measurement hierarchy.
-     */
-    public static final int MAX_CALL_DEPTH = 100;
-
     private static final ASysMonLogger log = ASysMonLogger.get(AMeasurementHierarchyImpl.class);
 
     private final ASysMonConfig config;
     private final ADataSink dataSink;
 
     private Set<ACollectingMeasurement> collectingMeasurements = new HashSet<>();
+
+    private int size = 0; // total number of measurements in this hierarchy
 
     private final ArrayStack<ASimpleSerialMeasurementImpl> unfinished = new ArrayStack<>();
     private final ArrayStack<List<AHierarchicalData>> childrenStack = new ArrayStack<>();
@@ -79,6 +75,7 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             checkOverflow();
             final ASimpleSerialMeasurementImpl result = new ASimpleSerialMeasurementImpl(this, config.timer.getCurrentNanos(), identifier);
             unfinished.push(result);
+            size += 1;
             childrenStack.push(new ArrayList<AHierarchicalData>());
             return result;
         }
@@ -88,22 +85,46 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     private void checkOverflow() {
-        if(unfinished.size() < MAX_CALL_DEPTH) {
+        checkMaxDepth ();
+        checkMaxSize ();
+    }
+
+    private void checkMaxSize () {
+        if (wasKilled || size < config.maxNumMeasurementsPerHierarchy) {
             return;
         }
 
+        final ASimpleSerialMeasurementImpl rootMeasurement = doKillForcefully ();
+        log.error ("Excessive number of measurements in a single hierarchy:  " + size + " - probable memory leak, forcefully cleaning measurement stack. Root measurement was " +
+                rootMeasurement.getIdentifier() + " with parameters " + rootMeasurement.getParameters() + ", started at " + new Date(rootMeasurement.getStartTimeMillis()));
+    }
+
+    private ASimpleSerialMeasurementImpl doKillForcefully() {
         ASimpleSerialMeasurementImpl rootMeasurement = null;
         while(unfinished.nonEmpty()) {
             rootMeasurement = unfinished.peek();
-            finish(unfinished.peek());
+            finish (unfinished.peek());
         }
 
-        log.error("Detected probably memory leak, forcefully cleaning measurement stack. Root measurement was " + rootMeasurement.getIdentifier() + " with parameters " + rootMeasurement.getParameters() + ", started at " + new Date(rootMeasurement.getStartTimeMillis()));
-        wasKilled = true;
+        return rootMeasurement;
+    }
+
+    private void checkMaxDepth () {
+        if (wasKilled || unfinished.size() < config.maxNestedMeasurements) {
+            return;
+        }
+
+        final ASimpleSerialMeasurementImpl rootMeasurement = doKillForcefully ();
+        log.error ("Call depth " + unfinished.size () + " - probable memory leak, forcefully cleaning measurement stack. Root measurement was " +
+                rootMeasurement.getIdentifier() + " with parameters " + rootMeasurement.getParameters() + ", started at " + new Date(rootMeasurement.getStartTimeMillis()));
     }
 
     private void logWasKilled() {
-        log.warn("Interacting with a forcefully killed measurement. This is a consequence of A-SysMon cleaning up a (suspected) memory leak. It has no consequences aside from potentially weird measurements being reported.");
+        log.debug (new AFunction0NoThrow<String> () {
+            @Override public String apply () {
+                return "Interacting with a forcefully killed measurement. This is a consequence of A-SysMon cleaning up a (suspected) memory leak. It has no consequences aside from potentially weird measurements being reported.";
+            }
+        });
     }
 
     @Override public void finish(ASimpleSerialMeasurementImpl measurement) {
@@ -170,31 +191,27 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
     }
 
     @Override
-    public ACollectingMeasurement startCollectingMeasurement(String identifier, boolean isSerial) {
+    public ACollectingMeasurement startCollectingMeasurement (final String identifier, boolean isSerial) {
         if(ASysMonConfig.isGloballyDisabled()) {
-            return new ACollectingMeasurement(null, null, true, null, null);
+            return ACollectingMeasurement.createDisabled ();
         }
 
         checkNotFinished();
 
         if(unfinished.isEmpty()) {
-            // A collection measurement can never be top-level. So we wrap a SimpleMeasurement around it, finishing it immediately
-            //  to be on the safe side with regard to memory leaks
-            final ASimpleMeasurement m = start(IDENT_SYNTHETIC_ROOT, true);
-            try {
-                log.warn("starting a top-level collecting measurement - creating synthetic SimpleMeasurement and finishing immediately");
-                final ACollectingMeasurement result = new ACollectingMeasurement(config, this, isSerial, identifier, childrenStack.peek());
-                collectingMeasurements.add(result);
-                result.finish();
-                return result;
-            }
-            finally {
-                m.finish();
-            }
+            // A collection measurement can never be top-level. To be on the safe side, we just ignore this, losing measurement data rather than risking non-robust code.
+            // Declarative transactions can cause this if the start and especially the end of a transaction are not surrounded by an ASysMon measurement
+            log.debug (new AFunction0NoThrow<String> () {
+                @Override public String apply () {
+                    return "Trying to start a collectiong mesaurement outside of a measurement hierarchy: " + identifier;
+                }
+            });
+            return ACollectingMeasurement.createDisabled ();
         }
         else {
-            final ACollectingMeasurement result = new ACollectingMeasurement(config, this, isSerial, identifier, childrenStack.peek());
+            final ACollectingMeasurement result = ACollectingMeasurement.createRegular (config, this, isSerial, identifier, childrenStack.peek());
             collectingMeasurements.add(result);
+            size += 1;
             return result;
         }
     }

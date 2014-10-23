@@ -334,17 +334,9 @@ public class ASysMonTest {
         final CollectingDataSink dataSink = new CollectingDataSink();
         final ASysMonApi sysMon = createSysMon(dataSink);
 
-        // top-level collecting measurement is permitted, and A-SysMon implicitly creates (and finishes) a
-        //  simple measurement that serves as a root wrapper
+        // top-level collecting measurement is permitted, but results are discarded
         sysMon.startCollectingMeasurement("a").finish();
-
-        assertEquals(1, dataSink.data.size());
-
-        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
-        assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, root.getIdentifier());
-
-        assertEquals(1, root.getChildren().size());
-        assertEquals("a", root.getChildren().get(0).getIdentifier());
+        assertEquals (0, dataSink.data.size());
     }
 
     @Test
@@ -354,16 +346,11 @@ public class ASysMonTest {
 
         final ACollectingMeasurement a = sysMon.startCollectingMeasurement("a");
         final ACollectingMeasurement b = sysMon.startCollectingMeasurement("b");
-        assertEquals(2, dataSink.data.size());
+        assertTrue (dataSink.data.isEmpty ());
         a.finish();
-        assertEquals(2, dataSink.data.size());
+        assertTrue (dataSink.data.isEmpty ());
         b.finish();
-        assertEquals(2, dataSink.data.size());
-
-        assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, dataSink.data.get(0).getRootNode().getIdentifier());
-        assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, dataSink.data.get(1).getRootNode().getIdentifier());
-        assertEquals("a", dataSink.data.get(0).getRootNode().getChildren().get(0).getIdentifier());
-        assertEquals("b", dataSink.data.get(1).getRootNode().getChildren().get(0).getIdentifier());
+        assertTrue (dataSink.data.isEmpty ());
     }
 
     @Test
@@ -371,21 +358,16 @@ public class ASysMonTest {
         final CollectingDataSink dataSink = new CollectingDataSink();
         final ASysMonApi sysMon = createSysMon(dataSink);
 
-        // If a top-level collecting measurement is started, a synthetic SimpleMeasurement is wrapped around it,
-        //  and both are closed immediately to avoid memory leaks.
+        // top-level collecting measurements are permitted, but their data is immediately discarded
 
         final ACollectingMeasurement coll = sysMon.startCollectingMeasurement("a");
-        assertEquals(1, dataSink.data.size());
-
-        final AHierarchicalData root = dataSink.data.get(0).getRootNode();
-        assertEquals(AMeasurementHierarchy.IDENT_SYNTHETIC_ROOT, root.getIdentifier());
+        assertEquals(0, dataSink.data.size());
 
         final ASimpleMeasurement m = sysMon.start("m");
         m.finish();
 
-        assertEquals(2, dataSink.data.size());
-        assertEquals("a", dataSink.data.get(0).getRootNode().getChildren().get(0).getIdentifier());
-        assertEquals("m", dataSink.data.get(1).getRootNode().getIdentifier());
+        assertEquals(1, dataSink.data.size());
+        assertEquals("m", dataSink.data.get(0).getRootNode().getIdentifier());
 
         coll.finish();
     }
@@ -412,7 +394,7 @@ public class ASysMonTest {
         final CountingDataSink dataSink = new CountingDataSink();
         final ASysMonApi sysMon = createSysMon(dataSink);
 
-        for(int i=0; i<100 * AMeasurementHierarchyImpl.MAX_CALL_DEPTH; i++) {
+        for(int i=0; i<10_000; i++) {
             sysMon.start("a");
         }
 

@@ -1,6 +1,7 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
 import com.ajjpj.asysmon.ASysMonApi;
+import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -18,8 +19,6 @@ public class ASysMonDataSource implements DataSource {
     private final String poolIdentifier;
     private final ASysMonApi sysMon;
 
-    private final AConnectionCounter counter = AConnectionCounter.INSTANCE; //TODO make this configurable?
-
     public ASysMonDataSource(DataSource inner, String poolIdentifier, ASysMonApi sysMon) {
         this.inner = inner;
         this.poolIdentifier = poolIdentifier;
@@ -27,11 +26,11 @@ public class ASysMonDataSource implements DataSource {
     }
 
     @Override public Connection getConnection() throws SQLException {
-        return new ASysMonConnection(inner.getConnection(), sysMon, poolIdentifier, counter);
+        return new ASysMonConnection(inner.getConnection(), sysMon, poolIdentifier, new MeasuringConnectionCounter ());
     }
 
     @Override public Connection getConnection(String username, String password) throws SQLException {
-        return new ASysMonConnection(inner.getConnection(username, password), sysMon, poolIdentifier, counter);
+        return new ASysMonConnection(inner.getConnection(username, password), sysMon, poolIdentifier, new MeasuringConnectionCounter ());
     }
 
     @Override public PrintWriter getLogWriter() throws SQLException {
@@ -60,5 +59,34 @@ public class ASysMonDataSource implements DataSource {
 
     @Override public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return inner.isWrapperFor(iface);
+    }
+
+    /**
+     * This measuring counter wraps a (potentially top-level) measurement around all code that is executed with the connection outside the pool. We do this
+     *  only for connections from our own pool implementation because then we can be reasonably sure that 'close()' will be called when a chunk of work is finished.
+     * If connections are created using the ASysMon driver, these connections may be pooled so that 'close()' is pretty much never called, and using the 'activation' /
+     *  'passivation' mechanism seems a little fragile for this.
+     */
+    private class MeasuringConnectionCounter implements AIConnectionCounter {
+        private final AIConnectionCounter inner = AConnectionCounter.INSTANCE; //TODO make this configurable?
+        private final ASimpleMeasurement m;
+
+        private MeasuringConnectionCounter () {
+            m = sysMon.start (ASysMonStatement.IDENT_PREFIX_JDBC + "connection from pool");
+            m.addParameter ("pool", poolIdentifier);
+        }
+        @Override public void onOpenConnection (String qualifier) {
+            inner.onOpenConnection (qualifier);
+        }
+        @Override public void onCloseConnection (String qualifier) {
+            m.finish ();
+            inner.onCloseConnection (qualifier);
+        }
+        @Override public void onActivateConnection (String qualifier) {
+            inner.onActivateConnection (qualifier);
+        }
+        @Override public void onPassivateConnection (String qualifier) {
+            inner.onPassivateConnection (qualifier);
+        }
     }
 }

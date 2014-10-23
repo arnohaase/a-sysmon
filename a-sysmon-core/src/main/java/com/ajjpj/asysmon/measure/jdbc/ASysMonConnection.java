@@ -17,9 +17,9 @@ public class ASysMonConnection implements Connection {
 
     private final String poolIdentifier;
     private volatile boolean isActive = false;
-    private final AConnectionCounter connectionCounter;
+    private final AIConnectionCounter connectionCounter;
 
-    public ASysMonConnection(Connection inner, ASysMonApi sysMon, String poolIdentifier, AConnectionCounter connectionCounter) {
+    public ASysMonConnection(Connection inner, ASysMonApi sysMon, String poolIdentifier, AIConnectionCounter connectionCounter) {
         this.inner = inner;
         this.sysMon = sysMon;
         this.poolIdentifier = poolIdentifier;
