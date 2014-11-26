@@ -1,6 +1,8 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
+import com.ajjpj.abase.function.AFunction0NoThrow;
 import com.ajjpj.asysmon.ASysMonApi;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 
 import javax.sql.DataSource;
@@ -79,7 +81,18 @@ public class ASysMonDataSource implements DataSource {
             inner.onOpenConnection (qualifier);
         }
         @Override public void onCloseConnection (String qualifier) {
-            m.finish ();
+            try {
+                m.finish ();
+            }
+            catch (final Exception exc) {
+                ASysMonLogger.get (ASysMonDataSource.class).debug (new AFunction0NoThrow<String> () {
+                    @Override public String apply () {
+                        return "exception when finishing a JDBC connection measurement: " + exc;
+                    }
+                });
+                // Silently ignore - this means that the fetching and closing of the connection did not happen at the same level in the call hierarchy. While such
+                //  a symmetry is common and often desirable, it is by no means the only valid mode of using JDBC - so ASysMon needs to deal with it in a robust fashion.
+            }
             inner.onCloseConnection (qualifier);
         }
         @Override public void onActivateConnection (String qualifier) {
