@@ -267,7 +267,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         //  is seconds vs. minutes for large trees!
         $('.data-row.with-children').off();
         var myNode = document.getElementById("theTree");
-        while (myNode.firstChild) {
+        while (myNode && myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }
 
