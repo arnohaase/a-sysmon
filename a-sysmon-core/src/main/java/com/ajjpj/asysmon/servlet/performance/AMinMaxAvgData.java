@@ -1,6 +1,8 @@
 package com.ajjpj.asysmon.servlet.performance;
 
 
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,6 +17,8 @@ public class AMinMaxAvgData {
     private final long totalNanos;
 
     private final ConcurrentHashMap<String, AMinMaxAvgData> children;
+
+    private static final ASysMonLogger log = ASysMonLogger.get (AMinMaxAvgData.class);
 
     public AMinMaxAvgData(boolean isSerial, long initialNanos) {
         this(isSerial, 1, initialNanos, initialNanos, initialNanos, initialNanos, new ConcurrentHashMap<String, AMinMaxAvgData>());
@@ -32,7 +36,8 @@ public class AMinMaxAvgData {
 
     public AMinMaxAvgData withDataPoint(boolean isSerial, long durationNanos) {
         if(isSerial != this.isSerial) {
-            throw new IllegalArgumentException("both parallel and serial measurements at the same level with the same identifier");
+            log.error (new IllegalArgumentException("both parallel and serial measurements at the same level with the same identifier - ignoring measurement"));
+            return this;
         }
 
         return new AMinMaxAvgData(isSerial,

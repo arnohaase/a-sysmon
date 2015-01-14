@@ -3,6 +3,7 @@ package com.ajjpj.asysmon.measure.jdbc;
 
 import com.ajjpj.asysmon.ASysMon;
 import com.ajjpj.asysmon.ASysMonApi;
+import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.measure.ASysMonSource;
 
 import java.sql.*;
@@ -23,6 +24,8 @@ public class ASysMonJdbcDriver implements Driver {
 
     public static final ASysMonJdbcDriver INSTANCE = new ASysMonJdbcDriver();
 
+    private static final ASysMonLogger log = ASysMonLogger.get (ASysMonJdbcDriver.class);
+
     static {
         try {
             DriverManager.registerDriver(INSTANCE);
@@ -40,24 +43,30 @@ public class ASysMonJdbcDriver implements Driver {
             return null;
         }
 
-        final String withoutPrefix = url.substring(URL_PREFIX.length());
+        final String withoutPrefix = url.substring (URL_PREFIX.length ());
         final int idxColon = withoutPrefix.indexOf(':');
         if(idxColon == -1) {
             return null;
         }
-        final String paramString = withoutPrefix.substring(0, idxColon);
-        final Map<String, String> params = parseParams(paramString);
 
         final String innerUrl = withoutPrefix.substring(idxColon+1);
         final Connection inner = DriverManager.getConnection(innerUrl, info);
 
-        final ASysMonApi sysMon = getSysMon(params);
+        try {
+            final String paramString = withoutPrefix.substring(0, idxColon);
+            final Map<String, String> params = parseParams(paramString);
+            final ASysMonApi sysMon = getSysMon(params);
 
-        if(sysMon.getConfig().isGloballyDisabled()) {
+            if(sysMon.getConfig().isGloballyDisabled()) {
+                return inner;
+            }
+
+            return new ASysMonConnection(inner, sysMon, getPoolIdentifier(params), AConnectionCounter.INSTANCE); //TODO make instance management configurable
+        }
+        catch (SQLException e) {
+            log.error (e);
             return inner;
         }
-
-        return new ASysMonConnection(inner, sysMon, getPoolIdentifier(params), AConnectionCounter.INSTANCE); //TODO make instance management configurable
     }
 
     private String getPoolIdentifier(Map<String, String> params) {

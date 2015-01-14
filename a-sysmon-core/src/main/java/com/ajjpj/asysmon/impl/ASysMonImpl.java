@@ -155,7 +155,8 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
     public void startFlow(ACorrelationId flowId) {
         final AMeasurementHierarchy h = getMeasurementHierarchy(false);
         if(h == null) {
-            throw new IllegalStateException("flow handling only while a measurement is running");
+            log.error (new IllegalStateException("flow handling only while a measurement is running"));
+            return;
         }
         h.onStartFlow(flowId);
     }
@@ -164,7 +165,8 @@ public class ASysMonImpl implements AShutdownable, ASysMonApi {
     public void joinFlow(ACorrelationId flowId) {
         final AMeasurementHierarchy h = getMeasurementHierarchy(false);
         if(h == null) {
-            throw new IllegalStateException("flow handling only while a measurement is running");
+            log.error (new IllegalStateException("flow handling only while a measurement is running"));
+            return;
         }
         h.onJoinFlow(flowId);
     }

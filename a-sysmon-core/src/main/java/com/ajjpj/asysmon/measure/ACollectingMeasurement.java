@@ -108,7 +108,8 @@ public class ACollectingMeasurement implements AWithParameters {
         }
 
         if(this.detailIdentifier != null) {
-            throw new IllegalStateException("a detail measurement is already running");
+            log.error (new IllegalStateException("a detail measurement is already running - ignoring call to 'startDetail'"));
+            return;
         }
 
         this.detailIdentifier = detailIdentifier;
@@ -121,7 +122,8 @@ public class ACollectingMeasurement implements AWithParameters {
         }
 
         if(this.detailIdentifier == null) {
-            throw new IllegalStateException("no current detail measurement");
+            log.error (new IllegalStateException("no current detail measurement - ignoring call to 'finishDetail'"));
+            return;
         }
 
         final long duration = config.timer.getCurrentNanos() - detailStartTimeNanos;

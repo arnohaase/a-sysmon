@@ -48,14 +48,15 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
         this.dataSink = dataSink;
     }
 
-    private void checkNotFinished() {
+    private boolean checkNotFinished () {
         if(isFinished) {
-            throw new IllegalStateException("This measurement is already closed.");
+            log.error (new IllegalStateException("This measurement is already closed."));
         }
+        return isFinished;
     }
 
     @Override public ASimpleMeasurement start(String identifier, boolean isSerial) {
-        if(config.isGloballyDisabled()) {
+        if(config.isGloballyDisabled() || checkNotFinished()) {
             return new ASimpleMeasurement() {
                 @Override public void finish() {
                 }
@@ -64,8 +65,6 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
                 }
             };
         }
-
-        checkNotFinished();
 
         if(unfinished.isEmpty()) {
             dataSink.onStartedHierarchicalMeasurement(identifier);
@@ -136,7 +135,9 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             logWasKilled();
             return;
         }
-        checkNotFinished();
+        if (checkNotFinished ()) {
+            return;
+        }
 
         if (unfinished.peek() != measurement) {
             // This is basically a bug in using code: a measurement is 'finished' without being the innermost measurement
@@ -152,7 +153,8 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
                 }
             }
             else {
-                throw new IllegalStateException("Calling 'finish' on a measurement that is not on the measurement stack: " + measurement);
+                log.error (new IllegalStateException("Calling 'finish' on a measurement that is not on the measurement stack: " + measurement));
+                return;
             }
         }
 
@@ -184,7 +186,9 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             logWasKilled();
             return;
         }
-        checkNotFinished();
+        if (checkNotFinished ()) {
+            return;
+        }
 
         final long finishedTimestamp = config.timer.getCurrentNanos();
         m.getChildrenOfParent().add(new AHierarchicalData(false, m.getStartTimeMillis(), finishedTimestamp - m.getStartTimeNanos(), m.getIdentifier(), m.getParameters(), Collections.<AHierarchicalData>emptyList()));
@@ -192,11 +196,9 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
 
     @Override
     public ACollectingMeasurement startCollectingMeasurement (final String identifier, boolean isSerial) {
-        if(ASysMonConfig.isGloballyDisabled()) {
+        if(ASysMonConfig.isGloballyDisabled() || checkNotFinished()) {
             return ACollectingMeasurement.createDisabled ();
         }
-
-        checkNotFinished();
 
         if(unfinished.isEmpty()) {
             // A collection measurement can never be top-level. To be on the safe side, we just ignore this, losing measurement data rather than risking non-robust code.
@@ -225,7 +227,9 @@ public class AMeasurementHierarchyImpl implements AMeasurementHierarchy {
             logWasKilled();
             return;
         }
-        checkNotFinished();
+        if (checkNotFinished ()) {
+            return;
+        }
 
         final List<AHierarchicalData> children = new ArrayList<AHierarchicalData>();
         for(String detailIdentifier: m.getDetails().keySet()) {

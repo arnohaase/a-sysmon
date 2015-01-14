@@ -35,7 +35,8 @@ class ASimpleSerialMeasurementImpl implements ASimpleMeasurement {
 
     public void finish() {
         if(isFinished) {
-            throw new IllegalStateException("a simple measurement can be finished only once.");
+            log.error (new IllegalStateException("a simple measurement can be finished only once."));
+            return;
         }
 
         isFinished = true;
