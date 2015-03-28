@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.performance.bottomup;
 
-import com.ajjpj.abase.collection.mutable.ArrayStack;
+import com.ajjpj.afoundation.collection.mutable.ArrayStack;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;

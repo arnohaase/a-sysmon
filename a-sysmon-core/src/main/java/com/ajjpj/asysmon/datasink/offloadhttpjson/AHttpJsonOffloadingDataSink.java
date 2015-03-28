@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.datasink.offloadhttpjson;
 
-import com.ajjpj.abase.collection.mutable.ASoftlyLimitedQueue;
+import com.ajjpj.afoundation.collection.mutable.ASoftlyLimitedQueue;
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;

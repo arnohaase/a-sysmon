@@ -2,7 +2,7 @@ package com.ajjpj.asysmon.config.wiring;
 
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.config.log.ASysMonLoggerFactory;
-import com.ajjpj.abase.collection.immutable.AOption;
+import com.ajjpj.afoundation.collection.immutable.AOption;
 
 import java.util.ArrayList;
 import java.util.Collections;

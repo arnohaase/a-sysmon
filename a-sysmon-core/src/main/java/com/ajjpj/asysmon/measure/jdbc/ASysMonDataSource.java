@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.jdbc;
 
-import com.ajjpj.abase.function.AFunction0NoThrow;
+import com.ajjpj.afoundation.function.AFunction0NoThrow;
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;

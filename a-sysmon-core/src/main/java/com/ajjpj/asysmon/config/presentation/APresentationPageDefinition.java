@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.config.presentation;
 
-import com.ajjpj.abase.io.AJsonSerHelper;
+import com.ajjpj.afoundation.io.AJsonSerHelper;
 import com.ajjpj.asysmon.ASysMonApi;
 
 import java.util.List;

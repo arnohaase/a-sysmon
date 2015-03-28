@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure.scalar;
 
-import com.ajjpj.abase.io.AFile;
-import com.ajjpj.abase.proc.CliCommand;
+import com.ajjpj.afoundation.io.AFile;
+import com.ajjpj.afoundation.proc.CliCommand;
 import com.ajjpj.asysmon.data.AScalarDataPoint;
 import com.ajjpj.asysmon.measure.environment.impl.AFileSystemsEnvironmentMeasurer;
 

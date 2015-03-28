@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.datasink.offloadhttpjson;
 
-import com.ajjpj.abase.io.AJsonSerHelper;
+import com.ajjpj.afoundation.io.AJsonSerHelper;
 import com.ajjpj.asysmon.data.ACorrelationId;
 import com.ajjpj.asysmon.data.AHierarchicalData;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;

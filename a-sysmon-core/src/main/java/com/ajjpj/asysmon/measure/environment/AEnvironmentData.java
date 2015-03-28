@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure.environment;
 
-import com.ajjpj.abase.collection.immutable.AList;
-import com.ajjpj.abase.util.AUUID;
+import com.ajjpj.afoundation.collection.immutable.AList;
+import com.ajjpj.afoundation.util.AUUID;
 
 
 /**

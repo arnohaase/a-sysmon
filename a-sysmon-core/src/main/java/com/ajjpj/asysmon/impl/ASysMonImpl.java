@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.impl;
 
-import com.ajjpj.abase.collection.immutable.AList;
+import com.ajjpj.afoundation.collection.immutable.AList;
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.ASysMonAware;
 import com.ajjpj.asysmon.config.ASysMonConfig;

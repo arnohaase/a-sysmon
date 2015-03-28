@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.servlet.environment;
 
-import com.ajjpj.abase.collection.immutable.AList;
-import com.ajjpj.abase.io.AJsonSerHelper;
+import com.ajjpj.afoundation.collection.immutable.AList;
+import com.ajjpj.afoundation.io.AJsonSerHelper;
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentData;

@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.config.log;
 
-import com.ajjpj.abase.function.AFunction0NoThrow;
+import com.ajjpj.afoundation.function.AFunction0NoThrow;
 import com.ajjpj.asysmon.config.ADefaultConfigFactory;
 
 

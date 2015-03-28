@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.demo;
 
-import com.ajjpj.abase.collection.immutable.AOption;
+import com.ajjpj.afoundation.collection.immutable.AOption;
 import com.ajjpj.asysmon.measure.http.ASimpleHttpRequestAnalyzer;
 
 /**

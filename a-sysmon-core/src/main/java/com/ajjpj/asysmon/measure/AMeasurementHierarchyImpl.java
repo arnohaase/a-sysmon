@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.measure;
 
-import com.ajjpj.abase.collection.mutable.ArrayStack;
-import com.ajjpj.abase.function.AFunction0NoThrow;
+import com.ajjpj.afoundation.collection.mutable.ArrayStack;
+import com.ajjpj.afoundation.function.AFunction0NoThrow;
 import com.ajjpj.asysmon.config.ASysMonConfig;
 import com.ajjpj.asysmon.config.log.ASysMonLogger;
 import com.ajjpj.asysmon.data.ACorrelationId;

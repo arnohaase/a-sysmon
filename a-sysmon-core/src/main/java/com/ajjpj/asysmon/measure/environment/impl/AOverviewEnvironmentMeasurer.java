@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.environment.impl;
 
-import com.ajjpj.abase.proc.CliCommand;
+import com.ajjpj.afoundation.proc.CliCommand;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 
 import java.lang.management.ManagementFactory;

@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.data;
 
-import com.ajjpj.abase.util.AUUID;
+import com.ajjpj.afoundation.util.AUUID;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

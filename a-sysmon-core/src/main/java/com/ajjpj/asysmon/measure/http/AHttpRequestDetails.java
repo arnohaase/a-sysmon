@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.measure.http;
 
-import com.ajjpj.abase.collection.immutable.AOption;
+import com.ajjpj.afoundation.collection.immutable.AOption;
 
 import java.util.Map;
 

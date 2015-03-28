@@ -6,9 +6,9 @@ import com.ajjpj.asysmon.measure.AMeasureCallbackVoid;
 import com.ajjpj.asysmon.measure.AMeasureCallbackVoidNoThrow;
 import com.ajjpj.asysmon.measure.ASimpleMeasurement;
 import com.ajjpj.asysmon.measure.AWithParameters;
-import com.ajjpj.abase.collection.immutable.AOption;
-import com.ajjpj.abase.function.AStatement0;
-import com.ajjpj.abase.util.AUnchecker;
+import com.ajjpj.afoundation.collection.immutable.AOption;
+import com.ajjpj.afoundation.function.AStatement0;
+import com.ajjpj.afoundation.util.AUnchecker;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
 package com.ajjpj.asysmon.config;
 
-import com.ajjpj.abase.function.AFunction0;
-import com.ajjpj.abase.util.AUnchecker;
+import com.ajjpj.afoundation.function.AFunction0;
+import com.ajjpj.afoundation.util.AUnchecker;
 import com.ajjpj.asysmon.config.appinfo.AApplicationInfoProvider;
 import com.ajjpj.asysmon.config.log.ALog4JLoggerFactory;
 import com.ajjpj.asysmon.config.log.AStdOutLoggerFactory;
@@ -12,8 +12,8 @@ import com.ajjpj.asysmon.datasink.ADataSink;
 import com.ajjpj.asysmon.measure.environment.AEnvironmentMeasurer;
 import com.ajjpj.asysmon.measure.http.AHttpRequestAnalyzer;
 import com.ajjpj.asysmon.measure.scalar.AScalarMeasurer;
-import com.ajjpj.abase.collection.immutable.AOption;
-//import com.ajjpj.abase.util.AUnchecker;
+import com.ajjpj.afoundation.collection.immutable.AOption;
+//import com.ajjpj.afoundation.util.AUnchecker;
 import com.ajjpj.asysmon.util.timer.ATimer;
 
 import java.io.InputStream;

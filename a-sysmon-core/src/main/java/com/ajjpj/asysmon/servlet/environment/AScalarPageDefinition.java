@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.environment;
 
-import com.ajjpj.abase.io.AJsonSerHelper;
+import com.ajjpj.afoundation.io.AJsonSerHelper;
 import com.ajjpj.asysmon.ASysMonApi;
 import com.ajjpj.asysmon.config.presentation.APresentationPageDefinition;
 import com.ajjpj.asysmon.data.AScalarDataPoint;

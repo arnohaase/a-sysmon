@@ -1,6 +1,6 @@
 package com.ajjpj.asysmon.servlet.trace;
 
-import com.ajjpj.abase.collection.mutable.ARingBuffer;
+import com.ajjpj.afoundation.collection.mutable.ARingBuffer;
 import com.ajjpj.asysmon.data.AHierarchicalDataRoot;
 import com.ajjpj.asysmon.datasink.ADataSink;
 
