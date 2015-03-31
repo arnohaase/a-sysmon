@@ -59,7 +59,7 @@ public class AProcDiskstatsMeasurer implements AScalarMeasurer {
                 continue; // deal with dynamically added or removed devices
             }
 
-            if(current.sectorsRead.get(dev) == 0 & current.sectorsWritten.get(dev) == 0) {
+            if(current.sectorsRead.get(dev) == 0 && current.sectorsWritten.get(dev) == 0) {
                 continue; // filter out 'unused' devices, e.g. RAM disks
             }
 
