@@ -89,7 +89,7 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
     }
 
     private List<TreeNode> getDataRec(Map<String, AMinMaxAvgData> map, long parentSelfNanos, double parentTotalNanos, int numParentCalls) {
-        final List<TreeNode> result = new ArrayList<TreeNode>();
+        final List<TreeNode> result = new ArrayList<>();
         for(Map.Entry<String, AMinMaxAvgData> entry: getSorted(map, parentSelfNanos, numParentCalls)) {
             final AMinMaxAvgData inputData = entry.getValue();
 
@@ -104,7 +104,7 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
 
             final long[] dataRaw = new long[] {
                     (long)(100 * 10 * fractionOfParent),
-                    (long)(100 * inputData.getTotalNumInContext() / numParentCalls),
+                    (long)(100 * inputData.getTotalNumInContext()), // / numParentCalls),
                     inputData.getTotalNanos() / MILLION,
                     inputData.getAvgNanos() / MILLION,
                     inputData.getMinNanos() / MILLION,
@@ -117,7 +117,7 @@ public class ADrillDownPageDefinition extends AAbstractAsysmonPerformancePageDef
     }
 
     private List<Map.Entry<String, AMinMaxAvgData>> getSorted(Map<String, AMinMaxAvgData> raw, long selfNanos, int numParent) {
-        final List<Map.Entry<String, AMinMaxAvgData>> result = new ArrayList<Map.Entry<String, AMinMaxAvgData>>(raw.entrySet());
+        final List<Map.Entry<String, AMinMaxAvgData>> result = new ArrayList<>(raw.entrySet());
 
         if(selfNanos != 0 && !raw.isEmpty()) {
             final AMinMaxAvgData selfData = new AMinMaxAvgData(true, numParent, 0, 0, selfNanos / numParent, selfNanos, new ConcurrentHashMap<String, AMinMaxAvgData>());

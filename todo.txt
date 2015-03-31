@@ -1,4 +1,3 @@
-* opt. Zwischen-Überschriften ausblenden
 * abs. Gesamtzahl der Aufrufe in der Hierarchie
 * OMD-View
   * Queue-Backlog
