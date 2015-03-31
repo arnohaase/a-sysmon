@@ -1,4 +1,3 @@
-* abs. Gesamtzahl der Aufrufe in der Hierarchie
 * OMD-View
   * Queue-Backlog
   * Running Jobs
