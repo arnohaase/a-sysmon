@@ -1,5 +1,5 @@
 
-<div class="button-segment">
+<div class="options-header">
     <div class="button-box">
         <div class="btn-group">
             <a class="btn btn-default" ng-click="expandAll()" data-toggle="tooltip" title="Expand All"><img src="_$_asysmon_$_/static/img/treenode-closed.png" /></a>
@@ -17,6 +17,9 @@
         </div>
         <a class="btn btn-default" ng-click="doExport()" data-toggle="tooltip" title="Export currently visible data to Excel as CSV">Export</a>
     </div>
+
+    <input type="checkbox" ng-model="hideTitleRows"> Hide titles between trees <br>
+
 </div>
 <div class="affix-placeholder"></div>
 

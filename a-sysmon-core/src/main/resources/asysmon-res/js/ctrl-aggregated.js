@@ -25,6 +25,8 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
     var nodesByFqn = {};
 
+    $scope.$watch('hideTitleRows', renderTree);
+
     function initFromResponse(data) {
 //        $log.log('init from response');
         $scope.isStarted = data.isStarted;
@@ -302,13 +304,24 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
         var result = '';
 
-        angular.forEach($scope.pickedTraces, function(rootNode) {
-            result +=
-                '<div>' +
+        if ($scope.hideTitleRows) {
+            result += '<div>' + htmlForTableHeader + '</div>';
+            angular.forEach($scope.pickedTraces, function(rootNode) {
+                result +=
+                    '<div>' +
+                    htmlForTreeNode(rootNode) +
+                    '</div>';
+            });
+        }
+        else {
+            angular.forEach($scope.pickedTraces, function(rootNode) {
+                result +=
+                    '<div>' +
                     htmlForTableHeader +
                     htmlForTreeNode(rootNode) +
-                '</div>';
-        });
+                    '</div>';
+            });
+        }
 
         return result;
     }
@@ -344,7 +357,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
                 dataCols +
                 '<div class="node-text" style="margin-right: ' + $scope.totalDataWidth + 'px;">' + escapeHtml(curNode.name) + '</div>' +
                 '</div>';
-        $log.log($scope.pickedTraces); // The Tooltips has to be sent from the server. See ABottomUpPageDefinition and ATracePageDefinition
+        //$log.log($scope.pickedTraces); // The Tooltips has to be sent from the server. See ABottomUpPageDefinition and ATracePageDefinition
         result += htmlForChildrenDiv(curNode);
 
         return result;
