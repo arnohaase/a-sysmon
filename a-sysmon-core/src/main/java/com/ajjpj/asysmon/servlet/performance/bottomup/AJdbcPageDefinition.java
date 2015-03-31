@@ -11,7 +11,8 @@ public class AJdbcPageDefinition extends ABottomUpPageDefinition {
     @Override protected ABottomUpLeafFilter createLeafFilter() {
         return new ABottomUpLeafFilter() {
             @Override public boolean isLeaf(AHierarchicalData data) {
-                return data.getIdentifier().startsWith(ASysMonStatement.IDENT_PREFIX_JDBC);
+                return data.getIdentifier().startsWith(ASysMonStatement.IDENT_PREFIX_JDBC) &&
+                        !data.getIdentifier ().startsWith (ASysMonStatement.IDENT_PREFIX_JDBC + "connection");
             }
         };
     }

@@ -1,3 +1,11 @@
+* JDBC-Drillup-View: Bugfix
+* opt. Zwischen-Überschriften ausblenden
+* abs. Gesamtzahl der Aufrufe in der Hierarchie
+* OMD-View
+  * Queue-Backlog
+  * Running Jobs
+  * Dauer "Order Speichern"
+
 Driton
 ------
 * Search/Filter values in hierarchical views.
