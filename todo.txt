@@ -35,8 +35,6 @@ todo
   * lock-free aggregation implementation?
   * documentation
 
-  * extract a-base
-
   * beautify
     * scalar page:
       * separate section for GC
