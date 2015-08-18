@@ -1,4 +1,4 @@
-angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log, Rest, escapeHtml) {
+angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log, Rest, escapeHtml, $timeout) {
 
     $('.button-segment').affix({
         offset: {
@@ -29,6 +29,7 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
 
     function initFromResponse(data) {
 //        $log.log('init from response');
+        $scope.data = angular.toJson(data);
         $scope.isStarted = data.isStarted;
         $scope.columnDefs = data.columnDefs.reverse();
         $scope.traces = data.traces;
@@ -54,6 +55,8 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         }
 
         renderTree();
+        // unblock GUI after process
+        blockGui(false);
     }
 
     function initTraceNodes(nodes, level, prefix) {
@@ -70,6 +73,8 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
     }
 
     function sendCommand(cmd) {
+        // block gui for long calls
+        blockGui(true);
         Rest.call(cmd, initFromResponse);
     }
 
@@ -222,6 +227,51 @@ angular.module('ASysMonApp').controller('CtrlAggregated', function($scope, $log,
         $scope.pickedTraces = $scope.traces;
         $scope.rootLevel = 0;
         renderTree();
+    };
+
+    $scope.doExportAsJSON = function() {
+        function pad2(n) {
+            var result = n.toString();
+            while(result.length < 2) {
+                result = '0' + result;
+            }
+            return result;
+        }
+        var now = new Date();
+        var formattedNow = now.getFullYear() + '-' + pad2((now.getMonth()+1)) + '-' + pad2(now.getDate()) + '-' + pad2(now.getHours()) + '-' + pad2(now.getMinutes()) + '-' + pad2(now.getSeconds());
+
+        var blob = new Blob([$scope.data], {type: "application/json;charset=utf-8"});
+        saveAs(blob, "asysmon-export-" + formattedNow + '.json');
+    };
+
+    $scope.doImportJSON = function() {
+        $scope.uploadFile();
+    };
+
+    $scope.uploadFile = function(){
+        var file = document.getElementById('file').files[0],
+            reader = new FileReader();
+            // block gui while uploading file
+            blockGui(true);
+
+            reader.onloadend = function(e){
+            $scope.$apply(function() {
+                $scope.data = e.target.result;
+                initFromResponse(angular.fromJson($scope.data));
+            });
+
+        };
+        reader.readAsBinaryString(file);
+    };
+
+    function blockGui(boolean){
+        var element = document.getElementById("blocker");
+        if (boolean) {
+            $scope.originClassName =  element.className;
+            element.className+=" blocker";
+        }else{
+            element.classList.remove("blocker");
+        }
     };
 
     $scope.doExport = function() {

@@ -16,10 +16,14 @@
             <a class="btn btn-default" ng-if="isStarted" ng-click="stop()" data-toggle="tooltip" title="Stop recording data in the server">Stop</a>
         </div>
         <a class="btn btn-default" ng-click="doExport()" data-toggle="tooltip" title="Export currently visible data to Excel as CSV">Export</a>
+        <div class="btn-group">
+            <a class="btn btn-default" ng-click="doExportAsJSON()" data-toggle="tooltip" title="Export currently visible data as JSON">JSON Export</a>
+            <a class="btn btn-default" data-toggle="tooltip" title="Import JSON Data" onclick="$('#file').click();">JSON Import</a>
+        </div>
     </div>
-
-    <input type="checkbox" ng-model="hideTitleRows"> Hide titles between trees <br>
-
+        <input type="checkbox" ng-model="hideTitleRows"> Hide titles between trees <br>
+        <input type="file" id="file" onchange="angular.element(this).scope().doImportJSON()" style="visibility:hidden;">
+    </div>
 </div>
 <div class="affix-placeholder"></div>
 
