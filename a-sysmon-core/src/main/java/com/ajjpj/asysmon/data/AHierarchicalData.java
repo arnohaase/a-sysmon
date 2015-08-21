@@ -33,7 +33,7 @@ public class AHierarchicalData {
         this.isSerial = isSerial;
         this.startTimeMillis = startTimeMillis;
         this.durationNanos = durationNanos;
-        this.identifier = identifier;
+        this.identifier = identifier.intern();
         this.parameters = Collections.unmodifiableMap(parameters);
         this.children = Collections.unmodifiableList(children);
     }
