@@ -60,11 +60,6 @@
             <artifactId>a-foundation</artifactId>
             <version>1.0-pre13</version>
         </dependency>
-        <dependency>
-            <groupId>org.sonatype.plexus</groupId>
-            <artifactId>plexus-sec-dispatcher</artifactId>
-            <version>1.4</version>
-        </dependency>
     </dependencies>
     <distributionManagement>
         <snapshotRepository>
