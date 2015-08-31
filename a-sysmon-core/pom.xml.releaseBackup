@@ -4,72 +4,55 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <groupId>com.ajjpj.a-sysmon</groupId>
+        <artifactId>a-sysmon-parent</artifactId>
+        <version>1.0-pre27-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ajjpj.a-sysmon</groupId>
-    <artifactId>a-sysmon-demo</artifactId>
-    <version>1.0-pre28-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <artifactId>a-sysmon-core</artifactId>
 
     <name>${project.artifactId}-${project.version}</name>
 
-    <description>a-sysmon is a toolset for monitoring and exploring performance aspects of Java enterprise applications</description>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <scm>
-        <connection>scm:git:git@github.com:arnohaase/a-sysmon.git</connection>
-        <developerConnection>scm:git:git@github.com:arnohaase/a-sysmon.git</developerConnection>
-        <url>git@github.com:arnohaase/a-sysmon.git</url>
-    </scm>
-    <developers>
-        <developer>
-            <id>arnohaase</id>
-            <name>Arno Haase</name>
-            <email>github@haase-consulting.com</email>
-        </developer>
-    </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
+        <!--
         <dependency>
-            <groupId>com.ajjpj.a-sysmon</groupId>
-            <artifactId>a-sysmon-core</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.5.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>9.0.4.v20130625</version>
-        </dependency>
+        -->
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
 
+        <!-- required for HTTP offloading to A-SysMon server - exclude if not required and / or there is a version conflict -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.1</version>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
+            <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.3.172</version>
+            <scope>test</scope>
         </dependency>
         <!--
         <dependency>
