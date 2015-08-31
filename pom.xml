@@ -36,8 +36,7 @@
         <connection>scm:git:git@github.com:arnohaase/a-sysmon.git</connection>
         <developerConnection>scm:git:git@github.com:arnohaase/a-sysmon.git</developerConnection>
         <url>git@github.com:arnohaase/a-sysmon.git</url>
-      <tag>a-sysmon-parent-1.0-pre27</tag>
-  </scm>
+    </scm>
     <developers>
         <developer>
             <id>arnohaase</id>
@@ -62,16 +61,6 @@
             <version>1.0-pre13</version>
         </dependency>
     </dependencies>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
     <build>
         <plugins>
             <plugin>

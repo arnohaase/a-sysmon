@@ -10,8 +10,6 @@
     </parent>
 
     <artifactId>a-sysmon-core</artifactId>
-    <version>1.0-pre27</version>
-    <packaging>jar</packaging>
 
     <name>${project.artifactId}-${project.version}</name>
 
