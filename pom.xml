@@ -11,7 +11,7 @@
 
     <groupId>com.ajjpj.a-sysmon</groupId>
     <artifactId>a-sysmon-parent</artifactId>
-    <version>1.0-pre27-SNAPSHOT</version>
+    <version>1.0-pre27</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}-${project.version}</name>
@@ -36,7 +36,8 @@
         <connection>scm:git:git@github.com:arnohaase/a-sysmon.git</connection>
         <developerConnection>scm:git:git@github.com:arnohaase/a-sysmon.git</developerConnection>
         <url>git@github.com:arnohaase/a-sysmon.git</url>
-    </scm>
+      <tag>1.0-pre27</tag>
+  </scm>
     <developers>
         <developer>
             <id>arnohaase</id>
